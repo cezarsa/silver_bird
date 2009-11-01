@@ -1,0 +1,254 @@
+<link rel="stylesheet" type="text/css" href="whisper.css" />
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="jquery-ui-custom.js"></script>
+<script type="text/javascript" src="jquery_replace_html.js"></script>
+<script type="text/javascript" src="debug.js"></script>
+<script type="text/javascript" src="twitter_lib.js"></script>
+<script>
+
+var WAIT_TIME_UNTIL_REFETCH = 60000;
+var MAX_TWEET_SIZE = 140;
+var TWEETS_PER_PAGE = 5;
+
+Paginator = {
+  currentPage: 1,
+  firstPage: function() {
+    Paginator.currentPage = 1;
+    $('#previousPage').hide();
+  },
+  nextPage: function() {
+    Paginator.currentPage += 1;
+    $('#previousPage').show();
+    loadTimeline();
+  },
+  previousPage: function() {
+    if(Paginator.currentPage == 1) return;
+    Paginator.currentPage -= 1;
+    if(Paginator.currentPage == 1) {
+      $('#previousPage').hide();
+    }
+    loadTimeline();
+  }
+}
+
+function showError(msg, tryAgainFunction) {
+  $("#error").show();
+  $("#error").text(msg);
+  if(tryAgainFunction) {
+    $("#error").append(' <a href="#" onclick="' + tryAgainFunction + '(); $(\'#error\').hide();">Try again</a>');
+  }
+}
+
+function onTimelineRetrieved(success, data, status, context) {
+  $("#loading").hide();
+  if(success) {
+    chrome.extension.getBackgroundPage().setItem('friends_tl_' + context.page, data);
+    assemblyTweets(data);
+  } else {
+    showError('Unexpected error "' + status + '" during communication.', 'loadTimeline');
+  }
+}
+
+function openTab(tabUrl) {
+  chrome.tabs.create({ url: tabUrl });
+}
+
+function renderTweet(tweet) {
+  var str = '<div class="tweet">';
+  str += '<img src="' + tweet.user.profile_image_url + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\')"></img>';
+  str += '<a href="#" class="user" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\')">' + tweet.user.screen_name + '</a>';
+  str += '<div class="text">' + tweet.text + '</div>';
+
+  str += '<div class="footer">';
+  str += '<div class="timestamp">' + tweet.created_at + '</div>';
+  str += '<div class="actions"><a href="#" onclick="retweet(this.parentNode.parentNode.parentNode)">RT</a> <a href="#" onclick="reply(this.parentNode.parentNode.parentNode)">Reply</a></div>'
+  str += '</div>';
+
+  str += '<div style="clear: both;"></div>'
+  str += '</div>'
+  return str;
+}
+
+function assemblyTweets(tweets) {
+  $("#timeline").html('');
+  for(var i = 0; i < tweets.length; ++i) {
+    $("#timeline").append(renderTweet(tweets[i]));
+  }
+
+  var transformList = [
+    {
+      //create links
+      'expression': /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig,
+      'replacement': "<a href='$1' onclick=\"openTab('$1')\">$1</a>"
+    },
+    {
+      //create hash search links
+      'expression': /(#\w*)/ig,
+      'replacement': function(matchedValue) {
+        var linkHref = TwitterLib.URLS.SEARCH + escape(matchedValue);
+        return "<a href='" + linkHref + "' onclick=\"openTab('" + linkHref + "')\">" + matchedValue + "</a>"
+      }
+    },
+    {
+      //create users links
+      'expression': /(@)(\w*)/ig,
+      'replacement': "$1<a href='" + TwitterLib.URLS.BASE + "$2' onclick=\"openTab('" + TwitterLib.URLS.BASE + "$2')\">$2</a>"
+    }
+  ]
+
+  for(var i = 0; i < transformList.length; ++i) {
+    $("#timeline .tweet .text").replaceHtml(transformList[i].expression, transformList[i].replacement);
+  }
+}
+
+function shouldQueryTwitter() {
+  var curTime = new Date().getTime();
+  var lastTime = chrome.extension.getBackgroundPage().getItem('lastTime');
+  return !lastTime || (curTime - lastTime) > WAIT_TIME_UNTIL_REFETCH;
+}
+
+function loadTimeline(force) {
+  context = { 'page': Paginator.currentPage };
+
+  if(force || (context.page == 1 && shouldQueryTwitter())) {
+    Paginator.firstPage();
+    context.page = 1;
+    chrome.extension.getBackgroundPage().clear();
+    chrome.extension.getBackgroundPage().setItem('lastTime', new Date().getTime());
+  } else {
+    var tweetsData = chrome.extension.getBackgroundPage().getItem('friends_tl_' + context.page);
+    if(tweetsData) {
+      assemblyTweets(tweetsData);
+      return;
+    }
+  }
+  $("#loading").show();
+
+  var twitterBackend = chrome.extension.getBackgroundPage().getTwitterBackend();
+  twitterBackend.friendsTimeline(onTimelineRetrieved, context, TWEETS_PER_PAGE, context.page);
+}
+
+function sendTweet() {
+  $("#loading").show();
+  $("#compose_tweet_area input[type='button']").attr("disabled", "disabled");
+  $("#compose_tweet_area textarea").attr("disabled", "disabled");
+  var twitterBackend = chrome.extension.getBackgroundPage().getTwitterBackend();
+  twitterBackend.tweet(function(success, data, status) {
+    $("#loading").hide();
+    $("#compose_tweet_area input[type='button']").removeAttr("disabled");
+    $("#compose_tweet_area textarea").removeAttr("disabled");
+    if(success) {
+      $("#compose_tweet_area textarea").val("");
+      textareaChanged();
+      showComposeArea();
+      loadTimeline(true);
+    } else {
+    }
+  }, $("#compose_tweet_area textarea").val());
+}
+
+function signin() {
+  chrome.extension.getBackgroundPage().signin($("input[name='user']").val(), $("input[name='password']").val());
+  loadTimeline();
+  $("#signin").hide();
+  $("#workspace").show();
+}
+
+function signout() {
+  chrome.extension.getBackgroundPage().signout();
+  window.close();
+}
+
+function retweet(node) {
+  showComposeArea(true);
+  var el = $("#compose_tweet_area textarea");
+  var user = $(".user", node).text();
+  var msg = $(".text", node).text();
+  el.val("RT @" + user + ": " + msg);
+  textareaChanged();
+}
+
+function reply(node) {
+  showComposeArea(true);
+  var el = $("#compose_tweet_area textarea");
+  var user = $(".user", node).text();
+  el.val("@" + user + " ");
+  textareaChanged();
+}
+
+function showComposeArea(showOnly) {
+  if(!$("#compose_tweet_area").is(':visible')) {
+    $("#compose_tweet_area").show('blind', { direction: "vertical" });
+    $("#compose_tweet img").attr('src', 'arrow_up.gif');
+    $("#compose_tweet_area textarea").focus();
+  } else if(!showOnly) {
+    $("#compose_tweet_area").hide('blind', { direction: "vertical" });
+    $("#compose_tweet img").attr('src', 'arrow_down.gif');
+  }
+}
+
+function textareaChanged() {
+  var el = $("#compose_tweet_area textarea");
+  var availableChars = MAX_TWEET_SIZE - el.val().length;
+  var charsLeftEl = $("#compose_tweet_area .chars_left");
+  charsLeftEl.text(availableChars);
+  if(availableChars < 0) {
+    charsLeftEl.css('color', 'red');
+    $("#compose_tweet_area input[type='button']").attr("disabled", "disabled");
+  } else {
+    charsLeftEl.css('color', 'black');
+    $("#compose_tweet_area input[type='button']").removeAttr("disabled");
+  }
+}
+
+$(function() {
+  var twitterBackend = chrome.extension.getBackgroundPage().getTwitterBackend();
+  if(!twitterBackend) {
+    $("#signin").show();
+    $("input[name='user']").focus();
+  } else {
+    $("#workspace").show();
+    loadTimeline();
+  }
+  textareaChanged();
+});
+</script>
+
+
+<div id="signin" style="display: none;">
+  <h1>Twitter credentials</h1>
+  <label for="user">Username:</label>
+  <input name="user" type="text"/>
+  <label for="password">Password:</label>
+  <input name="password" type="password"/>
+  <input value="Go!" type="button" onclick="signin()"/>
+</div>
+
+<div id="error" style="display: none;"></div>
+
+<div id="workspace" style="display: none;">
+
+  <div id="compose_tweet_area" style="display: none;">
+    <textarea rows="4" onkeyup="textareaChanged();" onblur="textareaChanged();"></textarea>
+    <div class="footer">
+      <input type="button" value="Tweet it!" onclick="sendTweet();"/>
+      <span class="chars_left"></span>
+    </div>
+  </div>
+  <div id="compose_tweet" onclick="showComposeArea()">
+    <img class="left" src="arrow_down.gif"/>
+    Compose Tweet
+    <img class="right" src="arrow_down.gif"/>
+  </div>
+
+  <div id="paginator">
+    <img src="arrow_left.gif" onclick="Paginator.nextPage();"/>
+    <img src="none.gif"/>
+    <img src="arrow_right.gif" id="previousPage" style="display: none;" onclick="Paginator.previousPage();"/>
+  </div>
+  <div id="logout"><a href="#" onclick="signout()">Log out</a></div>
+  <img src="loading.gif" id="loading" style="display: none;"/>
+  <div style="clear: both;"></div>
+
+  <div id="timeline"></div>
+</div>

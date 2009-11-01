@@ -1,0 +1,18 @@
+{
+  "name": "Chromed Bird",
+  "version": "0.1",
+  "description": "General purpose Twitter extension",
+  "browser_action": {
+    "default_icon": "icon24.png",
+    "default_title": "Chromed Bird",
+    "popup": "popup.html"
+  },
+  "background_page": "background.html",
+  "permissions": [
+    "tabs",
+    "http://twitter.com/"
+  ],
+  "icons": {
+    "24": "icon24.png"
+  }
+}

@@ -1,0 +1,26 @@
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="twitter_lib.js"></script>
+<script>
+var dataStore = {};
+function setItem(name, data) {
+  dataStore[name] = data;
+}
+function getItem(name) {
+  return dataStore[name];
+}
+function clear() {
+  dataStore = {};
+}
+
+var twitterBackend = null;
+function getTwitterBackend() {
+  return twitterBackend;
+}
+function signin(user, password) {
+  twitterBackend = new TwitterLib(user, password);
+}
+function signout() {
+  clear();
+  twitterBackend = null;
+}
+</script>
