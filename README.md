@@ -6,7 +6,7 @@
 
 2. Installing
 
-    Just head to [downloads](http://github.com/cezarsa/chromed_bird/downloads) and download the latest .crx file. After that, autoupdate will start working and you won't have to worry about future releases.
+    [Install it now](http://cloud.github.com/downloads/cezarsa/chromed_bird/chromed_bird_current.crx)
 
 3. Compatibility
 
