@@ -20,19 +20,30 @@
     }
 
     #install {
-      text-align: center;
       background-color: #6DAFEB;
-      width: 150px;
-      line-height: 60px;
       border: 4px solid #365775;
       cursor: pointer;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 10px;
+      line-height: 50px;
+      font-weight: bold;
     }
     #install:hover {
       outline: 2px solid #365775;
     }
+
+    #wrong_browser {
+      background-color: #EB5959;
+      border: 4px solid #9E3C3C;
+    }
+
+    .top_box {
+      text-align: center;
+      width: 150px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 10px;
+      display: none;
+    }
+
     #title {
       text-align: center;
       color: 333;
@@ -71,6 +82,19 @@ $(function() {
   link.attr('href', "mailto:" + mail);
   link.text(mail);
   $("span.my_email").html(link);
+
+  var ua = navigator.userAgent;
+  if(ua.match(/Chrome/i)) {
+    if(ua.match(/Chrome\/4/)) {
+      $("#install").show();
+    } else {
+      $("#wrong_browser").text("You are running an unsupported version of Google Chrome. Check the compatibility note.");
+      $("#wrong_browser").show();
+    }
+  } else {
+    $("#wrong_browser").text("This is a Google Chrome extension, and you are not running it.");
+    $("#wrong_browser").show();
+  }
 });
 </script>
 </head>
@@ -80,7 +104,10 @@ $(function() {
 Chromed Bird
 </p>
 
-<div id="install" onclick="location.href='http://cloud.github.com/downloads/cezarsa/chromed_bird/chromed_bird_current.crx'">
+<div id="wrong_browser" class="top_box">
+</div>
+
+<div id="install" class="top_box" onclick="location.href='http://cloud.github.com/downloads/cezarsa/chromed_bird/chromed_bird_current.crx'">
 Install it now!
 </div>
 
