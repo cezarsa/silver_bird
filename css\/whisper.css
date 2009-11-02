@@ -1,0 +1,196 @@
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	margin: 0px;
+	padding: 0px;
+  color: black;
+  font-size: 10pt;
+}
+
+a {
+  color: #665;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+#__debug {
+  width: 200px;
+  background-color: #dd0;
+}
+
+#error {
+  margin: 5px;
+  margin-bottom: 10px;
+  background-color: #F9C236;
+}
+
+#workspace {
+  margin: 0px 4px 0px 4px;
+}
+
+#timeline {
+  margin: 0px;
+  padding: 0px;
+}
+
+#paginator {
+  float: left;
+  width: 30px;
+  height: 20px;
+  margin: 0px;
+  padding: 0px;
+}
+
+#paginator img {
+  cursor: pointer;
+}
+
+#logout {
+  float: left;
+  font-size: 8pt;
+  margin-top: 4px;
+}
+
+#loading {
+  float: right;
+  margin: 0px;
+  padding: 0px;
+}
+
+#compose_tweet_area textarea {
+  width: 100%;
+  border: 1px solid #882;
+  margin: 0px;
+  padding: 0px;
+}
+
+#compose_tweet_area .footer .chars_left {
+  margin-top: 3px;
+  float: right;
+}
+
+#compose_tweet_area input[type="button"] {
+  margin: 2px 0px 2px 0px;
+  padding: 0px;
+  background-color: #cc5;
+  border: 1px solid #882;
+}
+
+#compose_tweet_area input[type="button"]:hover {
+  outline: 1px solid #882;
+}
+
+#compose_tweet_area input[type="button"]:hover:disabled {
+  outline: inherit;
+}
+
+#compose_tweet img {
+  margin-top: 3px;
+}
+
+#compose_tweet img.left {
+  float: left;
+  margin-left: 3px;
+}
+
+#compose_tweet img.right {
+  float: right;
+  margin-right: 3px;
+}
+
+#compose_tweet {
+  background-color: #EDEDB1;
+  font-size: 9pt;
+  color: #666;
+  font-weight: bold;
+  font-style: italic;
+  margin: 0px;
+  padding: 0px;
+  text-align: center;
+  cursor: pointer;
+}
+
+#signin {
+  width: 210px;
+  background-color: #ee7;
+  margin: 0px;
+  padding: 3px;
+  color: #57572A;
+}
+
+#signin h1 {
+  margin: 0px;
+  margin-bottom: 8px;
+  font-size: 10pt;
+  font-weight: bold;
+  text-align: center;
+  font-style: italic;
+  width: 100%;
+}
+
+#signin label {
+  float: left;
+  width: 80px;
+}
+
+#signin input {
+  border: 1px solid #882;
+  width: 120px;
+  margin-bottom: 5px;
+}
+
+#signin input[type="button"] {
+  background-color: #cc5;
+  border: 1px solid #882;
+  margin-left: 80px;
+  margin-top: 5px;
+}
+#signin input[type="button"]:hover {
+  outline: 1px solid #882;
+}
+
+.tweet {
+  width: 350px;
+  background-color: #ee7;
+  padding: 2px 4px 2px 4px;
+  margin-bottom: 3px;
+}
+
+.tweet .user {
+  font-size: 9pt;
+  color: #666;
+  font-weight: bold;
+  font-style: italic;
+  text-decoration: none;
+}
+
+.tweet .footer {
+  margin: 0px;
+  padding: 0px;
+}
+
+.tweet .timestamp {
+  font-size: 8pt;
+  color: #999;
+  font-style: italic;
+  float: left;
+}
+
+.tweet .actions {
+  float: right;
+}
+
+.tweet .actions a {
+  font-size: 8pt;
+  color: #999;
+  font-style: italic;
+}
+
+.tweet img {
+  border: 0;
+  margin-right: 4px;
+  float: left;
+  cursor: pointer;
+}

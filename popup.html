@@ -1,9 +1,9 @@
-<link rel="stylesheet" type="text/css" href="whisper.css" />
-<script type="text/javascript" src="jquery.js"></script>
-<script type="text/javascript" src="jquery-ui-custom.js"></script>
-<script type="text/javascript" src="jquery_replace_html.js"></script>
-<script type="text/javascript" src="debug.js"></script>
-<script type="text/javascript" src="twitter_lib.js"></script>
+<link rel="stylesheet" type="text/css" href="css/whisper.css" />
+<script type="text/javascript" src="lib/jquery.js"></script>
+<script type="text/javascript" src="lib/jquery-ui-custom.js"></script>
+<script type="text/javascript" src="lib/jquery_replace_html.js"></script>
+<script type="text/javascript" src="lib/debug.js"></script>
+<script type="text/javascript" src="lib/twitter_lib.js"></script>
 <script>
 
 var WAIT_TIME_UNTIL_REFETCH = 60000;
@@ -179,11 +179,11 @@ function reply(node) {
 function showComposeArea(showOnly) {
   if(!$("#compose_tweet_area").is(':visible')) {
     $("#compose_tweet_area").show('blind', { direction: "vertical" });
-    $("#compose_tweet img").attr('src', 'arrow_up.gif');
+    $("#compose_tweet img").attr('src', 'img/arrow_up.gif');
     $("#compose_tweet_area textarea").focus();
   } else if(!showOnly) {
     $("#compose_tweet_area").hide('blind', { direction: "vertical" });
-    $("#compose_tweet img").attr('src', 'arrow_down.gif');
+    $("#compose_tweet img").attr('src', 'img/arrow_down.gif');
   }
 }
 
@@ -236,18 +236,18 @@ $(function() {
     </div>
   </div>
   <div id="compose_tweet" onclick="showComposeArea()">
-    <img class="left" src="arrow_down.gif"/>
+    <img class="left" src="img/arrow_down.gif"/>
     Compose Tweet
-    <img class="right" src="arrow_down.gif"/>
+    <img class="right" src="img/arrow_down.gif"/>
   </div>
 
   <div id="paginator">
-    <img src="arrow_left.gif" onclick="Paginator.nextPage();"/>
-    <img src="none.gif"/>
-    <img src="arrow_right.gif" id="previousPage" style="display: none;" onclick="Paginator.previousPage();"/>
+    <img src="img/arrow_left.gif" onclick="Paginator.nextPage();"/>
+    <img src="img/none.gif"/>
+    <img src="img/arrow_right.gif" id="previousPage" style="display: none;" onclick="Paginator.previousPage();"/>
   </div>
   <div id="logout"><a href="#" onclick="signout()">Log out</a></div>
-  <img src="loading.gif" id="loading" style="display: none;"/>
+  <img src="img/loading.gif" id="loading" style="display: none;"/>
   <div style="clear: both;"></div>
 
   <div id="timeline"></div>
