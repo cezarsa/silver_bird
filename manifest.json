@@ -1,6 +1,6 @@
 {
   "name": "Chromed Bird",
-  "version": "0.1",
+  "version": "0.2",
   "description": "General purpose Twitter extension",
   "browser_action": {
     "default_icon": "img/icon24.png",
@@ -14,5 +14,6 @@
   ],
   "icons": {
     "24": "icon24.png"
-  }
+  },
+  "update_url": "http://cezarsa.github.com/chromed_bird_updates.xml"
 }
