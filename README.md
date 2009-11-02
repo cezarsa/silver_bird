@@ -6,11 +6,11 @@
 
 2. Installing
 
-    Just head to http://github.com/cezarsa/chromed_bird/downloads and download the latest .crx file. After that, autoupdate will start working and you won't have to worry about future releases.
+    Just head to [downloads](http://github.com/cezarsa/chromed_bird/downloads) and download the latest .crx file. After that, autoupdate will start working and you won't have to worry about future releases.
 
 3. Compatibility
 
-    Currently only Dev channel releases of Google Chrome support extensions. Check http://dev.chromium.org/getting-involved/dev-channel.
+    Currently only Dev channel releases of Google Chrome support extensions. Check [http://dev.chromium.org/getting-involved/dev-channel](http://dev.chromium.org/getting-involved/dev-channel).
 
 4. Features
 
