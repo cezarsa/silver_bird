@@ -32,4 +32,4 @@
 
 6. License
 
-    Any of these open source ones. I mean, you're free to do whatever you want with it. If you're using some of the source code I only kindly ask that you mention where it came from.
+    This project uses the very simple and permissive MIT license. Check the LICENSE file.
