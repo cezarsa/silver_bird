@@ -10,7 +10,8 @@
   "background_page": "background.html",
   "permissions": [
     "tabs",
-    "http://twitter.com/"
+    "http://twitter.com/",
+    "https://twitter.com/"
   ],
   "icons": {
     "24": "icon24.png"
