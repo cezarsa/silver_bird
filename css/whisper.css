@@ -193,4 +193,6 @@ a:hover {
   margin-right: 4px;
   float: left;
   cursor: pointer;
+  height: 48px;
+  width: 48px;
 }
