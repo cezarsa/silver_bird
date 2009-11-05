@@ -203,8 +203,6 @@ $(function() {
   var twitterBackend = chrome.extension.getBackgroundPage().getTwitterBackend();
   if(!twitterBackend) {
     $("#signin").show();
-    $("input[name='user']").val('wwbruk');
-    $("input[name='password']").val('<>:?!@#$');
     $("input[name='user']").focus();
   } else {
     $("#workspace").show();
