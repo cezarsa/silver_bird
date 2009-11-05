@@ -6,28 +6,40 @@
 <script type="text/javascript" src="lib/twitter_lib.js"></script>
 <script>
 
-var WAIT_TIME_UNTIL_REFETCH = 60000;
-var MAX_TWEET_SIZE = 140;
-var TWEETS_PER_PAGE = 5;
+var tweetManager = chrome.extension.getBackgroundPage().TweetManager;
+var tweetManagerConst = chrome.extension.getBackgroundPage().TweetManagerConstants;
 
 Paginator = {
-  currentPage: 1,
   firstPage: function() {
-    Paginator.currentPage = 1;
+    tweetManager.currentPage = 1;
     $('#previousPage').hide();
   },
   nextPage: function() {
-    Paginator.currentPage += 1;
+    tweetManager.currentPage += 1;
     $('#previousPage').show();
     loadTimeline();
   },
+  setLastPage: function() {
+    tweetManager.currentIsLastPage = true;
+    $('#nextPage').hide();
+  },
   previousPage: function() {
-    if(Paginator.currentPage == 1) return;
-    Paginator.currentPage -= 1;
-    if(Paginator.currentPage == 1) {
+    tweetManager.currentIsLastPage = false;
+    $('#nextPage').show();
+    if(tweetManager.currentPage == 1) return;
+    tweetManager.currentPage -= 1;
+    if(tweetManager.currentPage == 1) {
       $('#previousPage').hide();
     }
     loadTimeline();
+  },
+  initialize: function() {
+    if(tweetManager.currentPage == 1) {
+      $('#previousPage').hide();
+    }
+    if(tweetManager.currentIsLastPage) {
+      $('#nextPage').hide();
+    }
   }
 }
 
@@ -39,13 +51,19 @@ function showError(msg, tryAgainFunction) {
   }
 }
 
-function onTimelineRetrieved(success, data, status, context) {
+function onTimelineRetrieved(tweets) {
   $("#loading").hide();
-  if(success) {
-    chrome.extension.getBackgroundPage().setItem('friends_tl_' + context.page, data);
-    assemblyTweets(data);
+  if(tweets) {
+    if(tweets.length == 0) {
+      Paginator.previousPage();
+    } else {
+      assemblyTweets(tweets);
+    }
+    if(tweets.length < tweetManagerConst.TWEETS_PER_PAGE) {
+      Paginator.setLastPage();
+    }
   } else {
-    showError('Unexpected error "' + status + '" during communication.', 'loadTimeline');
+    showError('Unexpected error "' + chrome.extension.getBackgroundPage().TweetManager.currentError + '" during communication.', 'loadTimeline');
   }
 }
 
@@ -101,31 +119,9 @@ function assemblyTweets(tweets) {
   }
 }
 
-function shouldQueryTwitter() {
-  var curTime = new Date().getTime();
-  var lastTime = chrome.extension.getBackgroundPage().getItem('lastTime');
-  return !lastTime || (curTime - lastTime) > WAIT_TIME_UNTIL_REFETCH;
-}
-
 function loadTimeline(force) {
-  context = { 'page': Paginator.currentPage };
-
-  if(force || (context.page == 1 && shouldQueryTwitter())) {
-    Paginator.firstPage();
-    context.page = 1;
-    chrome.extension.getBackgroundPage().clear();
-    chrome.extension.getBackgroundPage().setItem('lastTime', new Date().getTime());
-  } else {
-    var tweetsData = chrome.extension.getBackgroundPage().getItem('friends_tl_' + context.page);
-    if(tweetsData) {
-      assemblyTweets(tweetsData);
-      return;
-    }
-  }
   $("#loading").show();
-
-  var twitterBackend = chrome.extension.getBackgroundPage().getTwitterBackend();
-  twitterBackend.friendsTimeline(onTimelineRetrieved, context, TWEETS_PER_PAGE, context.page);
+  chrome.extension.getBackgroundPage().TweetManager.giveMeTweets(onTimelineRetrieved);
 }
 
 function sendTweet() {
@@ -149,7 +145,9 @@ function sendTweet() {
 
 function signin() {
   chrome.extension.getBackgroundPage().signin($("input[name='user']").val(), $("input[name='password']").val());
+
   loadTimeline();
+
   $("#signin").hide();
   $("#workspace").show();
 }
@@ -189,7 +187,7 @@ function showComposeArea(showOnly) {
 
 function textareaChanged() {
   var el = $("#compose_tweet_area textarea");
-  var availableChars = MAX_TWEET_SIZE - el.val().length;
+  var availableChars = tweetManagerConst.MAX_TWEET_SIZE - el.val().length;
   var charsLeftEl = $("#compose_tweet_area .chars_left");
   charsLeftEl.text(availableChars);
   if(availableChars < 0) {
@@ -205,11 +203,14 @@ $(function() {
   var twitterBackend = chrome.extension.getBackgroundPage().getTwitterBackend();
   if(!twitterBackend) {
     $("#signin").show();
+    $("input[name='user']").val('wwbruk');
+    $("input[name='password']").val('<>:?!@#$');
     $("input[name='user']").focus();
   } else {
     $("#workspace").show();
     loadTimeline();
   }
+  Paginator.initialize();
   textareaChanged();
 });
 </script>
@@ -242,9 +243,9 @@ $(function() {
   </div>
 
   <div id="paginator">
-    <img src="img/arrow_left.gif" onclick="Paginator.nextPage();"/>
+    <img src="img/arrow_left.gif" id="nextPage" onclick="Paginator.nextPage();"/>
     <img src="img/none.gif"/>
-    <img src="img/arrow_right.gif" id="previousPage" style="display: none;" onclick="Paginator.previousPage();"/>
+    <img src="img/arrow_right.gif" id="previousPage" onclick="Paginator.previousPage();"/>
   </div>
   <div id="logout"><a href="#" onclick="signout()">Log out</a></div>
   <img src="img/loading.gif" id="loading" style="display: none;"/>

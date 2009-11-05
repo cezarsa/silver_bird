@@ -2,16 +2,134 @@
 <script type="text/javascript" src="lib/twitter_lib.js"></script>
 <script type="text/javascript" src="lib/jquery.base64.js"></script>
 <script>
-var dataStore = {};
-function setItem(name, data) {
-  dataStore[name] = data;
+
+TweetManagerConstants = {
+  MAX_CACHED_ELEMENTS: 50,
+  WAIT_TIME_UNTIL_REFETCH: 60000,
+  TWEETS_PER_PAGE: 5,
+  MAX_TWEET_SIZE: 140
 }
-function getItem(name) {
-  return dataStore[name];
+
+var TweetManager = {
+  tweetsCache: [],
+  newTweetsCache: [],
+  readTweets: {},
+  timerId: null,
+  currentError: null,
+  currentPage: 1,
+  currentIsLastPage: false,
+  firstRun: true,
+
+  setError: function(status) {
+    this.currentError = status;
+  },
+  readTweet: function(id) {
+    this.readTweets[id] = true;
+  },
+  isTweetRead: function(id) {
+    return this.readTweets[id];
+  },
+  onFetchNew: function(success, tweets, status, context) {
+    console.log('onFetchNew');
+    if(!success) {
+      this.setError(status);
+      this.timerId = setTimeout(this.fetchTweets, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH);
+      return;
+    }
+    this.setError(null);
+
+    for(var i = 0; i < tweets.length; ++i) {
+      this.newTweetsCache.push(tweets[i]);
+    }
+    var _this = this;
+    this.timerId = setTimeout(function() { _this.fetchNewTweets.call(_this); }, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH);
+  },
+  onFetch: function(success, tweets, status, context) {
+    if(!success) {
+      this.setError(status);
+      context._callback(null);
+      return;
+    }
+    this.setError(null);
+    var i = 0;
+    if(context.usingMaxId) {
+      // If we're fetching using maxId, ignore the first one (we already have it)
+      i = 1;
+    }
+    for(; i < tweets.length; ++i) {
+      this.tweetsCache.push(tweets[i]);
+    }
+    var sliceStart = (context._page - 1) * context._count;
+    var sliceEnd = context._page * context._count;
+    context._callback(this.tweetsCache.slice(sliceStart, sliceEnd));
+
+    if(this.firstRun) {
+      //Start looking for new tweets
+      this.fetchNewTweets();
+      this.firstRun = false;
+    }
+  },
+  updateNewTweets: function() {
+    this.tweetsCache = this.newTweetsCache.concat(this.tweetsCache);
+    this.newTweetsCache = [];
+  },
+  giveMeTweets: function(callback) {
+    var page = this.currentPage;
+    if(page == 1) {
+      // FIX: This update will only be done on opening or by user intervention.
+      this.updateNewTweets();
+    }
+    var count = TweetManagerConstants.TWEETS_PER_PAGE;
+    if(this.tweetsCache.length >= (page * count) - 1) {
+      //Everything is cached, return right away.
+      callback(this.tweetsCache.slice((page - 1) * count, page * count));
+    } else {
+      //Hmm... There's something missing let's try to fetch what's missing.
+      var missingCount = count * 2;
+      var maxId = null;
+      if(this.tweetsCache.length > 0) {
+        maxId = this.tweetsCache[this.tweetsCache.length - 1].id;
+        missingCount += 1;
+      }
+      var context = {
+        _callback: callback,
+        _page: page,
+        _count: count,
+        usingMaxId: !!maxId
+      }
+      var _this = this;
+      twitterBackend.friendsTimeline(function(success, tweets, status, context) {
+        _this.onFetch.call(_this, success, tweets, status, context);
+      }, context, missingCount, null, null, maxId);
+    }
+  },
+  clear: function() {
+    if(this.timerId) {
+      clearTimeout(this.timerId);
+      this.timerId = null;
+    }
+    this.tweetsCache =  [];
+    this.newTweetsCache = [];
+    this.setError(null);
+  },
+  fetchNewTweets: function() {
+    if(this.timerId) {
+      clearTimeout(this.timerId);
+      this.timerId = null;
+    }
+    var lastId = null;
+    if(this.newTweetsCache.length > 0) {
+      lastId = this.newTweetsCache[0].id;
+    } else if(this.tweetsCache.length > 0) {
+      lastId = this.tweetsCache[0].id;
+    }
+    var _this = this;
+    twitterBackend.friendsTimeline(function(success, tweets, status, context) {
+      _this.onFetchNew.call(_this, success, tweets, status, context);
+    }, null, null, null, lastId)
+  }
 }
-function clear() {
-  dataStore = {};
-}
+
 
 var twitterBackend = null;
 function getTwitterBackend() {
@@ -21,7 +139,7 @@ function signin(user, password) {
   twitterBackend = new TwitterLib(user, password);
 }
 function signout() {
-  clear();
+  TweetManager.clear();
   twitterBackend = null;
 }
 </script>
