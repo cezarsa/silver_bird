@@ -3,7 +3,7 @@
   "version": "0.2",
   "description": "General purpose Twitter extension",
   "browser_action": {
-    "default_icon": "img/icon24.png",
+    "default_icon": "img/icon19.png",
     "default_title": "Chromed Bird",
     "popup": "popup.html"
   },

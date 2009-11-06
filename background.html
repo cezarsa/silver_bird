@@ -1,6 +1,7 @@
 <script type="text/javascript" src="lib/jquery.js"></script>
 <script type="text/javascript" src="lib/twitter_lib.js"></script>
 <script type="text/javascript" src="lib/jquery.base64.js"></script>
+
 <script>
 
 TweetManagerConstants = {
@@ -19,6 +20,10 @@ var TweetManager = {
   currentPage: 1,
   currentIsLastPage: false,
   firstRun: true,
+  newTweetsCallback: null,
+  iconRed: new Image(),
+  iconBlue: new Image(),
+  canvasContext: $("<canvas></canvas>")[0].getContext('2d'),
 
   setError: function(status) {
     this.currentError = status;
@@ -29,25 +34,45 @@ var TweetManager = {
   isTweetRead: function(id) {
     return this.readTweets[id];
   },
+  newTweetsCount: function() {
+    return this.newTweetsCache.length;
+  },
+  notifyNewTweets: function(size) {
+    var title = size + " new tweet";
+    if(size > 1)
+      title += "s";
+    chrome.browserAction.setTitle({title: title});
+
+    this.canvasContext.drawImage(this.iconRed, 0, 0);
+    chrome.browserAction.setIcon({imageData: this.canvasContext.getImageData(0, 0, 19, 19)});
+  },
   onFetchNew: function(success, tweets, status, context) {
-    console.log('onFetchNew');
+    var _this = this;
     if(!success) {
       this.setError(status);
-      this.timerId = setTimeout(this.fetchTweets, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH);
+      this.timerId = setTimeout(function() { _this.fetchNewTweets.call(_this); }, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH);
       return;
     }
     this.setError(null);
 
-    for(var i = 0; i < tweets.length; ++i) {
-      this.newTweetsCache.push(tweets[i]);
+    for(var i = tweets.length - 1; i >= 0; --i) {
+      this.newTweetsCache.unshift(tweets[i]);
     }
-    var _this = this;
+
+    if(tweets.length > 0) {
+      this.notifyNewTweets(this.newTweetsCache.length);
+      try {
+        // The callback might be invalid (popup not active), so let's ignore errors for now.
+        this.newTweetsCallback(this.newTweetsCache.length);
+      } catch(e) { /* ignoring */ }
+    }
     this.timerId = setTimeout(function() { _this.fetchNewTweets.call(_this); }, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH);
   },
   onFetch: function(success, tweets, status, context) {
     if(!success) {
       this.setError(status);
       context._callback(null);
+      this.setError(null);
       return;
     }
     this.setError(null);
@@ -72,13 +97,23 @@ var TweetManager = {
   updateNewTweets: function() {
     this.tweetsCache = this.newTweetsCache.concat(this.tweetsCache);
     this.newTweetsCache = [];
+    chrome.browserAction.setTitle({title: "Check your tweets"});
+    this.canvasContext.drawImage(this.iconBlue, 0, 0);
+    chrome.browserAction.setIcon({imageData: this.canvasContext.getImageData(0, 0, 19, 19)});
   },
-  giveMeTweets: function(callback) {
-    var page = this.currentPage;
-    if(page == 1) {
-      // FIX: This update will only be done on opening or by user intervention.
-      this.updateNewTweets();
+  giveMeTweets: function(callback, syncNew) {
+    if(syncNew) {
+      var oldNewTweetsCallback = this.newTweetsCallback;
+      var _this = this;
+      this.newTweetsCallback = function() {
+        _this.updateNewTweets();
+        _this.giveMeTweets(callback);
+        _this.newTweetsCallback = oldNewTweetsCallback;
+      }
+      this.fetchNewTweets();
+      return;
     }
+    var page = this.currentPage;
     var count = TweetManagerConstants.TWEETS_PER_PAGE;
     if(this.tweetsCache.length >= (page * count) - 1) {
       //Everything is cached, return right away.
@@ -110,7 +145,12 @@ var TweetManager = {
     }
     this.tweetsCache =  [];
     this.newTweetsCache = [];
+    this.newTweetsCallback = null;
+    this.firstRun = true;
     this.setError(null);
+  },
+  registerNewTweetsCallback: function(callback) {
+    this.newTweetsCallback = callback;
   },
   fetchNewTweets: function() {
     if(this.timerId) {
@@ -130,6 +170,8 @@ var TweetManager = {
   }
 }
 
+TweetManager.iconRed.src = "img/icon19_noalpha_red.png";
+TweetManager.iconBlue.src = "img/icon19_noalpha.png";
 
 var twitterBackend = null;
 function getTwitterBackend() {

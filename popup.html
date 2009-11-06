@@ -2,7 +2,7 @@
 <script type="text/javascript" src="lib/jquery.js"></script>
 <script type="text/javascript" src="lib/jquery-ui-custom.js"></script>
 <script type="text/javascript" src="lib/jquery_replace_html.js"></script>
-<script type="text/javascript" src="lib/debug.js"></script>
+<!--script type="text/javascript" src="lib/debug.js"></script-->
 <script type="text/javascript" src="lib/twitter_lib.js"></script>
 <script>
 
@@ -121,7 +121,10 @@ function assemblyTweets(tweets) {
 
 function loadTimeline(force) {
   $("#loading").show();
-  chrome.extension.getBackgroundPage().TweetManager.giveMeTweets(onTimelineRetrieved);
+  if(force) {
+    Paginator.firstPage();
+  }
+  tweetManager.giveMeTweets(onTimelineRetrieved, force);
 }
 
 function sendTweet() {
@@ -145,7 +148,6 @@ function sendTweet() {
 
 function signin() {
   chrome.extension.getBackgroundPage().signin($("input[name='user']").val(), $("input[name='password']").val());
-
   loadTimeline();
 
   $("#signin").hide();
@@ -199,6 +201,22 @@ function textareaChanged() {
   }
 }
 
+function newTweetsAvailable(count) {
+  var text = count + " more tweet";
+  if(count > 1)
+    text += "s";
+  text += " available. Update now.";
+  $("#update_tweets").text(text);
+  $("#update_tweets").fadeIn();
+}
+
+function loadNewTweets() {
+  Paginator.firstPage();
+  tweetManager.updateNewTweets();
+  $("#update_tweets").fadeOut();
+  loadTimeline();
+}
+
 $(function() {
   var twitterBackend = chrome.extension.getBackgroundPage().getTwitterBackend();
   if(!twitterBackend) {
@@ -206,8 +224,16 @@ $(function() {
     $("input[name='user']").focus();
   } else {
     $("#workspace").show();
+    if(tweetManager.newTweetsCount() > 0) {
+      if(tweetManager.currentPage == 1) {
+        tweetManager.updateNewTweets();
+      } else {
+        newTweetsAvailable(tweetManager.newTweetsCount());
+      }
+    }
     loadTimeline();
   }
+  tweetManager.registerNewTweetsCallback(newTweetsAvailable);
   Paginator.initialize();
   textareaChanged();
 });
@@ -248,6 +274,8 @@ $(function() {
   <div id="logout"><a href="#" onclick="signout()">Log out</a></div>
   <img src="img/loading.gif" id="loading" style="display: none;"/>
   <div style="clear: both;"></div>
+
+  <div id="update_tweets" onclick="loadNewTweets();"></div>
 
   <div id="timeline"></div>
 </div>

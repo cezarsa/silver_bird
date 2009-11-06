@@ -28,6 +28,7 @@ a:hover {
 
 #workspace {
   margin: 0px 4px 0px 4px;
+  min-width: 350px;
 }
 
 #timeline {
@@ -57,6 +58,23 @@ a:hover {
   float: right;
   margin: 0px;
   padding: 0px;
+}
+
+#update_tweets {
+  display: none;
+  -webkit-border-radius: 10px;
+  background-color: #EDEDB1;
+  font-size: 9pt;
+  color: #666;
+  font-weight: bold;
+  font-style: italic;
+  text-align: center;
+  margin-bottom: 3px;
+  cursor: pointer;
+}
+
+#update_tweets:hover {
+  background-color: #ee7;
 }
 
 #compose_tweet_area textarea {
@@ -92,15 +110,16 @@ a:hover {
 
 #compose_tweet img.left {
   float: left;
-  margin-left: 3px;
+  margin-left: 5px;
 }
 
 #compose_tweet img.right {
   float: right;
-  margin-right: 3px;
+  margin-right: 5px;
 }
 
 #compose_tweet {
+  -webkit-border-radius: 10px;
   background-color: #EDEDB1;
   font-size: 9pt;
   color: #666;
@@ -110,6 +129,10 @@ a:hover {
   padding: 0px;
   text-align: center;
   cursor: pointer;
+}
+
+#compose_tweet:hover {
+  background-color: #ee7;
 }
 
 #signin {
@@ -152,6 +175,7 @@ a:hover {
 }
 
 .tweet {
+  -webkit-border-radius: 5px;
   width: 350px;
   background-color: #ee7;
   padding: 2px 4px 2px 4px;
@@ -175,6 +199,7 @@ a:hover {
   font-size: 8pt;
   color: #999;
   font-style: italic;
+  margin-top: 2px;
   float: left;
 }
 
@@ -189,6 +214,7 @@ a:hover {
 }
 
 .tweet img {
+  -webkit-border-radius: 5px;
   border: 0;
   margin-right: 4px;
   float: left;
