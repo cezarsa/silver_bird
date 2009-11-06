@@ -5,6 +5,34 @@
 <!--script type="text/javascript" src="lib/debug.js"></script-->
 <script type="text/javascript" src="lib/twitter_lib.js"></script>
 <script>
+$.fn.hoverFor = function(time, mainCallback, startingCallback, abortCallback) {
+  return this.each(function(){
+    var _this = this, timeoutHandle, triggerFired = false;
+    $(this).hover(
+      function() {
+        if(triggerFired)
+          return;
+        if(startingCallback)
+          startingCallback.call(_this);
+        timeoutHandle = setTimeout(function() {
+          triggerFired = true;
+          mainCallback.call(_this);
+          timeoutHandle = null;
+        }, time);
+      },
+      function() {
+        if(triggerFired)
+          return;
+        if(timeoutHandle) {
+          if(abortCallback)
+            abortCallback.call(_this);
+          clearTimeout(timeoutHandle);
+          timeoutHandle = null;
+        }
+      }
+    );
+ });
+};
 
 var tweetManager = chrome.extension.getBackgroundPage().TweetManager;
 var tweetManagerConst = chrome.extension.getBackgroundPage().TweetManagerConstants;
@@ -72,7 +100,7 @@ function openTab(tabUrl) {
 }
 
 function renderTweet(tweet) {
-  var str = '<div class="tweet">';
+  var str = '<div id="tweet_' + tweet.id + '" class="tweet">';
   str += '<img src="' + tweet.user.profile_image_url + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\')"></img>';
   str += '<a href="#" class="user" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\')">' + tweet.user.screen_name + '</a>';
   str += '<div class="text">' + tweet.text + '</div>';
@@ -117,6 +145,28 @@ function assemblyTweets(tweets) {
   for(var i = 0; i < transformList.length; ++i) {
     $("#timeline .tweet .text").replaceHtml(transformList[i].expression, transformList[i].replacement);
   }
+
+  for(var unreadId in tweetManager.unreadTweets) {
+    $("#tweet_" + unreadId).addClass('unread');
+  }
+  $(".tweet.unread").hoverFor(2000,
+    function() {
+      //Hovering for <time> seconds, let's read it.
+      tweetManager.readTweet(this.id.split('_')[1]);
+      $(this).removeClass('unread');
+    },
+    function() {
+      //Starting countdown to read
+      $(this).animate({
+        backgroundColor: '#ee7'
+      }, 2000);
+    },
+    function() {
+      //Countdown aborted
+      $(this).stop();
+      $(this).css('background-color', '#eed077');
+    }
+  );
 }
 
 function loadTimeline(force) {

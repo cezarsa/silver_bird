@@ -187,6 +187,10 @@ a:hover {
   margin-bottom: 3px;
 }
 
+.tweet.unread {
+  background-color: #eed077;
+}
+
 .tweet .user {
   font-size: 9pt;
   color: #666;

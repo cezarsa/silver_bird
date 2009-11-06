@@ -14,7 +14,7 @@ TweetManagerConstants = {
 var TweetManager = {
   tweetsCache: [],
   newTweetsCache: [],
-  readTweets: {},
+  unreadTweets: {},
   timerId: null,
   currentError: null,
   currentPage: 1,
@@ -29,10 +29,10 @@ var TweetManager = {
     this.currentError = status;
   },
   readTweet: function(id) {
-    this.readTweets[id] = true;
+    delete this.unreadTweets[id];
   },
   isTweetRead: function(id) {
-    return this.readTweets[id];
+    return !this.unreadTweets[id];
   },
   newTweetsCount: function() {
     return this.newTweetsCache.length;
@@ -57,6 +57,7 @@ var TweetManager = {
 
     for(var i = tweets.length - 1; i >= 0; --i) {
       this.newTweetsCache.unshift(tweets[i]);
+      this.unreadTweets[tweets[i].id] = true;
     }
 
     if(tweets.length > 0) {
@@ -143,7 +144,8 @@ var TweetManager = {
       clearTimeout(this.timerId);
       this.timerId = null;
     }
-    this.tweetsCache =  [];
+    this.unreadTweets = {};
+    this.tweetsCache = [];
     this.newTweetsCache = [];
     this.newTweetsCallback = null;
     this.firstRun = true;
@@ -183,5 +185,11 @@ function signin(user, password) {
 function signout() {
   TweetManager.clear();
   twitterBackend = null;
+}
+
+if(localStorage.remember && localStorage.logged) {
+  //Initializing
+  signin(localStorage.username, localStorage.password);
+  TweetManager.giveMeTweets(function() {});
 }
 </script>
