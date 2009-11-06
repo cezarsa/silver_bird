@@ -158,15 +158,20 @@ a:hover {
   width: 80px;
 }
 
-#signin input {
+#signin input[type="text"], #signin input[type="password"] {
   border: 1px solid #882;
   width: 120px;
   margin-bottom: 5px;
 }
 
+#signin input[type="checkbox"] {
+  margin-left: 80px;
+}
+
 #signin input[type="button"] {
   background-color: #cc5;
   border: 1px solid #882;
+  width: 120px;
   margin-left: 80px;
   margin-top: 5px;
 }

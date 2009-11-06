@@ -146,7 +146,22 @@ function sendTweet() {
   }, $("#compose_tweet_area textarea").val());
 }
 
+function clearUserData() {
+  if(!$("input[name='remember']").is(":checked")) {
+    localStorage.removeItem('remember');
+    localStorage.removeItem('username');
+    localStorage.removeItem('password');
+    localStorage.removeItem('logged');
+  }
+}
+
 function signin() {
+  if($("input[name='remember']").is(":checked")) {
+    localStorage.remember = true;
+    localStorage.username = $("input[name='user']").val();
+    localStorage.password = $("input[name='password']").val();
+    localStorage.logged = true;
+  }
   chrome.extension.getBackgroundPage().signin($("input[name='user']").val(), $("input[name='password']").val());
   loadTimeline();
 
@@ -155,6 +170,7 @@ function signin() {
 }
 
 function signout() {
+  localStorage.removeItem('logged');
   chrome.extension.getBackgroundPage().signout();
   window.close();
 }
@@ -222,6 +238,15 @@ $(function() {
   if(!twitterBackend) {
     $("#signin").show();
     $("input[name='user']").focus();
+
+    if(localStorage.remember) {
+      $("input[name='user']").val(localStorage.username);
+      $("input[name='password']").val(localStorage.password);
+      $("input[name='remember']").attr('checked', 'checked');
+      if(localStorage.logged) {
+        signin();
+      }
+    }
   } else {
     $("#workspace").show();
     if(tweetManager.newTweetsCount() > 0) {
@@ -246,6 +271,8 @@ $(function() {
   <input name="user" type="text"/>
   <label for="password">Password:</label>
   <input name="password" type="password"/>
+  <input type="checkbox" name="remember" onclick="clearUserData();"/> Remember me
+
   <input value="Go!" type="button" onclick="signin()"/>
 </div>
 
