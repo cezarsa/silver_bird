@@ -1,0 +1,9 @@
+0.3
+
+* Tracking read / unread tweets
+* Notifying users when new tweets are available
+* Adding a "Remember me" option
+* Connecting to Twitter's API through HTTPS
+* [FIX] Limiting profile image size.
+* [FIX] Password field now allow any special characters.
+
