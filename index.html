@@ -85,7 +85,8 @@ $(function() {
 
   var ua = navigator.userAgent;
   if(ua.match(/Chrome/i)) {
-    if(ua.match(/Chrome\/4/)) {
+    var versionMain = ua.match(/Chrome\/(\d)/)[1];
+    if(versionMain >= 4) {
       $("#install").show();
     } else {
       $("#wrong_browser").text("You are running an unsupported version of Google Chrome. Check the compatibility note.");
@@ -138,9 +139,6 @@ Install it now!
     <li>Tweets caching to avoid hitting Twitter's API rate limit;</li>
     <li>Compose, reply, and RT tweets;</li>
     <li>The extension updates itself as soon as new versions are available.</li>
-  </ul>
-  <h1>Coming Soon</h1>
-  <ul>
     <li>Track read / unread tweets;</li>
     <li>Notify user whenever new tweets arrive.</li>
   </ul>
