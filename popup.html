@@ -260,19 +260,31 @@ function reply(node) {
   textareaChanged();
 }
 
-function showComposeArea(showOnly) {
+function showComposeArea(showOnly, noAnimation) {
   if(!$("#compose_tweet_area").is(':visible')) {
-    $("#compose_tweet_area").show('blind', { direction: "vertical" });
+    if(noAnimation) {
+      $("#compose_tweet_area").show();
+    } else {
+      $("#compose_tweet_area").show('blind', { direction: "vertical" });
+    }
     $("#compose_tweet img").attr('src', 'img/arrow_up.gif');
     $("#compose_tweet_area textarea").focus();
+    tweetManager.isComposing = true;
   } else if(!showOnly) {
-    $("#compose_tweet_area").hide('blind', { direction: "vertical" });
+    if(noAnimation) {
+      $("#compose_tweet_area").hide();
+    } else {
+      $("#compose_tweet_area").hide('blind', { direction: "vertical" });
+    }
     $("#compose_tweet img").attr('src', 'img/arrow_down.gif');
+    tweetManager.saveMessage = '';
+    tweetManager.isComposing = false;
   }
 }
 
 function textareaChanged() {
   var el = $("#compose_tweet_area textarea");
+  tweetManager.saveMessage = el.val();
   var availableChars = tweetManagerConst.MAX_TWEET_SIZE - el.val().length;
   var charsLeftEl = $("#compose_tweet_area .chars_left");
   charsLeftEl.text(availableChars);
@@ -325,6 +337,10 @@ $(function() {
       }
     }
     loadTimeline();
+  }
+  if(tweetManager.isComposing) {
+    showComposeArea(true, true);
+    $("#compose_tweet_area textarea").val(tweetManager.saveMessage || '');
   }
   tweetManager.registerNewTweetsCallback(newTweetsAvailable);
   Paginator.initialize();

@@ -24,6 +24,8 @@ var TweetManager = {
   iconRed: new Image(),
   iconBlue: new Image(),
   canvasContext: $("<canvas></canvas>")[0].getContext('2d'),
+  saveMessage: '',
+  isComposing: false,
 
   setError: function(status) {
     this.currentError = status;
@@ -149,6 +151,8 @@ var TweetManager = {
     this.newTweetsCache = [];
     this.newTweetsCallback = null;
     this.firstRun = true;
+    this.isComposing = false;
+    this.saveMessage = '';
     this.setError(null);
   },
   registerNewTweetsCallback: function(callback) {
