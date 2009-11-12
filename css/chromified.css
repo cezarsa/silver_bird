@@ -1,3 +1,8 @@
+/*
+  Chromified Theme
+  Copyright 2009 Will Ryan, ausnadian at gmail dot com
+*/
+
 body {
   font-family: Helvetica, Arial, sans-serif;
   margin: 0px;
@@ -11,9 +16,7 @@ a {
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
-}
+a:hover { text-decoration: underline; }
 
 #__debug {
   width: 200px;
@@ -44,104 +47,77 @@ a:hover {
   padding: 0px;
 }
 
-#paginator img {
-  cursor: pointer;
-}
+#paginator img { cursor: pointer; }
 
 #logout {
   float: left;
   font-size: 8pt;
-  margin-top: 4px;
-}
+  margin-top: 4px; }
 
 #loading {
   float: right;
   margin: 0px;
-  padding: 0px;
-}
+  padding: 0px; }
 
 #update_tweets {
   display: none;
-  -webkit-border-radius: 10px;
-  background-color: #EDEDB1;
+  -webkit-border-radius: 5px;
+  background-color: #b4cff2;
   font-size: 9pt;
   color: #666;
   font-weight: bold;
-  font-style: italic;
   text-align: center;
   margin-bottom: 3px;
-  cursor: pointer;
-}
+  cursor: pointer; }
 
-#update_tweets:hover {
-  background-color: #ee7;
-}
+#update_tweets:hover { background-color: #eff4fb; }
 
 #compose_tweet_area textarea {
+  -webkit-border-radius: 5px;
+  background-color: #f0f5fb;
+  border: 1px solid #c1cddc;
   width: 100%;
-  border: 1px solid #882;
   margin: 0px;
-  padding: 0px;
-}
+  padding: 0px; }
 
 #compose_tweet_area .footer .chars_left {
   margin-top: 3px;
-  float: right;
-}
+  float: right; }
 
-#compose_tweet_area input[type="button"] {
-  margin: 2px 0px 2px 0px;
-  padding: 0px;
-  background-color: #cc5;
-  border: 1px solid #882;
-}
+#compose_tweet_area input[type="button"]:hover:disabled { outline: inherit; }
 
-#compose_tweet_area input[type="button"]:hover {
-  outline: 1px solid #882;
-}
-
-#compose_tweet_area input[type="button"]:hover:disabled {
-  outline: inherit;
-}
-
-#compose_tweet img {
-  margin-top: 3px;
-}
+#compose_tweet img { margin-top: 3px; }
 
 #compose_tweet img.left {
   float: left;
-  margin-left: 5px;
-}
+  margin-left: 5px; }
 
 #compose_tweet img.right {
   float: right;
-  margin-right: 5px;
-}
+  margin-right: 5px; }
 
 #compose_tweet {
-  -webkit-border-radius: 10px;
-  background-color: #EDEDB1;
+  -webkit-border-radius: 5px;
   font-size: 9pt;
-  color: #666;
+  color: #000000;
   font-weight: bold;
-  font-style: italic;
   margin: 0px;
-  padding: 0px;
+  padding: 3px;
   text-align: center;
   cursor: pointer;
-}
+  background-color: #e5effe;
+  border: 1px solid #b4cff2; }
 
 #compose_tweet:hover {
-  background-color: #ee7;
-}
+  background-color: #f0f5fb;
+  border: 1px solid #c1cddc; }
 
 #signin {
   width: 210px;
-  background-color: #ee7;
+  background-color: #fcfeff;
   margin: 0px;
   padding: 3px;
-  color: #57572A;
-}
+  color: #57572A; }
 
 #signin h1 {
   margin: 0px;
@@ -149,79 +125,59 @@ a:hover {
   font-size: 10pt;
   font-weight: bold;
   text-align: center;
-  font-style: italic;
   width: 100%;
-}
+  background-color: #e5effe;
+  border: 1px solid #b4cff2;
+  -webkit-border-radius: 5px; }
 
 #signin label {
   float: left;
-  width: 80px;
-}
+  width: 80px; }
 
 #signin input[type="text"], #signin input[type="password"] {
   border: 1px solid #882;
   width: 120px;
-  margin-bottom: 5px;
-}
+  margin-bottom: 5px; }
 
-#signin input[type="checkbox"] {
-  margin-left: 80px;
-}
+#signin input[type="checkbox"] { margin-left: 80px; }
 
 #signin input[type="button"] {
-  background-color: #cc5;
-  border: 1px solid #882;
   width: 120px;
   margin-left: 80px;
-  margin-top: 5px;
-}
-#signin input[type="button"]:hover {
-  outline: 1px solid #882;
-}
+  margin-top: 5px; }
 
 .tweet {
   -webkit-border-radius: 5px;
   width: 350px;
-  background-color: #ee7;
+  background-color: #ffffff;
+  border: 3px solid #e5effe;
   padding: 2px 4px 2px 4px;
   margin-bottom: 3px;
-  clear: right;
-}
+  clear: right; }
 
-.tweet.unread {
-  background-color: #eed077;
-}
+.tweet.unread { border: 1px solid #4b8cdc; }
 
 .tweet .user {
   font-size: 9pt;
   color: #666;
   font-weight: bold;
-  font-style: italic;
-  text-decoration: none;
-}
+  text-decoration: none; }
 
 .tweet .footer {
   margin: 0px;
-  padding: 0px;
-}
+  padding: 0px; }
 
 .tweet .timestamp {
   font-size: 8pt;
   color: #999;
-  font-style: italic;
   margin-top: 2px;
-  float: left;
-}
+  float: left; }
 
-.tweet .actions {
-  float: right;
-}
+.tweet .actions { float: right; }
 
 .tweet .actions a {
   font-size: 8pt;
-  color: #999;
-  font-style: italic;
-}
+  color: #999; }
 
 .tweet img {
   -webkit-border-radius: 5px;
@@ -230,8 +186,7 @@ a:hover {
   float: left;
   cursor: pointer;
   height: 48px;
-  width: 48px;
-}
+  width: 48px; }
 
 
 /**
@@ -253,9 +208,10 @@ div.sexy {
 
 div.sexy input {
   margin: 0 0 0 0;
-  font: normal 8pt tahoma, arial, helvetica, sans-serif;
+  font:normal 8pt tahoma, arial, helvetica, sans-serif;
   padding:1px 3px;
-  border:1px solid #eed077;
+  background:#fff url(text-bg.gif) repeat-x 0 0;
+  border:1px solid #B5B8C8;
   height: 18px;
   line-height: 16px;
   vertical-align:middle;
@@ -269,9 +225,9 @@ div.sexy div.icon {
   width:17px;
   height:17px;
   border: 0;
-  background:transparent url(trigger.gif) no-repeat -17px 0px;
+  background:transparent url(trigger.gif) no-repeat 0 0;
   cursor:pointer;
-  border-bottom: 1px solid #eed077;
+  border-bottom: 1px solid #B5B8C8;
   top:0px;
   left: 129px;
 
@@ -310,5 +266,5 @@ div.sexy  li {
 }
 
 div.sexy li.active {
-  background-color: rgb(253, 240, 151);
+  background-color: rgb(223, 232, 246);
 }

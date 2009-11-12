@@ -1,5 +1,14 @@
-<link rel="stylesheet" type="text/css" href="css/whisper.css" />
+<html>
+<head>
+<!--
+HACK: Preloading themes CSS's with an invalid media (hidden) , otherwise popup window enlarges
+when loading it for the first time. (Don't know why...)
+-->
+<link rel="stylesheet" type="text/css" href="css/chromified.css" media="hidden" />
+<link rel="stylesheet" type="text/css" href="css/whisper.css" id="theme" />
+<link rel="stylesheet" type="text/css" href="css/sexy-combo.css" />
 <script type="text/javascript" src="lib/jquery.js"></script>
+<script type="text/javascript" src="lib/jquery.sexy-combo.js"></script>
 <script type="text/javascript" src="lib/jquery-ui-custom.js"></script>
 <script type="text/javascript" src="lib/jquery_replace_html.js"></script>
 <!--script type="text/javascript" src="lib/debug.js"></script-->
@@ -154,17 +163,26 @@ function assemblyTweets(tweets) {
       //Hovering for <time> seconds, let's read it.
       tweetManager.readTweet(this.id.split('_')[1]);
       $(this).removeClass('unread');
+      $(this).attr('style', '');
     },
     function() {
       //Starting countdown to read
-      $(this).animate({
-        backgroundColor: '#ee7'
-      }, 2000);
+      var testEl = $("<div class='tweet' style='display:none'></div>")
+      $(document.body).append(testEl);
+      var transformation = {};
+      jQuery.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopColor', 'color', 'outlineColor'], function(i, attr) {
+        var cssAttrName = attr.replace(/([A-Z])/g, '-$1').toLowerCase();
+        var originValue = testEl.css(cssAttrName);
+        if(originValue)
+          transformation[attr] = originValue;
+      });
+      testEl.remove();
+      $(this).animate(transformation, 2000);
     },
     function() {
       //Countdown aborted
       $(this).stop();
-      $(this).css('background-color', '#eed077');
+      $(this).attr('style', '');
     }
   );
 }
@@ -311,9 +329,30 @@ $(function() {
   tweetManager.registerNewTweetsCallback(newTweetsAvailable);
   Paginator.initialize();
   textareaChanged();
+  initTheme();
 });
-</script>
 
+function initTheme() {
+  var theme = localStorage.currentTheme;
+  if(theme) {
+    changeTheme(theme);
+    $("select#theme_selector").val(theme);
+  }
+  $("select#theme_selector").sexyCombo({changeCallback: changeTheme});
+}
+
+function changeTheme(newCss) {
+  if(!newCss) {
+    newCss = this.getHiddenValue();
+  }
+  localStorage.currentTheme = newCss;
+  var link_el = $("link#theme")[0]
+  var new_link_el = $("<link rel='stylesheet' id='theme' type='text/css'>").attr("href", newCss)[0];
+  link_el.parentNode.replaceChild(new_link_el, link_el);
+}
+</script>
+</head>
+<body>
 
 <div id="signin" style="display: none;">
   <h1>Twitter credentials</h1>
@@ -354,5 +393,11 @@ $(function() {
 
   <div id="update_tweets" onclick="loadNewTweets();"></div>
 
+  <select id="theme_selector">
+    <option value="css/whisper.css">Whispers (Default)</option>
+    <option value="css/chromified.css">Chromified</option>
+  </select>
   <div id="timeline"></div>
 </div>
+</body>
+</html>
