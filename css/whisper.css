@@ -28,7 +28,7 @@ a:hover {
 
 #workspace {
   margin: 0px 4px 0px 4px;
-  min-width: 350px;
+  min-width: 370px;
 }
 
 #timeline {
@@ -181,11 +181,10 @@ a:hover {
 
 .tweet {
   -webkit-border-radius: 5px;
-  width: 350px;
+  width: 370px;
   background-color: #ee7;
   padding: 2px 4px 2px 4px;
   margin-bottom: 3px;
-  clear: right;
 }
 
 .tweet.unread {
@@ -247,8 +246,10 @@ div.sexy {
   margin: 0;
   margin-bottom: 3px;
   padding: 0;
-  width: 146px;
+  width: 107px;
   float: right;
+  margin: 7px 8px 0px 0px;
+  z-index: 999;
 }
 
 div.sexy input {
@@ -261,7 +262,7 @@ div.sexy input {
   vertical-align:middle;
   left: 0px;
   top: 0px;
-  width: 129px;
+  width: 90px;
 
 }
 
@@ -273,7 +274,7 @@ div.sexy div.icon {
   cursor:pointer;
   border-bottom: 1px solid #eed077;
   top:0px;
-  left: 129px;
+  left: 90px;
 
 }
 
@@ -284,7 +285,7 @@ div.sexy div.list-wrapper {
   background-color: #FFFFFF;
   padding: 0;
   margin: 0;
-  width: 146px;
+  width: 105px;
   bottom: auto;
 }
 

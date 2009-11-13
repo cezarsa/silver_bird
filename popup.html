@@ -4,8 +4,12 @@
 HACK: Preloading themes CSS's with an invalid media (hidden) , otherwise popup window enlarges
 when loading it for the first time. (Don't know why...)
 -->
-<link rel="stylesheet" type="text/css" href="css/chromified.css" media="hidden" />
-<link rel="stylesheet" type="text/css" href="css/whisper.css" id="theme" />
+<link rel="stylesheet" type="text/css" href="css/whisper.css" class="theme" media="hidden" />
+<link rel="stylesheet" type="text/css" href="css/whisper-theme/jquery-ui-1.7.2.custom.css" class="theme" media="hidden"/>
+
+<link rel="stylesheet" type="text/css" href="css/chromified.css" class="theme" />
+<link rel="stylesheet" type="text/css" href="css/chromified-theme/jquery-ui-1.7.2.custom.css" class="theme" />
+
 <link rel="stylesheet" type="text/css" href="css/sexy-combo.css" />
 <script type="text/javascript" src="lib/jquery.js"></script>
 <script type="text/javascript" src="lib/jquery.sexy-combo.js"></script>
@@ -231,10 +235,12 @@ function signin() {
     localStorage.logged = true;
   }
   chrome.extension.getBackgroundPage().signin($("input[name='user']").val(), $("input[name='password']").val());
+  replaceUsername();
   loadTimeline();
 
   $("#signin").hide();
   $("#workspace").show();
+  ThemeManager.updateThemeSelector();
 }
 
 function signout() {
@@ -313,6 +319,10 @@ function loadNewTweets() {
   loadTimeline();
 }
 
+function replaceUsername() {
+  $(".__username").text(chrome.extension.getBackgroundPage().username);
+}
+
 $(function() {
   var twitterBackend = chrome.extension.getBackgroundPage().getTwitterBackend();
   if(!twitterBackend) {
@@ -329,6 +339,7 @@ $(function() {
     }
   } else {
     $("#workspace").show();
+    ThemeManager.updateThemeSelector();
     if(tweetManager.newTweetsCount() > 0) {
       if(tweetManager.currentPage == 1) {
         tweetManager.updateNewTweets();
@@ -345,27 +356,36 @@ $(function() {
   tweetManager.registerNewTweetsCallback(newTweetsAvailable);
   Paginator.initialize();
   textareaChanged();
-  initTheme();
+  $("#tabs").tabs();
+  ThemeManager.initTheme();
+  replaceUsername();
 });
 
-function initTheme() {
-  var theme = localStorage.currentTheme;
-  if(theme) {
-    changeTheme(theme);
-    $("select#theme_selector").val(theme);
-  }
-  $("select#theme_selector").sexyCombo({changeCallback: changeTheme});
-}
 
-function changeTheme(newCss) {
-  if(!newCss) {
-    newCss = this.getHiddenValue();
+ThemeManager = {
+  initTheme: function () {
+    var theme = localStorage.currentTheme;
+    if(theme) {
+      ThemeManager.changeTheme(theme);
+      $("select#theme_selector").val(theme);
+    }
+  },
+  updateThemeSelector: function() {
+    ThemeManager.initTheme();
+    $("select#theme_selector").sexyCombo({changeCallback: ThemeManager.changeTheme});
+  },
+  changeTheme: function (newCss) {
+    if(!newCss) {
+      newCss = this.getHiddenValue();
+    }
+    localStorage.currentTheme = newCss;
+    $("link.theme").remove();
+    $(newCss.split(",")).each(function(i, p) {
+      newLink = $("<link rel='stylesheet' type='text/css' class='theme'>").attr("href", p);
+      $(document.head).prepend(newLink);
+    });
   }
-  localStorage.currentTheme = newCss;
-  var link_el = $("link#theme")[0]
-  var new_link_el = $("<link rel='stylesheet' id='theme' type='text/css'>").attr("href", newCss)[0];
-  link_el.parentNode.replaceChild(new_link_el, link_el);
-}
+};
 </script>
 </head>
 <body>
@@ -410,10 +430,19 @@ function changeTheme(newCss) {
   <div id="update_tweets" onclick="loadNewTweets();"></div>
 
   <select id="theme_selector">
-    <option value="css/whisper.css">Whispers (Default)</option>
-    <option value="css/chromified.css">Chromified</option>
+    <option value="css/chromified.css,css/chromified-theme/jquery-ui-1.7.2.custom.css">Chromified</option>
+    <option value="css/whisper.css,css/whisper-theme/jquery-ui-1.7.2.custom.css">Whispers</option>
   </select>
-  <div id="timeline"></div>
+  <div id="tabs">
+    <ul>
+      <li><a href="#timeline"><span>Friends</span></a></li>
+      <li><a href="#timeline_mentions"><span>@<span class="__username"></span></span></a></li>
+      <li><a href="#timeline_dm"><span>DM</span></a></li>
+    </ul>
+    <div id="timeline"></div>
+    <div id="timeline_mentions"></div>
+    <div id="timeline_dm"></div>
+  </div>
 </div>
 </body>
 </html>

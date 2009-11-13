@@ -180,13 +180,16 @@ TweetManager.iconRed.src = "img/icon19_noalpha_red.png";
 TweetManager.iconBlue.src = "img/icon19_noalpha.png";
 
 var twitterBackend = null;
+var username = null;
 function getTwitterBackend() {
   return twitterBackend;
 }
 function signin(user, password) {
+  username = user;
   twitterBackend = new TwitterLib(user, password);
 }
 function signout() {
+  username = null;
   TweetManager.clear();
   twitterBackend = null;
 }

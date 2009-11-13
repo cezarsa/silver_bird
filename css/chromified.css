@@ -31,7 +31,7 @@ a:hover { text-decoration: underline; }
 
 #workspace {
   margin: 0px 4px 0px 4px;
-  min-width: 350px;
+  min-width: 370px;
 }
 
 #timeline {
@@ -148,12 +148,11 @@ a:hover { text-decoration: underline; }
 
 .tweet {
   -webkit-border-radius: 5px;
-  width: 350px;
+  width: 370px;
   background-color: #ffffff;
   border: 3px solid #e5effe;
   padding: 2px 4px 2px 4px;
-  margin-bottom: 3px;
-  clear: right; }
+  margin-bottom: 3px; }
 
 .tweet.unread { border: 1px solid #4b8cdc; }
 
@@ -202,8 +201,10 @@ div.sexy {
   margin: 0;
   margin-bottom: 3px;
   padding: 0;
-  width: 146px;
+  width: 107px;
   float: right;
+  margin: 7px 8px 0px 0px;
+  z-index: 999;
 }
 
 div.sexy input {
@@ -217,7 +218,7 @@ div.sexy input {
   vertical-align:middle;
   left: 0px;
   top: 0px;
-  width: 129px;
+  width: 90px;
 
 }
 
@@ -229,7 +230,7 @@ div.sexy div.icon {
   cursor:pointer;
   border-bottom: 1px solid #B5B8C8;
   top:0px;
-  left: 129px;
+  left: 90px;
 
 }
 
@@ -240,7 +241,7 @@ div.sexy div.list-wrapper {
   background-color: #FFFFFF;
   padding: 0;
   margin: 0;
-  width: 146px;
+  width: 105px;
   bottom: auto;
 }
 
