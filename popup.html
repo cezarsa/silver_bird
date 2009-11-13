@@ -112,6 +112,37 @@ function openTab(tabUrl) {
   chrome.tabs.create({ url: tabUrl });
 }
 
+function getTimestampText(inputTimestampStr) {
+  var inputTimestamp = Date.parse(inputTimestampStr);
+  var nowTimestamp = new Date().getTime();
+
+  var diff = (nowTimestamp - inputTimestamp) / 1000;
+  if(diff < 15) {
+    return "Just now";
+  } else if(diff < 60) {
+    return "Less than 1 minute ago";
+  } else if(diff < 60 * 60) {
+    var minutes = parseInt(diff / 60);
+    return minutes + " minute" + ((minutes > 1) ? "s" : "") + " ago";
+  } else if(diff < 60 * 60 * 24) {
+    var hours = parseInt(diff / (60 * 60));
+    return "about " + hours + " hour" + ((hours > 1) ? "s" : "") + " ago";
+  } else if(diff < 60 * 60 * 24 * 30) {
+    var days = parseInt(diff / (60 * 60 * 24));
+    return "about " + days + " day" + ((days > 1) ? "s" : "") + " ago";
+  } else if(diff < 60 * 60 * 24 * 30 * 12) {
+    var months = parseInt(diff / (60 * 60 * 24 * 30));
+    return "about " + months + " month" + ((months > 1) ? "s" : "") + " ago";
+  } else {
+    return "years ago";
+  }
+}
+
+function getTimestampAltText(inputTimestampStr) {
+  var inputTimestamp = Date.parse(inputTimestampStr);
+  return new Date(inputTimestamp).toLocaleDateString() + " " + new Date(inputTimestamp).toLocaleTimeString();
+}
+
 function renderTweet(tweet) {
   var str = '<div id="tweet_' + tweet.id + '" class="tweet">';
   str += '<img src="' + tweet.user.profile_image_url + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\')"></img>';
@@ -119,7 +150,7 @@ function renderTweet(tweet) {
   str += '<div class="text">' + tweet.text + '</div>';
 
   str += '<div class="footer">';
-  str += '<div class="timestamp">' + tweet.created_at + '</div>';
+  str += '<div class="timestamp" title="' + getTimestampAltText(tweet.created_at) + '">' + getTimestampText(tweet.created_at) + '</div>';
   str += '<div class="actions"><a href="#" onclick="retweet(this.parentNode.parentNode.parentNode)">RT</a> <a href="#" onclick="reply(this.parentNode.parentNode.parentNode)">Reply</a></div>'
   str += '</div>';
 
