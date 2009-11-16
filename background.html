@@ -17,8 +17,6 @@ var TweetManager = {
   unreadTweets: {},
   timerId: null,
   currentError: null,
-  currentPage: 1,
-  currentIsLastPage: false,
   firstRun: true,
   newTweetsCallback: null,
   iconRed: new Image(),
@@ -75,9 +73,11 @@ var TweetManager = {
   },
   onFetch: function(success, tweets, status, context) {
     if(!success) {
-      this.currentCallback = null;
       this.setError(status);
+      this.currentCallback(null);
+
       this.setError(null);
+      this.currentCallback = null;
       return;
     }
     this.setError(null);
@@ -89,16 +89,13 @@ var TweetManager = {
     for(; i < tweets.length; ++i) {
       this.tweetsCache.push(tweets[i]);
     }
-    var sliceStart = (context._page - 1) * context._count;
-    var sliceEnd = context._page * context._count;
-    this.currentCallback(this.tweetsCache/*.slice(sliceStart, sliceEnd)*/);
+    this.currentCallback(this.tweetsCache);
     this.currentCallback = null;
 
     if(this.firstRun) {
-      //Start looking for new tweets
-      this.fetchNewTweets();
       this.firstRun = false;
     }
+    this.fetchNewTweets();
   },
   updateNewTweets: function() {
     this.tweetsCache = this.newTweetsCache.concat(this.tweetsCache);
@@ -107,53 +104,57 @@ var TweetManager = {
     this.canvasContext.drawImage(this.iconBlue, 0, 0);
     chrome.browserAction.setIcon({imageData: this.canvasContext.getImageData(0, 0, 19, 19)});
   },
-  giveMeTweets: function(callback, syncNew) {
+  giveMeTweets: function(callback, syncNew, cacheOnly) {
     if(this.currentCallback) {
+      //Handling multiple calls to giveMeTweets, just update the registered
+      //callback and let the first request finish.
       this.currentCallback = callback;
       return;
     }
     if(syncNew) {
+      //We should fetch new tweets, update the cache and then return the
+      //cached results.
       var oldNewTweetsCallback = this.newTweetsCallback;
       var _this = this;
+      this.currentCallback = callback;
       this.newTweetsCallback = function() {
+        var tweetsCallback = _this.currentCallback;
+        _this.currentCallback = null;
+
         _this.updateNewTweets();
-        _this.giveMeTweets(callback);
+        _this.giveMeTweets(tweetsCallback, false, true);
         _this.newTweetsCallback = oldNewTweetsCallback;
       }
       this.fetchNewTweets();
       return;
     }
-    this.currentCallback = callback;
-    var page = this.currentPage;
-    var count = TweetManagerConstants.TWEETS_PER_PAGE;
-    if(this.tweetsCache.length >= (page * count) - 1) {
-      //Everything is cached, return right away.
-      this.currentCallback(this.tweetsCache/*.slice((page - 1) * count, page * count)*/);
-      this.currentCallback = null;
-    } else {
-      //Hmm... There's something missing let's try to fetch what's missing.
-      var missingCount = count;
-      var maxId = null;
-      if(this.tweetsCache.length > 0) {
-        maxId = this.tweetsCache[this.tweetsCache.length - 1].id;
-        missingCount += 1;
-      }
-      var context = {
-        _page: page,
-        _count: count,
-        usingMaxId: !!maxId
-      }
-      var _this = this;
-      twitterBackend.friendsTimeline(function(success, tweets, status, context) {
-        _this.onFetch.call(_this, success, tweets, status, context);
-      }, context, missingCount, null, null, maxId);
+    if(cacheOnly && !this.firstRun) {
+      //Only return cached results if this is not the first run.
+      callback(this.tweetsCache);
+      return;
     }
+    //If we didn't return yet it's because we want to fetch old tweets
+    //from twitter's API.
+
+    //First of all let's cancel the new tweets timer, we don't wanna mix
+    //things up.
+    this.cancelNewTweetsTimer();
+
+    this.currentCallback = callback;
+    var maxId = null;
+    if(this.tweetsCache.length > 0) {
+      maxId = this.tweetsCache[this.tweetsCache.length - 1].id;
+    }
+    var context = {
+      usingMaxId: !!maxId
+    }
+    var _this = this;
+    twitterBackend.friendsTimeline(function(success, tweets, status, context) {
+      _this.onFetch.call(_this, success, tweets, status, context);
+    }, context, TweetManagerConstants.TWEETS_PER_PAGE, null, null, maxId);
   },
   clear: function() {
-    if(this.timerId) {
-      clearTimeout(this.timerId);
-      this.timerId = null;
-    }
+    this.cancelNewTweetsTimer();
     this.unreadTweets = {};
     this.tweetsCache = [];
     this.newTweetsCache = [];
@@ -167,11 +168,14 @@ var TweetManager = {
   registerNewTweetsCallback: function(callback) {
     this.newTweetsCallback = callback;
   },
-  fetchNewTweets: function() {
+  cancelNewTweetsTimer: function() {
     if(this.timerId) {
       clearTimeout(this.timerId);
       this.timerId = null;
     }
+  },
+  fetchNewTweets: function() {
+    this.cancelNewTweetsTimer();
     var lastId = null;
     if(this.newTweetsCache.length > 0) {
       lastId = this.newTweetsCache[0].id;

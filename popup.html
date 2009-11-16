@@ -53,11 +53,13 @@ var tweetManager = chrome.extension.getBackgroundPage().TweetManager;
 var tweetManagerConst = chrome.extension.getBackgroundPage().TweetManagerConstants;
 
 Paginator = {
+  needsMore: false,
   firstPage: function() {
+    this.needsMore = false;
     $("#timeline").scrollTop(0);
   },
   nextPage: function() {
-    tweetManager.currentPage += 1;
+    this.needsMore = true;
     loadTimeline();
   }
 }
@@ -180,7 +182,7 @@ function assemblyTweets(tweets) {
   for(var unreadId in tweetManager.unreadTweets) {
     $("#tweet_" + unreadId).addClass('unread');
   }
-  $(".tweet.unread").hoverFor(2000,
+  $(".tweet.unread").hoverFor(1000,
     function() {
       //Hovering for <time> seconds, let's read it.
       tweetManager.readTweet(this.id.split('_')[1]);
@@ -199,7 +201,7 @@ function assemblyTweets(tweets) {
           transformation[attr] = originValue;
       });
       testEl.remove();
-      $(this).animate(transformation, 2000);
+      $(this).animate(transformation, 1000);
     },
     function() {
       //Countdown aborted
@@ -214,6 +216,7 @@ var loadingNewTweets = false;
 function onTimelineRetrieved(tweets) {
   $("#loading").hide();
   if(tweets) {
+    Paginator.needsMore = false;
     assemblyTweets(tweets);
   } else {
     showError('Unexpected error "' + chrome.extension.getBackgroundPage().TweetManager.currentError + '" during communication.', 'loadTimeline');
@@ -227,7 +230,11 @@ function loadTimeline(force) {
   if(force) {
     Paginator.firstPage();
   }
-  tweetManager.giveMeTweets(onTimelineRetrieved, force);
+  var cacheOnly = true;
+  if(Paginator.needsMore) {
+    cacheOnly = false;
+  }
+  tweetManager.giveMeTweets(onTimelineRetrieved, force, cacheOnly);
 }
 
 function sendTweet() {
