@@ -11,11 +11,13 @@ when loading it for the first time. (Don't know why...)
 <link rel="stylesheet" type="text/css" href="css/chromified-theme/jquery-ui-1.7.2.custom.css" class="theme" />
 
 <link rel="stylesheet" type="text/css" href="css/sexy-combo.css" />
+
 <script type="text/javascript" src="lib/jquery.js"></script>
 <script type="text/javascript" src="lib/jquery.sexy-combo.js"></script>
 <script type="text/javascript" src="lib/jquery-ui-custom.js"></script>
 <script type="text/javascript" src="lib/jquery_replace_html.js"></script>
-<!--script type="text/javascript" src="lib/debug.js"></script-->
+
+<script type="text/javascript" src="lib/debug.js"></script>
 <script type="text/javascript" src="lib/twitter_lib.js"></script>
 <script>
 $.fn.hoverFor = function(time, mainCallback, startingCallback, abortCallback) {
@@ -52,35 +54,36 @@ var tweetManagerConst = chrome.extension.getBackgroundPage().TweetManagerConstan
 
 Paginator = {
   firstPage: function() {
-    tweetManager.currentPage = 1;
-    $('#previousPage').hide();
+    $("#timeline").scrollTop(0);
   },
   nextPage: function() {
     tweetManager.currentPage += 1;
-    $('#previousPage').show();
     loadTimeline();
-  },
-  setLastPage: function() {
-    tweetManager.currentIsLastPage = true;
-    $('#nextPage').hide();
-  },
-  previousPage: function() {
-    tweetManager.currentIsLastPage = false;
-    $('#nextPage').show();
-    if(tweetManager.currentPage == 1) return;
-    tweetManager.currentPage -= 1;
-    if(tweetManager.currentPage == 1) {
-      $('#previousPage').hide();
+  }
+}
+
+ThemeManager = {
+  initTheme: function () {
+    var theme = localStorage.currentTheme;
+    if(theme) {
+      ThemeManager.changeTheme(theme);
+      $("select#theme_selector").val(theme);
     }
-    loadTimeline();
   },
-  initialize: function() {
-    if(tweetManager.currentPage == 1) {
-      $('#previousPage').hide();
+  updateThemeSelector: function() {
+    ThemeManager.initTheme();
+    $("select#theme_selector").sexyCombo({changeCallback: ThemeManager.changeTheme});
+  },
+  changeTheme: function (newCss) {
+    if(!newCss) {
+      newCss = this.getHiddenValue();
     }
-    if(tweetManager.currentIsLastPage) {
-      $('#nextPage').hide();
-    }
+    localStorage.currentTheme = newCss;
+    $("link.theme").remove();
+    $(newCss.split(",")).each(function(i, p) {
+      newLink = $("<link rel='stylesheet' type='text/css' class='theme'>").attr("href", p);
+      $(document.head).prepend(newLink);
+    });
   }
 }
 
@@ -89,22 +92,6 @@ function showError(msg, tryAgainFunction) {
   $("#error").text(msg);
   if(tryAgainFunction) {
     $("#error").append(' <a href="#" onclick="' + tryAgainFunction + '(); $(\'#error\').hide();">Try again</a>');
-  }
-}
-
-function onTimelineRetrieved(tweets) {
-  $("#loading").hide();
-  if(tweets) {
-    if(tweets.length == 0) {
-      Paginator.previousPage();
-    } else {
-      assemblyTweets(tweets);
-    }
-    if(tweets.length < tweetManagerConst.TWEETS_PER_PAGE) {
-      Paginator.setLastPage();
-    }
-  } else {
-    showError('Unexpected error "' + chrome.extension.getBackgroundPage().TweetManager.currentError + '" during communication.', 'loadTimeline');
   }
 }
 
@@ -222,7 +209,20 @@ function assemblyTweets(tweets) {
   );
 }
 
+var loadingNewTweets = false;
+
+function onTimelineRetrieved(tweets) {
+  $("#loading").hide();
+  if(tweets) {
+    assemblyTweets(tweets);
+  } else {
+    showError('Unexpected error "' + chrome.extension.getBackgroundPage().TweetManager.currentError + '" during communication.', 'loadTimeline');
+  }
+  loadingNewTweets = false;
+}
+
 function loadTimeline(force) {
+  loadingNewTweets = true;
   $("#loading").show();
   if(force) {
     Paginator.firstPage();
@@ -372,7 +372,7 @@ $(function() {
     $("#workspace").show();
     ThemeManager.updateThemeSelector();
     if(tweetManager.newTweetsCount() > 0) {
-      if(tweetManager.currentPage == 1) {
+      if(tweetManager.currentScroll == 0) {
         tweetManager.updateNewTweets();
       } else {
         newTweetsAvailable(tweetManager.newTweetsCount());
@@ -385,38 +385,26 @@ $(function() {
     $("#compose_tweet_area textarea").val(tweetManager.saveMessage || '');
   }
   tweetManager.registerNewTweetsCallback(newTweetsAvailable);
-  Paginator.initialize();
   textareaChanged();
   $("#tabs").tabs();
   ThemeManager.initTheme();
   replaceUsername();
-});
 
-
-ThemeManager = {
-  initTheme: function () {
-    var theme = localStorage.currentTheme;
-    if(theme) {
-      ThemeManager.changeTheme(theme);
-      $("select#theme_selector").val(theme);
-    }
-  },
-  updateThemeSelector: function() {
-    ThemeManager.initTheme();
-    $("select#theme_selector").sexyCombo({changeCallback: ThemeManager.changeTheme});
-  },
-  changeTheme: function (newCss) {
-    if(!newCss) {
-      newCss = this.getHiddenValue();
-    }
-    localStorage.currentTheme = newCss;
-    $("link.theme").remove();
-    $(newCss.split(",")).each(function(i, p) {
-      newLink = $("<link rel='stylesheet' type='text/css' class='theme'>").attr("href", p);
-      $(document.head).prepend(newLink);
-    });
+  if(tweetManager.currentScroll != 0) {
+    $("#timeline").scrollTop(tweetManager.currentScroll);
   }
-};
+  $("#timeline").scroll(function(e) {
+    var $this = $(this);
+    var threshold = 50;
+    tweetManager.currentScroll = $this.scrollTop();
+    var maxScroll = $this.attr("scrollHeight") - $this.height();
+    if(maxScroll - $this.scrollTop() < threshold) {
+      if(!loadingNewTweets) {
+        Paginator.nextPage();
+      }
+    }
+  });
+});
 </script>
 </head>
 <body>
@@ -449,11 +437,6 @@ ThemeManager = {
     <img class="right" src="img/arrow_down.gif"/>
   </div>
 
-  <div id="paginator">
-    <img src="img/arrow_left.gif" id="nextPage" onclick="Paginator.nextPage();"/>
-    <img src="img/none.gif"/>
-    <img src="img/arrow_right.gif" id="previousPage" onclick="Paginator.previousPage();"/>
-  </div>
   <div id="logout"><a href="#" onclick="signout()">Log out</a></div>
   <img src="img/loading.gif" id="loading" style="display: none;"/>
   <div style="clear: both;"></div>

@@ -34,6 +34,10 @@ a:hover {
 #timeline {
   margin: 0px;
   padding: 0px;
+  padding-right: 20px;
+  max-height: 400px;
+  overflow: auto;
+  overflow-x: hidden;
 }
 
 #paginator {

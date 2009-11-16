@@ -7,7 +7,7 @@
 TweetManagerConstants = {
   MAX_CACHED_ELEMENTS: 50,
   WAIT_TIME_UNTIL_REFETCH: 60000,
-  TWEETS_PER_PAGE: 5,
+  TWEETS_PER_PAGE: 10,
   MAX_TWEET_SIZE: 140
 };
 
@@ -26,6 +26,8 @@ var TweetManager = {
   canvasContext: $("<canvas></canvas>")[0].getContext('2d'),
   saveMessage: '',
   isComposing: false,
+  currentCallback: null,
+  currentScroll: 0,
 
   setError: function(status) {
     this.currentError = status;
@@ -73,8 +75,8 @@ var TweetManager = {
   },
   onFetch: function(success, tweets, status, context) {
     if(!success) {
+      this.currentCallback = null;
       this.setError(status);
-      context._callback(null);
       this.setError(null);
       return;
     }
@@ -89,7 +91,8 @@ var TweetManager = {
     }
     var sliceStart = (context._page - 1) * context._count;
     var sliceEnd = context._page * context._count;
-    context._callback(this.tweetsCache.slice(sliceStart, sliceEnd));
+    this.currentCallback(this.tweetsCache/*.slice(sliceStart, sliceEnd)*/);
+    this.currentCallback = null;
 
     if(this.firstRun) {
       //Start looking for new tweets
@@ -105,6 +108,10 @@ var TweetManager = {
     chrome.browserAction.setIcon({imageData: this.canvasContext.getImageData(0, 0, 19, 19)});
   },
   giveMeTweets: function(callback, syncNew) {
+    if(this.currentCallback) {
+      this.currentCallback = callback;
+      return;
+    }
     if(syncNew) {
       var oldNewTweetsCallback = this.newTweetsCallback;
       var _this = this;
@@ -116,21 +123,22 @@ var TweetManager = {
       this.fetchNewTweets();
       return;
     }
+    this.currentCallback = callback;
     var page = this.currentPage;
     var count = TweetManagerConstants.TWEETS_PER_PAGE;
     if(this.tweetsCache.length >= (page * count) - 1) {
       //Everything is cached, return right away.
-      callback(this.tweetsCache.slice((page - 1) * count, page * count));
+      this.currentCallback(this.tweetsCache/*.slice((page - 1) * count, page * count)*/);
+      this.currentCallback = null;
     } else {
       //Hmm... There's something missing let's try to fetch what's missing.
-      var missingCount = count * 2;
+      var missingCount = count;
       var maxId = null;
       if(this.tweetsCache.length > 0) {
         maxId = this.tweetsCache[this.tweetsCache.length - 1].id;
         missingCount += 1;
       }
       var context = {
-        _callback: callback,
         _page: page,
         _count: count,
         usingMaxId: !!maxId
@@ -154,6 +162,7 @@ var TweetManager = {
     this.isComposing = false;
     this.saveMessage = '';
     this.setError(null);
+    this.currentScroll = 0;
   },
   registerNewTweetsCallback: function(callback) {
     this.newTweetsCallback = callback;
