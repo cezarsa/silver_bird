@@ -1,4 +1,4 @@
-0.4
+0.4 (2009-11-17)
 
 * Adding theme support and a new default theme (Thanks Will Ryan)
 * Improved navigation with an endless scrollbar intelligently fetching older tweets
@@ -7,7 +7,7 @@
 * Better tweet timestamp handling with relative dates
 * Lots of small fixes in cache consistency
 
-0.3
+0.3 (2009-11-06)
 
 * Tracking read / unread tweets
 * Notifying users when new tweets are available
