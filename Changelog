@@ -1,3 +1,12 @@
+0.4
+
+* Adding theme support and a new default theme (Thanks Will Ryan)
+* Improved navigation with an endless scrollbar intelligently fetching older tweets
+* Switching to home_timeline, RT's are now displayed correctly
+* Closing the popup doesn't erase tweets being composed
+* Better tweet timestamp handling with relative dates
+* Lots of small fixes in cache consistency
+
 0.3
 
 * Tracking read / unread tweets
