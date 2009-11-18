@@ -121,7 +121,7 @@ a:hover { text-decoration: underline; }
   background-color: #fcfeff;
   margin: 0px;
   padding: 3px;
-  color: #57572A; }
+  color: black; }
 
 #signin h1 {
   margin: 0px;
@@ -139,7 +139,7 @@ a:hover { text-decoration: underline; }
   width: 80px; }
 
 #signin input[type="text"], #signin input[type="password"] {
-  border: 1px solid #882;
+  border: 1px solid #b4cff2;
   width: 120px;
   margin-bottom: 5px; }
 

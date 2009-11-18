@@ -5,7 +5,7 @@
 <script>
 
 TweetManagerConstants = {
-  MAX_CACHED_ELEMENTS: 50,
+  MAX_CACHED_ELEMENTS: 30,
   WAIT_TIME_UNTIL_REFETCH: 60000,
   TWEETS_PER_PAGE: 10,
   MAX_TWEET_SIZE: 140
@@ -130,6 +130,9 @@ var TweetManager = {
     }
     if(cacheOnly && !this.firstRun) {
       //Only return cached results if this is not the first run.
+      if(this.currentScroll == 0) {
+        this.cleanUpCache();
+      }
       callback(this.tweetsCache);
       return;
     }
@@ -152,6 +155,18 @@ var TweetManager = {
     twitterBackend.friendsTimeline(function(success, tweets, status, context) {
       _this.onFetch.call(_this, success, tweets, status, context);
     }, context, TweetManagerConstants.TWEETS_PER_PAGE, null, null, maxId);
+  },
+  cleanUpCache: function() {
+    var len = this.tweetsCache.length;
+    if(len <= TweetManagerConstants.MAX_CACHED_ELEMENTS)
+      return;
+    var i = len - 1;
+    for(; i >= TweetManagerConstants.MAX_CACHED_ELEMENTS; --i) {
+      if(!this.isTweetRead(this.tweetsCache[i].id)) {
+        break;
+      }
+    }
+    this.tweetsCache = this.tweetsCache.slice(0, i + 1);
   },
   clear: function() {
     this.cancelNewTweetsTimer();
