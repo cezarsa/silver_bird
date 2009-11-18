@@ -394,6 +394,7 @@ $(function() {
   tweetManager.registerNewTweetsCallback(newTweetsAvailable);
   textareaChanged();
   $("#tabs").tabs();
+  $("#tabs").data('disabled.tabs', [1, 2]);
   ThemeManager.initTheme();
   replaceUsername();
 
@@ -457,8 +458,8 @@ $(function() {
   <div id="tabs">
     <ul>
       <li><a href="#timeline"><span>Friends</span></a></li>
-      <li><a href="#timeline_mentions"><span>@<span class="__username"></span></span></a></li>
-      <li><a href="#timeline_dm"><span>DM</span></a></li>
+      <li><a href="#timeline_mentions"><span title="Coming soon...">@<span class="__username"></span></span></a></li>
+      <li><a href="#timeline_dm"><span title="Coming soon...">DM</span></a></li>
     </ul>
     <div id="timeline"></div>
     <div id="timeline_mentions"></div>
