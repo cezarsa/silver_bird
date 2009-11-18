@@ -52,6 +52,8 @@ var TweetManager = {
     var _this = this;
     if(!success) {
       this.setError(status);
+      if(context.onFinish)
+        context.onFinish(0);
       this.timerId = setTimeout(function() { _this.fetchNewTweets.call(_this); }, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH);
       return;
     }
@@ -69,6 +71,8 @@ var TweetManager = {
         this.newTweetsCallback(this.newTweetsCache.length);
       } catch(e) { /* ignoring */ }
     }
+    if(context.onFinish)
+      context.onFinish(tweets.length);
     this.timerId = setTimeout(function() { _this.fetchNewTweets.call(_this); }, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH);
   },
   onFetch: function(success, tweets, status, context) {
@@ -117,7 +121,8 @@ var TweetManager = {
       var oldNewTweetsCallback = this.newTweetsCallback;
       var _this = this;
       this.currentCallback = callback;
-      this.newTweetsCallback = function() {
+      this.newTweetsCallback = null;
+      var onFinishCallback = function() {
         var tweetsCallback = _this.currentCallback;
         _this.currentCallback = null;
 
@@ -125,7 +130,7 @@ var TweetManager = {
         _this.giveMeTweets(tweetsCallback, false, true);
         _this.newTweetsCallback = oldNewTweetsCallback;
       }
-      this.fetchNewTweets();
+      this.fetchNewTweets(onFinishCallback);
       return;
     }
     if(cacheOnly && !this.firstRun) {
@@ -189,7 +194,7 @@ var TweetManager = {
       this.timerId = null;
     }
   },
-  fetchNewTweets: function() {
+  fetchNewTweets: function(onFinishCallback) {
     this.cancelNewTweetsTimer();
     var lastId = null;
     if(this.newTweetsCache.length > 0) {
@@ -198,9 +203,10 @@ var TweetManager = {
       lastId = this.tweetsCache[0].id;
     }
     var _this = this;
+    var context = { onFinish: onFinishCallback };
     twitterBackend.friendsTimeline(function(success, tweets, status, context) {
       _this.onFetchNew.call(_this, success, tweets, status, context);
-    }, null, null, null, lastId)
+    }, context, null, null, lastId);
   }
 }
 
