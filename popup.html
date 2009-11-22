@@ -49,10 +49,10 @@ $.fn.hoverFor = function(time, mainCallback, startingCallback, abortCallback) {
  });
 };
 
-var tweetManager = chrome.extension.getBackgroundPage().TweetManager;
+var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
 var tweetManagerConst = chrome.extension.getBackgroundPage().TweetManagerConstants;
 
-Paginator = {
+var Paginator = {
   needsMore: false,
   firstPage: function() {
     this.needsMore = false;
@@ -64,7 +64,7 @@ Paginator = {
   }
 }
 
-ThemeManager = {
+var ThemeManager = {
   initTheme: function () {
     var theme = localStorage.currentTheme;
     if(theme) {
@@ -89,6 +89,195 @@ ThemeManager = {
   }
 }
 
+var Composer = {
+  retweet: function (node) {
+    Composer.showComposeArea(true);
+    var el = $("#compose_tweet_area textarea");
+    var user = $(".user", node).text();
+    var msg = $(".text", node).text();
+    el.val("RT @" + user + ": " + msg);
+    Composer.textareaChanged();
+  },
+
+  reply: function (node) {
+    Composer.showComposeArea(true);
+    var el = $("#compose_tweet_area textarea");
+    var user = $(".user", node).text();
+    el.val("@" + user + " ");
+    Composer.textareaChanged();
+  },
+
+  showComposeArea: function (showOnly, noAnimation) {
+    if(!$("#compose_tweet_area").is(':visible')) {
+      if(noAnimation) {
+        $("#compose_tweet_area").show();
+      } else {
+        $("#compose_tweet_area").show('blind', { direction: "vertical" });
+      }
+      $("#compose_tweet img").attr('src', 'img/arrow_up.gif');
+      $("#compose_tweet_area textarea").focus();
+      tweetManager.isComposing = true;
+    } else if(!showOnly) {
+      if(noAnimation) {
+        $("#compose_tweet_area").hide();
+      } else {
+        $("#compose_tweet_area").hide('blind', { direction: "vertical" });
+      }
+      $("#compose_tweet img").attr('src', 'img/arrow_down.gif');
+      tweetManager.saveMessage = '';
+      tweetManager.isComposing = false;
+    }
+  },
+
+  textareaChanged: function () {
+    var el = $("#compose_tweet_area textarea");
+    tweetManager.saveMessage = el.val();
+    var availableChars = tweetManagerConst.MAX_TWEET_SIZE - el.val().length;
+    var charsLeftEl = $("#compose_tweet_area .chars_left");
+    charsLeftEl.text(availableChars);
+    if(availableChars < 0) {
+      charsLeftEl.css('color', 'red');
+      $("#compose_tweet_area input[type='button']").attr("disabled", "disabled");
+    } else {
+      charsLeftEl.css('color', 'black');
+      $("#compose_tweet_area input[type='button']").removeAttr("disabled");
+    }
+  },
+
+  sendTweet: function () {
+    $("#loading").show();
+    $("#compose_tweet_area input[type='button']").attr("disabled", "disabled");
+    $("#compose_tweet_area textarea").attr("disabled", "disabled");
+    var twitterBackend = chrome.extension.getBackgroundPage().getTwitterBackend();
+    twitterBackend.tweet(function(success, data, status) {
+      $("#loading").hide();
+      $("#compose_tweet_area input[type='button']").removeAttr("disabled");
+      $("#compose_tweet_area textarea").removeAttr("disabled");
+      if(success) {
+        $("#compose_tweet_area textarea").val("");
+        Composer.textareaChanged();
+        Composer.showComposeArea();
+        loadTimeline(true);
+      } else {
+      }
+    }, $("#compose_tweet_area textarea").val());
+  }
+
+}
+
+var Renderer = {
+  getTimestampText: function (inputTimestampStr) {
+    var inputTimestamp = Date.parse(inputTimestampStr);
+    var nowTimestamp = new Date().getTime();
+
+    var diff = (nowTimestamp - inputTimestamp) / 1000;
+    if(diff < 15) {
+      return "Just now";
+    } else if(diff < 60) {
+      return "Less than 1 minute ago";
+    } else if(diff < 60 * 60) {
+      var minutes = parseInt(diff / 60);
+      return minutes + " minute" + ((minutes > 1) ? "s" : "") + " ago";
+    } else if(diff < 60 * 60 * 24) {
+      var hours = parseInt(diff / (60 * 60));
+      return "about " + hours + " hour" + ((hours > 1) ? "s" : "") + " ago";
+    } else if(diff < 60 * 60 * 24 * 30) {
+      var days = parseInt(diff / (60 * 60 * 24));
+      return "about " + days + " day" + ((days > 1) ? "s" : "") + " ago";
+    } else if(diff < 60 * 60 * 24 * 30 * 12) {
+      var months = parseInt(diff / (60 * 60 * 24 * 30));
+      return "about " + months + " month" + ((months > 1) ? "s" : "") + " ago";
+    } else {
+      return "years ago";
+    }
+  },
+
+  getTimestampAltText: function (inputTimestampStr) {
+    var inputTimestamp = Date.parse(inputTimestampStr);
+    return new Date(inputTimestamp).toLocaleDateString() + " " + new Date(inputTimestamp).toLocaleTimeString();
+  },
+
+  renderTweet: function (tweet) {
+    var str = '<div tweetid="' + tweet.id + '" class="tweet">';
+    str += '<img src="' + tweet.user.profile_image_url + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\')"></img>';
+    str += '<a href="#" class="user" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\')">' + tweet.user.screen_name + '</a>';
+    str += '<div class="text">' + tweet.text + '</div>';
+
+    str += '<div class="footer">';
+    str += '<div class="timestamp" title="' + Renderer.getTimestampAltText(tweet.created_at) + '">' + Renderer.getTimestampText(tweet.created_at) + '</div>';
+    str += '<div class="actions"><a href="#" onclick="Composer.retweet(this.parentNode.parentNode.parentNode)">RT</a> <a href="#" onclick="Composer.reply(this.parentNode.parentNode.parentNode)">Reply</a></div>'
+    str += '</div>';
+
+    str += '<div style="clear: both;"></div>'
+    str += '</div>'
+    return str;
+  },
+
+  assemblyTweets: function (tweets, timelineId) {
+    var destination = $("#timeline_" + timelineId);
+    destination.html('');
+    for(var i = 0; i < tweets.length; ++i) {
+      destination.append(Renderer.renderTweet(tweets[i]));
+    }
+
+    var transformList = [
+      {
+        //create links
+        'expression': /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig,
+        'replacement': "<a href='$1' onclick=\"openTab('$1')\">$1</a>"
+      },
+      {
+        //create hash search links
+        'expression': /(#\w*)/ig,
+        'replacement': function(matchedValue) {
+          var linkHref = TwitterLib.URLS.SEARCH + escape(matchedValue);
+          return "<a href='" + linkHref + "' onclick=\"openTab('" + linkHref + "')\">" + matchedValue + "</a>"
+        }
+      },
+      {
+        //create users links
+        'expression': /(@)(\w*)/ig,
+        'replacement': "$1<a href='" + TwitterLib.URLS.BASE + "$2' onclick=\"openTab('" + TwitterLib.URLS.BASE + "$2')\">$2</a>"
+      }
+    ]
+
+    for(var i = 0; i < transformList.length; ++i) {
+      $(".tweet .text", destination).replaceHtml(transformList[i].expression, transformList[i].replacement);
+    }
+
+    for(var unreadId in tweetManager.unreadTweets) {
+      $(".tweet[tweetid='" + unreadId +"']").addClass('unread');
+    }
+    $(".tweet.unread").hoverFor(1000,
+      function() {
+        //Hovering for <time> seconds, let's read it.
+        tweetManager.readTweet($(this).attr('tweetid'));
+        $(this).removeClass('unread');
+        $(this).attr('style', '');
+      },
+      function() {
+        //Starting countdown to read
+        var testEl = $("<div class='tweet' style='display:none'></div>")
+        $(document.body).append(testEl);
+        var transformation = {};
+        jQuery.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopColor', 'color', 'outlineColor'], function(i, attr) {
+          var cssAttrName = attr.replace(/([A-Z])/g, '-$1').toLowerCase();
+          var originValue = testEl.css(cssAttrName);
+          if(originValue)
+            transformation[attr] = originValue;
+        });
+        testEl.remove();
+        $(this).animate(transformation, 1000);
+      },
+      function() {
+        //Countdown aborted
+        $(this).stop();
+        $(this).attr('style', '');
+      }
+    );
+  }
+}
+
 function showError(msg, tryAgainFunction) {
   $("#error").show();
   $("#error").text(msg);
@@ -101,125 +290,15 @@ function openTab(tabUrl) {
   chrome.tabs.create({ url: tabUrl });
 }
 
-function getTimestampText(inputTimestampStr) {
-  var inputTimestamp = Date.parse(inputTimestampStr);
-  var nowTimestamp = new Date().getTime();
-
-  var diff = (nowTimestamp - inputTimestamp) / 1000;
-  if(diff < 15) {
-    return "Just now";
-  } else if(diff < 60) {
-    return "Less than 1 minute ago";
-  } else if(diff < 60 * 60) {
-    var minutes = parseInt(diff / 60);
-    return minutes + " minute" + ((minutes > 1) ? "s" : "") + " ago";
-  } else if(diff < 60 * 60 * 24) {
-    var hours = parseInt(diff / (60 * 60));
-    return "about " + hours + " hour" + ((hours > 1) ? "s" : "") + " ago";
-  } else if(diff < 60 * 60 * 24 * 30) {
-    var days = parseInt(diff / (60 * 60 * 24));
-    return "about " + days + " day" + ((days > 1) ? "s" : "") + " ago";
-  } else if(diff < 60 * 60 * 24 * 30 * 12) {
-    var months = parseInt(diff / (60 * 60 * 24 * 30));
-    return "about " + months + " month" + ((months > 1) ? "s" : "") + " ago";
-  } else {
-    return "years ago";
-  }
-}
-
-function getTimestampAltText(inputTimestampStr) {
-  var inputTimestamp = Date.parse(inputTimestampStr);
-  return new Date(inputTimestamp).toLocaleDateString() + " " + new Date(inputTimestamp).toLocaleTimeString();
-}
-
-function renderTweet(tweet) {
-  var str = '<div id="tweet_' + tweet.id + '" class="tweet">';
-  str += '<img src="' + tweet.user.profile_image_url + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\')"></img>';
-  str += '<a href="#" class="user" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\')">' + tweet.user.screen_name + '</a>';
-  str += '<div class="text">' + tweet.text + '</div>';
-
-  str += '<div class="footer">';
-  str += '<div class="timestamp" title="' + getTimestampAltText(tweet.created_at) + '">' + getTimestampText(tweet.created_at) + '</div>';
-  str += '<div class="actions"><a href="#" onclick="retweet(this.parentNode.parentNode.parentNode)">RT</a> <a href="#" onclick="reply(this.parentNode.parentNode.parentNode)">Reply</a></div>'
-  str += '</div>';
-
-  str += '<div style="clear: both;"></div>'
-  str += '</div>'
-  return str;
-}
-
-function assemblyTweets(tweets) {
-  $("#timeline").html('');
-  for(var i = 0; i < tweets.length; ++i) {
-    $("#timeline").append(renderTweet(tweets[i]));
-  }
-
-  var transformList = [
-    {
-      //create links
-      'expression': /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig,
-      'replacement': "<a href='$1' onclick=\"openTab('$1')\">$1</a>"
-    },
-    {
-      //create hash search links
-      'expression': /(#\w*)/ig,
-      'replacement': function(matchedValue) {
-        var linkHref = TwitterLib.URLS.SEARCH + escape(matchedValue);
-        return "<a href='" + linkHref + "' onclick=\"openTab('" + linkHref + "')\">" + matchedValue + "</a>"
-      }
-    },
-    {
-      //create users links
-      'expression': /(@)(\w*)/ig,
-      'replacement': "$1<a href='" + TwitterLib.URLS.BASE + "$2' onclick=\"openTab('" + TwitterLib.URLS.BASE + "$2')\">$2</a>"
-    }
-  ]
-
-  for(var i = 0; i < transformList.length; ++i) {
-    $("#timeline .tweet .text").replaceHtml(transformList[i].expression, transformList[i].replacement);
-  }
-
-  for(var unreadId in tweetManager.unreadTweets) {
-    $("#tweet_" + unreadId).addClass('unread');
-  }
-  $(".tweet.unread").hoverFor(1000,
-    function() {
-      //Hovering for <time> seconds, let's read it.
-      tweetManager.readTweet(this.id.split('_')[1]);
-      $(this).removeClass('unread');
-      $(this).attr('style', '');
-    },
-    function() {
-      //Starting countdown to read
-      var testEl = $("<div class='tweet' style='display:none'></div>")
-      $(document.body).append(testEl);
-      var transformation = {};
-      jQuery.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopColor', 'color', 'outlineColor'], function(i, attr) {
-        var cssAttrName = attr.replace(/([A-Z])/g, '-$1').toLowerCase();
-        var originValue = testEl.css(cssAttrName);
-        if(originValue)
-          transformation[attr] = originValue;
-      });
-      testEl.remove();
-      $(this).animate(transformation, 1000);
-    },
-    function() {
-      //Countdown aborted
-      $(this).stop();
-      $(this).attr('style', '');
-    }
-  );
-}
-
 var loadingNewTweets = false;
 
-function onTimelineRetrieved(tweets) {
+function onTimelineRetrieved(tweets, timelineId) {
   $("#loading").hide();
   if(tweets) {
     Paginator.needsMore = false;
-    assemblyTweets(tweets);
+    Renderer.assemblyTweets(tweets, timelineId);
   } else {
-    showError('Unexpected error "' + chrome.extension.getBackgroundPage().TweetManager.currentError + '" during communication.', 'loadTimeline');
+    showError('Unexpected error "' + tweetManager.currentError + '" during communication.', 'loadTimeline');
   }
   loadingNewTweets = false;
 }
@@ -234,26 +313,7 @@ function loadTimeline(force) {
   if(Paginator.needsMore) {
     cacheOnly = false;
   }
-  tweetManager.giveMeTweets(onTimelineRetrieved, force, cacheOnly);
-}
-
-function sendTweet() {
-  $("#loading").show();
-  $("#compose_tweet_area input[type='button']").attr("disabled", "disabled");
-  $("#compose_tweet_area textarea").attr("disabled", "disabled");
-  var twitterBackend = chrome.extension.getBackgroundPage().getTwitterBackend();
-  twitterBackend.tweet(function(success, data, status) {
-    $("#loading").hide();
-    $("#compose_tweet_area input[type='button']").removeAttr("disabled");
-    $("#compose_tweet_area textarea").removeAttr("disabled");
-    if(success) {
-      $("#compose_tweet_area textarea").val("");
-      textareaChanged();
-      showComposeArea();
-      loadTimeline(true);
-    } else {
-    }
-  }, $("#compose_tweet_area textarea").val());
+  tweetManager.giveMeTweets(tweetManager.currentTimeline, onTimelineRetrieved, force, cacheOnly);
 }
 
 function clearUserData() {
@@ -287,61 +347,17 @@ function signout() {
   window.close();
 }
 
-function retweet(node) {
-  showComposeArea(true);
-  var el = $("#compose_tweet_area textarea");
-  var user = $(".user", node).text();
-  var msg = $(".text", node).text();
-  el.val("RT @" + user + ": " + msg);
-  textareaChanged();
-}
-
-function reply(node) {
-  showComposeArea(true);
-  var el = $("#compose_tweet_area textarea");
-  var user = $(".user", node).text();
-  el.val("@" + user + " ");
-  textareaChanged();
-}
-
-function showComposeArea(showOnly, noAnimation) {
-  if(!$("#compose_tweet_area").is(':visible')) {
-    if(noAnimation) {
-      $("#compose_tweet_area").show();
-    } else {
-      $("#compose_tweet_area").show('blind', { direction: "vertical" });
-    }
-    $("#compose_tweet img").attr('src', 'img/arrow_up.gif');
-    $("#compose_tweet_area textarea").focus();
-    tweetManager.isComposing = true;
-  } else if(!showOnly) {
-    if(noAnimation) {
-      $("#compose_tweet_area").hide();
-    } else {
-      $("#compose_tweet_area").hide('blind', { direction: "vertical" });
-    }
-    $("#compose_tweet img").attr('src', 'img/arrow_down.gif');
-    tweetManager.saveMessage = '';
-    tweetManager.isComposing = false;
+function newTweetsAvailable(count, timelineId) {
+  var currentTimeline = tweetManager.currentTimeline;
+  if(timelineId != currentTimeline) {
+    $("#tab_modifier_" + timelineId).remove();
+    var timelineTabLink = $("a[href='#timeline_" + timelineId + "']");
+    var divEl = $("<div class='tab_modifier'></div>")
+      .attr('id', "tab_modifier_" + timelineId);
+    timelineTabLink.before(divEl);
+    divEl.css({width: (timelineTabLink.parent().width() - 12) + 'px'});
+    return;
   }
-}
-
-function textareaChanged() {
-  var el = $("#compose_tweet_area textarea");
-  tweetManager.saveMessage = el.val();
-  var availableChars = tweetManagerConst.MAX_TWEET_SIZE - el.val().length;
-  var charsLeftEl = $("#compose_tweet_area .chars_left");
-  charsLeftEl.text(availableChars);
-  if(availableChars < 0) {
-    charsLeftEl.css('color', 'red');
-    $("#compose_tweet_area input[type='button']").attr("disabled", "disabled");
-  } else {
-    charsLeftEl.css('color', 'black');
-    $("#compose_tweet_area input[type='button']").removeAttr("disabled");
-  }
-}
-
-function newTweetsAvailable(count) {
   var text = count + " more tweet";
   if(count > 1)
     text += "s";
@@ -352,13 +368,36 @@ function newTweetsAvailable(count) {
 
 function loadNewTweets() {
   Paginator.firstPage();
-  tweetManager.updateNewTweets();
+  tweetManager.clearAlert();
+  tweetManager.updateNewTweets(tweetManager.currentTimeline);
+  $("#tab_modifier_" + tweetManager.currentTimeline).remove();
   $("#update_tweets").fadeOut();
   loadTimeline();
 }
 
 function replaceUsername() {
   $(".__username").text(chrome.extension.getBackgroundPage().username);
+}
+
+function prepareAndLoadTimeline() {
+  var currentTimeline = tweetManager.currentTimeline;
+
+  $(["home", "mentions", "dms"]).each(function() {
+    var timelineId = this;
+    var newTweetsCount = tweetManager.newTweetsCount(timelineId);
+    if(newTweetsCount > 0) {
+      if(currentTimeline == timelineId &&
+          tweetManager.getTimeline(timelineId).currentScroll == 0) {
+        tweetManager.clearAlert();
+        tweetManager.updateNewTweets(timelineId);
+        $("#tab_modifier_" + timelineId).remove();
+      } else {
+        newTweetsAvailable(newTweetsCount, timelineId);
+      }
+    }
+  });
+
+  loadTimeline();
 }
 
 $(function() {
@@ -378,40 +417,45 @@ $(function() {
   } else {
     $("#workspace").show();
     ThemeManager.updateThemeSelector();
-    if(tweetManager.newTweetsCount() > 0) {
-      if(tweetManager.currentScroll == 0) {
-        tweetManager.updateNewTweets();
-      } else {
-        newTweetsAvailable(tweetManager.newTweetsCount());
-      }
-    }
-    loadTimeline();
+    prepareAndLoadTimeline();
   }
   if(tweetManager.isComposing) {
-    showComposeArea(true, true);
+    Composer.showComposeArea(true, true);
     $("#compose_tweet_area textarea").val(tweetManager.saveMessage || '');
   }
   tweetManager.registerNewTweetsCallback(newTweetsAvailable);
-  textareaChanged();
-  $("#tabs").tabs();
-  $("#tabs").data('disabled.tabs', [1, 2]);
+  Composer.textareaChanged();
+  $("#tabs").tabs({
+    select: function(event, ui) {
+      tweetManager.currentTimeline = ui.panel.id.split('_')[1];
+    },
+    show: function(event, ui) {
+      $("#update_tweets").hide();
+      prepareAndLoadTimeline();
+      $(ui.panel).scrollTop(tweetManager.getTimeline(tweetManager.currentTimeline).currentScroll);
+    }
+  });
+  $("#tabs").tabs('select', "#timeline_" + tweetManager.currentTimeline);
   ThemeManager.initTheme();
   replaceUsername();
 
-  if(tweetManager.currentScroll != 0) {
-    $("#timeline").scrollTop(tweetManager.currentScroll);
-  }
-  $("#timeline").scroll(function(e) {
-    var $this = $(this);
-    var threshold = 50;
-    tweetManager.currentScroll = $this.scrollTop();
-    var maxScroll = $this.attr("scrollHeight") - $this.height();
-    if(maxScroll - $this.scrollTop() < threshold) {
-      if(!loadingNewTweets) {
-        Paginator.nextPage();
+  $(["home", "mentions", "dms"]).each(function() {
+    var iterTab = this;
+    var tabEl = $("#timeline_" + iterTab);
+    tabEl.scrollTop(tweetManager.getTimeline(iterTab).currentScroll);
+    tabEl.scroll(function(e) {
+      var $this = $(this);
+      var threshold = 50;
+      tweetManager.getTimeline(iterTab).currentScroll = $this.scrollTop();
+      var maxScroll = $this.attr("scrollHeight") - $this.height();
+      if(maxScroll - $this.scrollTop() < threshold) {
+        if(!loadingNewTweets) {
+          Paginator.nextPage();
+        }
       }
-    }
+    });
   });
+
 });
 </script>
 </head>
@@ -433,13 +477,13 @@ $(function() {
 <div id="workspace" style="display: none;">
 
   <div id="compose_tweet_area" style="display: none;">
-    <textarea rows="4" onkeyup="textareaChanged();" onblur="textareaChanged();"></textarea>
+    <textarea rows="4" onkeyup="Composer.textareaChanged();" onblur="Composer.textareaChanged();"></textarea>
     <div class="footer">
-      <input type="button" value="Tweet it!" onclick="sendTweet();"/>
+      <input type="button" value="Tweet it!" onclick="Composer.sendTweet();"/>
       <span class="chars_left"></span>
     </div>
   </div>
-  <div id="compose_tweet" onclick="showComposeArea()">
+  <div id="compose_tweet" onclick="Composer.showComposeArea()">
     <img class="left" src="img/arrow_down.gif"/>
     Compose Tweet
     <img class="right" src="img/arrow_down.gif"/>
@@ -457,13 +501,13 @@ $(function() {
   </select>
   <div id="tabs">
     <ul>
-      <li><a href="#timeline"><span>Home</span></a></li>
-      <li><a href="#timeline_mentions"><span title="Coming soon...">@<span class="__username"></span></span></a></li>
-      <li><a href="#timeline_dm"><span title="Coming soon...">DM</span></a></li>
+      <li><a href="#timeline_home"><span>Home</span></a></li>
+      <li><a href="#timeline_mentions"><span>@<span class="__username"></span></span></a></li>
+      <li><a href="#timeline_dms"><span>DM</span></a></li>
     </ul>
-    <div id="timeline"></div>
-    <div id="timeline_mentions"></div>
-    <div id="timeline_dm"></div>
+    <div id="timeline_home" class="timeline"></div>
+    <div id="timeline_mentions" class="timeline"></div>
+    <div id="timeline_dms" class="timeline"></div>
   </div>
 </div>
 </body>

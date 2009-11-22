@@ -6,75 +6,87 @@
 
 TweetManagerConstants = {
   MAX_CACHED_ELEMENTS: 30,
-  WAIT_TIME_UNTIL_REFETCH: 60000,
+  WAIT_TIME_UNTIL_REFETCH_HOME: 60 * 1000,
+  WAIT_TIME_UNTIL_REFETCH_OTHERS: 150 * 1000,
   TWEETS_PER_PAGE: 10,
   MAX_TWEET_SIZE: 140
 };
 
-var TweetManager = {
-  tweetsCache: [],
-  newTweetsCache: [],
-  unreadTweets: {},
-  timerId: null,
-  currentError: null,
-  firstRun: true,
-  newTweetsCallback: null,
-  iconRed: new Image(),
-  iconBlue: new Image(),
-  canvasContext: $("<canvas></canvas>")[0].getContext('2d'),
-  saveMessage: '',
-  isComposing: false,
-  currentCallback: null,
-  currentScroll: 0,
+function TweetsTimeline(timelineId, manager, recheckTime) {
+  this.timelineId = timelineId;
+  this.manager = manager;
+  this.recheckTime = recheckTime;
+
+  this.tweetsCache = [];
+  this.newTweetsCache = [];
+
+  this.timerId = null;
+  this.currentError = null;
+  this.currentCallback = null;
+  this.currentScroll = 0;
+  this.firstRun = true;
+  this.timelinePath = timelineId;
+
+  switch(timelineId) {
+    case 'home':
+      this.timelinePath = 'statuses/home_timeline';
+      break;
+    case 'mentions':
+      this.timelinePath = 'statuses/mentions';
+      break;
+    case 'dms':
+      this.timelinePath = 'direct_messages';
+      break;
+  }
+}
+TweetsTimeline.prototype = {
 
   setError: function(status) {
     this.currentError = status;
   },
-  readTweet: function(id) {
-    delete this.unreadTweets[id];
-  },
-  isTweetRead: function(id) {
-    return !this.unreadTweets[id];
-  },
-  newTweetsCount: function() {
-    return this.newTweetsCache.length;
-  },
-  notifyNewTweets: function(size) {
-    var title = size + " new tweet";
-    if(size > 1)
-      title += "s";
-    chrome.browserAction.setTitle({title: title});
 
-    this.canvasContext.drawImage(this.iconRed, 0, 0);
-    chrome.browserAction.setIcon({imageData: this.canvasContext.getImageData(0, 0, 19, 19)});
-  },
   onFetchNew: function(success, tweets, status, context) {
     var _this = this;
     if(!success) {
       this.setError(status);
       if(context.onFinish)
         context.onFinish(0);
-      this.timerId = setTimeout(function() { _this.fetchNewTweets.call(_this); }, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH);
+      this.timerId = setTimeout(function() { _this.fetchNewTweets.call(_this); }, this.recheckTime);
       return;
     }
     this.setError(null);
 
     for(var i = tweets.length - 1; i >= 0; --i) {
       this.newTweetsCache.unshift(tweets[i]);
-      this.unreadTweets[tweets[i].id] = true;
+      this.manager.unreadTweets[tweets[i].id] = true;
     }
 
     if(tweets.length > 0) {
-      this.notifyNewTweets(this.newTweetsCache.length);
-      try {
-        // The callback might be invalid (popup not active), so let's ignore errors for now.
-        this.newTweetsCallback(this.newTweetsCache.length);
-      } catch(e) { /* ignoring */ }
+      this.manager.notifyNewTweets(this.timelineId, this.newTweetsCache.length);
     }
     if(context.onFinish)
       context.onFinish(tweets.length);
-    this.timerId = setTimeout(function() { _this.fetchNewTweets.call(_this); }, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH);
+    this.timerId = setTimeout(function() { _this.fetchNewTweets.call(_this); }, this.recheckTime);
   },
+
+  fetchNewTweets: function(onFinishCallback) {
+    if(this.timerId) {
+      clearTimeout(this.timerId);
+      this.timerId = null;
+    }
+    var lastId = null;
+    if(this.newTweetsCache.length > 0) {
+      lastId = this.newTweetsCache[0].id;
+    } else if(this.tweetsCache.length > 0) {
+      lastId = this.tweetsCache[0].id;
+    }
+    var _this = this;
+    var context = { onFinish: onFinishCallback };
+    twitterBackend.timeline(this.timelinePath, function(success, tweets, status, context) {
+      _this.onFetchNew.call(_this, success, tweets, status, context);
+    }, context, null, null, lastId);
+  },
+
   onFetch: function(success, tweets, status, context) {
     if(!success) {
       this.setError(status);
@@ -93,21 +105,15 @@ var TweetManager = {
     for(; i < tweets.length; ++i) {
       this.tweetsCache.push(tweets[i]);
     }
-    this.currentCallback(this.tweetsCache);
+    this.currentCallback(this.tweetsCache, this.timelineId);
     this.currentCallback = null;
 
     if(this.firstRun) {
       this.firstRun = false;
+      this.fetchNewTweets();
     }
-    this.fetchNewTweets();
   },
-  updateNewTweets: function() {
-    this.tweetsCache = this.newTweetsCache.concat(this.tweetsCache);
-    this.newTweetsCache = [];
-    chrome.browserAction.setTitle({title: "Check your tweets"});
-    this.canvasContext.drawImage(this.iconBlue, 0, 0);
-    chrome.browserAction.setIcon({imageData: this.canvasContext.getImageData(0, 0, 19, 19)});
-  },
+
   giveMeTweets: function(callback, syncNew, cacheOnly) {
     if(this.currentCallback) {
       //Handling multiple calls to giveMeTweets, just update the registered
@@ -118,15 +124,16 @@ var TweetManager = {
     if(syncNew) {
       //We should fetch new tweets, update the cache and then return the
       //cached results.
-      var oldNewTweetsCallback = this.newTweetsCallback;
+      var oldNewTweetsCallback = this.manager.newTweetsCallback;
       var _this = this;
       this.currentCallback = callback;
-      this.newTweetsCallback = null;
+      this.manager.newTweetsCallback = null;
       var onFinishCallback = function() {
         var tweetsCallback = _this.currentCallback;
         _this.currentCallback = null;
 
         _this.updateNewTweets();
+        _this.manager.clearAlert();
         _this.giveMeTweets(tweetsCallback, false, true);
         _this.newTweetsCallback = oldNewTweetsCallback;
       }
@@ -138,15 +145,11 @@ var TweetManager = {
       if(this.currentScroll == 0) {
         this.cleanUpCache();
       }
-      callback(this.tweetsCache);
+      callback(this.tweetsCache, this.timelineId);
       return;
     }
     //If we didn't return yet it's because we want to fetch old tweets
     //from twitter's API.
-
-    //First of all let's cancel the new tweets timer, we don't wanna mix
-    //things up.
-    this.cancelNewTweetsTimer();
 
     this.currentCallback = callback;
     var maxId = null;
@@ -157,10 +160,11 @@ var TweetManager = {
       usingMaxId: !!maxId
     }
     var _this = this;
-    twitterBackend.friendsTimeline(function(success, tweets, status, context) {
+    twitterBackend.timeline(this.timelinePath, function(success, tweets, status, context) {
       _this.onFetch.call(_this, success, tweets, status, context);
     }, context, TweetManagerConstants.TWEETS_PER_PAGE, null, null, maxId);
   },
+
   cleanUpCache: function() {
     var len = this.tweetsCache.length;
     if(len <= TweetManagerConstants.MAX_CACHED_ELEMENTS)
@@ -173,45 +177,100 @@ var TweetManager = {
     }
     this.tweetsCache = this.tweetsCache.slice(0, i + 1);
   },
-  clear: function() {
-    this.cancelNewTweetsTimer();
-    this.unreadTweets = {};
-    this.tweetsCache = [];
+
+  updateNewTweets: function() {
+    this.tweetsCache = this.newTweetsCache.concat(this.tweetsCache);
     this.newTweetsCache = [];
-    this.newTweetsCallback = null;
-    this.firstRun = true;
-    this.isComposing = false;
-    this.saveMessage = '';
-    this.setError(null);
-    this.currentScroll = 0;
   },
-  registerNewTweetsCallback: function(callback) {
-    this.newTweetsCallback = callback;
-  },
-  cancelNewTweetsTimer: function() {
-    if(this.timerId) {
-      clearTimeout(this.timerId);
-      this.timerId = null;
-    }
-  },
-  fetchNewTweets: function(onFinishCallback) {
-    this.cancelNewTweetsTimer();
-    var lastId = null;
-    if(this.newTweetsCache.length > 0) {
-      lastId = this.newTweetsCache[0].id;
-    } else if(this.tweetsCache.length > 0) {
-      lastId = this.tweetsCache[0].id;
-    }
-    var _this = this;
-    var context = { onFinish: onFinishCallback };
-    twitterBackend.friendsTimeline(function(success, tweets, status, context) {
-      _this.onFetchNew.call(_this, success, tweets, status, context);
-    }, context, null, null, lastId);
+
+  newTweetsCount: function() {
+    return this.newTweetsCache.length;
   }
 }
 
-TweetManager.iconRed.src = "img/icon19_noalpha_red.png";
-TweetManager.iconBlue.src = "img/icon19_noalpha.png";
+function TweetManager() {
+  this.unreadTweets = {};
+  this.newTweetsCallback = null;
+  this.iconRed = new Image();
+  this.iconBlue = new Image();
+  this.canvasContext = $("<canvas></canvas>")[0].getContext('2d');
+  this.saveMessage = '';
+  this.isComposing = false;
+
+  this.iconRed.src = "img/icon19_noalpha_red.png";
+  this.iconBlue.src = "img/icon19_noalpha.png";
+  this.currentTimeline = "home";
+
+  this.timelines = {};
+  this.timelines["home"] = new TweetsTimeline("home", this, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH_HOME);
+  this.timelines["mentions"] = new TweetsTimeline("mentions", this, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH_OTHERS);
+  this.timelines["dms"] = new TweetsTimeline("dms", this, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH_OTHERS);
+}
+
+TweetManager.prototype = {
+  clearAlert: function() {
+    chrome.browserAction.setTitle({title: "Check your tweets"});
+    this.canvasContext.drawImage(this.iconBlue, 0, 0);
+    chrome.browserAction.setIcon({imageData: this.canvasContext.getImageData(0, 0, 19, 19)});
+  },
+
+  giveMeTweets: function(timelineId, callback, syncNew, cacheOnly) {
+    var timeline = this.timelines[timelineId];
+    if(!timeline) {
+      return false;
+    }
+    return timeline.giveMeTweets(callback, syncNew, cacheOnly);
+  },
+
+  registerNewTweetsCallback: function(callback) {
+    this.newTweetsCallback = callback;
+  },
+
+  readTweet: function(id) {
+    delete this.unreadTweets[id];
+  },
+
+  isTweetRead: function(id) {
+    return !this.unreadTweets[id];
+  },
+
+  notifyNewTweets: function(timelineId, size) {
+    try {
+      // The callback might be invalid (popup not active), so let's ignore errors for now.
+      this.newTweetsCallback(size, timelineId);
+    } catch(e) { /* ignoring */ }
+
+    var title = size + " new tweet";
+    if(size > 1)
+      title += "s";
+    chrome.browserAction.setTitle({title: title});
+
+    this.canvasContext.drawImage(this.iconRed, 0, 0);
+    chrome.browserAction.setIcon({imageData: this.canvasContext.getImageData(0, 0, 19, 19)});
+  },
+
+  newTweetsCount: function(timelineId) {
+    var timeline = this.timelines[timelineId];
+    if(!timeline) {
+      return false;
+    }
+    return timeline.newTweetsCount();
+  },
+
+  updateNewTweets: function(timelineId) {
+    var timeline = this.timelines[timelineId];
+    if(!timeline) {
+      return false;
+    }
+    return timeline.updateNewTweets();
+  },
+
+  getTimeline: function(timelineId) {
+    return this.timelines[timelineId];
+  }
+}
+
+TweetManager.instance = new TweetManager();
 
 var twitterBackend = null;
 var username = null;
@@ -224,13 +283,15 @@ function signin(user, password) {
 }
 function signout() {
   username = null;
-  TweetManager.clear();
+  TweetManager.instance = new TweetManager();
   twitterBackend = null;
 }
 
 if(localStorage.remember && localStorage.logged) {
   //Initializing
   signin(localStorage.username, localStorage.password);
-  TweetManager.giveMeTweets(function() {});
+  TweetManager.instance.giveMeTweets("home", function() {});
+  TweetManager.instance.giveMeTweets("mentions", function() {});
+  TweetManager.instance.giveMeTweets("dms", function() {});
 }
 </script>
