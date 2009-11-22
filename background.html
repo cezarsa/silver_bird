@@ -56,13 +56,20 @@ TweetsTimeline.prototype = {
     }
     this.setError(null);
 
+    var unreadLength = 0;
     for(var i = tweets.length - 1; i >= 0; --i) {
       this.newTweetsCache.unshift(tweets[i]);
-      this.manager.unreadTweets[tweets[i].id] = true;
+      var tid = tweets[i].id;
+      if(context.onFinish) {
+        this.manager.readTweet(tid);
+      } else if(!this.manager.readTweets[tid]) {
+        ++unreadLength;
+        this.manager.unreadTweets[tid] = true;
+      }
     }
 
     if(tweets.length > 0) {
-      this.manager.notifyNewTweets(this.timelineId, this.newTweetsCache.length);
+      this.manager.notifyNewTweets(this.timelineId, this.newTweetsCache.length, unreadLength);
     }
     if(context.onFinish)
       context.onFinish(tweets.length);
@@ -135,7 +142,7 @@ TweetsTimeline.prototype = {
         _this.updateNewTweets();
         _this.manager.clearAlert();
         _this.giveMeTweets(tweetsCallback, false, true);
-        _this.newTweetsCallback = oldNewTweetsCallback;
+        _this.manager.newTweetsCallback = oldNewTweetsCallback;
       }
       this.fetchNewTweets(onFinishCallback);
       return;
@@ -171,7 +178,7 @@ TweetsTimeline.prototype = {
       return;
     var i = len - 1;
     for(; i >= TweetManagerConstants.MAX_CACHED_ELEMENTS; --i) {
-      if(!this.isTweetRead(this.tweetsCache[i].id)) {
+      if(!this.manager.isTweetRead(this.tweetsCache[i].id)) {
         break;
       }
     }
@@ -184,12 +191,20 @@ TweetsTimeline.prototype = {
   },
 
   newTweetsCount: function() {
-    return this.newTweetsCache.length;
+    var unreadCount = 0;
+    for(var i = this.newTweetsCache.length - 1; i >= 0; --i) {
+      if(!this.manager.isTweetRead(this.newTweetsCache[i].id)) {
+        ++unreadCount;
+      }
+    }
+    return [this.newTweetsCache.length, unreadCount];
   }
 }
 
 function TweetManager() {
   this.unreadTweets = {};
+  this.readTweets = {};
+
   this.newTweetsCallback = null;
   this.iconRed = new Image();
   this.iconBlue = new Image();
@@ -208,18 +223,16 @@ function TweetManager() {
 }
 
 TweetManager.prototype = {
+  eachTimeline: function(callback) {
+    for(var tId in this.timelines) {
+      callback.call(tId, this.timelines[tId]);
+    }
+  },
+
   clearAlert: function() {
     chrome.browserAction.setTitle({title: "Check your tweets"});
     this.canvasContext.drawImage(this.iconBlue, 0, 0);
     chrome.browserAction.setIcon({imageData: this.canvasContext.getImageData(0, 0, 19, 19)});
-  },
-
-  giveMeTweets: function(timelineId, callback, syncNew, cacheOnly) {
-    var timeline = this.timelines[timelineId];
-    if(!timeline) {
-      return false;
-    }
-    return timeline.giveMeTweets(callback, syncNew, cacheOnly);
   },
 
   registerNewTweetsCallback: function(callback) {
@@ -227,6 +240,7 @@ TweetManager.prototype = {
   },
 
   readTweet: function(id) {
+    this.readTweets[id] = true;
     delete this.unreadTweets[id];
   },
 
@@ -234,40 +248,45 @@ TweetManager.prototype = {
     return !this.unreadTweets[id];
   },
 
-  notifyNewTweets: function(timelineId, size) {
+  notifyNewTweets: function(timelineId, size, unreadSize) {
     try {
       // The callback might be invalid (popup not active), so let's ignore errors for now.
-      this.newTweetsCallback(size, timelineId);
+      this.newTweetsCallback(size, unreadSize, timelineId);
     } catch(e) { /* ignoring */ }
 
-    var title = size + " new tweet";
-    if(size > 1)
-      title += "s";
-    chrome.browserAction.setTitle({title: title});
+    if(unreadSize > 0) {
+      var title = size + " new tweet";
+      if(size > 1)
+        title += "s";
+      chrome.browserAction.setTitle({title: title});
 
-    this.canvasContext.drawImage(this.iconRed, 0, 0);
-    chrome.browserAction.setIcon({imageData: this.canvasContext.getImageData(0, 0, 19, 19)});
+      this.canvasContext.drawImage(this.iconRed, 0, 0);
+      chrome.browserAction.setIcon({imageData: this.canvasContext.getImageData(0, 0, 19, 19)});
+    }
+  },
+
+  postTweet: function(callback, msg) {
+    return twitterBackend.tweet(callback, msg);
+  },
+
+  /* Delegates */
+
+  giveMeTweets: function(timelineId, callback, syncNew, cacheOnly) {
+    return this.timelines[timelineId].giveMeTweets(callback, syncNew, cacheOnly);
   },
 
   newTweetsCount: function(timelineId) {
-    var timeline = this.timelines[timelineId];
-    if(!timeline) {
-      return false;
-    }
-    return timeline.newTweetsCount();
+    return this.timelines[timelineId].newTweetsCount();
   },
 
-  updateNewTweets: function(timelineId) {
-    var timeline = this.timelines[timelineId];
-    if(!timeline) {
-      return false;
-    }
-    return timeline.updateNewTweets();
+  updateNewTweets: function() {
+    return this.timelines[this.currentTimeline].updateNewTweets();
   },
 
-  getTimeline: function(timelineId) {
-    return this.timelines[timelineId];
+  getCurrentTimeline: function() {
+    return this.timelines[this.currentTimeline];
   }
+
 }
 
 TweetManager.instance = new TweetManager();

@@ -148,16 +148,22 @@ var Composer = {
     $("#loading").show();
     $("#compose_tweet_area input[type='button']").attr("disabled", "disabled");
     $("#compose_tweet_area textarea").attr("disabled", "disabled");
-    var twitterBackend = chrome.extension.getBackgroundPage().getTwitterBackend();
-    twitterBackend.tweet(function(success, data, status) {
+    tweetManager.postTweet(function(success, data, status) {
       $("#loading").hide();
       $("#compose_tweet_area input[type='button']").removeAttr("disabled");
       $("#compose_tweet_area textarea").removeAttr("disabled");
       if(success) {
-        $("#compose_tweet_area textarea").val("");
+        var textArea = $("#compose_tweet_area textarea");
+        var msg = textArea.val();
+        textArea.val("");
         Composer.textareaChanged();
         Composer.showComposeArea();
-        loadTimeline(true);
+
+        if(msg.match(/^d\s\w*?\s/i)) {
+          loadTimeline(true, "dms");
+        } else {
+          loadTimeline(true, "home");
+        }
       } else {
       }
     }, $("#compose_tweet_area textarea").val());
@@ -172,9 +178,9 @@ var Renderer = {
 
     var diff = (nowTimestamp - inputTimestamp) / 1000;
     if(diff < 15) {
-      return "Just now";
+      return "just now";
     } else if(diff < 60) {
-      return "Less than 1 minute ago";
+      return "less than 1 minute ago";
     } else if(diff < 60 * 60) {
       var minutes = parseInt(diff / 60);
       return minutes + " minute" + ((minutes > 1) ? "s" : "") + " ago";
@@ -303,7 +309,7 @@ function onTimelineRetrieved(tweets, timelineId) {
   loadingNewTweets = false;
 }
 
-function loadTimeline(force) {
+function loadTimeline(force, forcedTimeline) {
   loadingNewTweets = true;
   $("#loading").show();
   if(force) {
@@ -313,7 +319,10 @@ function loadTimeline(force) {
   if(Paginator.needsMore) {
     cacheOnly = false;
   }
-  tweetManager.giveMeTweets(tweetManager.currentTimeline, onTimelineRetrieved, force, cacheOnly);
+  if(!forcedTimeline) {
+    forcedTimeline = tweetManager.currentTimeline;
+  }
+  tweetManager.giveMeTweets(forcedTimeline, onTimelineRetrieved, force, cacheOnly);
 }
 
 function clearUserData() {
@@ -347,15 +356,18 @@ function signout() {
   window.close();
 }
 
-function newTweetsAvailable(count, timelineId) {
+function newTweetsAvailable(count, unreadCount, timelineId) {
   var currentTimeline = tweetManager.currentTimeline;
   if(timelineId != currentTimeline) {
+    if(unreadCount == 0)
+      return;
     $("#tab_modifier_" + timelineId).remove();
     var timelineTabLink = $("a[href='#timeline_" + timelineId + "']");
     var divEl = $("<div class='tab_modifier'></div>")
       .attr('id', "tab_modifier_" + timelineId);
     timelineTabLink.before(divEl);
-    divEl.css({width: (timelineTabLink.parent().width() - 12) + 'px'});
+    var modWidth = parseInt(timelineTabLink.parent().width()) - 12;
+    divEl.css({width: modWidth + 'px'});
     return;
   }
   var text = count + " more tweet";
@@ -369,7 +381,7 @@ function newTweetsAvailable(count, timelineId) {
 function loadNewTweets() {
   Paginator.firstPage();
   tweetManager.clearAlert();
-  tweetManager.updateNewTweets(tweetManager.currentTimeline);
+  tweetManager.updateNewTweets();
   $("#tab_modifier_" + tweetManager.currentTimeline).remove();
   $("#update_tweets").fadeOut();
   loadTimeline();
@@ -382,17 +394,18 @@ function replaceUsername() {
 function prepareAndLoadTimeline() {
   var currentTimeline = tweetManager.currentTimeline;
 
-  $(["home", "mentions", "dms"]).each(function() {
+  tweetManager.eachTimeline(function(timeline) {
     var timelineId = this;
-    var newTweetsCount = tweetManager.newTweetsCount(timelineId);
+    var newTweetsInfo = tweetManager.newTweetsCount(timelineId);
+    var newTweetsCount = newTweetsInfo[0];
     if(newTweetsCount > 0) {
       if(currentTimeline == timelineId &&
-          tweetManager.getTimeline(timelineId).currentScroll == 0) {
+          timeline.currentScroll == 0) {
         tweetManager.clearAlert();
-        tweetManager.updateNewTweets(timelineId);
+        tweetManager.updateNewTweets();
         $("#tab_modifier_" + timelineId).remove();
       } else {
-        newTweetsAvailable(newTweetsCount, timelineId);
+        newTweetsAvailable(newTweetsCount, newTweetsInfo[1], timelineId);
       }
     }
   });
@@ -417,7 +430,6 @@ $(function() {
   } else {
     $("#workspace").show();
     ThemeManager.updateThemeSelector();
-    prepareAndLoadTimeline();
   }
   if(tweetManager.isComposing) {
     Composer.showComposeArea(true, true);
@@ -432,21 +444,21 @@ $(function() {
     show: function(event, ui) {
       $("#update_tweets").hide();
       prepareAndLoadTimeline();
-      $(ui.panel).scrollTop(tweetManager.getTimeline(tweetManager.currentTimeline).currentScroll);
+      $(ui.panel).scrollTop(tweetManager.getCurrentTimeline().currentScroll);
     }
   });
   $("#tabs").tabs('select', "#timeline_" + tweetManager.currentTimeline);
   ThemeManager.initTheme();
   replaceUsername();
 
-  $(["home", "mentions", "dms"]).each(function() {
-    var iterTab = this;
-    var tabEl = $("#timeline_" + iterTab);
-    tabEl.scrollTop(tweetManager.getTimeline(iterTab).currentScroll);
+  tweetManager.eachTimeline(function(timeline) {
+    var timelineId = this;
+    var tabEl = $("#timeline_" + timelineId);
+    tabEl.scrollTop(timeline.currentScroll);
     tabEl.scroll(function(e) {
       var $this = $(this);
       var threshold = 50;
-      tweetManager.getTimeline(iterTab).currentScroll = $this.scrollTop();
+      timeline.currentScroll = $this.scrollTop();
       var maxScroll = $this.attr("scrollHeight") - $this.height();
       if(maxScroll - $this.scrollTop() < threshold) {
         if(!loadingNewTweets) {
