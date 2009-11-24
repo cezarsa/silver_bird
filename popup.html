@@ -90,6 +90,8 @@ var ThemeManager = {
 }
 
 var Composer = {
+  replyId: null,
+
   retweet: function (node) {
     Composer.showComposeArea(true);
     var el = $("#compose_tweet_area textarea");
@@ -104,6 +106,7 @@ var Composer = {
     var el = $("#compose_tweet_area textarea");
     var user = $(".user", node).text();
     el.val("@" + user + " ");
+    Composer.replyId = $(node).attr('tweetid');
     Composer.textareaChanged();
   },
 
@@ -156,6 +159,7 @@ var Composer = {
         var textArea = $("#compose_tweet_area textarea");
         var msg = textArea.val();
         textArea.val("");
+        Composer.replyId = null;
         Composer.textareaChanged();
         Composer.showComposeArea();
 
@@ -166,7 +170,7 @@ var Composer = {
         }
       } else {
       }
-    }, $("#compose_tweet_area textarea").val());
+    }, $("#compose_tweet_area textarea").val(), Composer.replyId);
   }
 
 }

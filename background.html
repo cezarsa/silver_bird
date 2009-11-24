@@ -280,8 +280,8 @@ TweetManager.prototype = {
     this.updateAlert();
   },
 
-  postTweet: function(callback, msg) {
-    return this.twitterBackend.tweet(callback, msg);
+  postTweet: function(callback, msg, replyId) {
+    return this.twitterBackend.tweet(callback, msg, replyId);
   },
 
   /* Delegates */
