@@ -2,6 +2,9 @@
 <script type="text/javascript" src="lib/twitter_lib.js"></script>
 <script type="text/javascript" src="lib/jquery.base64.js"></script>
 
+<script type="text/javascript" src="lib/oauth.js"></script>
+<script type="text/javascript" src="lib/sha1.js"></script>
+
 <script>
 
 TweetManagerConstants = {
@@ -45,6 +48,13 @@ TweetsTimeline.prototype = {
     this.currentError = status;
   },
 
+  stopTimer: function() {
+    if(this.timerId) {
+      clearTimeout(this.timerId);
+      this.timerId = null;
+    }
+  },
+
   onFetchNew: function(success, tweets, status, context) {
     var _this = this;
     if(!success) {
@@ -77,10 +87,7 @@ TweetsTimeline.prototype = {
   },
 
   fetchNewTweets: function(onFinishCallback) {
-    if(this.timerId) {
-      clearTimeout(this.timerId);
-      this.timerId = null;
-    }
+    this.stopTimer();
     var lastId = null;
     if(this.newTweetsCache.length > 0) {
       lastId = this.newTweetsCache[0].id;
@@ -89,7 +96,7 @@ TweetsTimeline.prototype = {
     }
     var _this = this;
     var context = { onFinish: onFinishCallback };
-    twitterBackend.timeline(this.timelinePath, function(success, tweets, status, context) {
+    this.manager.twitterBackend.timeline(this.timelinePath, function(success, tweets, status, context) {
       _this.onFetchNew.call(_this, success, tweets, status, context);
     }, context, null, null, lastId);
   },
@@ -167,7 +174,7 @@ TweetsTimeline.prototype = {
       usingMaxId: !!maxId
     }
     var _this = this;
-    twitterBackend.timeline(this.timelinePath, function(success, tweets, status, context) {
+    this.manager.twitterBackend.timeline(this.timelinePath, function(success, tweets, status, context) {
       _this.onFetch.call(_this, success, tweets, status, context);
     }, context, TweetManagerConstants.TWEETS_PER_PAGE, null, null, maxId);
   },
@@ -220,6 +227,13 @@ function TweetManager() {
   this.timelines["home"] = new TweetsTimeline("home", this, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH_HOME);
   this.timelines["mentions"] = new TweetsTimeline("mentions", this, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH_OTHERS);
   this.timelines["dms"] = new TweetsTimeline("dms", this, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH_OTHERS);
+
+  var _this = this;
+  this.twitterBackend = new TwitterLib(function onAuthenticated() {
+    _this.giveMeTweets.call(_this, "home", function() {});
+    _this.giveMeTweets.call(_this, "mentions", function() {});
+    _this.giveMeTweets.call(_this, "dms", function() {});
+  });
 }
 
 TweetManager.prototype = {
@@ -266,7 +280,7 @@ TweetManager.prototype = {
   },
 
   postTweet: function(callback, msg) {
-    return twitterBackend.tweet(callback, msg);
+    return this.twitterBackend.tweet(callback, msg);
   },
 
   /* Delegates */
@@ -285,32 +299,31 @@ TweetManager.prototype = {
 
   getCurrentTimeline: function() {
     return this.timelines[this.currentTimeline];
-  }
+  },
 
+  currentError: function() {
+    return this.timelines[this.currentTimeline].currentError;
+  },
+
+  stopAll: function() {
+    this.eachTimeline(function(timeline) {
+      timeline.stopTimer();
+      delete timeline;
+    });
+  },
+
+  signout: function() {
+    localStorage.removeItem('oauth_token_data');
+    this.stopAll();
+    TweetManager.instance = new TweetManager();
+  }
 }
 
 TweetManager.instance = new TweetManager();
 
-var twitterBackend = null;
-var username = null;
-function getTwitterBackend() {
-  return twitterBackend;
-}
-function signin(user, password) {
-  username = user;
-  twitterBackend = new TwitterLib(user, password);
-}
-function signout() {
-  username = null;
-  TweetManager.instance = new TweetManager();
-  twitterBackend = null;
-}
-
-if(localStorage.remember && localStorage.logged) {
-  //Initializing
-  signin(localStorage.username, localStorage.password);
-  TweetManager.instance.giveMeTweets("home", function() {});
-  TweetManager.instance.giveMeTweets("mentions", function() {});
-  TweetManager.instance.giveMeTweets("dms", function() {});
-}
+/* Clean up old versions mess */
+localStorage.removeItem('password');
+localStorage.removeItem('logged');
+localStorage.removeItem('username');
+localStorage.removeItem('remember');
 </script>

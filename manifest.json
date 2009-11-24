@@ -16,5 +16,11 @@
   "icons": {
     "19": "icon19.png"
   },
+  "content_scripts": [
+    {
+      "matches": ["http://twitter.com/oauth/authorize"],
+      "js": ["lib/jquery.js", "lib/oauth_authorizer.js"]
+    }
+  ],
   "update_url": "http://cezarsa.github.com/chromed_bird_updates.xml"
 }

@@ -126,40 +126,6 @@ a:hover { text-decoration: underline; }
   background-color: #f0f5fb;
   border: 1px solid #c1cddc; }
 
-#signin {
-  width: 210px;
-  background-color: #fcfeff;
-  margin: 0px;
-  padding: 3px;
-  color: black; }
-
-#signin h1 {
-  margin: 0px;
-  margin-bottom: 8px;
-  font-size: 10pt;
-  font-weight: bold;
-  text-align: center;
-  width: 100%;
-  background-color: #e5effe;
-  border: 1px solid #b4cff2;
-  -webkit-border-radius: 5px; }
-
-#signin label {
-  float: left;
-  width: 80px; }
-
-#signin input[type="text"], #signin input[type="password"] {
-  border: 1px solid #b4cff2;
-  width: 120px;
-  margin-bottom: 5px; }
-
-#signin input[type="checkbox"] { margin-left: 80px; }
-
-#signin input[type="button"] {
-  width: 120px;
-  margin-left: 80px;
-  margin-top: 5px; }
-
 .tweet {
   -webkit-border-radius: 5px;
   width: 370px;
