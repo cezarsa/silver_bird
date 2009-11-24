@@ -147,7 +147,7 @@ TweetsTimeline.prototype = {
         _this.currentCallback = null;
 
         _this.updateNewTweets();
-        _this.manager.clearAlert();
+        _this.manager.updateAlert();
         _this.giveMeTweets(tweetsCallback, false, true);
         _this.manager.newTweetsCallback = oldNewTweetsCallback;
       }
@@ -213,14 +213,9 @@ function TweetManager() {
   this.readTweets = {};
 
   this.newTweetsCallback = null;
-  this.iconRed = new Image();
-  this.iconBlue = new Image();
-  this.canvasContext = $("<canvas></canvas>")[0].getContext('2d');
   this.saveMessage = '';
   this.isComposing = false;
 
-  this.iconRed.src = "img/icon19_noalpha_red.png";
-  this.iconBlue.src = "img/icon19_noalpha.png";
   this.currentTimeline = "home";
 
   this.timelines = {};
@@ -243,10 +238,24 @@ TweetManager.prototype = {
     }
   },
 
-  clearAlert: function() {
-    chrome.browserAction.setTitle({title: "Check your tweets"});
-    this.canvasContext.drawImage(this.iconBlue, 0, 0);
-    chrome.browserAction.setIcon({imageData: this.canvasContext.getImageData(0, 0, 19, 19)});
+  updateAlert: function() {
+    var unreadNewCount = 0;
+    this.eachTimeline(function(timeline) {
+      unreadNewCount += timeline.newTweetsCount()[1];
+    });
+    if(unreadNewCount == 0) {
+      chrome.browserAction.setTitle({title: "Chromed Bird"});
+      chrome.browserAction.setIcon({path: 'img/icon19.png'});
+      chrome.browserAction.setBadgeText({text: ''});
+    } else {
+      var title = unreadNewCount + " new tweet";
+      if(unreadNewCount > 1)
+        title += "s";
+      chrome.browserAction.setTitle({title: title});
+      chrome.browserAction.setIcon({path: 'img/icon19_red.png'});
+      chrome.browserAction.setBadgeBackgroundColor({color: [255, 0, 0, 0]});
+      chrome.browserAction.setBadgeText({text: '' + unreadNewCount});
+    }
   },
 
   registerNewTweetsCallback: function(callback) {
@@ -268,15 +277,7 @@ TweetManager.prototype = {
       this.newTweetsCallback(size, unreadSize, timelineId);
     } catch(e) { /* ignoring */ }
 
-    if(unreadSize > 0) {
-      var title = size + " new tweet";
-      if(size > 1)
-        title += "s";
-      chrome.browserAction.setTitle({title: title});
-
-      this.canvasContext.drawImage(this.iconRed, 0, 0);
-      chrome.browserAction.setIcon({imageData: this.canvasContext.getImageData(0, 0, 19, 19)});
-    }
+    this.updateAlert();
   },
 
   postTweet: function(callback, msg) {
@@ -294,7 +295,8 @@ TweetManager.prototype = {
   },
 
   updateNewTweets: function() {
-    return this.timelines[this.currentTimeline].updateNewTweets();
+    this.timelines[this.currentTimeline].updateNewTweets();
+    this.updateAlert();
   },
 
   getCurrentTimeline: function() {

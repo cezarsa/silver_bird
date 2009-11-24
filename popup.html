@@ -354,7 +354,6 @@ function newTweetsAvailable(count, unreadCount, timelineId) {
 
 function loadNewTweets() {
   Paginator.firstPage();
-  tweetManager.clearAlert();
   tweetManager.updateNewTweets();
   $("#tab_modifier_" + tweetManager.currentTimeline).remove();
   $("#update_tweets").fadeOut();
@@ -375,7 +374,6 @@ function prepareAndLoadTimeline() {
     if(newTweetsCount > 0) {
       if(currentTimeline == timelineId &&
           timeline.currentScroll == 0) {
-        tweetManager.clearAlert();
         tweetManager.updateNewTweets();
         $("#tab_modifier_" + timelineId).remove();
       } else {
