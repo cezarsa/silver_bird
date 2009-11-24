@@ -1,3 +1,11 @@
+0.5 (2009-11-23)
+
+* Tabs allowing you to check your @replies and direct messages
+* Switching authentication to OAuth (now Twitter shows 'from Chromed Bird' yay!)
+* Showing badge text with new tweets count
+* Correctly handling replies to a specific tweet
+* Fixing freezing after sending a direct message
+
 0.4 (2009-11-17)
 
 * Adding theme support and a new default theme (Thanks Will Ryan)
