@@ -1,3 +1,8 @@
+0.51 (2009-11-24)
+
+* This version fixes some bugs introduced with OAuth authentication, it also
+  fixes an old bug regarding popup resizing.
+
 0.5 (2009-11-23)
 
 * Tabs allowing you to check your @replies and direct messages
