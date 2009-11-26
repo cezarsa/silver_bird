@@ -1,7 +1,7 @@
 {
   "name": "Chromed Bird",
   "version": "0.51",
-  "description": "General purpose Twitter extension",
+  "description": "Chromed Bird is a Twitter extension that allows you to follow your timelines and interact with your Twitter account.",
   "browser_action": {
     "default_icon": "img/icon19.png",
     "default_title": "Chromed Bird",
@@ -14,7 +14,7 @@
     "https://twitter.com/"
   ],
   "icons": {
-    "19": "icon19.png"
+    "19": "img/icon19.png"
   },
   "content_scripts": [
     {
@@ -22,5 +22,5 @@
       "js": ["lib/jquery.js", "lib/oauth_authorizer.js"]
     }
   ],
-  "update_url": "http://cezarsa.github.com/chromed_bird_updates.xml"
+  "update_url": "http://clients2.google.com/service/update2/crx"
 }
