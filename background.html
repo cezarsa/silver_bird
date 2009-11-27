@@ -208,16 +208,21 @@ TweetsTimeline.prototype = {
   }
 }
 
+function ComposerData() {
+  this.saveMessage = '';
+  this.isComposing = false;
+  this.replyId = null;
+}
+
 function TweetManager() {
   this.unreadTweets = {};
   this.readTweets = {};
 
   this.newTweetsCallback = null;
-  this.saveMessage = '';
-  this.isComposing = false;
+
+  this.composerData = new ComposerData();
 
   this.currentTimeline = "home";
-
   this.timelines = {};
   this.timelines["home"] = new TweetsTimeline("home", this, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH_HOME);
   this.timelines["mentions"] = new TweetsTimeline("mentions", this, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH_OTHERS);

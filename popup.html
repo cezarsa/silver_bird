@@ -117,7 +117,7 @@ var Composer = {
     var el = $("#compose_tweet_area textarea");
     var user = $(".user", node).text();
     el.val("@" + user + " ");
-    Composer.replyId = $(node).attr('tweetid');
+    tweetManager.composerData.replyId = Composer.replyId = $(node).attr('tweetid');
     Composer.textareaChanged();
   },
 
@@ -130,7 +130,8 @@ var Composer = {
       }
       $("#compose_tweet img").attr('src', 'img/arrow_up.gif');
       $("#compose_tweet_area textarea").focus();
-      tweetManager.isComposing = true;
+      tweetManager.composerData.isComposing = true;
+      tweetManager.composerData.replyId = Composer.replyId;
     } else if(!showOnly) {
       if(noAnimation) {
         $("#compose_tweet_area").hide();
@@ -138,14 +139,15 @@ var Composer = {
         $("#compose_tweet_area").hide('blind', { direction: "vertical" });
       }
       $("#compose_tweet img").attr('src', 'img/arrow_down.gif');
-      tweetManager.saveMessage = '';
-      tweetManager.isComposing = false;
+      tweetManager.composerData.saveMessage = '';
+      tweetManager.composerData.isComposing = false;
+      tweetManager.composerData.replyId = null;
     }
   },
 
   textareaChanged: function () {
     var el = $("#compose_tweet_area textarea");
-    tweetManager.saveMessage = el.val();
+    tweetManager.composerData.saveMessage = el.val();
     var availableChars = tweetManagerConst.MAX_TWEET_SIZE - el.val().length;
     var charsLeftEl = $("#compose_tweet_area .chars_left");
     charsLeftEl.text(availableChars);
@@ -403,9 +405,10 @@ function prepareAndLoadTimeline() {
 $(function() {
   $("#workspace").show();
   ThemeManager.updateThemeSelector();
-  if(tweetManager.isComposing) {
+  if(tweetManager.composerData.isComposing) {
+    Composer.replyId = tweetManager.composerData.replyId;
     Composer.showComposeArea(true, true);
-    $("#compose_tweet_area textarea").val(tweetManager.saveMessage || '');
+    $("#compose_tweet_area textarea").val(tweetManager.composerData.saveMessage || '');
   }
   tweetManager.registerNewTweetsCallback(newTweetsAvailable);
   Composer.textareaChanged();
