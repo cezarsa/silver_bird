@@ -18,6 +18,13 @@ a {
 
 a:hover { text-decoration: underline; }
 
+input[type='text'] {
+  -webkit-border-radius: 5px;
+  background-color: #f0f5fb;
+  border: 1px solid #c1cddc;
+  margin: 0px;
+}
+
 .tab_modifier {
   position: absolute;
   top: 1px;
@@ -53,16 +60,6 @@ a:hover { text-decoration: underline; }
   overflow-x: hidden;
 }
 
-#paginator {
-  float: left;
-  width: 30px;
-  height: 20px;
-  margin: 0px;
-  padding: 0px;
-}
-
-#paginator img { cursor: pointer; }
-
 #logout {
   float: left;
   font-size: 8pt;
@@ -85,6 +82,43 @@ a:hover { text-decoration: underline; }
   cursor: pointer; }
 
 #update_tweets:hover { background-color: #eff4fb; }
+
+#shortener_area {
+  margin: 0px;
+  padding: 0px;
+  margin-bottom: 2px;
+}
+
+#shortener_area input {
+  width: 100%;
+  z-index: 999;
+}
+
+#shortener_button {
+  left: 50%;
+  position: absolute;
+  width: 100px;
+  padding: 1px;
+  margin-left: -51px;
+}
+
+#shortener_button div {
+  text-align: center;
+  border-bottom-left-radius: 5px 5px;
+  border-bottom-right-radius: 5px 5px;
+  margin-top: -1px;
+  background-color: #e5effe;
+  border: 1px solid #b4cff2;
+  border-top: 0px;
+  cursor: pointer;
+  display: none;
+}
+
+#shortener_button div:hover {
+  background-color: #f0f5fb;
+  border: 1px solid #c1cddc;
+  border-top: 0px;
+}
 
 #compose_tweet_area textarea {
   -webkit-border-radius: 5px;

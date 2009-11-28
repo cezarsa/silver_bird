@@ -15,6 +15,12 @@ a:hover {
   text-decoration: underline;
 }
 
+input[type='text'] {
+  -webkit-border-radius: 5px;
+  border: 1px solid #882;
+  margin: 0px;
+}
+
 .tab_modifier {
   position: absolute;
   top: 1px;
@@ -50,18 +56,6 @@ a:hover {
   overflow-x: hidden;
 }
 
-#paginator {
-  float: left;
-  width: 30px;
-  height: 20px;
-  margin: 0px;
-  padding: 0px;
-}
-
-#paginator img {
-  cursor: pointer;
-}
-
 #logout {
   float: left;
   font-size: 8pt;
@@ -88,6 +82,38 @@ a:hover {
 }
 
 #update_tweets:hover {
+  background-color: #ee7;
+}
+
+#shortener_area {
+  margin: 0px;
+  padding: 0px;
+  margin-bottom: 2px;
+}
+
+#shortener_area input {
+  width: 100%;
+}
+
+#shortener_button {
+  left: 50%;
+  position: absolute;
+  width: 100px;
+  padding: 1px;
+  margin-left: -51px;
+}
+
+#shortener_button div {
+  text-align: center;
+  border-bottom-left-radius: 5px 5px;
+  border-bottom-right-radius: 5px 5px;
+  margin-top: -1px;
+  background-color: #EDEDB1;
+  cursor: pointer;
+  display: none;
+}
+
+#shortener_button div:hover {
   background-color: #ee7;
 }
 

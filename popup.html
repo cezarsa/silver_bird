@@ -22,7 +22,6 @@ var twitterBackend = tweetManager.twitterBackend;
 if(!twitterBackend.authenticated()) {
   twitterBackend.startAuthentication();
   window.close();
-  return;
 }
 </script>
 
@@ -125,11 +124,13 @@ var Composer = {
     if(!$("#compose_tweet_area").is(':visible')) {
       if(noAnimation) {
         $("#compose_tweet_area").show();
+        $("#compose_tweet_area textarea").focus();
       } else {
-        $("#compose_tweet_area").show('blind', { direction: "vertical" });
+        $("#compose_tweet_area").show('blind', { direction: "vertical" }, 'normal', function() {
+          $("#compose_tweet_area textarea").focus();
+        });
       }
       $("#compose_tweet img").attr('src', 'img/arrow_up.gif');
-      $("#compose_tweet_area textarea").focus();
       tweetManager.composerData.isComposing = true;
       tweetManager.composerData.replyId = Composer.replyId;
     } else if(!showOnly) {
@@ -142,6 +143,7 @@ var Composer = {
       tweetManager.composerData.saveMessage = '';
       tweetManager.composerData.isComposing = false;
       tweetManager.composerData.replyId = null;
+      Shortener.closeArea();
     }
   },
 
@@ -175,6 +177,7 @@ var Composer = {
         Composer.replyId = null;
         Composer.textareaChanged();
         Composer.showComposeArea();
+        Shortener.clear();
 
         if(msg.match(/^d\s\w*?\s/i)) {
           loadTimeline(true, "dms");
@@ -185,7 +188,68 @@ var Composer = {
       }
     }, $("#compose_tweet_area textarea").val(), Composer.replyId);
   }
+}
 
+var Shortener = {
+  SHORTENER_IDLE_STR: 'Type a URL to make it shorter.',
+
+  init: function() {
+    var savedUrl = tweetManager.composerData.urlShortener;
+    if(savedUrl != '') {
+      $("#shortener_area input").val(savedUrl);
+    }
+    this.blur();
+  },
+
+  clear: function() {
+    $("#shortener_area input").val('');
+    this.blur();
+  },
+
+  closeArea: function() {
+    tweetManager.composerData.urlShortener = '';
+  },
+
+  focus: function() {
+    var shortener = $("#shortener_area input");
+    var val = shortener.val();
+    if(val == this.SHORTENER_IDLE_STR) {
+      shortener.val('');
+      shortener.removeAttr('style');
+    }
+  },
+
+  blur: function() {
+    var shortener = $("#shortener_area input");
+    var val = shortener.val();
+    var shortenerButton = $("#shortener_button div");
+    if($.trim(val) == '') {
+      shortener.val(this.SHORTENER_IDLE_STR);
+      shortener.attr('style', 'color: #aaa;');
+      if(shortenerButton.is(":visible"))
+        shortenerButton.hide('blind', { direction: "vertical" });
+    } else {
+      if(!shortenerButton.is(":visible"))
+        shortenerButton.show('blind', { direction: "vertical" });
+    }
+  },
+
+  changed: function() {
+    var shortener = $("#shortener_area input");
+    var val = shortener.val();
+    tweetManager.composerData.urlShortener = val;
+    var shortenerButton = $("#shortener_button div");
+    if($.trim(val) != '') {
+      if(!shortenerButton.is(":visible"))
+        shortenerButton.show('blind', { direction: "vertical" });
+    } else {
+      if(shortenerButton.is(":visible"))
+        shortenerButton.hide('blind', { direction: "vertical" });
+    }
+  },
+
+  shortenIt: function() {
+  }
 }
 
 var Renderer = {
@@ -377,10 +441,6 @@ function loadNewTweets() {
   loadTimeline();
 }
 
-function replaceUsername() {
-  $(".__username").text(tweetManager.twitterBackend.username());
-}
-
 function prepareAndLoadTimeline() {
   var currentTimeline = tweetManager.currentTimeline;
 
@@ -403,6 +463,8 @@ function prepareAndLoadTimeline() {
 }
 
 $(function() {
+  if(!twitterBackend.authenticated())
+    return;
   $("#workspace").show();
   ThemeManager.updateThemeSelector();
   if(tweetManager.composerData.isComposing) {
@@ -411,7 +473,10 @@ $(function() {
     $("#compose_tweet_area textarea").val(tweetManager.composerData.saveMessage || '');
   }
   tweetManager.registerNewTweetsCallback(newTweetsAvailable);
+  $(".__username").text(tweetManager.twitterBackend.username());
   Composer.textareaChanged();
+  Shortener.init();
+
   $("#tabs").tabs({
     select: function(event, ui) {
       tweetManager.currentTimeline = ui.panel.id.split('_')[1];
@@ -424,7 +489,6 @@ $(function() {
   });
   $("#tabs").tabs('select', "#timeline_" + tweetManager.currentTimeline);
   ThemeManager.initTheme();
-  replaceUsername();
 
   tweetManager.eachTimeline(function(timeline) {
     var timelineId = this;
@@ -452,6 +516,10 @@ $(function() {
 
   <div id="compose_tweet_area" style="display: none;">
     <textarea rows="4" onkeyup="Composer.textareaChanged();" onblur="Composer.textareaChanged();"></textarea>
+    <div id="shortener_area">
+      <input type="text" name="shortener_text" onfocus="Shortener.focus();" onkeyup="Shortener.changed();" onblur="Shortener.blur();"></input>
+      <div id="shortener_button" onclick="Shortener.shortenIt();"><div>Shorten it!</div></div>
+    </div>
     <div class="footer">
       <input type="button" value="Tweet it!" onclick="Composer.sendTweet();"/>
       <span class="chars_left"></span>
