@@ -32,7 +32,10 @@ if(!twitterBackend.authenticated()) {
 <script type="text/javascript" src="lib/jquery_replace_html.js"></script>
 <script type="text/javascript" src="lib/debug.js"></script>
 <script type="text/javascript" src="lib/twitter_lib.js"></script>
+<script type="text/javascript" src="lib/shortener_lib.js"></script>
 <script>
+var shortener = new Shortener(localStorage.shortenerBackend);
+
 $.fn.hoverFor = function(time, mainCallback, startingCallback, abortCallback) {
   return this.each(function(){
     var _this = this, timeoutHandle, triggerFired = false;
@@ -147,7 +150,7 @@ var Composer = {
     }
   },
 
-  textareaChanged: function () {
+  textareaChanged: function (e) {
     var el = $("#compose_tweet_area textarea");
     tweetManager.composerData.saveMessage = el.val();
     var availableChars = tweetManagerConst.MAX_TWEET_SIZE - el.val().length;
@@ -159,6 +162,9 @@ var Composer = {
     } else {
       charsLeftEl.css('color', 'black');
       $("#compose_tweet_area input[type='button']").removeAttr("disabled");
+      if(e && e.ctrlKey && e.which == 13) { // Ctrl + Enter
+        this.sendTweet();
+      }
     }
   },
 
@@ -185,6 +191,7 @@ var Composer = {
           loadTimeline(true, "home");
         }
       } else {
+        $("#compose_tweet_area textarea").focus();
       }
     }, $("#compose_tweet_area textarea").val(), Composer.replyId);
   }
@@ -219,36 +226,85 @@ var Shortener = {
     }
   },
 
+  showButton: function() {
+    var shortenerButton = $("#shortener_button div");
+    if(!shortenerButton.is(":visible"))
+      shortenerButton.show('blind', { direction: "vertical" }, 'fast');
+  },
+
+  hideButton: function() {
+    var shortenerButton = $("#shortener_button div");
+    if(shortenerButton.is(":visible"))
+      shortenerButton.hide('blind', { direction: "vertical" }, 'fast');
+  },
+
   blur: function() {
     var shortener = $("#shortener_area input");
     var val = shortener.val();
-    var shortenerButton = $("#shortener_button div");
-    if($.trim(val) == '') {
+    if($.trim(val) == '' || val == this.SHORTENER_IDLE_STR) {
       shortener.val(this.SHORTENER_IDLE_STR);
       shortener.attr('style', 'color: #aaa;');
-      if(shortenerButton.is(":visible"))
-        shortenerButton.hide('blind', { direction: "vertical" });
+      this.hideButton();
     } else {
-      if(!shortenerButton.is(":visible"))
-        shortenerButton.show('blind', { direction: "vertical" });
+      this.showButton();
     }
   },
 
-  changed: function() {
+  changed: function(e) {
     var shortener = $("#shortener_area input");
     var val = shortener.val();
     tweetManager.composerData.urlShortener = val;
-    var shortenerButton = $("#shortener_button div");
     if($.trim(val) != '') {
-      if(!shortenerButton.is(":visible"))
-        shortenerButton.show('blind', { direction: "vertical" });
+      if(e.which == 13) { //Enter key
+        this.shortenIt();
+      } else {
+        this.showButton();
+      }
     } else {
-      if(shortenerButton.is(":visible"))
-        shortenerButton.hide('blind', { direction: "vertical" });
+      this.hideButton();
     }
   },
 
+  shortenCurrentPage: function() {
+    var _this = this;
+    chrome.tabs.getSelected(null, function(tab) {
+      var shortenerInput = $("#shortener_area input");
+      shortenerInput.val(tab.url);
+      _this.shortenIt();
+    });
+  },
+
   shortenIt: function() {
+    var shortenerInput = $("#shortener_area input");
+    var longUrl = shortenerInput.val();
+    this.shortenPage(longUrl);
+  },
+
+  shortenPage: function(longUrl) {
+    $("#loading").show();
+    var shortenerInput = $("#shortener_area input");
+    shortenerInput.attr('disabled', 'disabled');
+    this.hideButton();
+    var _this = this;
+    shortener.shorten(longUrl, function(shortUrl) {
+      $("#loading").hide();
+      shortenerInput.removeAttr('disabled');
+      _this.closeArea();
+      _this.clear();
+      var textarea = $("#compose_tweet_area textarea");
+      if(shortUrl) {
+        var newText = textarea.val();
+        if(newText.length > 0 && newText[newText.length - 1] != ' ') {
+          newText += ' ';
+        }
+        newText += shortUrl;
+        textarea.val(newText);
+        textarea[0].selectionStart = newText.length;
+        textarea[0].selectionEnd = newText.length;
+        Composer.textareaChanged();
+      }
+      textarea.focus();
+    });
   }
 }
 
@@ -515,9 +571,10 @@ $(function() {
 <div id="workspace" style="display: none;">
 
   <div id="compose_tweet_area" style="display: none;">
-    <textarea rows="4" onkeyup="Composer.textareaChanged();" onblur="Composer.textareaChanged();"></textarea>
+    <textarea rows="4" onkeyup="Composer.textareaChanged(event);" onblur="Composer.textareaChanged();"></textarea>
     <div id="shortener_area">
-      <input type="text" name="shortener_text" onfocus="Shortener.focus();" onkeyup="Shortener.changed();" onblur="Shortener.blur();"></input>
+      <input type="text" name="shortener_text" onfocus="Shortener.focus();" onkeyup="Shortener.changed(event);" onblur="Shortener.blur();"></input>
+      <div id="shorten_current" title="Share current page" onclick="Shortener.shortenCurrentPage();"></div>
       <div id="shortener_button" onclick="Shortener.shortenIt();"><div>Shorten it!</div></div>
     </div>
     <div class="footer">

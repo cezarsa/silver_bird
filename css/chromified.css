@@ -120,6 +120,16 @@ input[type='text'] {
   border-top: 0px;
 }
 
+#shorten_current {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  right: 4px;
+  margin-top: -18px;
+  background: #fff url(../img/globe_blue.png) repeat-x 0 0;
+  cursor: pointer;
+}
+
 #compose_tweet_area textarea {
   -webkit-border-radius: 5px;
   background-color: #f0f5fb;

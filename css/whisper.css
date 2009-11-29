@@ -117,6 +117,16 @@ input[type='text'] {
   background-color: #ee7;
 }
 
+#shorten_current {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  right: 4px;
+  margin-top: -18px;
+  background: #fff url(../img/globe_yellow.png) repeat-x 0 0;
+  cursor: pointer;
+}
+
 #compose_tweet_area textarea {
   width: 100%;
   border: 1px solid #882;

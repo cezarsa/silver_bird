@@ -11,7 +11,9 @@
   "permissions": [
     "tabs",
     "http://twitter.com/",
-    "https://twitter.com/"
+    "https://twitter.com/",
+    "http://api.bit.ly/",
+    "http://api.tr.im/"
   ],
   "icons": {
     "19": "img/icon19.png"
