@@ -104,14 +104,37 @@ var ThemeManager = {
 
 var Composer = {
   replyId: null,
+  rtId: null,
 
-  retweet: function (node) {
+  share: function (node) {
     Composer.showComposeArea(true);
     var el = $("#compose_tweet_area textarea");
     var user = $(".user", node).text();
     var msg = $(".text", node).text();
     el.val("RT @" + user + ": " + msg);
     Composer.textareaChanged();
+  },
+
+  confirmRT: function() {
+    $("#loading").show();
+    $(".rt_confirm").hide();
+    tweetManager.postRetweet(function(success, data, status) {
+      $("#loading").hide();
+      if(success) {
+        loadTimeline(true, "home");
+      } else {
+      }
+    }, this.rtId);
+  },
+
+  denyRT: function() {
+    $(".rt_confirm").hide();
+  },
+
+  retweet: function (node) {
+    $(".rt_confirm").hide();
+    $(".rt_confirm", node).show();
+    this.rtId = $(node).attr('tweetid');
   },
 
   reply: function (node) {
@@ -124,13 +147,17 @@ var Composer = {
   },
 
   showComposeArea: function (showOnly, noAnimation) {
-    if(!$("#compose_tweet_area").is(':visible')) {
+    var composeArea = $("#compose_tweet_area");
+    var textarea = $("textarea", composeArea);
+    var visible = composeArea.is(':visible');
+
+    if(!visible) {
       if(noAnimation) {
-        $("#compose_tweet_area").show();
-        $("#compose_tweet_area textarea").focus();
+        composeArea.show();
       } else {
-        $("#compose_tweet_area").show('blind', { direction: "vertical" }, 'normal', function() {
-          $("#compose_tweet_area textarea").focus();
+        composeArea.show('blind', { direction: "vertical" }, 'normal', function() {
+          textarea[0].selectionStart = textarea[0].selectionEnd = textarea.val().length;
+          textarea.focus();
         });
       }
       $("#compose_tweet img").attr('src', 'img/arrow_up.gif');
@@ -138,15 +165,20 @@ var Composer = {
       tweetManager.composerData.replyId = Composer.replyId;
     } else if(!showOnly) {
       if(noAnimation) {
-        $("#compose_tweet_area").hide();
+        composeArea.hide();
       } else {
-        $("#compose_tweet_area").hide('blind', { direction: "vertical" });
+        composeArea.hide('blind', { direction: "vertical" });
       }
       $("#compose_tweet img").attr('src', 'img/arrow_down.gif');
       tweetManager.composerData.saveMessage = '';
       tweetManager.composerData.isComposing = false;
       tweetManager.composerData.replyId = null;
       Shortener.closeArea();
+    }
+
+    if((visible && showOnly) || (!visible && noAnimation)) {
+      textarea[0].selectionStart = textarea[0].selectionEnd = textarea.val().length;
+      textarea.focus();
     }
   },
 
@@ -299,11 +331,9 @@ var Shortener = {
         }
         newText += shortUrl;
         textarea.val(newText);
-        textarea[0].selectionStart = newText.length;
-        textarea[0].selectionEnd = newText.length;
         Composer.textareaChanged();
       }
-      textarea.focus();
+      Composer.showComposeArea(true);
     });
   }
 }
@@ -341,17 +371,40 @@ var Renderer = {
   },
 
   renderTweet: function (tweet) {
+    var user = tweet.user;
+    var text = tweet.text;
+    if(tweet.retweeted_status) {
+      user = tweet.retweeted_status.user
+      text = tweet.retweeted_status.text
+    }
+
     var str = '<div tweetid="' + tweet.id + '" class="tweet">';
-    str += '<img src="' + tweet.user.profile_image_url + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\')"></img>';
-    str += '<a href="#" class="user" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\')">' + tweet.user.screen_name + '</a>';
-    str += '<div class="text">' + tweet.text + '</div>';
+    str += '<img class="profile" src="' + user.profile_image_url + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + user.screen_name + '\')"></img>';
+    str += '<a href="#" class="user" onclick="openTab(\'' + TwitterLib.URLS.BASE + user.screen_name + '\')">' + user.screen_name + '</a>';
+    str += '<div class="text">';
+    if(tweet.retweeted_status) {
+      str += '<img class="retweet" src="img/retweet.png">'
+    }
+    str += text + '</div>';
 
     str += '<div class="footer">';
-    str += '<div class="timestamp" title="' + Renderer.getTimestampAltText(tweet.created_at) + '">' + Renderer.getTimestampText(tweet.created_at) + '</div>';
-    str += '<div class="actions"><a href="#" onclick="Composer.retweet(this.parentNode.parentNode.parentNode)">RT</a> <a href="#" onclick="Composer.reply(this.parentNode.parentNode.parentNode)">Reply</a></div>'
+    str += '<div class="timestamp" title="' + Renderer.getTimestampAltText(tweet.created_at) + '">' + Renderer.getTimestampText(tweet.created_at);
+    if(tweet.retweeted_status) {
+      str += ' retweeted by <a href="' + TwitterLib.URLS.BASE + tweet.user.screen_name + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\');">' + tweet.user.screen_name + '</a>';
+    } else if(tweetManager.isRetweet(tweet.id)) {
+      str += ' retweeted by me';
+    }
+
+    str += '</div>';
+    str += '<div class="actions">';
+    str += '<a href="#" onclick="Composer.reply(this.parentNode.parentNode.parentNode)">Reply</a> ';
+    if(!tweetManager.isRetweet(tweet.id) && tweet.user.screen_name != tweetManager.twitterBackend.username()) {
+      str += '<a href="#" onclick="Composer.retweet(this.parentNode.parentNode.parentNode)">RT</a><div class="rt_confirm">Retweet this message: <a href="javascript:Composer.confirmRT();">Yes</a> <a href="javascript:Composer.denyRT();">No</a></div> ';
+    }
+    str += '<a href="#" onclick="Composer.share(this.parentNode.parentNode.parentNode)">Share</a></div>';
     str += '</div>';
 
-    str += '<div style="clear: both;"></div>'
+    str += '<div style="clear: both;"></div>';
     str += '</div>'
     return str;
   },
@@ -525,8 +578,8 @@ $(function() {
   ThemeManager.updateThemeSelector();
   if(tweetManager.composerData.isComposing) {
     Composer.replyId = tweetManager.composerData.replyId;
-    Composer.showComposeArea(true, true);
     $("#compose_tweet_area textarea").val(tweetManager.composerData.saveMessage || '');
+    Composer.showComposeArea(true, true);
   }
   tweetManager.registerNewTweetsCallback(newTweetsAvailable);
   $(".__username").text(tweetManager.twitterBackend.username());
@@ -573,7 +626,7 @@ $(function() {
   <div id="compose_tweet_area" style="display: none;">
     <textarea rows="4" onkeyup="Composer.textareaChanged(event);" onblur="Composer.textareaChanged();"></textarea>
     <div id="shortener_area">
-      <input type="text" name="shortener_text" onfocus="Shortener.focus();" onkeyup="Shortener.changed(event);" onblur="Shortener.blur();"></input>
+      <input type="text" name="shortener_text" onfocus="Shortener.focus();" onkeyup="Shortener.changed(event);" onblur="Shortener.blur();">
       <div id="shorten_current" title="Share current page" onclick="Shortener.shortenCurrentPage();"></div>
       <div id="shortener_button" onclick="Shortener.shortenIt();"><div>Shorten it!</div></div>
     </div>

@@ -208,6 +208,7 @@ input[type='text'] {
 .tweet .footer {
   margin: 0px;
   padding: 0px;
+  position: relative;
 }
 
 .tweet .timestamp {
@@ -228,7 +229,7 @@ input[type='text'] {
   font-style: italic;
 }
 
-.tweet img {
+.tweet img.profile {
   -webkit-border-radius: 5px;
   border: 0;
   margin-right: 4px;
@@ -238,6 +239,23 @@ input[type='text'] {
   width: 48px;
 }
 
+.tweet img.retweet {
+  width: 14px;
+  height: 14px;
+  margin-right: 2px;
+  margin-top: 1px;
+  vertical-align: top;
+}
+
+.tweet .rt_confirm {
+  -webkit-border-radius: 5px;
+  background-color: #EDEDB1;
+  position: absolute;
+  right: 0px;
+  top: 15px;
+  display: none;
+  padding: 5px;
+}
 
 /**
     Sexy Combo Skin

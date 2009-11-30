@@ -216,6 +216,7 @@ function ComposerData() {
 function TweetManager() {
   this.unreadTweets = {};
   this.readTweets = {};
+  this.retweets = {};
 
   this.newTweetsCallback = null;
 
@@ -275,6 +276,10 @@ TweetManager.prototype = {
     return !this.unreadTweets[id];
   },
 
+  isRetweet: function(id) {
+    return this.retweets[id];
+  },
+
   notifyNewTweets: function(timelineId, size, unreadSize) {
     try {
       // The callback might be invalid (popup not active), so let's ignore errors for now.
@@ -286,6 +291,16 @@ TweetManager.prototype = {
 
   postTweet: function(callback, msg, replyId) {
     return this.twitterBackend.tweet(callback, msg, replyId);
+  },
+
+  postRetweet: function(callback, id) {
+    var _this = this;
+    return this.twitterBackend.retweet(function(success, data, status) {
+      if(success) {
+        _this.retweets[id] = true;
+      }
+      callback(success, data, status);
+    }, id);
   },
 
   /* Delegates */
