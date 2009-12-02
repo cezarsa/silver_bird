@@ -197,7 +197,13 @@ input[type='text'] {
   background-color: #eed077;
 }
 
+.tweet .text {
+  clear: right;
+  padding-top: 2px;
+}
+
 .tweet .user {
+  float: left;
   font-size: 9pt;
   color: #666;
   font-weight: bold;
@@ -255,6 +261,13 @@ input[type='text'] {
   top: 15px;
   display: none;
   padding: 5px;
+}
+
+.tweet .extra_tweet_data {
+  float: right;
+  color: #999;
+  font-size: 8pt;
+  min-height: 10pt;
 }
 
 /**

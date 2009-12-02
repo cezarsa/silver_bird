@@ -408,9 +408,34 @@ var Renderer = {
       tweetClass += ' unread';
     }
 
+    var from = null;
+    if(tweet.source) {
+      from = tweet.source.replace(/(href=(['"])(.*?)\2)/i, "$1 onclick=\"openTab('$3')\"");
+    }
+
+    var inReply = null;
+    if(tweet.in_reply_to_status_id) {
+      var linkDst = TwitterLib.URLS.BASE + tweet.in_reply_to_screen_name + '/status/' + tweet.in_reply_to_status_id;
+      inReply = '<a href="' + linkDst + '" onclick="openTab(\'' + linkDst + '\')">in reply to ' + tweet.in_reply_to_screen_name + '</a> ';
+    }
+
     var str = '<div tweetid="' + tweet.id + '" class="' + tweetClass + '">';
     str += '<img class="profile" src="' + user.profile_image_url + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + user.screen_name + '\')"></img>';
     str += '<a href="#" class="user" onclick="openTab(\'' + TwitterLib.URLS.BASE + user.screen_name + '\')">' + user.screen_name + '</a>';
+
+    str += '<div class="extra_tweet_data">';
+    if(inReply) {
+      str += inReply;
+    } else if(tweet.retweeted_status) {
+      str += 'retweeted by <a href="' + TwitterLib.URLS.BASE + tweet.user.screen_name + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\');">' + tweet.user.screen_name + '</a> ';
+    } else if(tweetManager.isRetweet(tweet.id)) {
+      str += 'retweeted by me ';
+    }
+    if(from) {
+      str += 'from ' + from;
+    }
+    str += '</div>';
+
     str += '<div class="text">';
     if(tweet.retweeted_status) {
       str += '<img class="retweet" src="img/retweet.png">'
@@ -419,19 +444,14 @@ var Renderer = {
 
     str += '<div class="footer">';
     str += '<div class="timestamp" title="' + Renderer.getTimestampAltText(tweet.created_at) + '">' + Renderer.getTimestampText(tweet.created_at);
-    if(tweet.retweeted_status) {
-      str += ' retweeted by <a href="' + TwitterLib.URLS.BASE + tweet.user.screen_name + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\');">' + tweet.user.screen_name + '</a>';
-    } else if(tweetManager.isRetweet(tweet.id)) {
-      str += ' retweeted by me';
-    }
-
     str += '</div>';
+
     str += '<div class="actions">';
     str += '<a href="#" onclick="Composer.reply(this.parentNode.parentNode.parentNode)">Reply</a> ';
     if(!tweetManager.isRetweet(tweet.id) && tweet.user.screen_name != tweetManager.twitterBackend.username()) {
       str += '<a href="#" onclick="Composer.retweet(this.parentNode.parentNode.parentNode)">RT</a><div class="rt_confirm">Retweet this message: <a href="javascript:Composer.confirmRT();">Yes</a> <a href="javascript:Composer.denyRT();">No</a></div> ';
     }
-    str += '<a href="#" onclick="Composer.share(this.parentNode.parentNode.parentNode)">Share</a></div>';
+    str += ' <a href="#" onclick="Composer.share(this.parentNode.parentNode.parentNode)">Share</a></div>';
     str += '</div>';
 
     str += '<div style="clear: both;"></div>';
