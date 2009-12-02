@@ -122,7 +122,8 @@ TweetsTimeline.prototype = {
 
     if(this.firstRun) {
       this.firstRun = false;
-      this.fetchNewTweets();
+      var _this = this;
+      this.timerId = setTimeout(function() { _this.fetchNewTweets.call(_this); }, this.recheckTime);
     }
   },
 
@@ -181,13 +182,7 @@ TweetsTimeline.prototype = {
     var len = this.tweetsCache.length;
     if(len <= TweetManagerConstants.MAX_CACHED_ELEMENTS)
       return;
-    var i = len - 1;
-    for(; i >= TweetManagerConstants.MAX_CACHED_ELEMENTS; --i) {
-      if(!this.manager.isTweetRead(this.tweetsCache[i].id)) {
-        break;
-      }
-    }
-    this.tweetsCache = this.tweetsCache.slice(0, i + 1);
+    this.tweetsCache = this.tweetsCache.slice(0, TweetManagerConstants.MAX_CACHED_ELEMENTS + 1);
   },
 
   updateNewTweets: function() {

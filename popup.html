@@ -2,15 +2,8 @@
 
 <html>
 <head>
-<!--
-HACK: Preloading themes CSS's with an invalid media (hidden) , otherwise popup window enlarges
-when loading it for the first time. (Don't know why...)
--->
-<link rel="stylesheet" type="text/css" href="css/whisper.css" class="theme" media="hidden" />
-<link rel="stylesheet" type="text/css" href="css/whisper-theme/jquery-ui-1.7.2.custom.css" class="theme" media="hidden"/>
 
-<link rel="stylesheet" type="text/css" href="css/chromified.css" class="theme" />
-<link rel="stylesheet" type="text/css" href="css/chromified-theme/jquery-ui-1.7.2.custom.css" class="theme" />
+<!-- CSS files are loaded later by the ThemeManager -->
 
 <link rel="stylesheet" type="text/css" href="css/sexy-combo.css" />
 
@@ -78,15 +71,12 @@ var Paginator = {
 }
 
 var ThemeManager = {
-  initTheme: function () {
+  init: function () {
     var theme = localStorage.currentTheme;
     if(theme) {
       ThemeManager.changeTheme(theme);
       $("select#theme_selector").val(theme);
     }
-  },
-  updateThemeSelector: function() {
-    ThemeManager.initTheme();
     $("select#theme_selector").sexyCombo({changeCallback: ThemeManager.changeTheme});
   },
   changeTheme: function (newCss) {
@@ -96,7 +86,7 @@ var ThemeManager = {
     localStorage.currentTheme = newCss;
     $("link.theme").remove();
     $(newCss.split(",")).each(function(i, p) {
-      newLink = $("<link rel='stylesheet' type='text/css' class='theme'>").attr("href", p);
+      var newLink = $("<link rel='stylesheet' type='text/css' class='theme' href='" + p + "'>");
       $(document.head).prepend(newLink);
     });
   }
@@ -105,6 +95,15 @@ var ThemeManager = {
 var Composer = {
   replyId: null,
   rtId: null,
+
+  init: function() {
+    if(tweetManager.composerData.isComposing) {
+      Composer.replyId = tweetManager.composerData.replyId;
+      $("#compose_tweet_area textarea").val(tweetManager.composerData.saveMessage || '');
+      Composer.showComposeArea(true, true);
+    }
+    Composer.textareaChanged();
+  },
 
   share: function (node) {
     Composer.showComposeArea(true);
@@ -378,7 +377,12 @@ var Renderer = {
       text = tweet.retweeted_status.text
     }
 
-    var str = '<div tweetid="' + tweet.id + '" class="tweet">';
+    var tweetClass = 'tweet';
+    if(!tweetManager.isTweetRead(tweet.id)) {
+      tweetClass += ' unread';
+    }
+
+    var str = '<div tweetid="' + tweet.id + '" class="' + tweetClass + '">';
     str += '<img class="profile" src="' + user.profile_image_url + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + user.screen_name + '\')"></img>';
     str += '<a href="#" class="user" onclick="openTab(\'' + TwitterLib.URLS.BASE + user.screen_name + '\')">' + user.screen_name + '</a>';
     str += '<div class="text">';
@@ -441,9 +445,6 @@ var Renderer = {
       $(".tweet .text", destination).replaceHtml(transformList[i].expression, transformList[i].replacement);
     }
 
-    for(var unreadId in tweetManager.unreadTweets) {
-      $(".tweet[tweetid='" + unreadId +"']").addClass('unread');
-    }
     $(".tweet.unread").hoverFor(1000,
       function() {
         //Hovering for <time> seconds, let's read it.
@@ -551,6 +552,7 @@ function loadNewTweets() {
 }
 
 function prepareAndLoadTimeline() {
+  $("#update_tweets").hide();
   var currentTimeline = tweetManager.currentTimeline;
 
   tweetManager.eachTimeline(function(timeline) {
@@ -574,35 +576,39 @@ function prepareAndLoadTimeline() {
 $(function() {
   if(!twitterBackend.authenticated())
     return;
-  $("#workspace").show();
-  ThemeManager.updateThemeSelector();
-  if(tweetManager.composerData.isComposing) {
-    Composer.replyId = tweetManager.composerData.replyId;
-    $("#compose_tweet_area textarea").val(tweetManager.composerData.saveMessage || '');
-    Composer.showComposeArea(true, true);
-  }
   tweetManager.registerNewTweetsCallback(newTweetsAvailable);
+  $("#workspace").show();
   $(".__username").text(tweetManager.twitterBackend.username());
-  Composer.textareaChanged();
-  Shortener.init();
+  ThemeManager.init();
 
+  var selectedNumber = 0;
+  switch(tweetManager.currentTimeline) {
+    case 'mentions': selectedNumber = 1; break;
+    case 'dms': selectedNumber = 2; break;
+  }
   $("#tabs").tabs({
+    selected: selectedNumber,
     select: function(event, ui) {
       tweetManager.currentTimeline = ui.panel.id.split('_')[1];
+      prepareAndLoadTimeline();
     },
     show: function(event, ui) {
-      $("#update_tweets").hide();
-      prepareAndLoadTimeline();
       $(ui.panel).scrollTop(tweetManager.getCurrentTimeline().currentScroll);
     }
   });
-  $("#tabs").tabs('select', "#timeline_" + tweetManager.currentTimeline);
-  ThemeManager.initTheme();
 
-  tweetManager.eachTimeline(function(timeline) {
+  //Delay loading, improving responsiveness
+  setTimeout(function() {
+    Composer.init();
+    Shortener.init();
+
+    prepareAndLoadTimeline();
+    var tabEl = $("#timeline_" + tweetManager.currentTimeline);
+    tabEl.scrollTop(tweetManager.getCurrentTimeline().currentScroll);
+
+    tweetManager.eachTimeline(function(timeline) {
     var timelineId = this;
     var tabEl = $("#timeline_" + timelineId);
-    tabEl.scrollTop(timeline.currentScroll);
     tabEl.scroll(function(e) {
       var $this = $(this);
       var threshold = 50;
@@ -614,6 +620,7 @@ $(function() {
         }
       }
     });
+  }, 0);
   });
 });
 </script>
