@@ -377,7 +377,7 @@ var Renderer = {
       },
       {
         //create hash search links
-        'expression': /(#(\w*))/ig,
+        'expression': /(#(\w*))((?=.*?<a)|(?!.*?<\/a>))/ig,
         'replacement': "<a href='" + TwitterLib.URLS.SEARCH + "%23$2' onclick=\"openTab('" + TwitterLib.URLS.SEARCH + "%23$2')\">$1</a>"
       },
       {
