@@ -22,7 +22,6 @@ if(!twitterBackend.authenticated()) {
 <script type="text/javascript" src="lib/3rdparty/jquery.sexy-combo.js"></script>
 <script type="text/javascript" src="lib/3rdparty/jquery-ui-custom.js"></script>
 
-<script type="text/javascript" src="lib/jquery_replace_html.js"></script>
 <script type="text/javascript" src="lib/debug.js"></script>
 <script type="text/javascript" src="lib/twitter_lib.js"></script>
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
@@ -369,6 +368,32 @@ var Renderer = {
     return new Date(inputTimestamp).toLocaleDateString() + " " + new Date(inputTimestamp).toLocaleTimeString();
   },
 
+  transformTweetText: function(oldText) {
+    var transformList = [
+      {
+        //create links
+        'expression': /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig,
+        'replacement': "<a href='$1' onclick=\"openTab('$1')\">$1</a>"
+      },
+      {
+        //create hash search links
+        'expression': /(#(\w*))/ig,
+        'replacement': "<a href='" + TwitterLib.URLS.SEARCH + "%23$2' onclick=\"openTab('" + TwitterLib.URLS.SEARCH + "%23$2')\">$1</a>"
+      },
+      {
+        //create users links
+        'expression': /(@)(\w*)/ig,
+        'replacement': "$1<a href='" + TwitterLib.URLS.BASE + "$2' onclick=\"openTab('" + TwitterLib.URLS.BASE + "$2')\">$2</a>"
+      }
+    ];
+
+    var newText = oldText;
+    for(var i = 0; i < transformList.length; ++i) {
+      newText = newText.replace(transformList[i]['expression'], transformList[i]['replacement']);
+    }
+    return newText;
+  },
+
   renderTweet: function (tweet) {
     var user = tweet.user;
     var text = tweet.text;
@@ -376,6 +401,7 @@ var Renderer = {
       user = tweet.retweeted_status.user
       text = tweet.retweeted_status.text
     }
+    text = this.transformTweetText(text);
 
     var tweetClass = 'tweet';
     if(!tweetManager.isTweetRead(tweet.id)) {
@@ -415,35 +441,12 @@ var Renderer = {
 
   assemblyTweets: function (tweets, timelineId) {
     var destination = $("#timeline_" + timelineId);
-    destination.html('');
+    var destinationDom = destination[0];
+    var tweetsArray = [];
     for(var i = 0; i < tweets.length; ++i) {
-      destination.append(Renderer.renderTweet(tweets[i]));
+      tweetsArray[i] = Renderer.renderTweet(tweets[i]);
     }
-
-    var transformList = [
-      {
-        //create links
-        'expression': /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig,
-        'replacement': "<a href='$1' onclick=\"openTab('$1')\">$1</a>"
-      },
-      {
-        //create hash search links
-        'expression': /(#\w*)/ig,
-        'replacement': function(matchedValue) {
-          var linkHref = TwitterLib.URLS.SEARCH + escape(matchedValue);
-          return "<a href='" + linkHref + "' onclick=\"openTab('" + linkHref + "')\">" + matchedValue + "</a>"
-        }
-      },
-      {
-        //create users links
-        'expression': /(@)(\w*)/ig,
-        'replacement': "$1<a href='" + TwitterLib.URLS.BASE + "$2' onclick=\"openTab('" + TwitterLib.URLS.BASE + "$2')\">$2</a>"
-      }
-    ]
-
-    for(var i = 0; i < transformList.length; ++i) {
-      $(".tweet .text", destination).replaceHtml(transformList[i].expression, transformList[i].replacement);
-    }
+    destinationDom.innerHTML = tweetsArray.join('');
 
     $(".tweet.unread").hoverFor(1000,
       function() {
@@ -607,21 +610,21 @@ $(function() {
     tabEl.scrollTop(tweetManager.getCurrentTimeline().currentScroll);
 
     tweetManager.eachTimeline(function(timeline) {
-    var timelineId = this;
-    var tabEl = $("#timeline_" + timelineId);
-    tabEl.scroll(function(e) {
-      var $this = $(this);
-      var threshold = 50;
-      timeline.currentScroll = $this.scrollTop();
-      var maxScroll = $this.attr("scrollHeight") - $this.height();
-      if(maxScroll - $this.scrollTop() < threshold) {
-        if(!loadingNewTweets) {
-          Paginator.nextPage();
+      var timelineId = this;
+      var tabEl = $("#timeline_" + timelineId);
+      tabEl.scroll(function(e) {
+        var $this = $(this);
+        var threshold = 50;
+        timeline.currentScroll = $this.scrollTop();
+        var maxScroll = $this.attr("scrollHeight") - $this.height();
+        if(maxScroll - $this.scrollTop() < threshold) {
+          if(!loadingNewTweets) {
+            Paginator.nextPage();
+          }
         }
-      }
+      });
     });
   }, 0);
-  });
 });
 </script>
 </head>
