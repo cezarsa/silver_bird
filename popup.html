@@ -8,9 +8,10 @@
 <link rel="stylesheet" type="text/css" href="css/sexy-combo.css" />
 
 <script>
+var MAX_TWEET_SIZE = 140;
 var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
-var tweetManagerConst = chrome.extension.getBackgroundPage().TweetManagerConstants;
 var twitterBackend = tweetManager.twitterBackend;
+var OptionsBackend = chrome.extension.getBackgroundPage().OptionsBackend;
 
 if(!twitterBackend.authenticated()) {
   twitterBackend.startAuthentication();
@@ -26,7 +27,7 @@ if(!twitterBackend.authenticated()) {
 <script type="text/javascript" src="lib/twitter_lib.js"></script>
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
 <script>
-var shortener = new Shortener(localStorage.shortenerBackend);
+var shortener = new Shortener(OptionsBackend.get('url_shortener'));
 
 $.fn.hoverFor = function(time, mainCallback, startingCallback, abortCallback) {
   return this.each(function(){
@@ -183,7 +184,7 @@ var Composer = {
   textareaChanged: function (e) {
     var el = $("#compose_tweet_area textarea");
     tweetManager.composerData.saveMessage = el.val();
-    var availableChars = tweetManagerConst.MAX_TWEET_SIZE - el.val().length;
+    var availableChars = MAX_TWEET_SIZE - el.val().length;
     var charsLeftEl = $("#compose_tweet_area .chars_left");
     charsLeftEl.text(availableChars);
     if(availableChars < 0) {

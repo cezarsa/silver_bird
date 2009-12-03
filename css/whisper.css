@@ -40,11 +40,12 @@ input[type='text'] {
   margin: 5px;
   margin-bottom: 10px;
   background-color: #F9C236;
+  width: 100%;
 }
 
 #workspace {
   margin: 0px 4px 0px 4px;
-  min-width: 410px;
+  min-width: 400px;
 }
 
 .timeline {

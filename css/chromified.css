@@ -44,6 +44,7 @@ input[type='text'] {
   margin: 5px;
   margin-bottom: 10px;
   background-color: #F9C236;
+  width: 100%;
 }
 
 #workspace {

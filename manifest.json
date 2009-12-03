@@ -24,5 +24,6 @@
       "js": ["lib/3rdparty/jquery.js", "lib/oauth_authorizer.js"]
     }
   ],
+  "options_page": "options.html",
   "update_url": "http://clients2.google.com/service/update2/crx"
 }

@@ -5,12 +5,33 @@
 
 <script>
 
-TweetManagerConstants = {
-  MAX_CACHED_ELEMENTS: 30,
-  WAIT_TIME_UNTIL_REFETCH_HOME: 60 * 1000,
-  WAIT_TIME_UNTIL_REFETCH_OTHERS: 150 * 1000,
-  TWEETS_PER_PAGE: 10,
-  MAX_TWEET_SIZE: 140
+OptionsBackend = {
+  defaultOptions: {
+    home_refresh_interval: 60 * 1000,
+    mentions_refresh_interval: 150 * 1000,
+    dms_refresh_interval: 150 * 1000,
+    tweets_per_page: 10,
+    max_cached_tweets: 30,
+    url_shortener: 'bitly'
+  },
+  save: function(optionsMap) {
+    localStorage['options'] = JSON.stringify(optionsMap);
+  },
+  load: function(forceDefault) {
+    var map = $.extend(true, {}, this.defaultOptions);
+    if(forceDefault) {
+      return map;
+    }
+    try {
+      var parsedMap = JSON.parse(localStorage['options']);
+      if(parsedMap)
+        $.extend(true, map, parsedMap);
+    } catch(e) { /* ignored */ }
+    return map;
+  },
+  get: function(option) {
+    return this.load()[option];
+  }
 };
 
 function TweetsTimeline(timelineId, manager, recheckTime) {
@@ -175,14 +196,14 @@ TweetsTimeline.prototype = {
     var _this = this;
     this.manager.twitterBackend.timeline(this.timelinePath, function(success, tweets, status, context) {
       _this.onFetch.call(_this, success, tweets, status, context);
-    }, context, TweetManagerConstants.TWEETS_PER_PAGE, null, null, maxId);
+    }, context, OptionsBackend.get('tweets_per_page'), null, null, maxId);
   },
 
   cleanUpCache: function() {
     var len = this.tweetsCache.length;
-    if(len <= TweetManagerConstants.MAX_CACHED_ELEMENTS)
+    if(len <= OptionsBackend.get('max_cached_tweets'))
       return;
-    this.tweetsCache = this.tweetsCache.slice(0, TweetManagerConstants.MAX_CACHED_ELEMENTS + 1);
+    this.tweetsCache = this.tweetsCache.slice(0, OptionsBackend.get('max_cached_tweets') + 1);
   },
 
   updateNewTweets: function() {
@@ -219,9 +240,10 @@ function TweetManager() {
 
   this.currentTimeline = "home";
   this.timelines = {};
-  this.timelines["home"] = new TweetsTimeline("home", this, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH_HOME);
-  this.timelines["mentions"] = new TweetsTimeline("mentions", this, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH_OTHERS);
-  this.timelines["dms"] = new TweetsTimeline("dms", this, TweetManagerConstants.WAIT_TIME_UNTIL_REFETCH_OTHERS);
+
+  this.timelines["home"] = new TweetsTimeline("home", this, OptionsBackend.get('home_refresh_interval'));
+  this.timelines["mentions"] = new TweetsTimeline("mentions", this, OptionsBackend.get('mentions_refresh_interval'));
+  this.timelines["dms"] = new TweetsTimeline("dms", this, OptionsBackend.get('dms_refresh_interval'));
 
   var _this = this;
   this.twitterBackend = new TwitterLib(function onAuthenticated() {

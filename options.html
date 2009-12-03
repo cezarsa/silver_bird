@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="css/options.css" />
+<script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
+<script type="text/javascript" src="lib/shortener_lib.js"></script>
+<title>Chromed Bird Options</title>
+
+<script type="text/javascript">
+
+var OptionsBackend = chrome.extension.getBackgroundPage().OptionsBackend;
+
+function Options() {
+  this.optionsMap = {};
+
+  this.load = function(forceDefault) {
+    this.optionsMap = OptionsBackend.load(forceDefault);
+    var _this = this;
+    $('input,select').each(function() {
+      var $this = $(this);
+      var name = $this.attr('name');
+      if(name)
+        $this.val(_this.optionsMap[name]);
+    });
+  };
+
+  this.loadDefaults = function() {
+    this.load(true);
+    this.save();
+  };
+
+  this.save = function() {
+    this.clearErrors();
+    var hasErrors = false;
+    var _this = this;
+    $('input,select').each(function() {
+      var $this = $(this);
+      var validator = $this.attr('validator');
+      if(validator) {
+        var validatorsArray = validator.split(',');
+        for(var i = 0; i < validatorsArray.length; ++i) {
+          var validInfo = window[validatorsArray[i]]($this);
+          if(validInfo !== true) {
+            hasErrors = true;
+            _this.addValidationError($this, validInfo);
+            return true;
+          }
+        }
+      }
+    });
+    if(!hasErrors) {
+      $('input,select').each(function() {
+        var $this = $(this);
+        var name = $this.attr('name');
+        if(name)
+          _this.optionsMap[name] = $this.val();
+      });
+      OptionsBackend.save(this.optionsMap);
+    }
+  };
+
+  this.addValidationError = function($el, error) {
+    var errorEl = $("<span>").attr('class', 'error').html(error);
+    $el.after(errorEl);
+  };
+
+  this.clearErrors = function() {
+    $('.error').remove();
+  };
+
+}
+
+/* ---- validation ---- */
+function required($el) {
+  var val = $el.val()
+  if(!val)
+    return 'It can\'t be empty.';
+  return true;
+}
+
+function number($el) {
+  var intVal = parseInt($el.val());
+  if(isNaN(intVal))
+    return 'It should be a number.';
+  return true;
+}
+
+function positive($el) {
+  if(parseInt($el.val()) <= 0)
+    return 'It should be positive.';
+  return true;
+}
+
+function minRefresh($el) {
+  if(parseInt($el.val()) < 20000)
+    return 'Minimum interval is 20000ms';
+  return true;
+}
+/* ---- end validation ---- */
+
+var options = new Options();
+$(function() {
+  for(var key in SHORTENERS_BACKEND) {
+    var desc = SHORTENERS_BACKEND[key].desc;
+    $("select[name='url_shortener']").append($("<option>").attr('value', key).text(desc));
+  }
+  options.load();
+});
+</script>
+
+</head>
+<body>
+
+<h1>Chromed Bird Options</h1>
+
+<div id="main_area">
+  <p class="notice">
+    Please notice that most of these options will only take effect if you restart the extension. Maybe this could change in the future.
+  </p>
+  <p>
+    Remaining Twitter API Hits: <span class="twitter_hits_left"></span><br>
+    Rate Limit Reset: <span class="twitter_hits_reset"></span>
+  </p>
+  <fieldset>
+    <legend>Refresh Interval</legend>
+    <label for="home_refresh_interval">Home Timeline:</label>
+    <input type="text" name="home_refresh_interval" validator="required,number,minRefresh"><br>
+    <label for="mentions_refresh_interval">Mentions Timeline:</label>
+    <input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh"><br>
+    <label for="dms_refresh_interval">DM Timeline:</label>
+    <input type="text" name="dms_refresh_interval" validator="required,number,minRefresh"><br>
+  </fieldset>
+
+  <fieldset>
+    <legend>Misc</legend>
+    <label for="tweets_per_page">Tweets per Page:</label>
+    <input type="text" name="tweets_per_page" validator="required,number,positive"><br>
+    <label for="max_cached_tweets">Max Shown Tweets:</label>
+    <input type="text" name="max_cached_tweets" validator="required,number,positive"><br>
+    <label for="url_shortener">URL Shortener:</label>
+    <select name="url_shortener"></select>
+  </fieldset>
+  <br>
+  <input type="button" value="Save" onclick="options.save();">
+  <input type="button" value="Reset" onclick="options.load();">
+  <input type="button" value="Reset to default" onclick="options.loadDefaults();">
+</div>
+
+</body>
+</html>
