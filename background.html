@@ -30,7 +30,11 @@ OptionsBackend = {
     return map;
   },
   get: function(option) {
-    return this.load()[option];
+    var optionValue = this.load()[option];
+    var intValue = parseInt(optionValue)
+    if(intValue == optionValue)
+      return intValue;
+    return optionValue;
   }
 };
 
