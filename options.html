@@ -100,8 +100,14 @@ function minRefresh($el) {
 }
 /* ---- end validation ---- */
 
+var twitterBackend = chrome.extension.getBackgroundPage().TweetManager.instance.twitterBackend;
 var options = new Options();
 $(function() {
+  var hitsInfo = twitterBackend.remainingHitsInfo();
+  $(".twitter_hits_left").text(hitsInfo[0]);
+  var dateObj = new Date();
+  dateObj.setTime(parseInt(hitsInfo[1]) * 1000);
+  $(".twitter_hits_reset").text(dateObj.toLocaleDateString() + " " + dateObj.toLocaleTimeString());
   for(var key in SHORTENERS_BACKEND) {
     var desc = SHORTENERS_BACKEND[key].desc;
     $("select[name='url_shortener']").append($("<option>").attr('value', key).text(desc));
