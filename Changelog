@@ -1,4 +1,4 @@
-0.6 (2009-12-03)
+1.0 (2009-12-03)
 
 * Integration with URL Shortener services, including an option to shorten the current page
 * Ability to use Twitter's retweet feature (old RT still available through 'share' option)
