@@ -1,3 +1,7 @@
+1.0.1 (2009-12-03)
+
+* Fixing bug causing tweets to stay on the timeline forever (only after tweaking with the options page)
+
 1.0 (2009-12-03)
 
 * Integration with URL Shortener services, including an option to shorten the current page
