@@ -3,8 +3,8 @@
 <html>
 <head>
 
-<!-- CSS files are loaded later by the ThemeManager -->
-
+<!-- Theme specific CSS files are loaded later by the ThemeManager -->
+<link rel="stylesheet" type="text/css" href="css/base.css" />
 <link rel="stylesheet" type="text/css" href="css/sexy-combo.css" />
 
 <script>
@@ -87,7 +87,7 @@ var ThemeManager = {
     $("link.theme").remove();
     $(newCss.split(",")).each(function(i, p) {
       var newLink = $("<link rel='stylesheet' type='text/css' class='theme' href='" + p + "'>");
-      $(document.head).prepend(newLink);
+      $(document.head).append(newLink);
     });
   }
 }
