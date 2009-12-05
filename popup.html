@@ -508,7 +508,13 @@ function showError(msg, tryAgainFunction) {
 }
 
 function openTab(tabUrl) {
-  chrome.tabs.create({ url: tabUrl });
+  var button = event.button;
+  if(button > 1)
+    return;
+  var selected = true;
+  if(button == 1 || event.ctrlKey) // Middle Button or Ctrl click
+    selected = false;
+  chrome.tabs.create({ url: tabUrl, selected: selected });
 }
 
 var loadingNewTweets = false;
