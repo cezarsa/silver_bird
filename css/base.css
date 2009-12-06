@@ -153,6 +153,7 @@ input[type='text'] {
 .tweet .text {
   clear: right;
   padding-top: 2px;
+  word-wrap: break-word;
 }
 
 .tweet .user {
