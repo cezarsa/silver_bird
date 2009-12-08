@@ -108,7 +108,7 @@ var Composer = {
   share: function (node) {
     Composer.showComposeArea(true);
     var el = $("#compose_tweet_area textarea");
-    var user = $(".user", node).text();
+    var user = $(".user", node).attr('screen_name');
     var msg = $(".text", node).text();
     el.val("RT @" + user + ": " + msg);
     Composer.textareaChanged();
@@ -140,7 +140,11 @@ var Composer = {
     Composer.showComposeArea(true);
     var el = $("#compose_tweet_area textarea");
     var user = $(".user", node).attr('screen_name');
-    el.val("@" + user + " ");
+    if(tweetManager.currentTimeline == "dms") {
+      el.val("d " + user + " ");
+    } else {
+      el.val("@" + user + " ");
+    }
     tweetManager.composerData.replyId = Composer.replyId = $(node).attr('tweetid');
     Composer.textareaChanged();
   },
@@ -458,7 +462,7 @@ var Renderer = {
 
     str += '<div class="actions">';
     str += '<a href="#" onclick="Composer.reply(this.parentNode.parentNode.parentNode)">Reply</a> ';
-    if(!tweetManager.isRetweet(tweet.id) && tweet.user.screen_name != tweetManager.twitterBackend.username()) {
+    if(!tweetManager.isRetweet(tweet.id) && tweet.user.screen_name != tweetManager.twitterBackend.username() && tweetManager.currentTimeline != "dms") {
       str += '<a href="#" onclick="Composer.retweet(this.parentNode.parentNode.parentNode)">RT</a><div class="rt_confirm">Retweet this message: <a href="javascript:Composer.confirmRT();">Yes</a> <a href="javascript:Composer.denyRT();">No</a></div> ';
     }
     str += ' <a href="#" onclick="Composer.share(this.parentNode.parentNode.parentNode)">Share</a></div>';
