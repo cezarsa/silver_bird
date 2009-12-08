@@ -12,10 +12,14 @@ OptionsBackend = {
     dms_refresh_interval: 150 * 1000,
     tweets_per_page: 10,
     max_cached_tweets: 30,
-    url_shortener: 'bitly'
+    url_shortener: 'bitly',
+    name_attribute: 'name',
+    request_timeout: 6000
   },
+  cachedOptions: null,
   save: function(optionsMap) {
     localStorage['options'] = JSON.stringify(optionsMap);
+    this.cachedOptions = this.load();
   },
   load: function(forceDefault) {
     var map = $.extend(true, {}, this.defaultOptions);
@@ -30,8 +34,11 @@ OptionsBackend = {
     return map;
   },
   get: function(option) {
-    var optionValue = this.load()[option];
-    var intValue = parseInt(optionValue)
+    if(this.cachedOptions == null) {
+      this.cachedOptions = this.load();
+    }
+    var optionValue = this.cachedOptions[option];
+    var intValue = parseInt(optionValue);
     if(intValue == optionValue)
       return intValue;
     return optionValue;
@@ -250,10 +257,11 @@ function TweetManager() {
   this.timelines["dms"] = new TweetsTimeline("dms", this, OptionsBackend.get('dms_refresh_interval'));
 
   var _this = this;
-  this.twitterBackend = new TwitterLib(function onAuthenticated() {
-    _this.giveMeTweets.call(_this, "home", function() {});
-    _this.giveMeTweets.call(_this, "mentions", function() {});
-    _this.giveMeTweets.call(_this, "dms", function() {});
+  this.twitterBackend = new TwitterLib(OptionsBackend.get('request_timeout'),
+    function onAuthenticated() {
+      _this.giveMeTweets.call(_this, "home", function() {});
+      _this.giveMeTweets.call(_this, "mentions", function() {});
+      _this.giveMeTweets.call(_this, "dms", function() {});
   });
 }
 

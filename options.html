@@ -58,6 +58,7 @@ function Options() {
           _this.optionsMap[name] = $this.val();
       });
       OptionsBackend.save(this.optionsMap);
+      $("#saved_notice").stop().show().css('opacity', '1.0').fadeOut(5000);
     }
   };
 
@@ -121,6 +122,7 @@ $(function() {
 
 <h1>Chromed Bird Options</h1>
 
+<div id="saved_notice">Your configuration has been successfully saved!</div>
 <div id="main_area">
   <p class="notice">
     Please notice that most of these options will only take effect if you restart the extension. Maybe this could change in the future.
@@ -130,7 +132,7 @@ $(function() {
     Rate Limit Reset: <span class="twitter_hits_reset"></span>
   </p>
   <fieldset>
-    <legend>Refresh Interval</legend>
+    <legend>Refresh Interval (ms)</legend>
     <label for="home_refresh_interval">Home Timeline:</label>
     <input type="text" name="home_refresh_interval" validator="required,number,minRefresh"><br>
     <label for="mentions_refresh_interval">Mentions Timeline:</label>
@@ -140,14 +142,31 @@ $(function() {
   </fieldset>
 
   <fieldset>
-    <legend>Misc</legend>
+    <legend>Timelines</legend>
     <label for="tweets_per_page">Tweets per Page:</label>
     <input type="text" name="tweets_per_page" validator="required,number,positive"><br>
     <label for="max_cached_tweets">Max Shown Tweets:</label>
     <input type="text" name="max_cached_tweets" validator="required,number,positive"><br>
+  </fieldset>
+
+  <fieldset>
+    <legend>Shortener</legend>
     <label for="url_shortener">URL Shortener:</label>
     <select name="url_shortener"></select>
   </fieldset>
+
+  <fieldset>
+    <legend>Advanced</legend>
+    <label for="name_attribute">Name in tweets:</label>
+    <select name="name_attribute">
+      <option value="screen_name">Screen name (nickname)</option>
+      <option value="name">Real name</option>
+    </select>
+    <label for="request_timeout">Request Timeout (ms):</label>
+    <input type="text" name="request_timeout" validator="required,number,positive"><br>
+
+  </fieldset>
+
   <br>
   <input type="button" value="Save" onclick="options.save();">
   <input type="button" value="Reset" onclick="options.load();">

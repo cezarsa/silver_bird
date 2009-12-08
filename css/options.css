@@ -17,12 +17,12 @@ fieldset legend {
 
 label {
   float: left;
-  width: 130px;
+  width: 150px;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], select {
   border: 1px solid #b4cff2;
-  width: 120px;
+  width: 140px;
 }
 
 input[type="checkbox"] {
@@ -49,4 +49,18 @@ span.error {
   background-color: #ffffff;
   border: 3px solid #e5effe;
   padding: 2px 4px 2px 4px;
+}
+
+#saved_notice {
+  -webkit-border-radius: 5px;
+  position: absolute;
+  left: 50%;
+  margin-left: -250px;
+  margin-top: -20px;
+  width: 500px;
+  border: 1px solid #B31E04;
+  background-color: #FF2B05;
+  color: #fff;
+  text-align: center;
+  display: none;
 }
