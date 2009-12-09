@@ -95,6 +95,7 @@ var ThemeManager = {
 var Composer = {
   replyId: null,
   rtId: null,
+  destroyId: null,
 
   init: function() {
     if(tweetManager.composerData.isComposing) {
@@ -114,16 +115,47 @@ var Composer = {
     Composer.textareaChanged();
   },
 
+  confirmDestroy: function() {
+    $("#loading").show();
+    $(".rt_confirm").hide();
+    var _this = this;
+    tweetManager.destroy(function(success, data, status) {
+      $("#loading").hide();
+      var notFound = status && status.match(/Not Found/);
+      if(success || notFound) {
+        $(".tweet[tweetid='" + _this.destroyId + "']").hide('blind', { direction: "vertical" });
+        var currentCount = tweetManager.getCurrentTimeline().tweetsCache.length;
+        if(currentCount < OptionsBackend.get('tweets_per_page')) {
+          Paginator.nextPage();
+        }
+      } else {
+        showError('Unexpected error ' + status + ' deleting tweet.', 'Composer.confirmDestroy');
+      }
+    }, _this.destroyId);
+  },
+
+  denyDestroy: function() {
+    $(".rt_confirm").hide();
+  },
+
+  destroy: function (node) {
+    $(".rt_confirm").hide();
+    $(".rt_confirm.destroy", node).show();
+    this.destroyId = $(node).attr('tweetid');
+  },
+
   confirmRT: function() {
     $("#loading").show();
     $(".rt_confirm").hide();
+    var _this = this;
     tweetManager.postRetweet(function(success, data, status) {
       $("#loading").hide();
       if(success) {
         loadTimeline(true, "home");
       } else {
+        showError('Unexpected error ' + status + ' retweeting.', 'Composer.confirmRT');
       }
-    }, this.rtId);
+    }, _this.rtId);
   },
 
   denyRT: function() {
@@ -227,6 +259,7 @@ var Composer = {
         }
       } else {
         $("#compose_tweet_area textarea").focus();
+        showError('Unexpected error ' + status + ' sending tweet.', 'Composer.sendTweet');
       }
     }, $("#compose_tweet_area textarea").val(), Composer.replyId);
   }
@@ -461,12 +494,21 @@ var Renderer = {
     str += '</div>';
 
     str += '<div class="actions">';
-    str += '<a href="#" onclick="Composer.reply(this.parentNode.parentNode.parentNode)">Reply</a> ';
-    if(!tweetManager.isRetweet(tweet.id) && tweet.user.screen_name != tweetManager.twitterBackend.username() && tweetManager.currentTimeline != "dms") {
-      str += '<a href="#" onclick="Composer.retweet(this.parentNode.parentNode.parentNode)">RT</a><div class="rt_confirm">Retweet this message: <a href="javascript:Composer.confirmRT();">Yes</a> <a href="javascript:Composer.denyRT();">No</a></div> ';
+    if(tweet.user.screen_name == tweetManager.twitterBackend.username()) {
+      str += '<a href="#" onclick="Composer.destroy(this.parentNode.parentNode.parentNode)">Delete</a> <div class="rt_confirm destroy">Delete this message: <a href="javascript:Composer.confirmDestroy();">Yes</a> <a href="javascript:Composer.denyDestroy();">No</a></div>';
+    } else {
+      str += '<a href="#" onclick="Composer.reply(this.parentNode.parentNode.parentNode)">Reply</a> ';
+      if(tweetManager.isRetweet(tweet.id)) {
+        //TODO: undo retweet
+        //str += '<a href="#" onclick="Composer.destroy(this.parentNode.parentNode.parentNode)">Undo RT</a> <div class="rt_confirm destroy">Undo this retweet: <a href="javascript:Composer.confirmDestroy();">Yes</a> <a href="javascript:Composer.denyDestroy();">No</a></div>';
+      } else {
+        if(tweetManager.currentTimeline != "dms") {
+          str += '<a href="#" onclick="Composer.retweet(this.parentNode.parentNode.parentNode)">RT</a> <div class="rt_confirm">Retweet this message: <a href="javascript:Composer.confirmRT();">Yes</a> <a href="javascript:Composer.denyRT();">No</a></div>';
+        }
+      }
+      str += '<a href="#" onclick="Composer.share(this.parentNode.parentNode.parentNode)">Share</a>';
     }
-    str += ' <a href="#" onclick="Composer.share(this.parentNode.parentNode.parentNode)">Share</a></div>';
-    str += '</div>';
+    str += '</div></div>';
 
     str += '<div style="clear: both;"></div>';
     str += '</div>'
@@ -538,7 +580,7 @@ function onTimelineRetrieved(tweets, timelineId) {
     Paginator.needsMore = false;
     Renderer.assemblyTweets(tweets, timelineId);
   } else {
-    showError('Unexpected error ' + tweetManager.currentError() + ' during communication.', 'loadTimeline');
+    showError('Unexpected error ' + tweetManager.currentError() + ' updating tweets.', 'loadTimeline');
   }
   loadingNewTweets = false;
 }

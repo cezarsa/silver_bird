@@ -230,6 +230,17 @@ TweetsTimeline.prototype = {
       }
     }
     return [this.newTweetsCache.length, unreadCount];
+  },
+
+  removeFromCache: function(id) {
+    var i = 0;
+    for(; i < this.tweetsCache.length; ++i) {
+      if(this.tweetsCache[i].id == id)
+        break;
+    }
+    if(i != this.tweetsCache.length) {
+      this.tweetsCache.splice(i, 1);
+    }
   }
 }
 
@@ -330,6 +341,23 @@ TweetManager.prototype = {
       }
       callback(success, data, status);
     }, id);
+  },
+
+  destroy: function(callback, id) {
+    var _this = this;
+    var firstCallback = function(success, data, status) {
+      if(success) {
+        _this.eachTimeline(function(timeline) {
+          timeline.removeFromCache(id);
+        });
+      }
+      callback(success, data, status);
+    };
+    if(this.currentTimeline == "dms") {
+      return this.twitterBackend.destroyDM(firstCallback, id);
+    } else {
+      return this.twitterBackend.destroy(firstCallback, id);
+    }
   },
 
   /* Delegates */
