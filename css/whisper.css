@@ -62,7 +62,6 @@ input[type='text'] {
   -webkit-border-radius: 5px;
   background-color: #ee7;
   margin-bottom: 3px;
-  width: 376px;
 }
 
 .tweet.unread {
@@ -76,12 +75,7 @@ input[type='text'] {
   text-decoration: none;
 }
 
-.tweet .timestamp {
-  color: #999;
-  font-style: italic;
-}
-
-.tweet .actions a {
+.tweet .footer {
   color: #999;
   font-style: italic;
 }

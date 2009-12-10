@@ -35,7 +35,7 @@ input[type='text'] {
 }
 
 #error {
-  width: 400px;
+  width: 430px;
   margin: 5px;
   margin-bottom: 10px;
   background-color: #F9C236;
@@ -43,7 +43,7 @@ input[type='text'] {
 
 #workspace {
   margin: 0px 4px 0px 4px;
-  min-width: 410px;
+  min-width: 440px;
 }
 
 #logout {
@@ -146,18 +146,17 @@ input[type='text'] {
 }
 
 .tweet {
-  width: 370px;
+  width: 400px;
   padding: 2px 4px 2px 4px;
+  min-height: 64px;
 }
 
 .tweet .text {
   clear: right;
-  padding-top: 2px;
   word-wrap: break-word;
 }
 
 .tweet .user {
-  float: left;
   font-size: 9pt;
 }
 
@@ -165,20 +164,8 @@ input[type='text'] {
   margin: 0px;
   padding: 0px;
   position: relative;
-}
-
-.tweet .timestamp {
   font-size: 8pt;
   margin-top: 2px;
-  float: left;
-}
-
-.tweet .actions {
-  float: right;
-}
-
-.tweet .actions a {
-  font-size: 8pt;
 }
 
 .tweet img.profile {
@@ -201,15 +188,29 @@ input[type='text'] {
 .tweet .rt_confirm {
   position: absolute;
   right: 0px;
-  top: 15px;
+  top: 45px;
   display: none;
   padding: 5px;
+  min-width: 200px;
 }
 
-.tweet .extra_tweet_data {
+.tweet .rt_confirm.destroy {
+  top: 30px;
+}
+
+.tweet .first_container {
+  width: 385px;
+  float: left;
+}
+
+.tweet .new_actions {
+  position: relative;
   float: right;
-  font-size: 8pt;
-  min-height: 10pt;
+  display: none;
+}
+
+.tweet .new_actions img {
+  cursor: pointer;
 }
 
 /**

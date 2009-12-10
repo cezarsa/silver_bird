@@ -467,10 +467,18 @@ var Renderer = {
     }
 
     var str = '<div tweetid="' + tweet.id + '" class="' + tweetClass + '">';
+    str += '<div class="first_container">';
     str += '<img class="profile" src="' + user.profile_image_url + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + user.screen_name + '\')"></img>';
     str += '<a href="#" class="user" screen_name="' + user.screen_name + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + user.screen_name + '\')" title="' + tweetTitleUserName + '">' + tweetUserName + '</a>';
 
-    str += '<div class="extra_tweet_data">';
+    str += '<div class="text">';
+    if(tweet.retweeted_status) {
+      str += '<img class="retweet" src="img/retweet.png">'
+    }
+    str += text + '</div>';
+
+    str += '<div class="footer">';
+    str += '<span class="timestamp" title="' + Renderer.getTimestampAltText(tweet.created_at) + '">' + Renderer.getTimestampText(tweet.created_at) + '</span> ';
     if(inReply) {
       str += inReply;
     } else if(tweet.retweeted_status) {
@@ -481,36 +489,29 @@ var Renderer = {
     if(from) {
       str += 'from ' + from;
     }
-    str += '</div>';
-
-    str += '<div class="text">';
-    if(tweet.retweeted_status) {
-      str += '<img class="retweet" src="img/retweet.png">'
-    }
-    str += text + '</div>';
-
-    str += '<div class="footer">';
-    str += '<div class="timestamp" title="' + Renderer.getTimestampAltText(tweet.created_at) + '">' + Renderer.getTimestampText(tweet.created_at);
-    str += '</div>';
-
-    str += '<div class="actions">';
-    if(tweet.user.screen_name == tweetManager.twitterBackend.username()) {
-      str += '<a href="#" onclick="Composer.destroy(this.parentNode.parentNode.parentNode)">Delete</a> <div class="rt_confirm destroy">Delete this message: <a href="javascript:Composer.confirmDestroy();">Yes</a> <a href="javascript:Composer.denyDestroy();">No</a></div>';
-    } else {
-      str += '<a href="#" onclick="Composer.reply(this.parentNode.parentNode.parentNode)">Reply</a> ';
-      if(tweetManager.isRetweet(tweet.id)) {
-        //TODO: undo retweet
-        //str += '<a href="#" onclick="Composer.destroy(this.parentNode.parentNode.parentNode)">Undo RT</a> <div class="rt_confirm destroy">Undo this retweet: <a href="javascript:Composer.confirmDestroy();">Yes</a> <a href="javascript:Composer.denyDestroy();">No</a></div>';
-      } else {
-        if(tweetManager.currentTimeline != "dms") {
-          str += '<a href="#" onclick="Composer.retweet(this.parentNode.parentNode.parentNode)">RT</a> <div class="rt_confirm">Retweet this message: <a href="javascript:Composer.confirmRT();">Yes</a> <a href="javascript:Composer.denyRT();">No</a></div>';
-        }
-      }
-      str += '<a href="#" onclick="Composer.share(this.parentNode.parentNode.parentNode)">Share</a>';
-    }
     str += '</div></div>';
 
+    str += '<div class="new_actions">';
+    str += '<img src="img/star.png" title="Favorite" class="unstarred"></img><br>';
+
+    if(tweet.user.screen_name == tweetManager.twitterBackend.username()) {
+      str += '<img src="img/delete.png" title="Delete" onclick="Composer.destroy(this.parentNode.parentNode)"></img><br>';
+      str += '<div class="rt_confirm destroy">Delete this message: <a href="javascript:Composer.confirmDestroy();">Yes</a> <a href="javascript:Composer.denyDestroy();">No</a></div>';
+    } else {
+      str += '<img src="img/reply.png" title="Reply" onclick="Composer.reply(this.parentNode.parentNode)"></img><br>';
+      if(tweetManager.isRetweet(tweet.id)) {
+        //TODO: undo retweet
+      } else {
+        if(tweetManager.currentTimeline != "dms") {
+          str += '<img src="img/rt.png" title="Retweet" onclick="Composer.retweet(this.parentNode.parentNode)"></img><br>';
+          str += '<div class="rt_confirm">Retweet this message: <a href="javascript:Composer.confirmRT();">Yes</a> <a href="javascript:Composer.denyRT();">No</a></div>';
+        }
+      }
+      str += '<img src="img/share.png" title="Share (old school RT)" onclick="Composer.share(this.parentNode.parentNode)"></img><br>';
+    }
+    str += '</div>';
     str += '<div style="clear: both;"></div>';
+
     str += '</div>'
     return str;
   },
@@ -523,6 +524,26 @@ var Renderer = {
       tweetsArray[i] = Renderer.renderTweet(tweets[i]);
     }
     destinationDom.innerHTML = tweetsArray.join('');
+
+    $(".tweet").hover(
+    function() {
+      $(".new_actions", this).show();
+    },
+    function() {
+      $(".new_actions", this).hide();
+    });
+
+    $(".new_actions img").hover(
+    function() {
+      var $this = $(this);
+      var old_src = $this.attr('src');
+      $this.attr('src', old_src.substr(0, old_src.length - 4) + '_hover.png');
+    },
+    function() {
+      var $this = $(this);
+      var old_src = $this.attr('src');
+      $this.attr('src', old_src.substr(0, old_src.length - 10) + '.png');
+    });
 
     $(".tweet.unread").hoverFor(1000,
       function() {
