@@ -241,6 +241,15 @@ TweetsTimeline.prototype = {
     if(i != this.tweetsCache.length) {
       this.tweetsCache.splice(i, 1);
     }
+  },
+
+  findTweet: function(id) {
+    var i = 0;
+    for(; i < this.tweetsCache.length; ++i) {
+      if(this.tweetsCache[i].id == id)
+        return this.tweetsCache[i];
+    }
+    return null;
   }
 }
 
@@ -358,6 +367,36 @@ TweetManager.prototype = {
     } else {
       return this.twitterBackend.destroy(firstCallback, id);
     }
+  },
+
+  favorite: function(callback, id) {
+    var _this = this;
+    var firstCallback = function(success, data, status) {
+      if(success) {
+        _this.eachTimeline(function(timeline) {
+          var tweet = timeline.findTweet(id);
+          if(tweet)
+            tweet.favorited = true;
+        });
+      }
+      callback(success, data, status);
+    };
+    return this.twitterBackend.favorite(firstCallback, id);
+  },
+
+  unFavorite: function(callback, id) {
+    var _this = this;
+    var firstCallback = function(success, data, status) {
+      if(success) {
+        _this.eachTimeline(function(timeline) {
+          var tweet = timeline.findTweet(id);
+          if(tweet)
+            tweet.favorited = false;
+        });
+      }
+      callback(success, data, status);
+    };
+    return this.twitterBackend.unFavorite(firstCallback, id);
   },
 
   /* Delegates */

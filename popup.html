@@ -96,6 +96,7 @@ var Composer = {
   replyId: null,
   rtId: null,
   destroyId: null,
+  favoriteId: null,
 
   init: function() {
     if(tweetManager.composerData.isComposing) {
@@ -166,6 +167,38 @@ var Composer = {
     $(".rt_confirm").hide();
     $(".rt_confirm", node).show();
     this.rtId = $(node).attr('tweetid');
+  },
+
+  favorite: function (node) {
+    if(node) {
+      this.favoriteId = $(node).attr('tweetid');
+    }
+    $("#loading").show();
+    tweetManager.favorite(function(success, data, status) {
+      $("#loading").hide();
+      if(success) {
+         Paginator.firstPage();
+         loadTimeline();
+      } else {
+        showError('Unexpected error ' + status + ' marking as favorite.', 'Composer.favorite');
+      }
+    }, this.favoriteId);
+  },
+
+  unFavorite: function (node) {
+    if(node) {
+      this.favoriteId = $(node).attr('tweetid');
+    }
+    $("#loading").show();
+    tweetManager.unFavorite(function(success, data, status) {
+      $("#loading").hide();
+      if(success) {
+         Paginator.firstPage();
+         loadTimeline();
+      } else {
+        showError('Unexpected error ' + status + ' unmarking as favorite.', 'Composer.unFavorite');
+      }
+    }, this.favoriteId);
   },
 
   reply: function (node) {
@@ -492,7 +525,11 @@ var Renderer = {
     str += '</div></div>';
 
     str += '<div class="new_actions">';
-    str += '<img src="img/star.png" title="Favorite" class="unstarred"></img><br>';
+    if(tweet.favorited) {
+      str += '<img src="img/star_hover.png" title="Unmark as favorite" class="starred" onclick="Composer.unFavorite(this.parentNode.parentNode);"></img><br>';
+    } else {
+      str += '<img src="img/star.png" title="Mark as favorite" class="unstarred" onclick="Composer.favorite(this.parentNode.parentNode);"></img><br>';
+    }
 
     if(tweet.user.screen_name == tweetManager.twitterBackend.username()) {
       str += '<img src="img/delete.png" title="Delete" onclick="Composer.destroy(this.parentNode.parentNode)"></img><br>';
@@ -527,23 +564,24 @@ var Renderer = {
 
     $(".tweet").hover(
     function() {
-      $(".new_actions", this).show();
+      $(".new_actions img:not(.starred)", this).show();
     },
     function() {
-      $(".new_actions", this).hide();
+      $(".new_actions img:not(.starred)", this).hide();
     });
 
-    $(".new_actions img").hover(
-    function() {
+    var hoverFunc = function() {
       var $this = $(this);
       var old_src = $this.attr('src');
-      $this.attr('src', old_src.substr(0, old_src.length - 4) + '_hover.png');
-    },
-    function() {
-      var $this = $(this);
-      var old_src = $this.attr('src');
-      $this.attr('src', old_src.substr(0, old_src.length - 10) + '.png');
-    });
+      var new_src;
+      if(old_src.match(/hover/)) {
+        new_src = old_src.replace(/_hover/, '');
+      } else {
+        new_src = old_src.replace(/\.png/, '_hover.png');
+      }
+      $this.attr('src', new_src);
+    }
+    $(".new_actions img").hover(hoverFunc, hoverFunc);
 
     $(".tweet.unread").hoverFor(1000,
       function() {
@@ -557,7 +595,7 @@ var Renderer = {
         var testEl = $("<div class='tweet' style='display:none'></div>")
         $(document.body).append(testEl);
         var transformation = {};
-        jQuery.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopColor', 'color', 'outlineColor'], function(i, attr) {
+        jQuery.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopColor', 'outlineColor'], function(i, attr) {
           var cssAttrName = attr.replace(/([A-Z])/g, '-$1').toLowerCase();
           var originValue = testEl.css(cssAttrName);
           if(originValue)

@@ -206,11 +206,15 @@ input[type='text'] {
 .tweet .new_actions {
   position: relative;
   float: right;
-  display: none;
 }
 
 .tweet .new_actions img {
   cursor: pointer;
+  display: none;
+}
+
+.tweet .new_actions img.starred {
+  display: inline;
 }
 
 /**
