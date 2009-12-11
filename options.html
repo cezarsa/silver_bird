@@ -41,7 +41,7 @@ function Options() {
       if(validator) {
         var validatorsArray = validator.split(',');
         for(var i = 0; i < validatorsArray.length; ++i) {
-          var validInfo = window[validatorsArray[i]]($this);
+          var validInfo = Validator[validatorsArray[i]]($this);
           if(validInfo !== true) {
             hasErrors = true;
             _this.addValidationError($this, validInfo);
@@ -74,30 +74,39 @@ function Options() {
 }
 
 /* ---- validation ---- */
-function required($el) {
-  var val = $el.val()
-  if(!val)
-    return 'It can\'t be empty.';
-  return true;
-}
+Validator = {
+  required: function ($el) {
+    var val = $el.val()
+    if(!val)
+      return 'It can\'t be empty.';
+    return true;
+  },
 
-function number($el) {
-  var intVal = parseInt($el.val());
-  if(isNaN(intVal))
-    return 'It should be a number.';
-  return true;
-}
+  number: function ($el) {
+    var intVal = parseInt($el.val());
+    if(isNaN(intVal))
+      return 'It should be a number.';
+    return true;
+  },
 
-function positive($el) {
-  if(parseInt($el.val()) <= 0)
-    return 'It should be positive.';
-  return true;
-}
+  positive: function ($el) {
+    if(parseInt($el.val()) <= 0)
+      return 'It should be positive.';
+    return true;
+  },
 
-function minRefresh($el) {
-  if(parseInt($el.val()) < 20000)
-    return 'Minimum interval is 20000ms';
-  return true;
+  minRefresh: function ($el) {
+    if(parseInt($el.val()) < 20000)
+      return 'Minimum interval is 20000ms';
+    return true;
+  },
+
+  url: function ($el) {
+    if($el.val().match(/(\b(https?):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i)) {
+      return true;
+    }
+    return 'It should be a valid URL.';
+  }
 }
 /* ---- end validation ---- */
 
@@ -161,7 +170,7 @@ $(function() {
     <select name="name_attribute">
       <option value="screen_name">Screen name (nickname)</option>
       <option value="name">Real name</option>
-    </select>
+    </select><br>
     <label for="compose_position">Compose area position:</label>
     <select name="compose_position">
       <option value="top">Top</option>
@@ -174,6 +183,12 @@ $(function() {
     <legend>Advanced</legend>
     <label for="request_timeout">Request Timeout (ms):</label>
     <input type="text" name="request_timeout" validator="required,number,positive"><br>
+    <label for="base_url">Twitter's API URL:</label>
+    <input type="text" name="base_url" style="width: 300px;" validator="required,url"><br>
+    <label for="base_signing_url">OAuth Signature URL:</label>
+    <input type="text" name="base_signing_url" style="width: 300px;" validator="required,url"><br>
+    <label for="base_authorize_url">OAuth Authorize URL:</label>
+    <input type="text" name="base_authorize_url" style="width: 300px;" validator="required,url"><br>
   </fieldset>
 
   <br>

@@ -42,7 +42,7 @@ span.error {
 
 #main_area {
   -webkit-border-radius: 5px;
-  width: 500px;
+  width: 700px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 20px;
@@ -55,9 +55,9 @@ span.error {
   -webkit-border-radius: 5px;
   position: absolute;
   left: 50%;
-  margin-left: -250px;
+  margin-left: -350px;
   margin-top: -20px;
-  width: 500px;
+  width: 700px;
   border: 1px solid #B31E04;
   background-color: #FF2B05;
   color: #fff;

@@ -10,10 +10,8 @@
   "background_page": "background.html",
   "permissions": [
     "tabs",
-    "http://twitter.com/",
-    "https://twitter.com/",
-    "http://api.bit.ly/",
-    "http://api.tr.im/"
+    "http://*/*",
+    "https://*/*"
   ],
   "icons": {
     "19": "img/icon19.png",

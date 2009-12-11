@@ -12,8 +12,14 @@ var MAX_TWEET_SIZE = 140;
 var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
 var twitterBackend = tweetManager.twitterBackend;
 var OptionsBackend = chrome.extension.getBackgroundPage().OptionsBackend;
+var TwitterLib = {
+  URLS: {
+    BASE: 'http://twitter.com/',
+    SEARCH: 'http://twitter.com/search?q='
+  }
+};
 
-if(!twitterBackend.authenticated()) {
+if(!twitterBackend.authenticated() && !twitterBackend.tokenRequested()) {
   twitterBackend.startAuthentication();
   window.close();
 }
@@ -23,8 +29,7 @@ if(!twitterBackend.authenticated()) {
 <script type="text/javascript" src="lib/3rdparty/jquery.sexy-combo.js"></script>
 <script type="text/javascript" src="lib/3rdparty/jquery-ui-custom.js"></script>
 
-<script type="text/javascript" src="lib/debug.js"></script>
-<script type="text/javascript" src="lib/twitter_lib.js"></script>
+<!--script type="text/javascript" src="lib/debug.js"></script-->
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
 <script>
 var shortener = new Shortener(OptionsBackend.get('url_shortener'));
@@ -56,6 +61,28 @@ $.fn.hoverFor = function(time, mainCallback, startingCallback, abortCallback) {
       }
     );
  });
+};
+
+var OAuth = {
+  registerPin: function() {
+    var pinNumber = $("input[name='pin']").val();
+    $("#loading_oauth").show();
+    twitterBackend.oauthLib.getAccessToken(pinNumber, function(result) {
+      $("#loading_oauth").hide();
+      $("#enter_pin").hide();
+      if(result) {
+        initializeWorkspace();
+      } else {
+        var errMsg = twitterBackend.oauthLib.error;
+        $("#error_pin").show().html('The following error occurred trying to authenticate: ' + errMsg + '. ' +
+          'Please, <a href="javascript:OAuth.requestNewToken();">click here to restart the authentication process</a>');
+      }
+    });
+  },
+  requestNewToken: function() {
+    twitterBackend.startAuthentication();
+    window.close();
+  }
 };
 
 var Paginator = {
@@ -717,9 +744,7 @@ function prepareAndLoadTimeline() {
   loadTimeline();
 }
 
-$(function() {
-  if(!twitterBackend.authenticated())
-    return;
+function initializeWorkspace() {
   tweetManager.registerNewTweetsCallback(newTweetsAvailable);
   $("#workspace").show();
   $(".__username").text(tweetManager.twitterBackend.username());
@@ -772,6 +797,16 @@ $(function() {
       });
     });
   }, 0);
+}
+
+$(function() {
+  if(!twitterBackend.authenticated()) {
+    if(twitterBackend.tokenRequested()) {
+      $("#enter_pin").show();
+    }
+    return;
+  }
+  initializeWorkspace();
 });
 </script>
 </head>
@@ -821,5 +856,17 @@ $(function() {
 
 
 </div>
+
+<div id="enter_pin" style="display: none;">
+  <img src="img/loading.gif" id="loading_oauth" style="display: none;"/>
+  <label for="pin">Twitter's OAuth Pin:</label>
+  <input type="text" name="pin"><br>
+  <input type="button" onclick="OAuth.registerPin();" value="Authorize!">
+  <br><br>
+  <a href="javascript:OAuth.requestNewToken();">Request another token</a>
+</div>
+<div id="error_pin" style="display: none;">
+</div>
+
 </body>
 </html>

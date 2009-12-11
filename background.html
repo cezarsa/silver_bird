@@ -15,7 +15,10 @@ OptionsBackend = {
     url_shortener: 'bitly',
     name_attribute: 'name',
     request_timeout: 6000,
-    compose_position: 'top'
+    compose_position: 'top',
+    base_url: 'http://twitter.com/',
+    base_signing_url: 'http://twitter.com/',
+    base_authorize_url: 'https://twitter.com/oauth/authorize?oauth_token='
   },
   cachedOptions: null,
   save: function(optionsMap) {
@@ -283,7 +286,7 @@ function TweetManager() {
       _this.giveMeTweets.call(_this, "home", function() {});
       _this.giveMeTweets.call(_this, "mentions", function() {});
       _this.giveMeTweets.call(_this, "dms", function() {});
-  });
+  }, OptionsBackend.get('base_url'), OptionsBackend.get('base_authorize_url'), OptionsBackend.get('base_signing_url'));
 }
 
 TweetManager.prototype = {
