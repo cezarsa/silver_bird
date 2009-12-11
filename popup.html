@@ -741,6 +741,12 @@ $(function() {
     }
   });
 
+  if(OptionsBackend.get('compose_position') == 'bottom') {
+    var composeArea = $("#compose_tweet_area").remove();
+    var composeButton = $("#compose_tweet").remove();
+    $("#workspace").append(composeArea).append(composeButton);
+  }
+
   //Delay loading, improving responsiveness
   setTimeout(function() {
     Composer.init();
@@ -812,6 +818,8 @@ $(function() {
     <div id="timeline_mentions" class="timeline"></div>
     <div id="timeline_dms" class="timeline"></div>
   </div>
+
+
 </div>
 </body>
 </html>
