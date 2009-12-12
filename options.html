@@ -4,7 +4,9 @@
 
 <head>
 <link rel="stylesheet" type="text/css" href="css/options.css" />
+<link rel="stylesheet" type="text/css" href="css/colorpicker/colorpicker.css" />
 <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
+<script type="text/javascript" src="lib/3rdparty/colorpicker.js"></script>
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
 <title>Chromed Bird Options</title>
 
@@ -18,11 +20,23 @@ function Options() {
   this.load = function(forceDefault) {
     this.optionsMap = OptionsBackend.load(forceDefault);
     var _this = this;
-    $('input,select').each(function() {
+    $('input,select,canvas.color_selector').each(function() {
       var $this = $(this);
       var name = $this.attr('name');
-      if(name)
-        $this.val(_this.optionsMap[name]);
+      if(name) {
+        if($this.is('[type="checkbox"]')) {
+          $this.attr('checked', _this.optionsMap[name]);
+        } else if($this.is('canvas')) {
+          /*$("div", $this)
+            .css('backgroundColor', _this.optionsMap[name])
+            .attr('hexColor', _this.optionsMap[name]);*/
+          $this.attr('hexColor', _this.optionsMap[name]);
+          paintIcon($this[0], _this.optionsMap[name]);
+          $this.ColorPickerSetColor(_this.optionsMap[name]);
+        } else {
+          $this.val(_this.optionsMap[name]);
+        }
+      }
     });
   };
 
@@ -51,13 +65,26 @@ function Options() {
       }
     });
     if(!hasErrors) {
-      $('input,select').each(function() {
+      $('input,select,canvas.color_selector').each(function() {
         var $this = $(this);
         var name = $this.attr('name');
-        if(name)
-          _this.optionsMap[name] = $this.val();
+        if(name) {
+          if($this.is('[type="checkbox"]')) {
+             _this.optionsMap[name] = $this.attr('checked');
+          } else if($this.is('canvas')) {
+            _this.optionsMap[name] = $this.attr('hexColor');
+          } else {
+            var elValue = $this.val();
+            var intValue = parseInt(elValue );
+            if(intValue == elValue) {
+              elValue = intValue;
+            }
+            _this.optionsMap[name] = elValue;
+          }
+        }
       });
       OptionsBackend.save(this.optionsMap);
+      $(document).scrollTop(0);
       $("#saved_notice").stop().show().css('opacity', '1.0').fadeOut(5000);
     }
   };
@@ -110,18 +137,44 @@ Validator = {
 }
 /* ---- end validation ---- */
 
+var IconCreator = chrome.extension.getBackgroundPage().IconCreator;
 var twitterBackend = chrome.extension.getBackgroundPage().TweetManager.instance.twitterBackend;
 var options = new Options();
+var imgEl = null;
+
+function paintIcon(canvas, color) {
+  if(!imgEl) {
+    var img = $('<img>').attr('src', 'img/icon19.png');
+    img.load(function() {
+      imgEl = img[0];
+      var imgData = IconCreator.paintIcon(imgEl, color);
+      canvas.getContext("2d").putImageData(imgData, 0, 0);
+    });
+  } else {
+    var imgData = IconCreator.paintIcon(imgEl, color);
+    canvas.getContext("2d").putImageData(imgData, 0, 0);
+  }
+}
+
 $(function() {
-  var hitsInfo = twitterBackend.remainingHitsInfo();
-  $(".twitter_hits_left").text(hitsInfo[0]);
-  var dateObj = new Date();
-  dateObj.setTime(parseInt(hitsInfo[1]) * 1000);
-  $(".twitter_hits_reset").text(dateObj.toLocaleDateString() + " " + dateObj.toLocaleTimeString());
+  if(twitterBackend) {
+    var hitsInfo = twitterBackend.remainingHitsInfo();
+    $(".twitter_hits_left").text(hitsInfo[0]);
+    var dateObj = new Date();
+    dateObj.setTime(parseInt(hitsInfo[1]) * 1000);
+    $(".twitter_hits_reset").text(dateObj.toLocaleDateString() + " " + dateObj.toLocaleTimeString());
+  }
   for(var key in SHORTENERS_BACKEND) {
     var desc = SHORTENERS_BACKEND[key].desc;
     $("select[name='url_shortener']").append($("<option>").attr('value', key).text(desc));
   }
+  $('canvas.color_selector').ColorPicker({
+    onChange: function (hsb, hex, rgb) {
+      var canvas = this.data('colorpicker').el;
+      $(canvas).attr('hexColor', '#' + hex);
+      paintIcon(canvas, rgb);
+    }
+  });
   options.load();
 });
 </script>
@@ -175,8 +228,38 @@ $(function() {
     <select name="compose_position">
       <option value="top">Top</option>
       <option value="bottom">Bottom</option>
-    </select>
+    </select><br>
+    <label>Icon color:</label>
+    <canvas name="idle_color" width="19" height="19" class="color_selector"></canvas>
+  </fieldset>
 
+  <fieldset>
+    <legend>Notifications</legend>
+    <table>
+      <tr>
+        <th></th>
+        <th>Show on Page</th>
+        <th>Change Icon</th>
+        <th>Icon Color</th>
+      <tr>
+        <td class="label">Home:</td>
+        <td><input type="checkbox" name="home_on_page"></td>
+        <td><input type="checkbox" name="home_icon"></td>
+        <td><canvas name="home_color" width="19" height="19" class="color_selector"></canvas></td>
+      </tr>
+      <tr>
+        <td class="label">Mentions:</td>
+        <td><input type="checkbox" name="mentions_on_page"></td>
+        <td><input type="checkbox" name="mentions_icon"></td>
+        <td><canvas name="mentions_color" width="19" height="19" class="color_selector"></canvas></td>
+      </tr>
+      <tr>
+        <td class="label">DMs:</td>
+        <td><input type="checkbox" name="dms_on_page"></td>
+        <td><input type="checkbox" name="dms_icon"></td>
+        <td><canvas name="dms_color" width="19" height="19" class="color_selector"></canvas></td>
+      </tr>
+    </table>
   </fieldset>
 
   <fieldset>

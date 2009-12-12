@@ -1,7 +1,12 @@
+<!DOCTYPE html>
+
+<html>
+<head>
 <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
 <script type="text/javascript" src="lib/3rdparty/oauth.js"></script>
 <script type="text/javascript" src="lib/3rdparty/sha1.js"></script>
 <script type="text/javascript" src="lib/twitter_lib.js"></script>
+<script type="text/javascript" src="lib/icon_creator.js"></script>
 
 <script>
 
@@ -18,7 +23,19 @@ OptionsBackend = {
     compose_position: 'top',
     base_url: 'http://twitter.com/',
     base_signing_url: 'http://twitter.com/',
-    base_authorize_url: 'https://twitter.com/oauth/authorize?oauth_token='
+    base_authorize_url: 'https://twitter.com/oauth/authorize?oauth_token=',
+
+    home_on_page: false,
+    home_icon: true,
+    mentions_on_page: true,
+    mentions_icon: true,
+    dms_on_page: true,
+    dms_icon: true,
+
+    idle_color: '#4880a6',
+    home_color: '#ff4242',
+    mentions_color: '#7f870b',
+    dms_color: '#7f870b'
   },
   cachedOptions: null,
   save: function(optionsMap) {
@@ -41,11 +58,7 @@ OptionsBackend = {
     if(this.cachedOptions == null) {
       this.cachedOptions = this.load();
     }
-    var optionValue = this.cachedOptions[option];
-    var intValue = parseInt(optionValue);
-    if(intValue == optionValue)
-      return intValue;
-    return optionValue;
+    return this.cachedOptions[option];
   }
 };
 
@@ -275,6 +288,8 @@ function TweetManager() {
 
   this.currentTimeline = "home";
   this.timelines = {};
+  this.iconImg = null;
+  this.loadIcon();
 
   this.timelines["home"] = new TweetsTimeline("home", this, OptionsBackend.get('home_refresh_interval'));
   this.timelines["mentions"] = new TweetsTimeline("mentions", this, OptionsBackend.get('mentions_refresh_interval'));
@@ -296,23 +311,36 @@ TweetManager.prototype = {
     }
   },
 
-  updateAlert: function() {
-    var unreadNewCount = 0;
-    this.eachTimeline(function(timeline) {
-      unreadNewCount += timeline.newTweetsCount()[1];
+  loadIcon: function() {
+    var $icon = $('<img>').attr('src', 'img/icon19.png');
+    $icon.load(function() {
+      chrome.browserAction.setIcon({imageData: IconCreator.paintIcon(this, OptionsBackend.get('idle_color'))});
     });
-    if(unreadNewCount == 0) {
+    this.iconImg = $icon[0];
+  },
+
+  updateAlert: function() {
+    var totalUnreadNewCount = 0;
+    var colors = [];
+    this.eachTimeline(function(timeline) {
+      var unreadNew = timeline.newTweetsCount()[1];
+      totalUnreadNewCount += unreadNew;
+      if(unreadNew > 0 && OptionsBackend.get(this + '_icon')) {
+        colors.push(OptionsBackend.get(this + '_color'));
+      }
+    });
+    if(colors.length == 0) {
       chrome.browserAction.setTitle({title: "Chromed Bird"});
-      chrome.browserAction.setIcon({path: 'img/icon19.png'});
+      chrome.browserAction.setIcon({imageData: IconCreator.paintIcon(this.iconImg, OptionsBackend.get('idle_color'))});
       chrome.browserAction.setBadgeText({text: ''});
     } else {
-      var title = unreadNewCount + " new tweet";
-      if(unreadNewCount > 1)
+      var title = totalUnreadNewCount + " new tweet";
+      if(totalUnreadNewCount > 1)
         title += "s";
       chrome.browserAction.setTitle({title: title});
-      chrome.browserAction.setIcon({path: 'img/icon19_red.png'});
+      chrome.browserAction.setIcon({imageData: IconCreator.paintIcon(this.iconImg, colors)});
       chrome.browserAction.setBadgeBackgroundColor({color: [255, 0, 0, 0]});
-      chrome.browserAction.setBadgeText({text: '' + unreadNewCount});
+      chrome.browserAction.setBadgeText({text: '' + totalUnreadNewCount});
     }
   },
 
@@ -448,3 +476,5 @@ localStorage.removeItem('logged');
 localStorage.removeItem('username');
 localStorage.removeItem('remember');
 </script>
+</head>
+</html>
