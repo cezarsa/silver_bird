@@ -552,10 +552,12 @@ var Renderer = {
     str += '</div></div>';
 
     str += '<div class="new_actions">';
-    if(tweet.favorited) {
-      str += '<img src="img/star_hover.png" title="Unmark as favorite" class="starred" onclick="Composer.unFavorite(this.parentNode.parentNode);"></img><br>';
-    } else {
-      str += '<img src="img/star.png" title="Mark as favorite" class="unstarred" onclick="Composer.favorite(this.parentNode.parentNode);"></img><br>';
+    if(tweetManager.currentTimeline != "dms") {
+      if(tweet.favorited) {
+        str += '<img src="img/star_hover.png" title="Unmark as favorite" class="starred" onclick="Composer.unFavorite(this.parentNode.parentNode);"></img><br>';
+      } else {
+        str += '<img src="img/star.png" title="Mark as favorite" class="unstarred" onclick="Composer.favorite(this.parentNode.parentNode);"></img><br>';
+      }
     }
 
     if(tweet.user.screen_name == tweetManager.twitterBackend.username()) {
