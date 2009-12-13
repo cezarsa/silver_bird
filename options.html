@@ -187,35 +187,12 @@ $(function() {
 <div id="saved_notice">Your configuration has been successfully saved!</div>
 <div id="main_area">
   <p class="notice">
-    Please notice that most of these options will only take effect if you restart the extension. Maybe this could change in the future.
+    Please notice that options denoted with asterisk "*" will only take effect if you restart the extension. (Disabling and enabling it again)
   </p>
   <p>
     Remaining Twitter API Hits: <span class="twitter_hits_left"></span><br>
     Rate Limit Reset: <span class="twitter_hits_reset"></span>
   </p>
-  <fieldset>
-    <legend>Refresh Interval (ms)</legend>
-    <label for="home_refresh_interval">Home Timeline:</label>
-    <input type="text" name="home_refresh_interval" validator="required,number,minRefresh"><br>
-    <label for="mentions_refresh_interval">Mentions Timeline:</label>
-    <input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh"><br>
-    <label for="dms_refresh_interval">DM Timeline:</label>
-    <input type="text" name="dms_refresh_interval" validator="required,number,minRefresh"><br>
-  </fieldset>
-
-  <fieldset>
-    <legend>Timelines</legend>
-    <label for="tweets_per_page">Tweets per Page:</label>
-    <input type="text" name="tweets_per_page" validator="required,number,positive"><br>
-    <label for="max_cached_tweets">Max Shown Tweets:</label>
-    <input type="text" name="max_cached_tweets" validator="required,number,positive"><br>
-  </fieldset>
-
-  <fieldset>
-    <legend>Shortener</legend>
-    <label for="url_shortener">URL Shortener:</label>
-    <select name="url_shortener"></select>
-  </fieldset>
 
    <fieldset>
     <legend>UI</legend>
@@ -229,7 +206,7 @@ $(function() {
       <option value="top">Top</option>
       <option value="bottom">Bottom</option>
     </select><br>
-    <label>Icon color:</label>
+    <label>*Icon color:</label>
     <canvas name="idle_color" width="19" height="19" class="color_selector"></canvas>
   </fieldset>
 
@@ -263,14 +240,41 @@ $(function() {
   </fieldset>
 
   <fieldset>
+    <legend>Shortener</legend>
+    <label for="url_shortener">URL Shortener:</label>
+    <select name="url_shortener"></select>
+  </fieldset>
+
+  <fieldset>
+    <legend>Refresh Interval (ms)</legend>
+    <p class="notice">
+      Be careful with API hits limit!
+    </p>
+    <label for="home_refresh_interval">*Home Timeline:</label>
+    <input type="text" name="home_refresh_interval" validator="required,number,minRefresh"><br>
+    <label for="mentions_refresh_interval">*Mentions Timeline:</label>
+    <input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh"><br>
+    <label for="dms_refresh_interval">*DM Timeline:</label>
+    <input type="text" name="dms_refresh_interval" validator="required,number,minRefresh"><br>
+  </fieldset>
+
+  <fieldset>
+    <legend>Timelines</legend>
+    <label for="tweets_per_page">*Tweets per Page:</label>
+    <input type="text" name="tweets_per_page" validator="required,number,positive"><br>
+    <label for="max_cached_tweets">*Max Shown Tweets:</label>
+    <input type="text" name="max_cached_tweets" validator="required,number,positive"><br>
+  </fieldset>
+
+  <fieldset>
     <legend>Advanced</legend>
-    <label for="request_timeout">Request Timeout (ms):</label>
+    <label for="request_timeout">*Request Timeout (ms):</label>
     <input type="text" name="request_timeout" validator="required,number,positive"><br>
-    <label for="base_url">Twitter's API URL:</label>
+    <label for="base_url">*Twitter's API URL:</label>
     <input type="text" name="base_url" style="width: 300px;" validator="required,url"><br>
-    <label for="base_signing_url">OAuth Signature URL:</label>
+    <label for="base_signing_url">*OAuth Signature URL:</label>
     <input type="text" name="base_signing_url" style="width: 300px;" validator="required,url"><br>
-    <label for="base_authorize_url">OAuth Authorize URL:</label>
+    <label for="base_authorize_url">*OAuth Authorize URL:</label>
     <input type="text" name="base_authorize_url" style="width: 300px;" validator="required,url"><br>
   </fieldset>
 
