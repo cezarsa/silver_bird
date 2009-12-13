@@ -1,7 +1,3 @@
-<!DOCTYPE html>
-
-<html>
-<head>
 <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
 <script type="text/javascript" src="lib/3rdparty/oauth.js"></script>
 <script type="text/javascript" src="lib/3rdparty/sha1.js"></script>
@@ -33,7 +29,7 @@ OptionsBackend = {
     dms_icon: true,
 
     idle_color: '#4880a6',
-    home_color: '#ff4242',
+    home_color: '#9c2e2e',
     mentions_color: '#7f870b',
     dms_color: '#7f870b'
   },
@@ -69,6 +65,7 @@ function TweetsTimeline(timelineId, manager, recheckTime) {
 
   this.tweetsCache = [];
   this.newTweetsCache = [];
+  this.unreadNotified = [];
 
   this.timerId = null;
   this.currentError = null;
@@ -237,6 +234,7 @@ TweetsTimeline.prototype = {
   updateNewTweets: function() {
     this.tweetsCache = this.newTweetsCache.concat(this.tweetsCache);
     this.newTweetsCache = [];
+    this.unreadNotified = [];
   },
 
   newTweetsCount: function() {
@@ -247,6 +245,17 @@ TweetsTimeline.prototype = {
       }
     }
     return [this.newTweetsCache.length, unreadCount];
+  },
+
+  getNewUnreadTweets: function() {
+    var unreadNewList = [];
+    for(var i = 0; i < this.newTweetsCache.length; ++i) {
+      if(!this.manager.isTweetRead(this.newTweetsCache[i].id) && !this.unreadNotified[this.newTweetsCache[i].id]) {
+        unreadNewList.push(this.newTweetsCache[i]);
+        this.unreadNotified[this.newTweetsCache[i].id] = true;
+      }
+    }
+    return unreadNewList;
   },
 
   removeFromCache: function(id) {
@@ -281,6 +290,7 @@ function TweetManager() {
   this.unreadTweets = {};
   this.readTweets = {};
   this.retweets = {};
+  this.injectTweets = null;
 
   this.newTweetsCallback = null;
 
@@ -322,11 +332,17 @@ TweetManager.prototype = {
   updateAlert: function() {
     var totalUnreadNewCount = 0;
     var colors = [];
+    var unreadNewTweets = [];
     this.eachTimeline(function(timeline) {
       var unreadNew = timeline.newTweetsCount()[1];
       totalUnreadNewCount += unreadNew;
-      if(unreadNew > 0 && OptionsBackend.get(this + '_icon')) {
-        colors.push(OptionsBackend.get(this + '_color'));
+      if(unreadNew > 0) {
+        if(OptionsBackend.get(this + '_icon')) {
+          colors.push(OptionsBackend.get(this + '_color'));
+        }
+        if(OptionsBackend.get(this + '_on_page')) {
+          unreadNewTweets = unreadNewTweets.concat(timeline.getNewUnreadTweets());
+        }
       }
     });
     if(colors.length == 0) {
@@ -341,6 +357,20 @@ TweetManager.prototype = {
       chrome.browserAction.setIcon({imageData: IconCreator.paintIcon(this.iconImg, colors)});
       chrome.browserAction.setBadgeBackgroundColor({color: [255, 0, 0, 0]});
       chrome.browserAction.setBadgeText({text: '' + totalUnreadNewCount});
+    }
+    if(unreadNewTweets.length > 0) {
+      this.injectTweets = unreadNewTweets;
+      chrome.tabs.executeScript(null, {
+        file: 'lib/3rdparty/jquery.js'
+      }, function() {
+        chrome.tabs.insertCSS(null, {
+          file: 'css/injectedTweets.css'
+        }, function() {
+          chrome.tabs.executeScript(null, {
+            file: 'lib/tweets_assembler.js'
+          });
+        });
+      });
     }
   },
 
@@ -470,11 +500,20 @@ TweetManager.prototype = {
 
 TweetManager.instance = new TweetManager();
 
+chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+  if(request.cb_requesting_tweets) {
+    sendResponse({
+      tweets: TweetManager.instance.injectTweets,
+      nameAttribute: OptionsBackend.get('name_attribute'),
+      extensionId: location.host
+    });
+    TweetManager.instance.injectTweets = null;
+  }
+});
+
 /* Clean up old versions mess */
 localStorage.removeItem('password');
 localStorage.removeItem('logged');
 localStorage.removeItem('username');
 localStorage.removeItem('remember');
 </script>
-</head>
-</html>
