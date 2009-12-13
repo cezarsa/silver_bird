@@ -89,7 +89,7 @@ var Paginator = {
   needsMore: false,
   firstPage: function() {
     this.needsMore = false;
-    $("#timeline").scrollTop(0);
+    $("#timeline_" + tweetManager.currentTimeline).scrollTop(0);
   },
   nextPage: function() {
     this.needsMore = true;
@@ -204,7 +204,7 @@ var Composer = {
     tweetManager.favorite(function(success, data, status) {
       $("#loading").hide();
       if(success) {
-         Paginator.firstPage();
+         Paginator.needsMore = false;
          loadTimeline();
       } else {
         showError('Unexpected error ' + status + ' marking as favorite.', 'Composer.favorite');
@@ -220,7 +220,7 @@ var Composer = {
     tweetManager.unFavorite(function(success, data, status) {
       $("#loading").hide();
       if(success) {
-         Paginator.firstPage();
+         Paginator.needsMore = false;
          loadTimeline();
       } else {
         showError('Unexpected error ' + status + ' unmarking as favorite.', 'Composer.unFavorite');
@@ -637,6 +637,12 @@ var Renderer = {
         $(this).attr('style', '');
       }
     );
+  },
+
+  markAllAsRead: function() {
+    tweetManager.markTimelineAsRead();
+    Paginator.needsMore = false;
+    loadTimeline();
   }
 }
 
@@ -695,8 +701,10 @@ function signout() {
 function newTweetsAvailable(count, unreadCount, timelineId) {
   var currentTimeline = tweetManager.currentTimeline;
   if(timelineId != currentTimeline) {
-    if(unreadCount == 0)
+    if(unreadCount == 0) {
+      $("#tab_modifier_" + timelineId).remove();
       return;
+    }
     $("#tab_modifier_" + timelineId).remove();
     var timelineTabLink = $("a[href='#timeline_" + timelineId + "']");
     var divEl = $("<div class='tab_modifier'></div>")
@@ -706,6 +714,8 @@ function newTweetsAvailable(count, unreadCount, timelineId) {
     divEl.css({width: modWidth + 'px'});
     return;
   }
+  if(count == 0)
+    return;
   var text = count + " more tweet";
   if(count > 1)
     text += "s";
@@ -833,7 +843,8 @@ $(function() {
     <img class="right" src="img/arrow_down.gif"/>
   </div>
 
-  <div id="logout"><a href="#" onclick="signout()">Log out</a></div>
+  <a id="logout" href="javascript:signout()">Log out</a>
+  <a id="mark_as_read" href="javascript:Renderer.markAllAsRead();">Mark all as read</a>
   <img src="img/loading.gif" id="loading" style="display: none;"/>
   <div style="clear: both;"></div>
 

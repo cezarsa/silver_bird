@@ -258,6 +258,16 @@ TweetsTimeline.prototype = {
     return unreadNewList;
   },
 
+  getNewUnreadIds: function() {
+    var unreadNewIds = [];
+    for(var i = 0; i < this.newTweetsCache.length; ++i) {
+      if(!this.manager.isTweetRead(this.newTweetsCache[i].id)) {
+        unreadNewIds.push(this.newTweetsCache[i].id);
+      }
+    }
+    return unreadNewIds;
+  },
+
   removeFromCache: function(id) {
     var i = 0;
     for(; i < this.tweetsCache.length; ++i) {
@@ -329,14 +339,24 @@ TweetManager.prototype = {
     this.iconImg = $icon[0];
   },
 
+  unique: function(srcList) {
+    var newList = [];
+    for(var i = 0; i < srcList.length; ++i) {
+      if($.inArray(srcList[i], newList) == -1) {
+        newList[newList.length] = srcList[i];
+      }
+    }
+    return newList;
+  },
+
   updateAlert: function() {
-    var totalUnreadNewCount = 0;
     var colors = [];
     var unreadNewTweets = [];
+    var totalUnreadNewIds = [];
     this.eachTimeline(function(timeline) {
-      var unreadNew = timeline.newTweetsCount()[1];
-      totalUnreadNewCount += unreadNew;
-      if(unreadNew > 0) {
+      var unreadNewIds = timeline.getNewUnreadIds();
+      totalUnreadNewIds = totalUnreadNewIds.concat(unreadNewIds);
+      if(unreadNewIds.length > 0) {
         if(OptionsBackend.get(this + '_icon')) {
           colors.push(OptionsBackend.get(this + '_color'));
         }
@@ -345,6 +365,7 @@ TweetManager.prototype = {
         }
       }
     });
+    var totalUnreadNewCount = this.unique(totalUnreadNewIds).length;
     if(colors.length == 0) {
       chrome.browserAction.setTitle({title: "Chromed Bird"});
       chrome.browserAction.setIcon({imageData: IconCreator.paintIcon(this.iconImg, OptionsBackend.get('idle_color'))});
@@ -381,6 +402,11 @@ TweetManager.prototype = {
   readTweet: function(id) {
     this.readTweets[id] = true;
     delete this.unreadTweets[id];
+    var _this = this;
+    this.eachTimeline(function(timeline) {
+      var newTweets = timeline.newTweetsCount();
+      _this.notifyNewTweets(this, newTweets[0], newTweets[1]);
+    });
   },
 
   isTweetRead: function(id) {
@@ -495,6 +521,13 @@ TweetManager.prototype = {
     localStorage.removeItem('oauth_token_data');
     this.stopAll();
     TweetManager.instance = new TweetManager();
+  },
+
+  markTimelineAsRead: function() {
+    var tweetsToRead = this.getCurrentTimeline().tweetsCache;
+    for(var i = 0; i < tweetsToRead.length; ++i) {
+      this.readTweet(tweetsToRead[i].id);
+    }
   }
 }
 

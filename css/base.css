@@ -52,10 +52,18 @@ input[type='text'] {
   margin-top: 4px;
 }
 
+#mark_as_read {
+  float: right;
+  font-size: 8pt;
+  margin-top: 4px;
+}
+
 #loading {
   float: right;
   margin: 0px;
   padding: 0px;
+  padding-right: 5px;
+  padding-top: 6px;
 }
 
 .timeline {
