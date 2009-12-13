@@ -1,3 +1,23 @@
+1.2.0 (2009-12-13)
+
+* Showing tweets as soon as they arrive (Can be enabled/disabled for each timeline in the options page)
+* Allowing tweets to be deleted
+* Allowing tweets to be marked and unmarked as favorite
+* Allowing links to be opened in a background tab. (Middle clicking or Ctrl-clicking the link)
+* Allowing users to manually enter Twitter's OAuth Pin
+* Allowing users to mark all tweets in the timeline as read
+* Reworking actions on tweets using icons instead of links
+* Reworking options page adding options to:
+  - Change icon colors and notification settings
+  - Change displayed name in tweets
+  - Change request timeout
+  - Change Twitter's API endpoint
+* Correcly handling replies to Direct Messages
+* Fixing new tweets count when tweets are shown in more than one timeline
+* Fixing word-wrapping in tweets
+* Fixing popup going crazy when showing error messages
+* Showing returned error while fetching OAuth's request token
+
 1.0.1 (2009-12-03)
 
 * Fixing bug causing tweets to stay on the timeline forever (only after tweaking with the options page)
