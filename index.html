@@ -25,12 +25,13 @@
     #install {
       background-color: #6DAFEB;
       border: 4px solid #365775;
-      cursor: pointer;
       line-height: 50px;
       font-weight: bold;
+      display: block;
     }
     #install:hover {
       outline: 2px solid #365775;
+      text-decoration: none;
     }
 
     #wrong_browser {
@@ -43,17 +44,22 @@
       width: 150px;
       margin-left: auto;
       margin-right: auto;
-      margin-top: 10px;
-      display: none;
     }
 
     #title {
-      text-align: center;
+      /*text-align: center;*/
       color: 333;
-      font-size: 12pt;
+      font-size: 22pt;
       font-style: italic;
       font-weight: bold;
+      margin: 0;
     }
+
+    #title img {
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
     div.side_box {
       width: 43%;
       margin-top: 20px;
@@ -81,10 +87,7 @@ $(function() {
   mail += "@";
   mail += "gmail.";
   mail += "com";
-  var link = $("<a></a>");
-  link.attr('href', "mailto:" + mail);
-  link.text(mail);
-  $("span.my_email").html(link);
+  $("span.my_email").html($("<a></a>").attr('href', "mailto:" + mail).text(mail));
 
   var ua = navigator.userAgent;
   if(ua.match(/Chrome/i)) {
@@ -105,15 +108,15 @@ $(function() {
 <body>
 
 <p id="title">
-Chromed Bird
+<img src="bird48.png"></img>Chromed Bird
 </p>
 
-<div id="wrong_browser" class="top_box">
+<div id="wrong_browser" class="top_box" style="display: none;">
 </div>
 
-<div id="install" class="top_box" onclick="location.href='https://clients2.google.com/service/update2/crx?response=redirect&x=id%3Dencaiiljifbdbjlphpgpiimidegddhic%26uc%26lang%3Den-US'">
-Install it now!
-</div>
+<a id="install" class="top_box" style="display: none;" href="https://chrome.google.com/extensions/detail/encaiiljifbdbjlphpgpiimidegddhic">
+Get it!
+</a>
 
 <div id="content_left" class="side_box">
   <h1>What is it?</h1>
@@ -123,9 +126,17 @@ Install it now!
   <p>
     More details in the <a href="http://github.com/cezarsa/chromed_bird">GitHub Project Page</a>.
   </p>
+  <h1>FAQ</h1>
+  <p>
+    <a href="http://wiki.github.com/cezarsa/chromed_bird/faq">Check out the FAQ now.</a>
+  </p>
+   <h1>Screenshots and users feedback</h1>
+   <p>
+    <a href="https://chrome.google.com/extensions/detail/encaiiljifbdbjlphpgpiimidegddhic">Check the extension page in Chrome's gallery.</a>
+  </p>
   <h1>Compatibility</h1>
   <p>
-    Currently only Dev channel releases of Google Chrome support extensions. Check <a href="http://dev.chromium.org/getting-involved/dev-channel">http://dev.chromium.org/getting-involved/dev-channel</a> for more information.
+    Currently only Beta and Dev channel releases of Google Chrome support extensions. Check <a href="http://dev.chromium.org/getting-involved/dev-channel">Early Access Release Channels</a> for more information.
   </p>
   <h1>Contact</h1>
   <p>
@@ -142,12 +153,13 @@ Install it now!
   </p>
   <h1>Current Features</h1>
   <ul>
-    <li>Follow your friends timeline and navigate through older tweets;</li>
-    <li>Tweets caching to avoid hitting Twitter's API rate limit;</li>
-    <li>Compose, reply, and RT tweets;</li>
-    <li>The extension updates itself as soon as new versions are available.</li>
+    <li>Follow your timelines and navigate through your tweets;</li>
+    <li>Compose, reply, RT, share, favorite and delete tweets;</li>
+    <li>Create short URLs within the extension;</li>
     <li>Track read / unread tweets;</li>
-    <li>Notify user whenever new tweets arrive.</li>
+    <li>Notify user whenever new tweets arrive;</li>
+    <li>The extension updates itself as soon as new versions are available;</li>
+    <li>Tweets caching to avoid hitting Twitter's API rate limit.</li>
   </ul>
 </div>
 
