@@ -31,7 +31,9 @@ OptionsBackend = {
     idle_color: '#4880a6',
     home_color: '#9c2e2e',
     mentions_color: '#7f870b',
-    dms_color: '#7f870b'
+    dms_color: '#7f870b',
+
+    notification_fade_timeout: 5000
   },
   cachedOptions: null,
   save: function(optionsMap) {
@@ -538,7 +540,8 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     sendResponse({
       tweets: TweetManager.instance.injectTweets,
       nameAttribute: OptionsBackend.get('name_attribute'),
-      extensionId: location.host
+      extensionId: location.host,
+      fadeTimeout: OptionsBackend.get('notification_fade_timeout')
     });
     TweetManager.instance.injectTweets = null;
   }
