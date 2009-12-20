@@ -384,13 +384,16 @@ TweetManager.prototype = {
     if(unreadNewTweets.length > 0) {
       this.injectTweets = unreadNewTweets;
       chrome.tabs.executeScript(null, {
-        file: 'lib/3rdparty/jquery.js'
+        file: 'lib/3rdparty/jquery.js',
+        allFrames: true
       }, function() {
         chrome.tabs.insertCSS(null, {
-          file: 'css/injectedTweets.css'
+          file: 'css/injectedTweets.css',
+          allFrames: true
         }, function() {
           chrome.tabs.executeScript(null, {
-            file: 'lib/tweets_assembler.js'
+            file: 'lib/tweets_assembler.js',
+            allFrames: true
           });
         });
       });
@@ -535,15 +538,32 @@ TweetManager.prototype = {
 
 TweetManager.instance = new TweetManager();
 
+var waitingFirstRequest = true;
+var selectedResponse = null;
+var biggestArea = -1;
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
   if(request.cb_requesting_tweets) {
-    sendResponse({
-      tweets: TweetManager.instance.injectTweets,
-      nameAttribute: OptionsBackend.get('name_attribute'),
-      extensionId: location.host,
-      fadeTimeout: OptionsBackend.get('notification_fade_timeout')
-    });
-    TweetManager.instance.injectTweets = null;
+    if(waitingFirstRequest) {
+      waitingFirstRequest = false;
+      setTimeout(function() {
+        if(selectedResponse) {
+          selectedResponse({
+            tweets: TweetManager.instance.injectTweets,
+            nameAttribute: OptionsBackend.get('name_attribute'),
+            extensionId: location.host,
+            fadeTimeout: OptionsBackend.get('notification_fade_timeout')
+          });
+        }
+        waitingFirstRequest = true;
+        TweetManager.instance.injectTweets = null;
+        biggestArea = -1;
+      }, 200);
+    }
+    var area = request.frame_area;
+    if(area >= biggestArea) {
+      biggestArea = area;
+      selectedResponse = sendResponse;
+    }
   }
 });
 
