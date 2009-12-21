@@ -27,9 +27,6 @@ function Options() {
         if($this.is('[type="checkbox"]')) {
           $this.attr('checked', _this.optionsMap[name]);
         } else if($this.is('canvas')) {
-          /*$("div", $this)
-            .css('backgroundColor', _this.optionsMap[name])
-            .attr('hexColor', _this.optionsMap[name]);*/
           $this.attr('hexColor', _this.optionsMap[name]);
           paintIcon($this[0], _this.optionsMap[name]);
           $this.ColorPickerSetColor(_this.optionsMap[name]);
@@ -258,6 +255,8 @@ $(function() {
     <input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh"><br>
     <label for="dms_refresh_interval">*DM Timeline:</label>
     <input type="text" name="dms_refresh_interval" validator="required,number,minRefresh"><br>
+    <label for="favorites_refresh_interval">*Favorites Timeline:</label>
+    <input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh"><br>
   </fieldset>
 
   <fieldset>

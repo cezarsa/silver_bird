@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-
 <html>
 <head>
-
 <!-- Theme specific CSS files are loaded later by the ThemeManager -->
 <link rel="stylesheet" type="text/css" href="css/base.css" />
 <link rel="stylesheet" type="text/css" href="css/sexy-combo.css" />
@@ -766,6 +764,7 @@ function initializeWorkspace() {
   switch(tweetManager.currentTimeline) {
     case 'mentions': selectedNumber = 1; break;
     case 'dms': selectedNumber = 2; break;
+    case 'favorites': selectedNumber = 3; break;
   }
   $("#tabs").tabs({
     selected: selectedNumber,
@@ -826,7 +825,6 @@ $(function() {
 <div id="error" style="display: none;"></div>
 
 <div id="workspace" style="display: none;">
-
   <div id="compose_tweet_area" style="display: none;">
     <textarea rows="4" onkeyup="Composer.textareaChanged(event);" onblur="Composer.textareaChanged();"></textarea>
     <div id="shortener_area">
@@ -861,10 +859,12 @@ $(function() {
       <li><a href="#timeline_home"><span>Home</span></a></li>
       <li><a href="#timeline_mentions"><span>@<span class="__username"></span></span></a></li>
       <li><a href="#timeline_dms"><span>DM</span></a></li>
+      <li><a href="#timeline_favorites"><span>Favorites</span></a></li>
     </ul>
     <div id="timeline_home" class="timeline"></div>
     <div id="timeline_mentions" class="timeline"></div>
     <div id="timeline_dms" class="timeline"></div>
+    <div id="timeline_favorites" class="timeline"></div>
   </div>
 
 

@@ -4,6 +4,7 @@ body {
   padding: 0px;
   color: black;
   font-size: 10pt;
+  overflow: hidden;
 }
 
 a {

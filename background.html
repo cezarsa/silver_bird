@@ -11,6 +11,7 @@ OptionsBackend = {
     home_refresh_interval: 60 * 1000,
     mentions_refresh_interval: 150 * 1000,
     dms_refresh_interval: 150 * 1000,
+    favorites_refresh_interval: 600 * 1000,
     tweets_per_page: 10,
     max_cached_tweets: 30,
     url_shortener: 'bitly',
@@ -27,11 +28,14 @@ OptionsBackend = {
     mentions_icon: true,
     dms_on_page: true,
     dms_icon: true,
+    favorites_on_page: false,
+    favorites_icon: false,
 
     idle_color: '#4880a6',
     home_color: '#9c2e2e',
     mentions_color: '#7f870b',
     dms_color: '#7f870b',
+    favorites_color: '#7f870b',
 
     notification_fade_timeout: 5000
   },
@@ -75,6 +79,8 @@ function TweetsTimeline(timelineId, manager, recheckTime) {
   this.currentScroll = 0;
   this.firstRun = true;
   this.timelinePath = timelineId;
+  this.usingPages = false;
+  this.timelineId = timelineId;
 
   switch(timelineId) {
     case 'home':
@@ -85,6 +91,10 @@ function TweetsTimeline(timelineId, manager, recheckTime) {
       break;
     case 'dms':
       this.timelinePath = 'direct_messages';
+      break;
+    case 'favorites':
+      this.timelinePath = 'favorites';
+      this.usingPages = true;
       break;
   }
 }
@@ -113,14 +123,29 @@ TweetsTimeline.prototype = {
     this.setError(null);
 
     var unreadLength = 0;
-    for(var i = tweets.length - 1; i >= 0; --i) {
-      this.newTweetsCache.unshift(tweets[i]);
-      var tid = tweets[i].id;
-      if(context.onFinish) {
-        this.manager.readTweet(tid);
-      } else if(!this.manager.readTweets[tid]) {
-        ++unreadLength;
-        this.manager.unreadTweets[tid] = true;
+    if(this.usingPages) {
+      for(var i = 0; i < tweets.length; ++i) {
+        var j = 0;
+        for(; j < this.tweetsCache.length; ++j) {
+          if(tweets[i].id == this.tweetsCache[j].id) {
+            break;
+          }
+        }
+        if(j != this.tweetsCache.length) {
+          break;
+        }
+        this.newTweetsCache.push(tweets[i]);
+      }
+    } else {
+      for(var i = tweets.length - 1; i >= 0; --i) {
+        this.newTweetsCache.unshift(tweets[i]);
+        var tid = tweets[i].id;
+        if(context.onFinish) {
+          this.manager.readTweet(tid);
+        } else if(!this.manager.readTweets[tid]) {
+          ++unreadLength;
+          this.manager.unreadTweets[tid] = true;
+        }
       }
     }
 
@@ -142,9 +167,17 @@ TweetsTimeline.prototype = {
     }
     var _this = this;
     var context = { onFinish: onFinishCallback };
+    var params = {};
+    if(this.usingPages) {
+      //No params
+    } else {
+      if(lastId) {
+        params.since_id = lastId;
+      }
+    }
     this.manager.twitterBackend.timeline(this.timelinePath, function(success, tweets, status, context) {
       _this.onFetchNew.call(_this, success, tweets, status, context);
-    }, context, null, null, lastId);
+    }, context, params);
   },
 
   onFetch: function(success, tweets, status, context) {
@@ -157,13 +190,19 @@ TweetsTimeline.prototype = {
       return;
     }
     this.setError(null);
-    var i = 0;
-    if(context.usingMaxId) {
-      // If we're fetching using maxId, ignore the first one (we already have it)
-      i = 1;
-    }
-    for(; i < tweets.length; ++i) {
-      this.tweetsCache.push(tweets[i]);
+    if(this.usingPages) {
+      for(var i = 0; i < tweets.length; ++i) {
+        this.pushTweet(tweets[i]);
+      }
+    } else {
+      var i = 0;
+      if(context.usingMaxId) {
+        // If we're fetching using maxId, ignore the first one (we already have it)
+        i = 1;
+      }
+      for(; i < tweets.length; ++i) {
+        this.tweetsCache.push(tweets[i]);
+      }
     }
     this.currentCallback(this.tweetsCache, this.timelineId);
     this.currentCallback = null;
@@ -213,17 +252,26 @@ TweetsTimeline.prototype = {
     //from twitter's API.
 
     this.currentCallback = callback;
-    var maxId = null;
-    if(this.tweetsCache.length > 0) {
-      maxId = this.tweetsCache[this.tweetsCache.length - 1].id;
-    }
-    var context = {
-      usingMaxId: !!maxId
-    }
     var _this = this;
+    var params, context;
+    if(this.usingPages) {
+      params = {page: (this.tweetsCache.length / 20) + 1};
+    } else {
+      var maxId = null;
+      if(this.tweetsCache.length > 0) {
+        maxId = this.tweetsCache[this.tweetsCache.length - 1].id;
+      }
+      context = {
+        usingMaxId: !!maxId
+      }
+      params = {count: OptionsBackend.get('tweets_per_page')};
+      if(maxId) {
+        params.max_id = maxId;
+      }
+    }
     this.manager.twitterBackend.timeline(this.timelinePath, function(success, tweets, status, context) {
       _this.onFetch.call(_this, success, tweets, status, context);
-    }, context, OptionsBackend.get('tweets_per_page'), null, null, maxId);
+    }, context, params);
   },
 
   cleanUpCache: function() {
@@ -288,6 +336,19 @@ TweetsTimeline.prototype = {
         return this.tweetsCache[i];
     }
     return null;
+  },
+
+  pushTweet: function(tweet) {
+    var baseTime = Date.parse(tweet.created_at);
+    var i = 0;
+    for(; i < this.tweetsCache.length; ++i) {
+      var tweetTime = Date.parse(this.tweetsCache[i].created_at);
+      if(baseTime >= tweetTime) {
+        break;
+      }
+    }
+    if(i == this.tweetsCache.length || this.tweetsCache[i].id != tweet.id)
+      this.tweetsCache.splice(i, 0, tweet);
   }
 }
 
@@ -316,6 +377,7 @@ function TweetManager() {
   this.timelines["home"] = new TweetsTimeline("home", this, OptionsBackend.get('home_refresh_interval'));
   this.timelines["mentions"] = new TweetsTimeline("mentions", this, OptionsBackend.get('mentions_refresh_interval'));
   this.timelines["dms"] = new TweetsTimeline("dms", this, OptionsBackend.get('dms_refresh_interval'));
+  this.timelines["favorites"] = new TweetsTimeline("favorites", this, OptionsBackend.get('favorites_refresh_interval'));
 
   var _this = this;
   this.twitterBackend = new TwitterLib(OptionsBackend.get('request_timeout'),
@@ -323,6 +385,7 @@ function TweetManager() {
       _this.giveMeTweets.call(_this, "home", function() {});
       _this.giveMeTweets.call(_this, "mentions", function() {});
       _this.giveMeTweets.call(_this, "dms", function() {});
+      _this.giveMeTweets.call(_this, "favorites", function() {});
   }, OptionsBackend.get('base_url'), OptionsBackend.get('base_authorize_url'), OptionsBackend.get('base_signing_url'));
 }
 
@@ -466,6 +529,8 @@ TweetManager.prototype = {
     var _this = this;
     var firstCallback = function(success, data, status) {
       if(success) {
+        var favTimeline = _this.timelines["favorites"];
+        favTimeline.pushTweet(data);
         _this.eachTimeline(function(timeline) {
           var tweet = timeline.findTweet(id);
           if(tweet)
@@ -481,6 +546,8 @@ TweetManager.prototype = {
     var _this = this;
     var firstCallback = function(success, data, status) {
       if(success) {
+        var favTimeline = _this.timelines["favorites"];
+        favTimeline.removeFromCache(id);
         _this.eachTimeline(function(timeline) {
           var tweet = timeline.findTweet(id);
           if(tweet)
@@ -503,6 +570,16 @@ TweetManager.prototype = {
   },
 
   updateNewTweets: function() {
+    if(this.currentTimeline == 'favorites') {
+      for(var i = 0, len = this.timelines[this.currentTimeline].newTweetsCache.length; i < len; ++i) {
+        var id = this.timelines[this.currentTimeline].newTweetsCache[i].id;
+        this.eachTimeline(function(timeline) {
+          var tweet = timeline.findTweet(id);
+          if(tweet)
+            tweet.favorited = true;
+        });
+      }
+    }
     this.timelines[this.currentTimeline].updateNewTweets();
     this.updateAlert();
   },
