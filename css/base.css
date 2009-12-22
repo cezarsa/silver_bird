@@ -236,12 +236,8 @@ div.sexy {
   white-space: nowrap;
   height: 17px;
   border: 0;
-  margin: 0;
-  margin-bottom: 3px;
   padding: 0;
   width: 107px;
-  float: right;
-  margin: 7px 8px 0px 0px;
   z-index: 999;
 }
 
@@ -251,11 +247,11 @@ div.sexy input {
   padding:1px 3px;
   height: 14px;
   line-height: 16px;
-  vertical-align:middle;
+  vertical-align: middle;
   left: 0px;
   top: 0px;
   width: 90px;
-
+  cursor: pointer;
 }
 
 div.sexy div.icon {
@@ -283,18 +279,20 @@ div.sexy div.list-wrapper-up {
   bottom: 17px;
 }
 
-div.sexy ul {
+div.sexy div ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
   height: 200px;
 }
 
-div.sexy  li {
+div.sexy div ul li.visible {
   padding: 0;
   padding-left: 5px;
   font:normal 8pt tahoma, arial, helvetica, sans-serif;
   background-color: #FFFFFF;
   cursor: pointer;
   margin: 0;
+  color: black;
+  float: none;
 }

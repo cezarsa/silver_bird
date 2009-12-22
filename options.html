@@ -203,6 +203,11 @@ $(function() {
       <option value="top">Top</option>
       <option value="bottom">Bottom</option>
     </select><br>
+    <label for="theme">UI Theme:</label>
+    <select name="theme">
+      <option value="css/chromified.css,css/chromified-theme/jquery-ui-1.7.2.custom.css">Chromified</option>
+      <option value="css/whisper.css,css/whisper-theme/jquery-ui-1.7.2.custom.css">Whispers</option>
+    </select><br>
     <label>*Icon color:</label>
     <canvas name="idle_color" width="19" height="19" class="color_selector"></canvas>
   </fieldset>
@@ -257,6 +262,8 @@ $(function() {
     <input type="text" name="dms_refresh_interval" validator="required,number,minRefresh"><br>
     <label for="favorites_refresh_interval">*Favorites Timeline:</label>
     <input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh"><br>
+    <label for="lists_refresh_interval">*Lists Timeline:</label>
+    <input type="text" name="lists_refresh_interval" validator="required,number,minRefresh"><br>
   </fieldset>
 
   <fieldset>

@@ -97,22 +97,10 @@ var Paginator = {
 
 var ThemeManager = {
   init: function () {
-    var theme = localStorage.currentTheme;
-    if(theme) {
-      ThemeManager.changeTheme(theme);
-      $("select#theme_selector").val(theme);
-    }
-    $("select#theme_selector").sexyCombo({changeCallback: ThemeManager.changeTheme});
-  },
-  changeTheme: function (newCss) {
-    if(!newCss) {
-      newCss = this.getHiddenValue();
-    }
-    localStorage.currentTheme = newCss;
     $("link.theme").remove();
-    $(newCss.split(",")).each(function(i, p) {
-      var newLink = $("<link rel='stylesheet' type='text/css' class='theme' href='" + p + "'>");
-      $(document.head).append(newLink);
+    var theme = OptionsBackend.get('theme');
+    $(theme.split(",")).each(function(i, p) {
+      $("<link rel='stylesheet' type='text/css' class='theme' href='" + p + "'>").appendTo(document.head);
     });
   }
 }
@@ -646,6 +634,43 @@ var Renderer = {
   }
 }
 
+var Lists = {
+  selector_value: '__chromedbird__selector__',
+  update_value: '__chromedbird__update_lists__',
+
+  init: function(force) {
+    var _this = this;
+    tweetManager.lists(force, function(success, lists, status) {
+      if(!success) {
+        showError('Unexpected error ' + status + ' fetching lists.', 'Lists.init');
+        return;
+      }
+      var $listSelect = $("select#list_selector");
+      $listSelect.html('');
+      $listSelect.append($("<option>").attr('value', _this.selector_value).text('- Select a list -'));
+      for(var i = 0; i < lists.length; ++i) {
+        $listSelect.append($("<option>").attr('value', lists[i].slug).text(lists[i].name));
+      }
+      $listSelect.append($("<option>").attr('value', _this.update_value).text('Update lists...'));
+      if(tweetManager.listId) {
+        $listSelect.val(tweetManager.listId);
+      }
+      $listSelect.sexyCombo({changeCallback: function() {
+        var value = this.getHiddenValue();
+        if(value == _this.selector_value) {
+          return;
+        }
+        if(value == _this.update_value) {
+          Lists.init(true);
+          return;
+        }
+        tweetManager.changeList(value);
+        prepareAndLoadTimeline();
+      }});
+    });
+  }
+}
+
 function showError(msg, tryAgainFunction) {
   $("#error").show();
   $("#error").text(msg);
@@ -765,12 +790,15 @@ function initializeWorkspace() {
     case 'mentions': selectedNumber = 1; break;
     case 'dms': selectedNumber = 2; break;
     case 'favorites': selectedNumber = 3; break;
+    case 'lists': selectedNumber = 4; break;
   }
   $("#tabs").tabs({
     selected: selectedNumber,
     select: function(event, ui) {
       tweetManager.currentTimeline = ui.panel.id.split('_')[1];
-      prepareAndLoadTimeline();
+      if(tweetManager.currentTimeline != 'lists' || tweetManager.listId) {
+        prepareAndLoadTimeline();
+      }
     },
     show: function(event, ui) {
       $(ui.panel).scrollTop(tweetManager.getCurrentTimeline().currentScroll);
@@ -785,6 +813,7 @@ function initializeWorkspace() {
 
   //Delay loading, improving responsiveness
   setTimeout(function() {
+    Lists.init();
     Composer.init();
     Shortener.init();
 
@@ -850,21 +879,22 @@ $(function() {
 
   <div id="update_tweets" onclick="loadNewTweets();"></div>
 
-  <select id="theme_selector">
-    <option value="css/chromified.css,css/chromified-theme/jquery-ui-1.7.2.custom.css">Chromified</option>
-    <option value="css/whisper.css,css/whisper-theme/jquery-ui-1.7.2.custom.css">Whispers</option>
-  </select>
   <div id="tabs">
     <ul>
       <li><a href="#timeline_home"><span>Home</span></a></li>
       <li><a href="#timeline_mentions"><span>@<span class="__username"></span></span></a></li>
       <li><a href="#timeline_dms"><span>DM</span></a></li>
       <li><a href="#timeline_favorites"><span>Favorites</span></a></li>
+      <li><a href="#timeline_lists"><span>
+        <select id="list_selector">
+        </select>
+      </span></a></li>
     </ul>
     <div id="timeline_home" class="timeline"></div>
     <div id="timeline_mentions" class="timeline"></div>
     <div id="timeline_dms" class="timeline"></div>
     <div id="timeline_favorites" class="timeline"></div>
+    <div id="timeline_lists" class="timeline"></div>
   </div>
 
 

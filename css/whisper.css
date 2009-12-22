@@ -108,6 +108,6 @@ div.sexy div.icon {
   border-bottom: 1px solid #eed077;
 }
 
-div.sexy li.active {
+div.sexy div ul li.active {
   background-color: rgb(253, 240, 151);
 }

@@ -8,9 +8,10 @@
 
 OptionsBackend = {
   defaultOptions: {
-    home_refresh_interval: 60 * 1000,
+    home_refresh_interval: 90 * 1000,
     mentions_refresh_interval: 150 * 1000,
     dms_refresh_interval: 150 * 1000,
+    lists_refresh_interval: 150 * 1000,
     favorites_refresh_interval: 600 * 1000,
     tweets_per_page: 10,
     max_cached_tweets: 30,
@@ -37,7 +38,8 @@ OptionsBackend = {
     dms_color: '#7f870b',
     favorites_color: '#7f870b',
 
-    notification_fade_timeout: 5000
+    notification_fade_timeout: 5000,
+    theme: 'css/chromified.css,css/chromified-theme/jquery-ui-1.7.2.custom.css'
   },
   cachedOptions: null,
   save: function(optionsMap) {
@@ -96,12 +98,18 @@ function TweetsTimeline(timelineId, manager, recheckTime) {
       this.timelinePath = 'favorites';
       this.usingPages = true;
       break;
+    case 'lists':
+      break;
   }
 }
 TweetsTimeline.prototype = {
 
   setError: function(status) {
     this.currentError = status;
+  },
+
+  setTimelinePath: function(path) {
+    this.timelinePath = path;
   },
 
   stopTimer: function() {
@@ -264,7 +272,7 @@ TweetsTimeline.prototype = {
       context = {
         usingMaxId: !!maxId
       }
-      params = {count: OptionsBackend.get('tweets_per_page')};
+      params = {count: OptionsBackend.get('tweets_per_page'), per_page: OptionsBackend.get('tweets_per_page')};
       if(maxId) {
         params.max_id = maxId;
       }
@@ -372,12 +380,15 @@ function TweetManager() {
   this.currentTimeline = "home";
   this.timelines = {};
   this.iconImg = null;
+  this.listsCache = null;
+  this.listId = null;
   this.loadIcon();
 
   this.timelines["home"] = new TweetsTimeline("home", this, OptionsBackend.get('home_refresh_interval'));
   this.timelines["mentions"] = new TweetsTimeline("mentions", this, OptionsBackend.get('mentions_refresh_interval'));
   this.timelines["dms"] = new TweetsTimeline("dms", this, OptionsBackend.get('dms_refresh_interval'));
   this.timelines["favorites"] = new TweetsTimeline("favorites", this, OptionsBackend.get('favorites_refresh_interval'));
+  this.timelines["lists"] = new TweetsTimeline("lists", this, OptionsBackend.get('lists_refresh_interval'));
 
   var _this = this;
   this.twitterBackend = new TwitterLib(OptionsBackend.get('request_timeout'),
@@ -559,6 +570,33 @@ TweetManager.prototype = {
     return this.twitterBackend.unFavorite(firstCallback, id);
   },
 
+  lists: function(force, callback) {
+    if(force) {
+      this.listsCache = null;
+    }
+    if(!this.listsCache) {
+      var _this = this;
+      this.twitterBackend.lists(function(success, data, status) {
+        if(success) {
+          _this.listsCache = data.lists;
+        }
+        callback(success, _this.listsCache, status);
+      });
+      return;
+    }
+    callback(true, this.listsCache, null);
+  },
+
+  changeList: function(listId) {
+    if(this.listId != listId) {
+      this.timelines["lists"].stopTimer();
+      delete this.timelines["lists"];
+      this.timelines["lists"] = new TweetsTimeline("lists", this, OptionsBackend.get('lists_refresh_interval'));
+    }
+    this.listId = listId;
+    this.timelines["lists"].setTimelinePath(this.twitterBackend.username() + '/lists/' + listId + '/statuses');
+  },
+
   /* Delegates */
 
   giveMeTweets: function(timelineId, callback, syncNew, cacheOnly) {
@@ -649,4 +687,5 @@ localStorage.removeItem('password');
 localStorage.removeItem('logged');
 localStorage.removeItem('username');
 localStorage.removeItem('remember');
+localStorage.removeItem('currentTheme');
 </script>
