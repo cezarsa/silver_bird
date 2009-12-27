@@ -393,6 +393,19 @@ function TweetManager() {
   this.timelines["favorites"] = new TweetsTimeline("favorites", this, OptionsBackend.get('favorites_refresh_interval'));
   this.timelines["lists"] = new TweetsTimeline("lists", this, OptionsBackend.get('lists_refresh_interval'));
 
+  this.expectedHitsCount = (60 * 60 * 1000) * (1 / OptionsBackend.get('home_refresh_interval') +
+                                               1 / OptionsBackend.get('mentions_refresh_interval') +
+                                               1 / OptionsBackend.get('dms_refresh_interval') +
+                                               1 / OptionsBackend.get('favorites_refresh_interval') +
+                                               1 / OptionsBackend.get('lists_refresh_interval'));
+  this.lastAvailableHits = null;
+  this.lastAvailableHitsTime = null;
+
+  this.warningsCallback = null;
+  this.warningMessage = null;
+  this.autoClearWarning = false;
+  this.tooManyHitsCount = 0;
+
   var _this = this;
   this.twitterBackend = new TwitterLib(OptionsBackend.get('request_timeout'),
     function onAuthenticated() {
@@ -400,10 +413,78 @@ function TweetManager() {
       _this.giveMeTweets.call(_this, "mentions", function() {});
       _this.giveMeTweets.call(_this, "dms", function() {});
       _this.giveMeTweets.call(_this, "favorites", function() {});
-  }, OptionsBackend.get('base_url'), OptionsBackend.get('base_authorize_url'), OptionsBackend.get('base_signing_url'));
+    },
+    function onHitsUpdated(remainingHits, nextHitsReset) {
+      if(remainingHits == 0) {
+        var nextResetDate = new Date();
+        nextResetDate.setTime(parseInt(nextHitsReset) * 1000);
+        _this.autoClearWarning = true;
+        _this.setWarning("You've exceeded API hits limit. " +
+                         "Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"" + chrome.extension.getURL('options.html') + "\"})'>options page</a>. " +
+                         "Chromed Bird won't update until " + nextResetDate + ".");
+        return;
+      }
+      if(_this.autoClearWarning) {
+        _this.autoClearWarning = false;
+        _this.clearWarning();
+      }
+      if(_this.lastAvailableHitsTime == null) {
+        _this.lastAvailableHitsTime = new Date();
+        _this.lastAvailableHits = remainingHits;
+      }
+      var timeDiff = new Date() - _this.lastAvailableHitsTime;
+      console.log(timeDiff);
+      if(timeDiff >= 5 * 60 * 1000) {
+        var realHitsPerHour = ((_this.lastAvailableHits - remainingHits) / timeDiff) * 60 * 60 * 1000;
+        console.log('last: ' + _this.lastAvailableHits);
+        console.log('now : ' + remainingHits);
+        console.log('real/hour: ' + realHitsPerHour);
+        if(realHitsPerHour > 150) {
+          // If we keep this same speed we're gonna exhaust our hits limit.
+          _this.tooManyHitsCount += 1;
+          if(_this.tooManyHitsCount >= 2) {
+            // We've exceeded the limit twice in a row, let's warn users.
+            _this.setWarning("Hey! Your remaining API hits are ending too fast.<br>" +
+                             "Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"" + chrome.extension.getURL('options.html') + "\"})'>options page</a>. " +
+                             "Take special care if you're running multiple Twitter clients, as they all share the same limit.");
+            _this.tooManyHitsCount = 0;
+          }
+        } else {
+          // We only wanna warn users if we exceed hits limit more than once
+          // in a row, so let's just reset the counter.
+          _this.tooManyHitsCount = 0;
+        }
+        _this.lastAvailableHitsTime = new Date();
+        _this.lastAvailableHits = remainingHits;
+      }
+    },
+    OptionsBackend.get('base_url'),
+    OptionsBackend.get('base_authorize_url'),
+    OptionsBackend.get('base_signing_url')
+  );
 }
 
 TweetManager.prototype = {
+  setWarning: function(msg) {
+    this.warningMessage = msg;
+    try {
+      this.warningCallback(msg);
+    } catch(e) {
+      /* ignoring, the popup window might be closed. */
+    }
+  },
+
+  clearWarning: function() {
+    this.warningMessage = null;
+  },
+
+  registerWarningsCallback: function(callback) {
+    this.warningsCallback = callback;
+    if(this.warningMessage) {
+      this.warningsCallback(this.warningMessage);
+    }
+  },
+
   eachTimeline: function(callback) {
     for(var tId in this.timelines) {
       callback.call(tId, this.timelines[tId]);
@@ -691,4 +772,35 @@ localStorage.removeItem('logged');
 localStorage.removeItem('username');
 localStorage.removeItem('remember');
 localStorage.removeItem('currentTheme');
+
+function compareVersions(v1, v2) {
+  if(!v1) return -1;
+  if(!v2) return 1;
+  var maxLen = Math.max(v1.length, v2.length);
+  for(var i = 0; i < maxLen; ++i) {
+    if(!v1[i]) return -1;
+    if(!v2[i]) return 1;
+    if(v1[i] > v2[i]) return 1;
+    if(v1[i] < v2[i]) return -1;
+  }
+  return 0;
+}
+
+$.get('manifest.json', null, function(data, textStatus) {
+  var currentVersion = data.version.split('.');
+  var storageVersion = localStorage['version'];
+
+  if(compareVersions(currentVersion, storageVersion) != 0) {
+    // if last version is < 1.3.0
+    if(compareVersions(storageVersion, [1, 3, 0]) < 0) {
+      //Old default refresh interval, let's update it for the new version
+      if(OptionsBackend.get('home_refresh_interval') == 60000) {
+        var options = OptionsBackend.load();
+        options['home_refresh_interval'] = OptionsBackend.defaultOptions['home_refresh_interval'];
+        OptionsBackend.save(options);
+      }
+    }
+    localStorage['version'] = currentVersion;
+  }
+});
 </script>

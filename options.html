@@ -99,6 +99,10 @@ function Options() {
 
 /* ---- validation ---- */
 Validator = {
+  global: function() {
+
+  },
+
   required: function ($el) {
     var val = $el.val()
     if(!val)
@@ -173,7 +177,36 @@ $(function() {
     }
   });
   options.load();
+
+  updatePredictedHitsCount();
+  var timelines = ['home', 'mentions', 'dms', 'lists', 'favorites'];
+  for(var i = 0; i < timelines.length; ++i) {
+    var inputEl = $('input[name="' +  timelines[i] + '_refresh_interval"]');
+    inputEl.keyup(updatePredictedHitsCount);
+    inputEl.blur(updatePredictedHitsCount);
+  }
 });
+
+function updatePredictedHitsCount() {
+  var timelines = ['home', 'mentions', 'dms', 'lists', 'favorites'];
+  var totalHits = 0;
+  for(var i = 0; i < timelines.length; ++i) {
+    var inputEl = $('input[name="' +  timelines[i] + '_refresh_interval"]');
+    var intVal = parseInt(inputEl.val());
+    totalHits += (60 * 60 * 1000) / intVal;
+  }
+  totalHits = parseInt(totalHits);
+  $('#predicted_hits_count').text(totalHits);
+  if(totalHits >= 150) {
+    $('#predicted_hits_count').css('backgroundColor', 'red');
+  } else if(totalHits >= 130) {
+    $('#predicted_hits_count').css('backgroundColor', 'yellow');
+  } else {
+    $('#predicted_hits_count').css('backgroundColor', 'white');
+  }
+  return totalHits;
+}
+
 </script>
 
 </head>
@@ -257,8 +290,12 @@ $(function() {
 
   <fieldset>
     <legend>Refresh Interval (ms)</legend>
-    <p class="notice">
-      Be careful with API hits limit!
+    <p class="notice" style="text-align: center; color: black;">
+      You should keep API hits <span style="color: red;">below 150</span>! Otherwise Chromed Bird will stop working properly and timelines won't update anymore.<br>
+      <span style="color: red;">Remember</span> that if you're using multiple Twitter clients you'll need to keep your API hits even lower.
+    </p>
+    <p class="hits_notice">
+      API hits per hour: <span id="predicted_hits_count"></span> / 150
     </p>
     <label for="home_refresh_interval">*Home Timeline:</label>
     <input type="text" name="home_refresh_interval" validator="required,number,minRefresh"><br>
@@ -266,10 +303,10 @@ $(function() {
     <input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh"><br>
     <label for="dms_refresh_interval">*DM Timeline:</label>
     <input type="text" name="dms_refresh_interval" validator="required,number,minRefresh"><br>
-    <label for="favorites_refresh_interval">*Favorites Timeline:</label>
-    <input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh"><br>
     <label for="lists_refresh_interval">*Lists Timeline:</label>
     <input type="text" name="lists_refresh_interval" validator="required,number,minRefresh"><br>
+    <label for="favorites_refresh_interval">*Favorites Timeline:</label>
+    <input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh"><br>
   </fieldset>
 
   <fieldset>
