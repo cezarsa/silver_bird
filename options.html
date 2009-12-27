@@ -165,6 +165,14 @@ $(function() {
     var desc = SHORTENERS_BACKEND[key].desc;
     $("select[name='url_shortener']").append($("<option>").attr('value', key).text(desc));
   }
+  $("select[name='url_shortener']").change(function() {
+    if(this.value=='bitly' || this.value=='jmp') {
+      $(".shortener_login").show();
+    }
+    else {
+      $(".shortener_login").hide();
+    }
+  });
   $('canvas.color_selector').ColorPicker({
     onChange: function (hsb, hex, rgb) {
       var canvas = this.data('colorpicker').el;
@@ -252,7 +260,14 @@ $(function() {
   <fieldset>
     <legend>Shortener</legend>
     <label for="url_shortener">URL Shortener:</label>
-    <select name="url_shortener"></select>
+    <select name="url_shortener"></select><br>
+    <div class="shortener_login">
+      <p class="notice">Leave blank for anonymous.</p>
+      <label for="shortener_user">Username:</label>
+      <input type="text" name="shortener_user"><br>
+      <label for="shortener_api">API Key:</label>
+      <input type="text" name="shortener_api">
+    </div>
   </fieldset>
 
   <fieldset>

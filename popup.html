@@ -30,7 +30,9 @@ if(!twitterBackend.authenticated() && !twitterBackend.tokenRequested()) {
 <!--script type="text/javascript" src="lib/debug.js"></script-->
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
 <script>
-var shortener = new Shortener(OptionsBackend.get('url_shortener'));
+var shortener = new Shortener(OptionsBackend.get('url_shortener'),
+                              OptionsBackend.get('shortener_user'),
+                              OptionsBackend.get('shortener_api'));
 
 $.fn.hoverFor = function(time, mainCallback, startingCallback, abortCallback) {
   return this.each(function(){
