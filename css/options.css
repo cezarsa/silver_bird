@@ -37,6 +37,21 @@ fieldset legend {
   font-size: 8pt;
 }
 
+#main_area .hits_notice {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+
+  text-align: center;
+}
+
+#main_area #predicted_hits_count {
+  font-weight: bold;
+  border: 1px solid #b4cff2;
+  padding: 2px;
+  padding-right: 3px;
+}
+
 #main_area table {
   border-collapse: collapse;
 }

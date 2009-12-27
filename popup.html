@@ -145,7 +145,7 @@ var Composer = {
           Paginator.nextPage();
         }
       } else {
-        showError('Unexpected error ' + status + ' deleting tweet.', 'Composer.confirmDestroy');
+        Renderer.showError('Unexpected error ' + status + ' deleting tweet.', 'Composer.confirmDestroy');
       }
     }, _this.destroyId);
   },
@@ -169,7 +169,7 @@ var Composer = {
       if(success) {
         loadTimeline(true, "home");
       } else {
-        showError('Unexpected error ' + status + ' retweeting.', 'Composer.confirmRT');
+        Renderer.showError('Unexpected error ' + status + ' retweeting.', 'Composer.confirmRT');
       }
     }, _this.rtId);
   },
@@ -195,7 +195,7 @@ var Composer = {
          Paginator.needsMore = false;
          loadTimeline();
       } else {
-        showError('Unexpected error ' + status + ' marking as favorite.', 'Composer.favorite');
+        Renderer.showError('Unexpected error ' + status + ' marking as favorite.', 'Composer.favorite');
       }
     }, this.favoriteId);
   },
@@ -211,7 +211,7 @@ var Composer = {
          Paginator.needsMore = false;
          loadTimeline();
       } else {
-        showError('Unexpected error ' + status + ' unmarking as favorite.', 'Composer.unFavorite');
+        Renderer.showError('Unexpected error ' + status + ' unmarking as favorite.', 'Composer.unFavorite');
       }
     }, this.favoriteId);
   },
@@ -307,7 +307,7 @@ var Composer = {
         }
       } else {
         $("#compose_tweet_area textarea").focus();
-        showError('Unexpected error ' + status + ' sending tweet.', 'Composer.sendTweet');
+        Renderer.showError('Unexpected error ' + status + ' sending tweet.', 'Composer.sendTweet');
       }
     }, $("#compose_tweet_area textarea").val(), Composer.replyId);
   }
@@ -633,6 +633,40 @@ var Renderer = {
     tweetManager.markTimelineAsRead();
     Paginator.needsMore = false;
     loadTimeline();
+  },
+
+  warningsCallback: function(msg, isError) {
+    if(isError) {
+      Renderer.showError(msg);
+    } else {
+      Renderer.showWarning(msg);
+    }
+  },
+
+  showWarning: function(msg) {
+    $("#warning .img_area img").attr('src', 'img/warning.png');
+    Renderer.showMessage(msg);
+  },
+
+  showError: function(msg, tryAgainFunction) {
+    $("#warning .img_area img").attr('src', 'img/error.png');
+    if(tryAgainFunction) {
+      msg += ' <a href="#" onclick="' + tryAgainFunction + '(); Renderer.hideMessage();">Try again</a>';
+    }
+    Renderer.showMessage(msg);
+  },
+
+  showMessage: function(msg) {
+    $("#warning .content").html(msg);
+    $("#absolute_container").slideDown('slow');
+  },
+
+  hideMessage: function(msg) {
+    var imgSrc = $("#warning .img_area img").attr('src');
+    if(imgSrc.match(/warning/)) {
+      tweetManager.clearWarning();
+    }
+    $("#absolute_container").slideUp('slow');
   }
 }
 
@@ -644,7 +678,7 @@ var Lists = {
     var _this = this;
     tweetManager.lists(force, function(success, lists, status) {
       if(!success) {
-        showError('Unexpected error ' + status + ' fetching lists.', 'Lists.init');
+        Renderer.showError('Unexpected error ' + status + ' fetching lists.', 'Lists.init');
         return;
       }
       var $listSelect = $("select#list_selector");
@@ -673,14 +707,6 @@ var Lists = {
   }
 }
 
-function showError(msg, tryAgainFunction) {
-  $("#error").show();
-  $("#error").text(msg);
-  if(tryAgainFunction) {
-    $("#error").append(' <a href="#" onclick="' + tryAgainFunction + '(); $(\'#error\').hide();">Try again</a>');
-  }
-}
-
 function openTab(tabUrl) {
   var button = event.button;
   if(button > 1)
@@ -699,7 +725,7 @@ function onTimelineRetrieved(tweets, timelineId) {
     Paginator.needsMore = false;
     Renderer.assemblyTweets(tweets, timelineId);
   } else {
-    showError('Unexpected error ' + tweetManager.currentError() + ' updating tweets.', 'loadTimeline');
+    Renderer.showError('Unexpected error ' + tweetManager.currentError() + ' updating tweets.', 'loadTimeline');
   }
   loadingNewTweets = false;
 }
@@ -838,6 +864,10 @@ function initializeWorkspace() {
         }
       });
     });
+
+    tweetManager.registerWarningsCallback(function(msg) {
+      Renderer.warningsCallback.call(Renderer, msg);
+    });
   }, 0);
 }
 
@@ -856,6 +886,15 @@ $(function() {
 <div id="error" style="display: none;"></div>
 
 <div id="workspace" style="display: none;">
+  <div id="absolute_container">
+    <div id="warning">
+      <div class="img_area"><img src="img/warning.png" /></div>
+      <div class="dismiss" onclick="Renderer.hideMessage();">X</div>
+      <div class="content"></div>
+      <div style="clear: both;"></div>
+    </div>
+  </div>
+
   <div id="compose_tweet_area" style="display: none;">
     <textarea rows="4" onkeyup="Composer.textareaChanged(event);" onblur="Composer.textareaChanged();"></textarea>
     <div id="shortener_area">

@@ -9,6 +9,17 @@ input[type='text'] {
   border: 1px solid #c1cddc;
 }
 
+#warning {
+  background-color: #e5effe;
+  border: 2px solid #b4cff2;
+  border-top: 0;
+}
+
+#warning .dismiss {
+  border: 1px solid #b4cff2;
+  padding: 0px 4px 0px 4px;
+}
+
 #update_tweets {
   -webkit-border-radius: 5px;
   background-color: #b4cff2;
