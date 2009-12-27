@@ -157,6 +157,7 @@ function paintIcon(canvas, color) {
   }
 }
 
+var hourlyLimit = 150;
 $(function() {
   if(twitterBackend) {
     var hitsInfo = twitterBackend.remainingHitsInfo();
@@ -164,7 +165,12 @@ $(function() {
     var dateObj = new Date();
     dateObj.setTime(parseInt(hitsInfo[1]) * 1000);
     $(".twitter_hits_reset").text(dateObj.toLocaleDateString() + " " + dateObj.toLocaleTimeString());
+
+    if(hitsInfo[2]) {
+      hourlyLimit = parseInt(hitsInfo[2]);
+    }
   }
+  $(".__hourly_limit").text(hourlyLimit);
   for(var key in SHORTENERS_BACKEND) {
     var desc = SHORTENERS_BACKEND[key].desc;
     $("select[name='url_shortener']").append($("<option>").attr('value', key).text(desc));
@@ -197,9 +203,9 @@ function updatePredictedHitsCount() {
   }
   totalHits = parseInt(totalHits);
   $('#predicted_hits_count').text(totalHits);
-  if(totalHits >= 150) {
+  if(totalHits >= hourlyLimit) {
     $('#predicted_hits_count').css('backgroundColor', 'red');
-  } else if(totalHits >= 130) {
+  } else if(totalHits >= hourlyLimit * 0.85) {
     $('#predicted_hits_count').css('backgroundColor', 'yellow');
   } else {
     $('#predicted_hits_count').css('backgroundColor', 'white');
@@ -291,11 +297,11 @@ function updatePredictedHitsCount() {
   <fieldset>
     <legend>Refresh Interval (ms)</legend>
     <p class="notice" style="text-align: center; color: black;">
-      You should keep API hits <span style="color: red;">below 150</span>! Otherwise Chromed Bird will stop working properly and timelines won't update anymore.<br>
+      You should keep API hits <span style="color: red;">below <span class="__hourly_limit"></span></span>! Otherwise Chromed Bird will stop working properly and timelines won't update anymore.<br>
       <span style="color: red;">Remember</span> that if you're using multiple Twitter clients you'll need to keep your API hits even lower.
     </p>
     <p class="hits_notice">
-      API hits per hour: <span id="predicted_hits_count"></span> / 150
+      API hits per hour: <span id="predicted_hits_count"></span> / <span class="__hourly_limit">
     </p>
     <label for="home_refresh_interval">*Home Timeline:</label>
     <input type="text" name="home_refresh_interval" validator="required,number,minRefresh"><br>
