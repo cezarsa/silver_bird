@@ -177,10 +177,10 @@ $(function() {
   }
   $("select[name='url_shortener']").change(function() {
     if(this.value=='bitly' || this.value=='jmp') {
-      $(".shortener_login").show();
+      $("#shortener_opts").show();
     }
     else {
-      $(".shortener_login").hide();
+      $("#shortener_opts").hide();
     }
   });
   $('canvas.color_selector').ColorPicker({
@@ -300,13 +300,14 @@ function updatePredictedHitsCount() {
     <legend>Shortener</legend>
     <label for="url_shortener">URL Shortener:</label>
     <select name="url_shortener"></select><br>
-    <div class="shortener_login">
-      <p class="notice">Leave blank for anonymous.</p>
-      <label for="shortener_user">Username:</label>
-      <input type="text" name="shortener_user"><br>
-      <label for="shortener_api">API Key:</label>
-      <input type="text" name="shortener_api">
-    </div>
+    <p id="shortener_opts">
+      <label for="shortener_acct">Use Personal Account?</label>
+      <input type="checkbox" name="shortener_acct"><br>
+      <label for="shortener_login">API Login:</label>
+      <input type="text" name="shortener_login"><br>
+      <label for="shortener_key">API Key:</label>
+      <input type="text" name="shortener_key">
+    </p>
   </fieldset>
 
   <fieldset>
