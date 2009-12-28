@@ -171,6 +171,7 @@ $(function() {
     }
   }
   $(".__hourly_limit").text(hourlyLimit);
+
   for(var key in SHORTENERS_BACKEND) {
     var desc = SHORTENERS_BACKEND[key].desc;
     $("select[name='url_shortener']").append($("<option>").attr('value', key).text(desc));
@@ -178,11 +179,21 @@ $(function() {
   $("select[name='url_shortener']").change(function() {
     if(this.value=='bitly' || this.value=='jmp') {
       $("#shortener_opts").show();
-    }
-    else {
+    } else {
       $("#shortener_opts").hide();
     }
   });
+  var onShortenerAcctClick = function() {
+    if($("input[name='shortener_acct']").attr('checked')) {
+      $("input[name='shortener_login']").removeAttr('disabled');
+      $("input[name='shortener_key']").removeAttr('disabled');
+    } else {
+      $("input[name='shortener_login']").val('').attr('disabled', 'disabled');
+      $("input[name='shortener_key']").val('').attr('disabled', 'disabled');
+    }
+  };
+  $("input[name='shortener_acct']").click(onShortenerAcctClick);
+
   $('canvas.color_selector').ColorPicker({
     onChange: function (hsb, hex, rgb) {
       var canvas = this.data('colorpicker').el;
@@ -191,6 +202,7 @@ $(function() {
     }
   });
   options.load();
+  onShortenerAcctClick();
 
   updatePredictedHitsCount();
   var timelines = ['home', 'mentions', 'dms', 'lists', 'favorites'];

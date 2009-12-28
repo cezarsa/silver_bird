@@ -98,3 +98,8 @@ canvas.color_selector {
   text-align: center;
   display: none;
 }
+
+#shortener_opts {
+  margin: 0;
+  padding: 0;
+}
