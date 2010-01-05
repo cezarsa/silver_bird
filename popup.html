@@ -27,7 +27,7 @@ if(!twitterBackend.authenticated() && !twitterBackend.tokenRequested()) {
 <script type="text/javascript" src="lib/3rdparty/jquery.sexy-combo.js"></script>
 <script type="text/javascript" src="lib/3rdparty/jquery-ui-custom.js"></script>
 
-<!--script type="text/javascript" src="lib/debug.js"></script-->
+<script type="text/javascript" src="lib/debug.js"></script>
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
 <script>
 
@@ -38,7 +38,7 @@ if(shortener_acct) {
   shortener_login = OptionsBackend.get('shortener_login');
   shortener_key = OptionsBackend.get('shortener_key');
 }
-var shortener = new Shortener(OptionsBackend.get('url_shortener'), 
+var shortener = new Shortener(OptionsBackend.get('url_shortener'),
   shortener_acct, shortener_login, shortener_key);
 
 $.fn.hoverFor = function(time, mainCallback, startingCallback, abortCallback) {
@@ -96,7 +96,7 @@ var Paginator = {
   needsMore: false,
   firstPage: function() {
     this.needsMore = false;
-    $("#timeline_" + tweetManager.currentTimeline).scrollTop(0);
+    $("#timeline-" + tweetManager.currentTimeline).scrollTop(0);
   },
   nextPage: function() {
     this.needsMore = true;
@@ -578,7 +578,9 @@ var Renderer = {
   },
 
   assemblyTweets: function (tweets, timelineId) {
-    var destination = $("#timeline_" + timelineId);
+    var destination = $("#timeline-" + timelineId);
+    if(destination.length == 0)
+      return;
     var destinationDom = destination[0];
     var tweetsArray = [];
     for(var i = 0; i < tweets.length; ++i) {
@@ -688,28 +690,38 @@ var Lists = {
         Renderer.showError('Unexpected error ' + status + ' fetching lists.', 'Lists.init');
         return;
       }
-      var $listSelect = $("select#list_selector");
-      $listSelect.html('');
-      $listSelect.append($("<option>").attr('value', _this.selector_value).text('- Select a list -'));
-      for(var i = 0; i < lists.length; ++i) {
-        $listSelect.append($("<option>").attr('value', lists[i].slug).text(lists[i].name));
-      }
-      $listSelect.append($("<option>").attr('value', _this.update_value).text('Update lists...'));
-      if(tweetManager.listId) {
-        $listSelect.val(tweetManager.listId);
-      }
-      $listSelect.sexyCombo({changeCallback: function() {
-        var value = this.getHiddenValue();
-        if(value == _this.selector_value) {
-          return;
+      var listsTabCount = tweetManager.listsTabCount;
+      for(var i = 0; i < listsTabCount; ++i) {
+        var pos = tweetManager.getTimelinePosition('lists_' + i);
+        if(pos == -1) {
+          pos = undefined;
         }
-        if(value == _this.update_value) {
-          Lists.init(true);
-          return;
+        $("#tabs").tabs('add', '#timeline-lists_' + i, '<select id="lists_' + i + '-selector"></select>', pos);
+        var $listSelect = $("select#lists_" + i + "-selector");
+        $listSelect.html('');
+        $listSelect.append($("<option>").attr('value', _this.selector_value).text('- Select a list -'));
+        for(var j = 0; j < lists.length; ++j) {
+          $listSelect.append($("<option>").attr('value', lists[j].slug).text(lists[j].name));
         }
-        tweetManager.changeList(value);
-        prepareAndLoadTimeline();
-      }});
+        $listSelect.append($("<option>").attr('value', _this.update_value).text('Update lists...'));
+        var selectedListId = tweetManager.getListId('lists_' + i);
+        if(selectedListId) {
+          $listSelect.val(selectedListId);
+        }
+        $listSelect.sexyCombo({changeCallback: function() {
+          var value = this.getHiddenValue();
+          if(value == _this.selector_value) {
+            return;
+          }
+          if(value == _this.update_value) {
+            Lists.init(true);
+            return;
+          }
+          var timelineName = this.selectbox[0].id.split('-')[0];
+          tweetManager.changeList(timelineName, value);
+          prepareAndLoadTimeline();
+        }});
+      }
     });
   }
 }
@@ -766,7 +778,7 @@ function newTweetsAvailable(count, unreadCount, timelineId) {
       return;
     }
     $("#tab_modifier_" + timelineId).remove();
-    var timelineTabLink = $("a[href='#timeline_" + timelineId + "']");
+    var timelineTabLink = $("a[href='#timeline-" + timelineId + "']");
     var divEl = $("<div class='tab_modifier'></div>")
       .attr('id', "tab_modifier_" + timelineId);
     timelineTabLink.before(divEl);
@@ -817,26 +829,48 @@ function prepareAndLoadTimeline() {
 function initializeWorkspace() {
   tweetManager.registerNewTweetsCallback(newTweetsAvailable);
   $("#workspace").show();
-  $(".__username").text(tweetManager.twitterBackend.username());
   ThemeManager.init();
 
-  var selectedNumber = 0;
-  switch(tweetManager.currentTimeline) {
-    case 'mentions': selectedNumber = 1; break;
-    case 'dms': selectedNumber = 2; break;
-    case 'favorites': selectedNumber = 3; break;
-    case 'lists': selectedNumber = 4; break;
-  }
   $("#tabs").tabs({
-    selected: selectedNumber,
+    panelTemplate: '<div class="timeline"></div>',
+    tabTemplate: '<li id="tab_#{href}"><a href="#{href}"><span>#{label}</span></a></li>',
+    selected: 0,
     select: function(event, ui) {
-      tweetManager.currentTimeline = ui.panel.id.split('_')[1];
-      if(tweetManager.currentTimeline != 'lists' || tweetManager.listId) {
+      tweetManager.currentTimeline = ui.panel.id.split('-')[1];
+      if(!tweetManager.currentTimeline.match(/^lists/) || tweetManager.getListId()) {
         prepareAndLoadTimeline();
       }
     },
     show: function(event, ui) {
       $(ui.panel).scrollTop(tweetManager.getCurrentTimeline().currentScroll);
+    }
+  });
+  tweetManager.orderedEachTimeline(function(timeline) {
+    var timelineId = this;
+    if(timelineId.match(/^lists/)) {
+      return true;
+    }
+    var name = '';
+    if(timelineId == 'home') {
+      name = 'Home';
+    } else if(timelineId == 'mentions') {
+      name = '@<span class="__username">';
+    } else if(timelineId == 'dms') {
+      name = 'DM';
+    } else if(timelineId == 'favorites') {
+      name = 'Favorites';
+    }
+    $("#tabs").tabs('add', '#timeline-' + timelineId, name);
+  });
+  $(".__username").text(tweetManager.twitterBackend.username());
+  $("#tabs .ui-tabs-nav").sortable({
+    stop: function(event, ui) {
+      var sortedTabs = ui.item.parent().sortable('toArray');
+      var sortedTimelines = [];
+      for(var i = 0; i < sortedTabs.length; ++i) {
+        sortedTimelines[i] = sortedTabs[i].split('-')[1];
+      }
+      tweetManager.setTimelineOrder(sortedTimelines);
     }
   });
 
@@ -849,16 +883,17 @@ function initializeWorkspace() {
   //Delay loading, improving responsiveness
   setTimeout(function() {
     Lists.init();
+    $("#tabs").tabs('select', '#timeline-' + tweetManager.currentTimeline);
     Composer.init();
     Shortener.init();
 
     prepareAndLoadTimeline();
-    var tabEl = $("#timeline_" + tweetManager.currentTimeline);
+    var tabEl = $("#timeline-" + tweetManager.currentTimeline);
     tabEl.scrollTop(tweetManager.getCurrentTimeline().currentScroll);
 
     tweetManager.eachTimeline(function(timeline) {
       var timelineId = this;
-      var tabEl = $("#timeline_" + timelineId);
+      var tabEl = $("#timeline-" + timelineId);
       tabEl.scroll(function(e) {
         var $this = $(this);
         var threshold = 50;
@@ -928,23 +963,8 @@ $(function() {
   <div id="update_tweets" onclick="loadNewTweets();"></div>
 
   <div id="tabs">
-    <ul>
-      <li><a href="#timeline_home"><span>Home</span></a></li>
-      <li><a href="#timeline_mentions"><span>@<span class="__username"></span></span></a></li>
-      <li><a href="#timeline_dms"><span>DM</span></a></li>
-      <li><a href="#timeline_favorites"><span>Favorites</span></a></li>
-      <li><a href="#timeline_lists"><span>
-        <select id="list_selector">
-        </select>
-      </span></a></li>
-    </ul>
-    <div id="timeline_home" class="timeline"></div>
-    <div id="timeline_mentions" class="timeline"></div>
-    <div id="timeline_dms" class="timeline"></div>
-    <div id="timeline_favorites" class="timeline"></div>
-    <div id="timeline_lists" class="timeline"></div>
+    <ul></ul>
   </div>
-
 
 </div>
 

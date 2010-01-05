@@ -37,6 +37,14 @@ OptionsBackend = {
     lists_on_page: true,
     lists_icon: true,
 
+    home_visible: true,
+    mentions_visible: true,
+    dms_visible: true,
+    favorites_visible: true,
+    lists_visible: true,
+
+    lists_count: 1,
+
     idle_color: '#4880a6',
     home_color: '#9c2e2e',
     mentions_color: '#7f870b',
@@ -89,6 +97,7 @@ function TweetsTimeline(timelineId, manager, recheckTime) {
   this.timelinePath = timelineId;
   this.usingPages = false;
   this.timelineId = timelineId;
+  this.listId = null;
 
   switch(timelineId) {
     case 'home':
@@ -103,8 +112,6 @@ function TweetsTimeline(timelineId, manager, recheckTime) {
     case 'favorites':
       this.timelinePath = 'favorites';
       this.usingPages = true;
-      break;
-    case 'lists':
       break;
   }
 }
@@ -387,20 +394,25 @@ function TweetManager() {
   this.timelines = {};
   this.iconImg = null;
   this.listsCache = null;
-  this.listId = null;
+  this.listsTabCount = OptionsBackend.get('lists_count');
   this.loadIcon();
 
-  this.timelines["home"] = new TweetsTimeline("home", this, OptionsBackend.get('home_refresh_interval'));
-  this.timelines["mentions"] = new TweetsTimeline("mentions", this, OptionsBackend.get('mentions_refresh_interval'));
-  this.timelines["dms"] = new TweetsTimeline("dms", this, OptionsBackend.get('dms_refresh_interval'));
-  this.timelines["favorites"] = new TweetsTimeline("favorites", this, OptionsBackend.get('favorites_refresh_interval'));
-  this.timelines["lists"] = new TweetsTimeline("lists", this, OptionsBackend.get('lists_refresh_interval'));
+  var timelineNames = ["home", "mentions", "dms", "favorites", "lists"];
+  for(var i = 0; i < timelineNames.length; ++i) {
+    var refreshInterval = OptionsBackend.get(timelineNames[i] + '_refresh_interval');
+    var visible = OptionsBackend.get(timelineNames[i] + '_visible');
+    if(!visible) {
+      continue;
+    }
+    if(timelineNames[i] == "lists") {
+      for(var j = 0; j < this.listsTabCount; ++j) {
+        this.timelines["lists_" + j] = new TweetsTimeline("lists_" + j, this, refreshInterval);
+      }
+    } else {
+      this.timelines[timelineNames[i]] = new TweetsTimeline(timelineNames[i], this, refreshInterval);
+    }
+  }
 
-  this.expectedHitsCount = (60 * 60 * 1000) * (1 / OptionsBackend.get('home_refresh_interval') +
-                                               1 / OptionsBackend.get('mentions_refresh_interval') +
-                                               1 / OptionsBackend.get('dms_refresh_interval') +
-                                               1 / OptionsBackend.get('favorites_refresh_interval') +
-                                               1 / OptionsBackend.get('lists_refresh_interval'));
   this.lastAvailableHits = null;
   this.lastAvailableHitsTime = null;
 
@@ -412,51 +424,27 @@ function TweetManager() {
   var _this = this;
   this.twitterBackend = new TwitterLib(OptionsBackend.get('request_timeout'),
     function onAuthenticated() {
-      _this.giveMeTweets.call(_this, "home", function() {});
-      _this.giveMeTweets.call(_this, "mentions", function() {});
-      _this.giveMeTweets.call(_this, "dms", function() {});
-      _this.giveMeTweets.call(_this, "favorites", function() {});
-    },
-    function onHitsUpdated(remainingHits, nextHitsReset, hourlyLimit) {
-      var nextResetDate = new Date();
-      nextResetDate.setTime(parseInt(nextHitsReset) * 1000);
-      if(remainingHits == 0) {
-        _this.autoClearWarning = true;
-        _this.setWarning("You've exceeded API hits limit. " +
-                         "Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"" + chrome.extension.getURL('options.html') + "\"})'>options page</a>. " +
-                         "Chromed Bird won't update until " + nextResetDate.toLocaleDateString() + ".");
-        return;
-      }
-      if(_this.autoClearWarning) {
-        _this.autoClearWarning = false;
-        _this.clearWarning();
-      }
-      if(_this.lastAvailableHitsTime == null) {
-        _this.lastAvailableHitsTime = new Date();
-        _this.lastAvailableHits = remainingHits;
-      }
-      var timeDiff = new Date() - _this.lastAvailableHitsTime;
-      if(timeDiff >= 5 * 60 * 1000) {
-        var realHitsPerHour = ((_this.lastAvailableHits - remainingHits) / timeDiff) * 60 * 60 * 1000;
-        if(realHitsPerHour > hourlyLimit) {
-          // If we keep this same speed we're gonna exhaust our hits limit.
-          _this.tooManyHitsCount += 1;
-          if(_this.tooManyHitsCount >= 2) {
-            // We've exceeded the limit twice in a row, let's warn users.
-            _this.setWarning("Hey! Your remaining API hits are ending too fast.<br>" +
-                             "Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"" + chrome.extension.getURL('options.html') + "\"})'>options page</a>. " +
-                             "Take special care if you're running multiple Twitter clients, as they all share the same limit.<br>" +
-                             "Available hits left: " + remainingHits + " - Next hits reset: " + nextResetDate.toLocaleDateString());
-            _this.tooManyHitsCount = 0;
+      for(var i = 0; i < timelineNames.length; ++i) {
+        var visible = OptionsBackend.get(timelineNames[i] + '_visible');
+        if(!visible) {
+          continue;
+        }
+        if(timelineNames[i] == "lists") {
+          _this.lists();
+          var selectedLists = _this.getSelectedLists();
+          for(var timelineId in selectedLists) {
+            var timeline = _this.changeList(timelineId, selectedLists[timelineId]);
+            if(timeline) {
+              timeline.giveMeTweets(function() {});
+            }
           }
         } else {
-          // We only wanna warn users if we exceed hits limit more than once
-          // in a row, so let's just reset the counter.
-          _this.tooManyHitsCount = 0;
+          _this.giveMeTweets.call(_this, timelineNames[i], function() {});
         }
-        _this.lastAvailableHitsTime = new Date();
-        _this.lastAvailableHits = remainingHits;
       }
+    },
+    function(remainingHits, nextHitsReset, hourlyLimit) {
+      _this.onHitsUpdated.call(_this, remainingHits, nextHitsReset, hourlyLimit);
     },
     OptionsBackend.get('base_url'),
     OptionsBackend.get('base_authorize_url'),
@@ -485,10 +473,63 @@ TweetManager.prototype = {
     }
   },
 
+  getSelectedLists: function() {
+    var selectedListsStr = localStorage['selected_lists']
+    if(selectedListsStr) {
+      return JSON.parse(selectedListsStr);
+    }
+    return {};
+  },
+
+  registerSelectedList: function(timelineId, listId) {
+    var selectedLists = this.getSelectedLists();
+    selectedLists[timelineId] = listId;
+    localStorage['selected_lists'] = JSON.stringify(selectedLists);
+  },
+
   eachTimeline: function(callback) {
     for(var tId in this.timelines) {
       callback.call(tId, this.timelines[tId]);
     }
+  },
+
+  orderedEachTimeline: function(callback) {
+    var retList = [];
+    for(var tId in this.timelines) {
+      var orderedPos = this.getTimelinePosition(tId);
+      if(orderedPos == -1) {
+        orderedPos = retList.length;
+      }
+      retList[orderedPos] = tId;
+    }
+    for(var i = 0; i < retList.length; ++i) {
+      var tId = retList[i];
+      if(tId) {
+        callback.call(tId, this.timelines[tId]);
+      }
+    }
+  },
+
+  getTimelinePosition: function(timelineId) {
+    if(!this.timelineOrderCache) {
+      var storedOrder = localStorage['timeline_order'];
+      if(storedOrder) {
+        this.timelineOrderCache = JSON.parse(storedOrder);
+      } else {
+        this.timelineOrderCache = [];
+      }
+    }
+    for(var i = 0; i < this.timelineOrderCache.length; ++i) {
+      if(timelineId == this.timelineOrderCache[i]) {
+        return i;
+      }
+    }
+    return -1;
+  },
+
+  setTimelineOrder: function(sortedTimelinesArray) {
+    this.timelineOrderCache = sortedTimelinesArray;
+    localStorage['timeline_order'] = JSON.stringify(sortedTimelinesArray);
   },
 
   loadIcon: function() {
@@ -664,27 +705,57 @@ TweetManager.prototype = {
         if(success) {
           _this.listsCache = data.lists;
         }
-        callback(success, _this.listsCache, status);
+        if(callback) {
+          callback(success, _this.listsCache, status);
+        }
       });
       return;
     }
-    callback(true, this.listsCache, null);
+    if(callback) {
+      callback(true, this.listsCache, null);
+    }
   },
 
-  changeList: function(listId) {
-    if(this.listId != listId) {
-      this.timelines["lists"].stopTimer();
-      delete this.timelines["lists"];
-      this.timelines["lists"] = new TweetsTimeline("lists", this, OptionsBackend.get('lists_refresh_interval'));
+  changeList: function(timelineName, listId) {
+    var timeline = this.timelines[timelineName];
+    if(!timeline) {
+      return null;
     }
-    this.listId = listId;
-    this.timelines["lists"].setTimelinePath(this.twitterBackend.username() + '/lists/' + listId + '/statuses');
+    if(timeline.listId != listId) {
+      this.registerSelectedList(timelineName, listId);
+      timeline.stopTimer();
+      delete this.timelines[timelineName];
+      timeline = this.timelines[timelineName] = new TweetsTimeline(timelineName, this, OptionsBackend.get('lists_refresh_interval'));
+    }
+    timeline.listId = listId;
+    timeline.setTimelinePath(this.twitterBackend.username() + '/lists/' + listId + '/statuses');
+    return timeline;
+  },
+
+  getListId: function(timelineName) {
+    if(!timelineName) {
+      timelineName = this.currentTimeline;
+    }
+    var listId = this.timelines[timelineName].listId;
+    if(listId && this.listsCache) {
+      for(var i = 0; i < this.listsCache.length; ++i) {
+        if(this.listsCache[i].slug == listId) {
+          return listId;
+        }
+      }
+    }
+    return null;
   },
 
   /* Delegates */
 
   giveMeTweets: function(timelineId, callback, syncNew, cacheOnly) {
-    return this.timelines[timelineId].giveMeTweets(callback, syncNew, cacheOnly);
+    var timeline = this.timelines[timelineId];
+    if(!timeline) {
+      callback([], timelineId);
+      return;
+    }
+    return timeline.giveMeTweets(callback, syncNew, cacheOnly);
   },
 
   newTweetsCount: function(timelineId) {
@@ -731,6 +802,48 @@ TweetManager.prototype = {
     var tweetsToRead = this.getCurrentTimeline().tweetsCache;
     for(var i = 0; i < tweetsToRead.length; ++i) {
       this.readTweet(tweetsToRead[i].id);
+    }
+  },
+
+  onHitsUpdated: function(remainingHits, nextHitsReset, hourlyLimit) {
+    var nextResetDate = new Date();
+    nextResetDate.setTime(parseInt(nextHitsReset) * 1000);
+    if(remainingHits == 0) {
+      this.autoClearWarning = true;
+      this.setWarning("You've exceeded API hits limit. " +
+                       "Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"" + chrome.extension.getURL('options.html') + "\"})'>options page</a>. " +
+                       "Chromed Bird won't update until " + nextResetDate.toLocaleDateString() + ".");
+      return;
+    }
+    if(this.autoClearWarning) {
+      this.autoClearWarning = false;
+      this.clearWarning();
+    }
+    if(this.lastAvailableHitsTime == null) {
+      this.lastAvailableHitsTime = new Date();
+      this.lastAvailableHits = remainingHits;
+    }
+    var timeDiff = new Date() - this.lastAvailableHitsTime;
+    if(timeDiff >= 5 * 60 * 1000) {
+      var realHitsPerHour = ((this.lastAvailableHits - remainingHits) / timeDiff) * 60 * 60 * 1000;
+      if(realHitsPerHour > hourlyLimit) {
+        // If we keep this same speed we're gonna exhaust our hits limit.
+        this.tooManyHitsCount += 1;
+        if(this.tooManyHitsCount >= 2) {
+          // We've exceeded the limit twice in a row, let's warn users.
+          this.setWarning("Hey! Your remaining API hits are ending too fast.<br>" +
+                           "Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"" + chrome.extension.getURL('options.html') + "\"})'>options page</a>. " +
+                           "Take special care if you're running multiple Twitter clients, as they all share the same limit.<br>" +
+                           "Available hits left: " + remainingHits + " - Next hits reset: " + nextResetDate.toLocaleDateString() + " " + nextResetDate.toLocaleTimeString());
+          this.tooManyHitsCount = 0;
+        }
+      } else {
+        // We only wanna warn users if we exceed hits limit more than once
+        // in a row, so let's just reset the counter.
+        this.tooManyHitsCount = 0;
+      }
+      this.lastAvailableHitsTime = new Date();
+      this.lastAvailableHits = remainingHits;
     }
   }
 }

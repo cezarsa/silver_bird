@@ -61,9 +61,20 @@ fieldset legend {
 }
 
 #main_area table td:not(.label) {
-  width: 100px;
   text-align: center;
   border-right: 1px solid #000;
+}
+
+#main_area table.notifications td {
+  width: 100px;
+}
+
+#main_area table.timelines td {
+  width: 120px;
+}
+
+#main_area table td.label {
+  width: inherit;
 }
 
 #main_area table th:not(:empty) {

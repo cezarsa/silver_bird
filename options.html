@@ -207,9 +207,11 @@ $(function() {
   updatePredictedHitsCount();
   var timelines = ['home', 'mentions', 'dms', 'lists', 'favorites'];
   for(var i = 0; i < timelines.length; ++i) {
-    var inputEl = $('input[name="' +  timelines[i] + '_refresh_interval"]');
-    inputEl.keyup(updatePredictedHitsCount);
-    inputEl.blur(updatePredictedHitsCount);
+    $('table.timelines input, table.timelines select')
+      .keyup(updatePredictedHitsCount)
+      .blur(updatePredictedHitsCount)
+      .click(updatePredictedHitsCount)
+      .change(updatePredictedHitsCount);
   }
 });
 
@@ -217,9 +219,15 @@ function updatePredictedHitsCount() {
   var timelines = ['home', 'mentions', 'dms', 'lists', 'favorites'];
   var totalHits = 0;
   for(var i = 0; i < timelines.length; ++i) {
+    var inputVisibleEl = $('input[name="' +  timelines[i] + '_visible"]');
+    if(!inputVisibleEl.is(':checked')) {
+      continue;
+    }
     var inputEl = $('input[name="' +  timelines[i] + '_refresh_interval"]');
     var intVal = parseInt(inputEl.val());
-    totalHits += (60 * 60 * 1000) / intVal;
+    var timelineHits = (60 * 60 * 1000) / intVal;
+    var timelineCount = $('select[name="' +  timelines[i] + '_count"]').val() || 1;
+    totalHits += timelineHits * timelineCount;
   }
   totalHits = parseInt(totalHits);
   $('#predicted_hits_count').text(totalHits);
@@ -273,7 +281,7 @@ function updatePredictedHitsCount() {
 
   <fieldset>
     <legend>Notifications</legend>
-    <table>
+    <table class="notifications">
       <tr>
         <th></th>
         <th>Show on Page</th>
@@ -323,7 +331,7 @@ function updatePredictedHitsCount() {
   </fieldset>
 
   <fieldset>
-    <legend>Refresh Interval (ms)</legend>
+    <legend>Timelines</legend>
     <p class="notice" style="text-align: center; color: black;">
       You should keep API hits <span style="color: red;">below <span class="__hourly_limit"></span></span>! Otherwise Chromed Bird will stop working properly and timelines won't update anymore.<br>
       <span style="color: red;">Remember</span> that if you're using multiple Twitter clients you'll need to keep your API hits even lower.
@@ -331,16 +339,51 @@ function updatePredictedHitsCount() {
     <p class="hits_notice">
       API hits per hour: <span id="predicted_hits_count"></span> / <span class="__hourly_limit">
     </p>
-    <label for="home_refresh_interval">*Home Timeline:</label>
-    <input type="text" name="home_refresh_interval" validator="required,number,minRefresh"><br>
-    <label for="mentions_refresh_interval">*Mentions Timeline:</label>
-    <input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh"><br>
-    <label for="dms_refresh_interval">*DM Timeline:</label>
-    <input type="text" name="dms_refresh_interval" validator="required,number,minRefresh"><br>
-    <label for="lists_refresh_interval">*Lists Timeline:</label>
-    <input type="text" name="lists_refresh_interval" validator="required,number,minRefresh"><br>
-    <label for="favorites_refresh_interval">*Favorites Timeline:</label>
-    <input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh"><br>
+    <table class="timelines">
+      <tr>
+        <th></th>
+        <th>*Visible</th>
+        <th>*Refresh Interval (ms)</th>
+        <th>*Tabs Count</th>
+      <tr>
+        <td class="label">Home:</td>
+        <td><input type="checkbox" name="home_visible"></td>
+        <td><input type="text" name="home_refresh_interval" validator="required,number,minRefresh"></td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td class="label">Mentions:</td>
+        <td><input type="checkbox" name="mentions_visible"></td>
+        <td><input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh"></td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td class="label">DM:</td>
+        <td><input type="checkbox" name="dms_visible"></td>
+        <td><input type="text" name="dms_refresh_interval" validator="required,number,minRefresh"></td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td class="label">Lists:</td>
+        <td><input type="checkbox" name="lists_visible"></td>
+        <td><input type="text" name="lists_refresh_interval" validator="required,number,minRefresh"></td>
+        <td>
+          <select name="lists_count" style="width: 40px;">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td class="label">Favorites:</td>
+        <td><input type="checkbox" name="favorites_visible"></td>
+        <td><input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh"></td>
+        <td>1</td>
+      </tr>
+    </table>
   </fieldset>
 
   <fieldset>
