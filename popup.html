@@ -411,13 +411,13 @@ var Shortener = {
     shortenerInput.attr('disabled', 'disabled');
     this.hideButton();
     var _this = this;
-    shortener.shorten(longUrl, function(shortUrl) {
+    shortener.shorten(longUrl, function(success, shortUrl) {
       $("#loading").hide();
       shortenerInput.removeAttr('disabled');
       _this.closeArea();
       _this.clear();
       var textarea = $("#compose_tweet_area textarea");
-      if(shortUrl) {
+      if(success && shortUrl) {
         var newText = textarea.val();
         if(newText.length > 0 && newText[newText.length - 1] != ' ') {
           newText += ' ';
@@ -425,6 +425,8 @@ var Shortener = {
         newText += shortUrl;
         textarea.val(newText);
         Composer.textareaChanged();
+      } else if(!success) {
+        Renderer.showError(shortUrl);
       }
       Composer.showComposeArea(true);
     });
