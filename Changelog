@@ -1,3 +1,7 @@
+1.4.1 (2010-01-05)
+
+* Fixing nasty bug when lists timelines are disabled.
+
 1.4.0 (2010-01-05)
 
 * Adding a Favorites and Lists timelines
