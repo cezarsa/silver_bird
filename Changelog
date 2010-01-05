@@ -1,3 +1,15 @@
+1.4.0 (2010-01-05)
+
+* Adding a Favorites and Lists timelines
+* Allowing users to configure witch tabs will be displayed
+* Allowing to use personal bit.ly account (Thanks Michael Ceyko)
+* Allowing users to configure how long notifications will be displayed
+* Detecting and warning excessive API hits
+* Improving error handling
+* Fixing notifications in a lot of pages, mainly ones with multiple frames
+* Fixing scroll after sending a tweet
+* Not hidding OAuth's PIN number
+
 1.2.0 (2009-12-13)
 
 * Showing tweets as soon as they arrive (Can be enabled/disabled for each timeline in the options page)
