@@ -94,9 +94,11 @@ var OAuth = {
 
 var Paginator = {
   needsMore: false,
-  firstPage: function() {
+  firstPage: function(shouldScrollTop) {
     this.needsMore = false;
-    $("#timeline-" + tweetManager.currentTimeline).scrollTop(0);
+    if(shouldScrollTop) {
+      $("#timeline-" + tweetManager.currentTimeline).scrollTop(0);
+    }
   },
   nextPage: function() {
     this.needsMore = true;
@@ -797,7 +799,7 @@ function newTweetsAvailable(count, unreadCount, timelineId) {
 }
 
 function loadNewTweets() {
-  Paginator.firstPage();
+  Paginator.firstPage(true);
   tweetManager.updateNewTweets();
   $("#tab_modifier_" + tweetManager.currentTimeline).remove();
   $("#update_tweets").fadeOut();
