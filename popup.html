@@ -694,11 +694,13 @@ var Lists = {
       }
       var listsTabCount = tweetManager.listsTabCount;
       for(var i = 0; i < listsTabCount; ++i) {
-        var pos = tweetManager.getTimelinePosition('lists_' + i);
-        if(pos == -1) {
-          pos = undefined;
+        if(!force) {
+          var pos = tweetManager.getTimelinePosition('lists_' + i);
+          if(pos == -1) {
+            pos = undefined;
+          }
+          $("#tabs").tabs('add', '#timeline-lists_' + i, '<select id="lists_' + i + '-selector"></select>', pos);
         }
-        $("#tabs").tabs('add', '#timeline-lists_' + i, '<select id="lists_' + i + '-selector"></select>', pos);
         var $listSelect = $("select#lists_" + i + "-selector");
         $listSelect.html('');
         $listSelect.append($("<option>").attr('value', _this.selector_value).text('- Select a list -'));
