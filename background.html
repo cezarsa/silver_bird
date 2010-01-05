@@ -899,9 +899,12 @@ function compareVersions(v1, v2) {
   return 0;
 }
 
-$.get('manifest.json', null, function(data, textStatus) {
-  var currentVersion = data.version.split('.');
+function checkVersionChanges(manifest) {
+  var currentVersion = manifest.version.split('.');
   var storageVersion = localStorage['version'];
+  if(storageVersion) {
+    storageVersion = JSON.parse(storageVersion);
+  }
 
   if(compareVersions(currentVersion, storageVersion) != 0) {
     // if last version is < 1.3.0
@@ -913,7 +916,22 @@ $.get('manifest.json', null, function(data, textStatus) {
         OptionsBackend.save(options);
       }
     }
-    localStorage['version'] = currentVersion;
+    localStorage['version'] = JSON.stringify(currentVersion);
+  }
+}
+
+$.ajax({
+  type: 'GET',
+  url: 'manifest.json',
+  data: {},
+  dataType: "json",
+  timeout: 5000,
+  success: function(data, status) {
+    checkVersionChanges(data);
+  },
+  error: function (request, status, error) {
+    // Ugly hack, but currently Chrome is returning an error
+    checkVersionChanges(JSON.parse(request.responseText));
   }
 });
 </script>
