@@ -736,7 +736,11 @@ TweetManager.prototype = {
     if(!timelineName) {
       timelineName = this.currentTimeline;
     }
-    var listId = this.timelines[timelineName].listId;
+    var timeline = this.timelines[timelineName];
+    if(!timeline) {
+      return null;
+    }
+    var listId = timeline.listId;
     if(listId && this.listsCache) {
       for(var i = 0; i < this.listsCache.length; ++i) {
         if(this.listsCache[i].slug == listId) {

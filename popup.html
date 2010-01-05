@@ -851,9 +851,11 @@ function initializeWorkspace() {
       $(ui.panel).scrollTop(tweetManager.getCurrentTimeline().currentScroll);
     }
   });
+  var showLists = false;
   tweetManager.orderedEachTimeline(function(timeline) {
     var timelineId = this;
     if(timelineId.match(/^lists/)) {
+      showLists = true;
       return true;
     }
     var name = '';
@@ -888,7 +890,9 @@ function initializeWorkspace() {
 
   //Delay loading, improving responsiveness
   setTimeout(function() {
-    Lists.init();
+    if(showLists) {
+      Lists.init();
+    }
     $("#tabs").tabs('select', '#timeline-' + tweetManager.currentTimeline);
     Composer.init();
     Shortener.init();
