@@ -582,18 +582,40 @@ TweetManager.prototype = {
     }
     if(unreadNewTweets.length > 0) {
       this.injectTweets = unreadNewTweets;
-      chrome.tabs.executeScript(null, {
-        file: 'lib/3rdparty/jquery.js',
-        allFrames: true
-      }, function() {
-        chrome.tabs.insertCSS(null, {
-          file: 'css/injectedTweets.css',
-          allFrames: true
-        }, function() {
-          chrome.tabs.executeScript(null, {
-            file: 'lib/tweets_assembler.js',
-            allFrames: true
-          });
+
+      var injectHelper = function(action, file, allFrames, callback) {
+        var method;
+        if(action == 'script') {
+          method = chrome.tabs.executeScript;
+        } else if(action == 'css') {
+          method = chrome.tabs.insertCSS;
+        } else {
+          return;
+        }
+        var params = {file: file};
+        if(allFrames) {
+          params.allFrames = true;
+        }
+        try {
+          method.call(chrome.tabs, null, params, callback);
+        } catch(e) {
+          // Maybe this exception is due to allFrames = true, let's try without it
+          if(allFrames) {
+            try {
+              method.call(chrome.tabs, null, {file: file}, callback);
+            } catch(e) {
+              // This time something really bad happened, logging and ignoring
+              console.log(e);
+            }
+          } else {
+            // We don't know the motive, logging and ignoring
+            console.log(e);
+          }
+        }
+      };
+      injectHelper('script', 'lib/3rdparty/jquery.js', true, function() {
+        injectHelper('css', 'css/injectedTweets.css', true, function() {
+          injectHelper('script', 'lib/tweets_assembler.js', true);
         });
       });
     }
