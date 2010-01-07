@@ -479,8 +479,8 @@ var Renderer = {
       },
       {
         //create users links
-        'expression': /(@)(\w*)/ig,
-        'replacement': "$1<a href='" + TwitterLib.URLS.BASE + "$2' onclick=\"openTab('" + TwitterLib.URLS.BASE + "$2')\">$2</a>"
+        'expression': /(@(\w*))((?=.*?<a)|(?!.*?<\/a>))/ig,
+        'replacement': "@<a href='" + TwitterLib.URLS.BASE + "$2' onclick=\"openTab('" + TwitterLib.URLS.BASE + "$2')\">$2</a>"
       }
     ];
 
