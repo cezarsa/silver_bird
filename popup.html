@@ -613,7 +613,15 @@ var Renderer = {
     }
     $(".new_actions img").hover(hoverFunc, hoverFunc);
 
-    $(".tweet.unread").hoverFor(1000,
+    $(".tweet.unread").click(function() {
+      tweetManager.readTweet($(this).attr('tweetid'));
+      $(this).stop();
+      $(this).removeClass('unread');
+      $(this).attr('style', '');
+    });
+
+    var hoverTimeout = OptionsBackend.get('hover_timeout');
+    $(".tweet.unread").hoverFor(hoverTimeout,
       function() {
         //Hovering for <time> seconds, let's read it.
         tweetManager.readTweet($(this).attr('tweetid'));
@@ -632,7 +640,7 @@ var Renderer = {
             transformation[attr] = originValue;
         });
         testEl.remove();
-        $(this).animate(transformation, 1000);
+        $(this).animate(transformation, hoverTimeout);
       },
       function() {
         //Countdown aborted

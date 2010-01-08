@@ -275,6 +275,8 @@ function updatePredictedHitsCount() {
       <option value="css/chromified.css,css/chromified-theme/jquery-ui-1.7.2.custom.css">Chromified</option>
       <option value="css/whisper.css,css/whisper-theme/jquery-ui-1.7.2.custom.css">Whispers</option>
     </select><br>
+    <label for="hover_timeout">Hover to read time (ms):</label>
+    <input type="text" name="hover_timeout" validator="required,number,positive"><br>
     <label>*Icon color:</label>
     <canvas name="idle_color" width="19" height="19" class="color_selector"></canvas>
   </fieldset>
