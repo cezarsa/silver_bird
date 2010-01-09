@@ -905,7 +905,9 @@ function initializeWorkspace() {
     Composer.init();
     Shortener.init();
 
-    prepareAndLoadTimeline();
+    if(!tweetManager.currentTimeline.match(/^lists/) || tweetManager.getListId()) {
+      prepareAndLoadTimeline();
+    }
     var tabEl = $("#timeline-" + tweetManager.currentTimeline);
     tabEl.scrollTop(tweetManager.getCurrentTimeline().currentScroll);
 

@@ -822,6 +822,7 @@ TweetManager.prototype = {
 
   signout: function() {
     localStorage.removeItem('oauth_token_data');
+    localStorage.removeItem('selected_lists');
     this.stopAll();
     TweetManager.instance = new TweetManager();
   },
