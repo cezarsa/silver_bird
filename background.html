@@ -843,7 +843,7 @@ TweetManager.prototype = {
       this.autoClearWarning = true;
       this.setWarning("You've exceeded API hits limit. " +
                        "Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"" + chrome.extension.getURL('options.html') + "\"})'>options page</a>. " +
-                       "Chromed Bird won't update until " + nextResetDate.toLocaleDateString() + ".");
+                       "Chromed Bird won't update until " + nextResetDate.toLocaleDateString() + " " + nextResetDate.toLocaleTimeString() + ".");
       return;
     }
     if(this.autoClearWarning) {
