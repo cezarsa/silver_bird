@@ -104,7 +104,7 @@ input[type='text'] {
 .timeline {
   margin: 0px;
   padding: 0px;
-  padding-right: 20px;
+  padding-right: 35px;
   max-height: 400px;
   overflow: auto;
   overflow-x: hidden;
@@ -189,9 +189,12 @@ input[type='text'] {
 }
 
 .tweet {
-  width: 400px;
+  width: 100%;
+  min-width: 400px;
   padding: 2px 4px 2px 4px;
   min-height: 64px;
+  padding-right: 20px;
+  position: relative;
 }
 
 .tweet .text {
@@ -242,13 +245,13 @@ input[type='text'] {
 }
 
 .tweet .first_container {
-  width: 385px;
-  float: left;
+  width: 100%;
 }
 
 .tweet .new_actions {
-  position: relative;
-  float: right;
+  position: absolute;
+  top: 2px;
+  right: 3px;
 }
 
 .tweet .new_actions img {
