@@ -559,13 +559,17 @@ TweetManager.prototype = {
     var unreadNewTweets = [];
     var totalUnreadNewIds = [];
     this.eachTimeline(function(timeline) {
+      var timelineId = this;
       var unreadNewIds = timeline.getNewUnreadIds();
       totalUnreadNewIds = totalUnreadNewIds.concat(unreadNewIds);
       if(unreadNewIds.length > 0) {
-        if(OptionsBackend.get(this + '_icon')) {
-          colors.push(OptionsBackend.get(this + '_color'));
+        if(timelineId.match(/^lists/)) {
+          timelineId = 'lists';
         }
-        if(OptionsBackend.get(this + '_on_page')) {
+        if(OptionsBackend.get(timelineId + '_icon')) {
+          colors.push(OptionsBackend.get(timelineId + '_color'));
+        }
+        if(OptionsBackend.get(timelineId + '_on_page')) {
           unreadNewTweets = unreadNewTweets.concat(timeline.getNewUnreadTweets());
         }
       }
