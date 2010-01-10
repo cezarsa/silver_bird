@@ -392,7 +392,6 @@ function TweetManager() {
 
   this.composerData = new ComposerData();
 
-  this.currentTimeline = "home";
   this.timelines = {};
   this.iconImg = null;
   this.listsCache = null;
@@ -412,6 +411,9 @@ function TweetManager() {
       }
     } else {
       this.timelines[timelineNames[i]] = new TweetsTimeline(timelineNames[i], this, refreshInterval);
+    }
+    if(!this.currentTimeline) {
+      this.currentTimeline = (timelineNames[i] == "lists") ? "lists_0" : timelineNames[i];
     }
   }
 
