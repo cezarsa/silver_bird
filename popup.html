@@ -725,15 +725,16 @@ var Lists = {
         $listSelect.simpleSelect({
           change: function(value, label) {
             if(value == _this.selector_value) {
-              return;
+              return false;
             }
             if(value == _this.update_value) {
               Lists.init(true);
-              return;
+              return true;
             }
             var timelineName = this.selectEl.id.split('-')[0];
             tweetManager.changeList(timelineName, value);
             prepareAndLoadTimeline();
+            return true;
           }
         });
       }
