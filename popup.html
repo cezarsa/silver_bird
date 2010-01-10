@@ -977,8 +977,11 @@ $(function() {
     <img class="right" src="img/arrow_down.gif"/>
   </div>
 
-  <a id="logout" href="javascript:signout()">Log out</a>
-  <a id="mark_as_read" href="javascript:Renderer.markAllAsRead();">Mark all as read</a>
+  <span class="header_link_left">
+    <a href="javascript:signout()">Log out</a> |
+    <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))">Options</a>
+  </span>
+  <a class="header_link_right" href="javascript:Renderer.markAllAsRead();">Mark all as read</a>
   <img src="img/loading.gif" id="loading" style="display: none;"/>
   <div style="clear: both;"></div>
 

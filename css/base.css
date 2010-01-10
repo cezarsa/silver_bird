@@ -81,13 +81,13 @@ input[type='text'] {
   min-width: 440px;
 }
 
-#logout {
+.header_link_left {
   float: left;
   font-size: 8pt;
   margin-top: 4px;
 }
 
-#mark_as_read {
+.header_link_right {
   float: right;
   font-size: 8pt;
   margin-top: 4px;
