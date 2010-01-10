@@ -1,0 +1,50 @@
+select.ss_overriden {
+  display: none;
+}
+
+div.simple_select {
+  z-index: 99999;
+}
+
+div.simple_select .label {
+  margin: 1px 2px 1px 2px;
+  padding: 1px 3px 1px 3px;
+}
+
+div.simple_select .label img {
+  padding-left: 10px;
+  padding-right: 5px;
+  cursor: pointer;
+}
+
+div.simple_select .options_area {
+  display: none;
+
+  position: absolute;
+  overflow: hidden;
+  z-index: 99999;
+
+  border: 1px solid #D9D9D9;
+  background-color: #FFFFFF;
+
+  left: 8px;
+  min-width: 110px;
+  font-weight: normal;
+}
+
+div.simple_select  ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+div.simple_select .options_area ul li {
+  display: inherit;
+  position: inherit;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  height: auto;
+  cursor: pointer;
+  color: black;
+}

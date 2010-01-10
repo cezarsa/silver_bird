@@ -3,7 +3,7 @@
 <head>
 <!-- Theme specific CSS files are loaded later by the ThemeManager -->
 <link rel="stylesheet" type="text/css" href="css/base.css" />
-<link rel="stylesheet" type="text/css" href="css/sexy-combo.css" />
+<link rel="stylesheet" type="text/css" href="css/simple_select.css" />
 
 <script>
 var MAX_TWEET_SIZE = 140;
@@ -24,11 +24,11 @@ if(!twitterBackend.authenticated() && !twitterBackend.tokenRequested()) {
 </script>
 
 <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
-<script type="text/javascript" src="lib/3rdparty/jquery.sexy-combo.js"></script>
 <script type="text/javascript" src="lib/3rdparty/jquery-ui-custom.js"></script>
 
 <!--script type="text/javascript" src="lib/debug.js"></script-->
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
+<script type="text/javascript" src="lib/simple_select.js"></script>
 <script>
 
 var shortener_acct = OptionsBackend.get('shortener_acct');
@@ -722,19 +722,20 @@ var Lists = {
         if(selectedListId) {
           $listSelect.val(selectedListId);
         }
-        $listSelect.sexyCombo({changeCallback: function() {
-          var value = this.getHiddenValue();
-          if(value == _this.selector_value) {
-            return;
+        $listSelect.simpleSelect({
+          change: function(value, label) {
+            if(value == _this.selector_value) {
+              return;
+            }
+            if(value == _this.update_value) {
+              Lists.init(true);
+              return;
+            }
+            var timelineName = this.selectEl.id.split('-')[0];
+            tweetManager.changeList(timelineName, value);
+            prepareAndLoadTimeline();
           }
-          if(value == _this.update_value) {
-            Lists.init(true);
-            return;
-          }
-          var timelineName = this.selectbox[0].id.split('-')[0];
-          tweetManager.changeList(timelineName, value);
-          prepareAndLoadTimeline();
-        }});
+        });
       }
     });
   }

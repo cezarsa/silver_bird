@@ -102,22 +102,18 @@ input[type='text'] {
   color: #999;
 }
 
-/**
-    Sexy Combo Skin
-
-	sexy-combo 2.1.3 : http://code.google.com/p/sexy-combo/
-*/
-
-div.sexy input {
-  background:#fff url(text-bg.gif) repeat-x 0 0;
-  border:1px solid #B5B8C8;
+/* Simple Select */
+div.simple_select .label {
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#e5effe), color-stop(0.5, #b4cff2), to(#e5effe));
+  -webkit-border-radius: 8px;
+  border: 1px solid #b4cff2;
+  color: #0070A3;
 }
 
-div.sexy div.icon {
-  background:transparent url(trigger.gif) no-repeat 0 0;
-  border-bottom: 1px solid #B5B8C8;
+div.simple_select .options_area ul li:hover {
+  background-color: rgb(223, 232, 246);
 }
 
-div.sexy div ul li.active {
+div.simple_select ul li.selected {
   background-color: rgb(223, 232, 246);
 }

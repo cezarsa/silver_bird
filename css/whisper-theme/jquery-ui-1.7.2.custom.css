@@ -395,10 +395,10 @@
 .ui-slider-vertical .ui-slider-range-max { top: 0; }/* Tabs
 ----------------------------------*/
 .ui-tabs { padding: .2em; zoom: 1; }
-.ui-tabs .ui-tabs-nav { list-style: none; position: relative; padding: .2em .2em 0; }
-.ui-tabs .ui-tabs-nav li { position: relative; float: left; border-bottom-width: 0 !important; margin: 0 .2em -1px 0; padding: 0; }
-.ui-tabs .ui-tabs-nav li a { float: left; text-decoration: none; padding: .2em 0.7em; }
-.ui-tabs .ui-tabs-nav li.ui-tabs-selected { padding-bottom: 1px; border-bottom-width: 0; }
+.ui-tabs .ui-tabs-nav { white-space: nowrap; list-style: none; position: relative; padding: .1em .3em 0em .3em; }
+.ui-tabs .ui-tabs-nav li { display: inline-block; height: 19px; position: relative; border-bottom-width: 0 !important; margin: 1px .2em 0px 0px; padding: 0; padding-top: 3px;}
+.ui-tabs .ui-tabs-nav li a { text-decoration: none; padding: .2em 0.7em .2em 0.7em; white-space: nowrap; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected { border-bottom-width: 0; }
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; }
 .ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
 .ui-tabs .ui-tabs-panel { display: block; border-width: 0; background: none; }
