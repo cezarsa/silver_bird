@@ -238,6 +238,7 @@ input[type='text'] {
   display: none;
   padding: 5px;
   min-width: 200px;
+  z-index: 99999;
 }
 
 .tweet .rt_confirm.destroy {
