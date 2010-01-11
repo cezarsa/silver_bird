@@ -1,3 +1,19 @@
+1.4.8 (2010-01-10)
+(This version contains mostly bug fixes and stability improvements)
+
+* Allowing tweets to be marked as read by clicking
+* Allowing users to configure how long they want to hover a tweet to mark it as read
+* Adding a few other url shorteners (is.gd, migre.me, miud.in)
+* Adding link to the options page
+* Dropping using Sexy Combo for a simpler approach (called Simple Select)
+* Better handling tabs overflow allowing popup to grow larger
+* Better error handling during OAuth authentication
+* Fixing potential leak in OAuth's PIN listener
+* Fixing notifications not showing for lists timelines
+* Fixing crash when disabling home timeline
+* Fixing @mentions matches inside URLs.
+* Fixing trying to load timelines for unselected lists
+
 1.4.2 (2010-01-06)
 
 * Bugfix: Older versions of Chrome (beta channel) don't support 'allFrames'
