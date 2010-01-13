@@ -555,7 +555,8 @@ var Renderer = {
       str += inReply;
     } else if(tweet.retweeted_status) {
       str += 'retweeted by <a href="' + TwitterLib.URLS.BASE + tweet.user.screen_name + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\');">' + tweet.user.screen_name + '</a> ';
-    } else if(tweetManager.isRetweet(tweet.id)) {
+    }
+    if(tweetManager.isRetweet(tweet.id)) {
       str += 'retweeted by me ';
     }
     if(from) {
