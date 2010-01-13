@@ -481,6 +481,11 @@ var Renderer = {
         //create users links
         'expression': /(@(\w*))((?=.*?<a)|(?!.*?<\/a>))/ig,
         'replacement': "@<a href='" + TwitterLib.URLS.BASE + "$2' onclick=\"openTab('" + TwitterLib.URLS.BASE + "$2')\">$2</a>"
+      },
+      {
+        //line breaks
+        'expression': /\r?\n/g,
+        'replacement': "<br />"
       }
     ];
 
