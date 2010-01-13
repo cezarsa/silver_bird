@@ -507,7 +507,11 @@ TweetManager.prototype = {
       if(orderedPos == -1) {
         orderedPos = retList.length;
       }
-      retList[orderedPos] = tId;
+      if(retList[orderedPos]) {
+        retList.splice(orderedPos, 0, tId);
+      } else {
+        retList[orderedPos] = tId;
+      }
     }
     for(var i = 0; i < retList.length; ++i) {
       var tId = retList[i];
