@@ -499,9 +499,11 @@ var Renderer = {
   renderTweet: function (tweet) {
     var user = tweet.user;
     var text = tweet.text;
+    var tweetId = tweet.id;
     if(tweet.retweeted_status) {
       user = tweet.retweeted_status.user
       text = tweet.retweeted_status.text
+      tweetId = tweet.retweeted_status.id;
     }
     text = this.transformTweetText(text);
 
@@ -542,7 +544,8 @@ var Renderer = {
     str += text + '</div>';
 
     str += '<div class="footer">';
-    str += '<span class="timestamp" title="' + Renderer.getTimestampAltText(tweet.created_at) + '">' + Renderer.getTimestampText(tweet.created_at) + '</span> ';
+    var statusLinkDst = TwitterLib.URLS.BASE + user.screen_name + '/status/' + tweetId;
+    str += '<a href="' + statusLinkDst + '" onclick="openTab(\'' + statusLinkDst + '\')"><span class="timestamp" title="' + Renderer.getTimestampAltText(tweet.created_at) + '">' + Renderer.getTimestampText(tweet.created_at) + '</span></a> ';
     if(inReply) {
       str += inReply;
     } else if(tweet.retweeted_status) {
