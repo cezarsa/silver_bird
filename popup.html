@@ -524,12 +524,17 @@ var Renderer = {
     }
 
     var nameAttribute = OptionsBackend.get('name_attribute');
-    var tweetUserName = user[nameAttribute];
+    var tweetUserName;
     var tweetTitleUserName;
-    if(nameAttribute.indexOf('screen') == 0) {
+    if(nameAttribute == "screen_name") {
+      tweetUserName = user.screen_name;
       tweetTitleUserName = user.name;
-    } else {
+    } else if(nameAttribute == "name") {
+      tweetUserName = user.name;
       tweetTitleUserName = user.screen_name;
+    } else if(nameAttribute == "both") {
+      tweetUserName = user.screen_name + ' (' + user.name + ')';
+      tweetTitleUserName = '';
     }
 
     var str = '<div tweetid="' + tweet.id + '" class="' + tweetClass + '">';
