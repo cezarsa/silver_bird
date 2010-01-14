@@ -3,6 +3,17 @@ input[type='text'] {
   border: 1px solid #882;
 }
 
+#warning {
+  background-color: #EDEDB1;
+  border: 2px solid #EDEDB1;
+  border-top: 0;
+}
+
+#warning .dismiss {
+  border: 1px solid #EDEDB1;
+  padding: 0px 4px 0px 4px;
+}
+
 #update_tweets {
   -webkit-border-radius: 10px;
   background-color: #EDEDB1;
