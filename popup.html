@@ -472,17 +472,17 @@ var Renderer = {
       {
         //create links
         'expression': /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig,
-        'replacement': "<a href='$1' onclick=\"openTab('$1')\">$1</a>"
+        'replacement': "<a href='#' onclick=\"openTab('$1')\">$1</a>"
       },
       {
         //create hash search links
         'expression': /(#(\w*))((?=.*?<a)|(?!.*?<\/a>))/ig,
-        'replacement': "<a href='" + TwitterLib.URLS.SEARCH + "%23$2' onclick=\"openTab('" + TwitterLib.URLS.SEARCH + "%23$2')\">$1</a>"
+        'replacement': "<a href='#' onclick=\"openTab('" + TwitterLib.URLS.SEARCH + "%23$2')\">$1</a>"
       },
       {
         //create users links
         'expression': /(@(\w*))((?=.*?<a)|(?!.*?<\/a>))/ig,
-        'replacement': "@<a href='" + TwitterLib.URLS.BASE + "$2' onclick=\"openTab('" + TwitterLib.URLS.BASE + "$2')\">$2</a>"
+        'replacement': "@<a href='#' onclick=\"openTab('" + TwitterLib.URLS.BASE + "$2')\">$2</a>"
       },
       {
         //line breaks
@@ -516,13 +516,13 @@ var Renderer = {
 
     var from = null;
     if(tweet.source) {
-      from = tweet.source.replace(/(href=(['"])(.*?)\2)/i, "$1 onclick=\"openTab('$3')\"");
+      from = tweet.source.replace(/(href=(['"])(.*?)\2)/i, "onclick=\"openTab('$3')\"");
     }
 
     var inReply = null;
     if(tweet.in_reply_to_status_id) {
       var linkDst = TwitterLib.URLS.BASE + tweet.in_reply_to_screen_name + '/status/' + tweet.in_reply_to_status_id;
-      inReply = '<a href="' + linkDst + '" onclick="openTab(\'' + linkDst + '\')">in reply to ' + tweet.in_reply_to_screen_name + '</a> ';
+      inReply = '<a href="#" onclick="openTab(\'' + linkDst + '\')">in reply to ' + tweet.in_reply_to_screen_name + '</a> ';
     }
 
     var nameAttribute = OptionsBackend.get('name_attribute');
@@ -552,11 +552,11 @@ var Renderer = {
 
     str += '<div class="footer">';
     var statusLinkDst = TwitterLib.URLS.BASE + user.screen_name + '/status/' + tweetId;
-    str += '<a href="' + statusLinkDst + '" onclick="openTab(\'' + statusLinkDst + '\')"><span class="timestamp" title="' + Renderer.getTimestampAltText(tweet.created_at) + '">' + Renderer.getTimestampText(tweet.created_at) + '</span></a> ';
+    str += '<a href="#" onclick="openTab(\'' + statusLinkDst + '\')"><span class="timestamp" title="' + Renderer.getTimestampAltText(tweet.created_at) + '">' + Renderer.getTimestampText(tweet.created_at) + '</span></a> ';
     if(inReply) {
       str += inReply;
     } else if(tweet.retweeted_status) {
-      str += 'retweeted by <a href="' + TwitterLib.URLS.BASE + tweet.user.screen_name + '" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\');">' + tweet.user.screen_name + '</a> ';
+      str += 'retweeted by <a href="#" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\');">' + tweet.user.screen_name + '</a> ';
     }
     if(tweetManager.isRetweet(tweet.id)) {
       str += 'retweeted by me ';
