@@ -303,7 +303,6 @@ var Composer = {
       if(success) {
         var textArea = $("#compose_tweet_area textarea");
         var msg = textArea.val();
-        textArea.val("");
         Composer.replyId = null;
         Composer.textareaChanged();
         Composer.showComposeArea();
@@ -314,6 +313,7 @@ var Composer = {
         } else {
           loadTimeline(true, "home");
         }
+        textArea.val("");
       } else {
         $("#compose_tweet_area textarea").focus();
         Renderer.showError('Unexpected error ' + status + ' sending tweet.', 'Composer.sendTweet');
