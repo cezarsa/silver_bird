@@ -280,8 +280,10 @@ var Composer = {
     var availableChars = MAX_TWEET_SIZE - el.val().length;
     var charsLeftEl = $("#compose_tweet_area .chars_left");
     charsLeftEl.text(availableChars);
-    if(availableChars < 0) {
-      charsLeftEl.css('color', 'red');
+    if(availableChars < 0 || availableChars == MAX_TWEET_SIZE) {
+      if(availableChars < 0) {
+        charsLeftEl.css('color', 'red');
+      }
       $("#compose_tweet_area input[type='button']").attr("disabled", "disabled");
     } else {
       charsLeftEl.css('color', 'black');
