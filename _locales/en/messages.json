@@ -1,0 +1,35 @@
+{
+	"composeTweet": {
+		"message": "Compose tweet",
+		"description": "Text for composing new tweet"
+	},
+	"logout": {
+		"message": "Log out",
+		"description": "The text for the logout link"
+	},
+	"options": {
+		"message": "Options",
+		"description": "Options link"
+	},
+	"allRead": {
+		"message": "Mark all as read"
+	},
+	"newToken": {
+		"message": "Request another token"
+	},
+	"shortenerIdleString": {
+		"message": "Type a URL to make it shorter, or, click right here \u2192"
+	},
+	"timelineHome": {
+		"message": "Home",
+		"description": "The home timeline tab"
+	},
+	"timelineDM": {
+		"message": "DM",
+		"description": "The direct message timeline tab"
+	},
+	"timelineFavorites": {
+		"message": "Favorites",
+		"description": "The home timeline tab"
+	}
+}
