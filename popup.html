@@ -1016,6 +1016,11 @@ $(function() {
     }
   });
 });
+
+function writeMessage(msg)
+{
+  document.write(chrome.i18n.getMessage(msg));
+}
 </script>
 </head>
 <body>
@@ -1045,13 +1050,13 @@ $(function() {
   </div>
   <div id="compose_tweet" onclick="Composer.showComposeArea()">
     <img class="left" src="img/arrow_down.gif"/>
-    Compose Tweet
+    <script>writeMessage("composeTweet");</script>
     <img class="right" src="img/arrow_down.gif"/>
   </div>
 
   <span class="header_link_left">
-    <a href="javascript:signout()">Log out</a> |
-    <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))">Options</a>
+    <a href="javascript:signout()"><script>writeMessage("logout");</script></a> |
+    <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))"><script>writeMessage("options");</script></a>
   </span>
   <a class="header_link_right" href="javascript:Renderer.markAllAsRead();">Mark all as read</a>
   <img src="img/loading.gif" id="loading" style="display: none;"/>
