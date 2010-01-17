@@ -995,6 +995,18 @@ $(function() {
     return;
   }
   initializeWorkspace();
+
+  chrome.tabs.getAllInWindow(null, function(tabs) {
+    //Let's make it fullscreen if we're running it in an exclusive window.
+    if(tabs.length == 1 && tabs[0].url == chrome.extension.getURL('popup.html')) {
+      var resizeWindowFunc = function() {
+        var timelineHeight = window.innerHeight - 79;
+        $('.timeline').css('maxHeight', timelineHeight + 'px');
+      }
+      resizeWindowFunc();
+      $(window).resize(resizeWindowFunc);
+    }
+  });
 });
 </script>
 </head>
