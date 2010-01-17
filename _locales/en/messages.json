@@ -1,0 +1,14 @@
+{
+	"composeTweet": {
+		"message": "Compose tweet",
+		"description": "Text for composing new tweet"
+	},
+	"logout": {
+		"message": "Log out",
+		"description": "The text for the logout link"
+	},
+	"options": {
+		"message": "Options",
+		"description": "Options link"
+	}
+}
