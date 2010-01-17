@@ -325,7 +325,7 @@ var Composer = {
 }
 
 var Shortener = {
-  SHORTENER_IDLE_STR: 'Type a URL to make it shorter, or, click right here \u2192',
+  SHORTENER_IDLE_STR: chrome.i18n.getMessage("shortenerIdleString"),
 
   init: function() {
     var savedUrl = tweetManager.composerData.urlShortener;
@@ -886,13 +886,13 @@ function initializeWorkspace() {
     }
     var name = '';
     if(timelineId == 'home') {
-      name = 'Home';
+      name = chrome.i18n.getMessage("timelineHome");
     } else if(timelineId == 'mentions') {
       name = '@<span class="__username">';
     } else if(timelineId == 'dms') {
-      name = 'DM';
+      name = chrome.i18n.getMessage("timelineDM");
     } else if(timelineId == 'favorites') {
-      name = 'Favorites';
+      name = chrome.i18n.getMessage("timelineFavorites");
     }
     $("#tabs").tabs('add', '#timeline-' + timelineId, name);
   });
@@ -1002,7 +1002,7 @@ function writeMessage(msg)
     <a href="javascript:signout()"><script>writeMessage("logout");</script></a> |
     <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))"><script>writeMessage("options");</script></a>
   </span>
-  <a class="header_link_right" href="javascript:Renderer.markAllAsRead();">Mark all as read</a>
+  <a class="header_link_right" href="javascript:Renderer.markAllAsRead();"><script>writeMessage("allRead");</script></a>
   <img src="img/loading.gif" id="loading" style="display: none;"/>
   <div style="clear: both;"></div>
 
@@ -1020,7 +1020,7 @@ function writeMessage(msg)
   <input type="text" name="pin"><br>
   <input type="button" onclick="OAuth.registerPin();" value="Authorize!">
   <br><br>
-  <a href="javascript:OAuth.requestNewToken();">Request another token</a>
+  <a href="javascript:OAuth.requestNewToken();"><script>writeMessage("newToken");</script></a>
 </div>
 <div id="error_pin" style="display: none;">
 </div>
