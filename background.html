@@ -927,9 +927,9 @@ function checkVersionChanges(manifest) {
     /* experimental code, something can go wrong */
     console.log(e);
   }
-  initializeExtension();
 }
 
+initializeExtension();
 $.ajax({
   type: 'GET',
   url: 'manifest.json',
@@ -940,8 +940,12 @@ $.ajax({
     checkVersionChanges(data);
   },
   error: function (request, status, error) {
-    // Ugly hack, but currently Chrome is returning an error
-    checkVersionChanges(JSON.parse(request.responseText));
+    try {
+      // Ugly hack, but currently Chrome is returning an error
+      checkVersionChanges(JSON.parse(request.responseText));
+    } catch(e) {
+      /* ignoring */
+    }
   }
 });
 
