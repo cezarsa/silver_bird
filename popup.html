@@ -839,6 +839,8 @@ function signout() {
 }
 
 function newTweetsAvailable(count, unreadCount, timelineId) {
+  if(!window)
+    return;
   var currentTimeline = tweetManager.currentTimeline;
   if(timelineId != currentTimeline) {
     if(unreadCount == 0) {
@@ -895,6 +897,12 @@ function prepareAndLoadTimeline() {
 }
 
 function initializeWorkspace() {
+  $(window).unload(function() {
+    if(tweetManager) {
+      tweetManager.registerWarningsCallback(null);
+      tweetManager.registerNewTweetsCallback(null);
+    }
+  });
   tweetManager.registerNewTweetsCallback(newTweetsAvailable);
   $("#workspace").show();
   ThemeManager.init();

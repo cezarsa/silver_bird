@@ -463,7 +463,9 @@ TweetManager.prototype = {
   setWarning: function(msg) {
     this.warningMessage = msg;
     try {
-      this.warningCallback(msg);
+      if(this.warningCallback) {
+        this.warningCallback(msg);
+      }
     } catch(e) {
       /* ignoring, the popup window might be closed. */
     }
@@ -475,7 +477,7 @@ TweetManager.prototype = {
 
   registerWarningsCallback: function(callback) {
     this.warningsCallback = callback;
-    if(this.warningMessage) {
+    if(this.warningMessage && this.warningsCallback) {
       this.warningsCallback(this.warningMessage);
     }
   },
@@ -661,7 +663,9 @@ TweetManager.prototype = {
   notifyNewTweets: function(timelineId, size, unreadSize) {
     try {
       // The callback might be invalid (popup not active), so let's ignore errors for now.
-      this.newTweetsCallback(size, unreadSize, timelineId);
+      if(this.newTweetsCallback) {
+        this.newTweetsCallback(size, unreadSize, timelineId);
+      }
     } catch(e) { /* ignoring */ }
 
     this.updateAlert();
