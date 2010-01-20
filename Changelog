@@ -1,3 +1,10 @@
+1.4.9.1 (2010-01-20)
+(Emergency release due to 1.4.9 bugs, reverting to 1.4.8 adding only
+ the fix for the 'gray square' bug when opening the extension)
+
+1.4.9
+Buggy!
+
 1.4.8 (2010-01-10)
 (This version contains mostly bug fixes and stability improvements)
 
