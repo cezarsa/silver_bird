@@ -1,6 +1,6 @@
 {
   "name": "Chromed Bird",
-  "version": "1.4.8",
+  "version": "1.4.9",
   "description": "Chromed Bird is a Twitter extension that allows you to follow your timelines and interact with your Twitter account.",
   "default_locale": "en",
   "browser_action": {

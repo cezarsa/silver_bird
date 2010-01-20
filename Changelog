@@ -1,3 +1,20 @@
+1.4.9 (2010-01-19)
+(Another minor release with a few features and many bugfixes)
+
+* Allowing newlines in tweets (Thanks hyperlink!)
+* Allowing adding people to reply to by clicking their name or the reply icon
+* Linking timestamp to tweet's page
+* Adding option to display both nickname and real name
+* Updating jQuery to version 1.4
+* Groundwork on i18n (Thanks Ikke!)
+* Experimenting with running as a standalone app (chrome.exe --app=path/to/popup.html)
+* Fixing JQuery error loading background page (Thanks Naouak!)
+* Fixing styles for warnings on whispers theme (Thanks hyperlink!)
+* Fixing bug that caused the extension not to work right after opening Chrome
+* Fixing tabs not showing after being re-enabled
+* Fixing possible crash when submiting tweets with Ctrl-Enter
+* Noticing retweets that have been also retweeted by the user
+
 1.4.8 (2010-01-10)
 (This version contains mostly bug fixes and stability improvements)
 
