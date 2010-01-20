@@ -8,7 +8,6 @@
 <script type="text/javascript" src="lib/icon_creator.js"></script>
 
 <script>
-
 OptionsBackend = {
   defaultOptions: {
     home_refresh_interval: 90 * 1000,
@@ -929,15 +928,16 @@ function checkVersionChanges(manifest) {
           OptionsBackend.save(options);
         }
       }
+      //TODO: Maybe restart tweetManager
       localStorage['version'] = JSON.stringify(currentVersion);
     }
   } catch(e) {
     /* experimental code, something can go wrong */
     console.log(e);
   }
-  initializeExtension();
 }
 
+initializeExtension();
 $.ajax({
   type: 'GET',
   url: 'manifest.json',
@@ -948,8 +948,12 @@ $.ajax({
     checkVersionChanges(data);
   },
   error: function (request, status, error) {
-    // Ugly hack, but currently Chrome is returning an error
-    checkVersionChanges(JSON.parse(request.responseText));
+    try {
+      // Ugly hack, but currently Chrome is returning an error
+      checkVersionChanges(JSON.parse(request.responseText));
+    } catch(e) {
+      /* Something can go wrong, ignoring... */
+    }
   }
 });
 
