@@ -495,17 +495,17 @@ var Renderer = {
       {
         //create links
         'expression': /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig,
-        'replacement': "<a href='#' onclick=\"openTab('$1')\">$1</a>"
+        'replacement': "<a href='javascript:' onclick=\"javascript:openTab('$1')\">$1</a>"
       },
       {
         //create hash search links
-        'expression': /(#(\w*))((?=.*?<a)|(?!.*?<\/a>))/ig,
-        'replacement': "<a href='#' onclick=\"openTab('" + TwitterLib.URLS.SEARCH + "%23$2')\">$1</a>"
+        'expression': /(#(\w*))((?=([^<])*?<a)|(?!.*?<\/a>))/ig,
+        'replacement': "<a href='javascript:' onclick=\"javascript:openTab('" + TwitterLib.URLS.SEARCH + "%23$2')\">$1</a>"
       },
       {
         //create users links
-        'expression': /(@(\w*))((?=.*?<a)|(?!.*?<\/a>))/ig,
-        'replacement': "@<a href='#' onclick=\"openTab('" + TwitterLib.URLS.BASE + "$2')\">$2</a>"
+        'expression': /(@(\w*))((?=([^<])*?<a)|(?!.*?<\/a>))/ig,
+        'replacement': "@<a href='javascript:' onclick=\"javascript:openTab('" + TwitterLib.URLS.BASE + "$2')\">$2</a>"
       },
       {
         //line breaks
