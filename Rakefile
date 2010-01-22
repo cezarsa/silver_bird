@@ -2,6 +2,7 @@ require 'crxmake'
 
 module Constants
   KEY_FILE = "../chromed_bird.pem"
+  BETA_KEY_FILE = "../chromed_bird_beta.pem"
   IGNORE_DIR = /\.git/
   IGNORE_FILE = /Rakefile|\.gitignore|.*\.crx$|.*\.zip$/
 end
@@ -11,29 +12,45 @@ def current_branch
   current_branch = $1
 end
 
-task :default => [:pack]
+def get_filename(extension, ext)
+  "./chromed_bird_#{extension.id}_#{extension.version}_#{current_branch}.#{ext}"
+end
 
-task :pack do
-  CrxMake.make(
+def make_crx(key_file)
+  crxmake_hash = {
     :ex_dir => ".",
-    :pkey => Constants::KEY_FILE,
+    :pkey => key_file,
     :verbose => false,
     :ignorefile => Constants::IGNORE_FILE,
     :ignoredir => Constants::IGNORE_DIR
-  ) do |extension|
-    "./chromed_bird_#{extension.id}_#{extension.version}_#{current_branch}.crx"
+  }
+  CrxMake.make(crxmake_hash) do |extension|
+    get_filename(extension, 'crx')
   end
 end
 
+task :default => :'pack:default'
+
+namespace :pack do
+  desc 'pack extension using main key'
+  task :default do
+    make_crx(Constants::KEY_FILE)
+  end
+
+  desc 'pack extension using beta key'
+  task :beta do
+    make_crx(Constants::BETA_KEY_FILE)
+  end
+
+  desc 'pack extension using a generated key'
+  task :random do
+    make_crx(Constants::BETA_KEY_FILE)
+  end
+end
+
+desc 'generate zip file for extension gallery'
 task :zip do
-  CrxMake.zip(
-    :ex_dir => ".",
-    :pkey => Constants::KEY_FILE,
-    :zip_output => "./chromed_bird.zip",
-    :verbose => false,
-    :ignorefile => Constants::IGNORE_FILE,
-    :ignoredir => Constants::IGNORE_DIR
-  ) do |extension|
-    "./chromed_bird_#{extension.id}_#{extension.version}_#{current_branch}.zip"
+  CrxMake.zip(@crxmake_hash) do |extension|
+    get_filename(extension, 'zip')
   end
 end
