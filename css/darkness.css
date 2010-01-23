@@ -3,6 +3,14 @@ input[type='text'] {
   border: 1px solid #882;
 }
 
+#warning {
+	background-color: #000;	
+	color: #eee;
+	padding: 5px;
+	border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
 #shortener_button div {
   border-bottom-left-radius: 5px 5px;
   border-bottom-right-radius: 5px 5px;
