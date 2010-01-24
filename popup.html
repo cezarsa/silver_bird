@@ -245,7 +245,7 @@ var Composer = {
     var textArea = $("#compose_tweet_area textarea");
     var currentVal = textArea.val();
     var user = $(".user", node).attr('screen_name');
-    var replies = [];    
+    var replies = [];
     if (reply_all) {
       $(".text a", node).each(function(){
         var t = $(this).text();
