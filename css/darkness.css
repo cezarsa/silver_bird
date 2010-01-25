@@ -41,6 +41,11 @@ input[type='text'] {
 	margin-left: 5px;
 }
 
+.chars_left {
+	color: #eee !important;
+	margin-right:5px;
+}
+
 .tab_modifier {
 	background-color: transparent;
 }
