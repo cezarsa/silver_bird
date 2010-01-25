@@ -246,10 +246,11 @@ var Composer = {
     var currentVal = textArea.val();
     var user = $(".user", node).attr('screen_name');
     var replies = [];
+    var ownName = tweetManager.twitterBackend.username();
     if (reply_all) {
       $(".text a", node).each(function(){
         var t = $(this).text();
-        if (/^[A-Z0-9_-]{1,15}$/ig.test(t)) {
+        if (t !== ownName && /^[A-Z0-9_-]{1,15}$/ig.test(t)) {
           replies.push('@'+t+' ');
         }
       });
