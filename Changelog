@@ -1,3 +1,13 @@
+1.5.0 (2010-01-24)
+
+* Re-enabling 1.4.9 fixes and features
+* Added an awesome new theme: "Darkness" (Thank you Xiaoxin Lu [hyperlink])
+* Added option to reply to all people mentioned in a tweet. You'll
+  need to enable it in the options page. (Thanks to Xiaoxin Lu)
+* Fixing @mentions and #hashtags links for some specific cases
+* Fixing bug that caused timeline to stop updating with jQuery 1.4
+* Added some dev scripts to make it easier to pack the extension
+
 1.4.9.1 (2010-01-20)
 (Emergency release due to 1.4.9 bugs, reverting to 1.4.8 adding only
  the fix for the 'gray square' bug when opening the extension.

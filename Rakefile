@@ -16,14 +16,17 @@ def get_filename(extension, ext)
   "./chromed_bird_#{extension.id}_#{extension.version}_#{current_branch}.#{ext}"
 end
 
+@crxmake_hash = {
+  :ex_dir => ".",
+  :pkey => Constants::KEY_FILE,
+  :verbose => false,
+  :ignorefile => Constants::IGNORE_FILE,
+  :ignoredir => Constants::IGNORE_DIR
+}
+
 def make_crx(key_file)
-  crxmake_hash = {
-    :ex_dir => ".",
-    :pkey => key_file,
-    :verbose => false,
-    :ignorefile => Constants::IGNORE_FILE,
-    :ignoredir => Constants::IGNORE_DIR
-  }
+  crxmake_hash = @crxmake_hash.dup
+  crxmake_hash[pkey] = key_file
   CrxMake.make(crxmake_hash) do |extension|
     get_filename(extension, 'crx')
   end
@@ -44,7 +47,7 @@ namespace :pack do
 
   desc 'pack extension using a generated key'
   task :random do
-    make_crx(Constants::BETA_KEY_FILE)
+    make_crx(nil)
   end
 end
 
