@@ -244,7 +244,7 @@ var Composer = {
 
     var textArea = $("#compose_tweet_area textarea");
     var currentVal = textArea.val();
-    var user = $(".user", node).attr('screen_name');
+    var user = $(".user", node).attr('screen_name');    
     var replies = [];
     var ownName = tweetManager.twitterBackend.username();
     if (reply_all) {
@@ -597,7 +597,7 @@ var Renderer = {
       str += 'retweeted by me ';
     }
     if(from) {
-      str += 'from ' + from;
+      str += '<span class="from_app">from ' + from + '</span>';
     }
     str += '</div></div>';
 
@@ -1014,6 +1014,9 @@ $(function() {
     }
     return;
   }
+  
+  console.log('executed!');
+  
   initializeWorkspace();
 
   chrome.tabs.getAllInWindow(null, function(tabs) {
