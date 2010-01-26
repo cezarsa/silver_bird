@@ -819,6 +819,10 @@ function openTab(tabUrl) {
 var loadingNewTweets = false;
 
 function onTimelineRetrieved(tweets, timelineId) {
+  if(!window) {
+    //Sanity check, popup might be closed.
+    return;
+  }
   $("#loading").hide();
   if(tweets) {
     Paginator.needsMore = false;
@@ -851,8 +855,10 @@ function signout() {
 }
 
 function newTweetsAvailable(count, unreadCount, timelineId) {
-  if(!window)
+  if(!window) {
+    //Sanity check, popup might be closed.
     return;
+  }
   var currentTimeline = tweetManager.currentTimeline;
   if(timelineId != currentTimeline) {
     if(unreadCount == 0) {

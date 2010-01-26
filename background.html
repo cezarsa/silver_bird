@@ -231,8 +231,17 @@ TweetsTimeline.prototype = {
         this.tweetsCache.push(tweets[i]);
       }
     }
-    this.currentCallback(this.tweetsCache, this.timelineId);
+
+    // Let's clean this.currentCallback before calling it as
+    // there might be unexpected errors and this should not block
+    // the extension.
+    var callback = this.currentCallback;
     this.currentCallback = null;
+    try {
+      callback(this.tweetsCache, this.timelineId);
+    } catch(e) {
+      /* ignoring exception, popup might be closed */
+    }
 
     if(this.firstRun) {
       this.firstRun = false;
