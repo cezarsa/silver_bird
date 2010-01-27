@@ -30,6 +30,7 @@ OptionsBackend = {
     base_signing_url: 'http://twitter.com/',
     base_authorize_url: 'https://twitter.com/oauth/authorize?oauth_token=',
 
+    use_desktop_notifications: false,
     home_on_page: false,
     home_icon: true,
     mentions_on_page: true,
@@ -132,8 +133,12 @@ TweetsTimeline.prototype = {
     this.timelinePath = path;
   },
 
-  stopTimer: function() {
+  killTimeline: function() {
     this.timelineStopped = true;
+    this.stopTimer();
+  },
+
+  stopTimer: function() {
     if(this.timerId) {
       clearTimeout(this.timerId);
       this.timerId = null;
@@ -619,8 +624,25 @@ TweetManager.prototype = {
       chrome.browserAction.setBadgeText({text: '' + totalUnreadNewCount});
     }
     if(unreadNewTweets.length > 0) {
-      this.injectTweets = unreadNewTweets;
+      this.showTweetsNotifications(unreadNewTweets);
+    }
+  },
 
+  showTweetsNotifications: function(tweetsToNotify, forceOnPage) {
+    this.injectTweets = tweetsToNotify;
+
+    if(!forceOnPage && OptionsBackend.get('use_desktop_notifications')) {
+      try {
+        var notificationCenter = window.notifications || window.webkitNotifications;
+        var notification = notificationCenter.createHTMLNotification(
+          chrome.extension.getURL('tweets_notifier.html')
+        );
+        notification.show();
+      } catch(e) {
+        // Fallback to 'on page' notifications
+        this.showTweetsNotifications(tweetsToNotify, true);
+      }
+    } else {
       var injectHelper = function(action, file, allFrames, callback) {
         var method;
         if(action == 'script') {
@@ -853,7 +875,7 @@ TweetManager.prototype = {
 
   stopAll: function() {
     this.eachTimeline(function(timeline) {
-      timeline.stopTimer();
+      timeline.killTimeline();
       delete timeline;
     });
   },
@@ -990,7 +1012,15 @@ function initializeExtension() {
   var selectedResponse = null;
   var biggestArea = -1;
   chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-    if(request.cb_requesting_tweets) {
+    if(request.cb_requesting_tweets_immediate) {
+      sendResponse({
+        tweets: TweetManager.instance.injectTweets,
+        nameAttribute: OptionsBackend.get('name_attribute'),
+        extensionId: location.host,
+        fadeTimeout: OptionsBackend.get('notification_fade_timeout')
+      });
+      TweetManager.instance.injectTweets = null;
+    } else if(request.cb_requesting_tweets) {
       if(waitingFirstRequest) {
         waitingFirstRequest = false;
         setTimeout(function() {
