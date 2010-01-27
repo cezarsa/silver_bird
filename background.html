@@ -418,7 +418,6 @@ function TweetManager() {
   this.iconImg = null;
   this.listsCache = null;
   this.listsTabCount = OptionsBackend.get('lists_count');
-  this.loadIcon();
 
   var timelineNames = ["home", "mentions", "dms", "favorites", "lists"];
   for(var i = 0; i < timelineNames.length; ++i) {
@@ -446,6 +445,8 @@ function TweetManager() {
   this.warningMessage = null;
   this.autoClearWarning = false;
   this.tooManyHitsCount = 0;
+
+  this.initIconAndAlerts();
 
   var _this = this;
   this.twitterBackend = new TwitterLib(OptionsBackend.get('request_timeout'),
@@ -564,12 +565,13 @@ TweetManager.prototype = {
     localStorage['timeline_order'] = JSON.stringify(sortedTimelinesArray);
   },
 
-  loadIcon: function() {
+  initIconAndAlerts: function() {
     var $icon = $('<img>').attr('src', 'img/icon19.png');
-    $icon.load(function() {
-      chrome.browserAction.setIcon({imageData: IconCreator.paintIcon(this, OptionsBackend.get('idle_color'))});
-    });
     this.iconImg = $icon[0];
+    var _this = this;
+    $icon.load(function() {
+      _this.updateAlert();
+    });
   },
 
   unique: function(srcList) {
