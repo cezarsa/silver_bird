@@ -708,18 +708,22 @@ var Renderer = {
       return "less than 1 minute ago";
     } else if(diff < 60 * 60) {
       var minutes = parseInt(diff / 60);
-      return minutes + " minute" + ((minutes > 1) ? "s" : "") + " ago";
+      var minute_string = minutes > 1 ? "minute_plural" : "minute_singular";
+      return chrome.i18n.getMessage('minutes', [minutes, chrome.i18n.getMessage(minute_string)]);
     } else if(diff < 60 * 60 * 24) {
       var hours = parseInt(diff / (60 * 60));
-      return "about " + hours + " hour" + ((hours > 1) ? "s" : "") + " ago";
+      var hour_string = hours > 1 ? "hour_plural" : "hour_singular";
+      return chrome.i18n.getMessage("timeAgo", [hours, chrome.i18n.getMessage(hour_string)]);
     } else if(diff < 60 * 60 * 24 * 30) {
       var days = parseInt(diff / (60 * 60 * 24));
-      return "about " + days + " day" + ((days > 1) ? "s" : "") + " ago";
+      var day_string = days > 1 ? "day_plural" : "day_singular";
+      return chrome.i18n.getMessage("timeAgo", [days, chrome.i18n.getMessage(day_string)]);
     } else if(diff < 60 * 60 * 24 * 30 * 12) {
       var months = parseInt(diff / (60 * 60 * 24 * 30));
-      return "about " + months + " month" + ((months > 1) ? "s" : "") + " ago";
+      var month_string = months > 1 ? "month_plural" : "month_singular";
+      return chrome.i18n.getMessage("timeAgo", [months, chrome.i18n.getMessage(month_string)]);
     } else {
-      return "years ago";
+      return chrome.i18n.getMessage("yearsAgo");
     }
   },
 

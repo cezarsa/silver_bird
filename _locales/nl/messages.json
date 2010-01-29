@@ -1,36 +1,36 @@
 {
 	"composeTweet": {
-		"message": "Compose tweet",
+		"message": "Tweet samenstellen",
 		"description": "Text for composing new tweet"
 	},
 	"logout": {
-		"message": "Log out",
+		"message": "Uitloggen",
 		"description": "The text for the logout link"
 	},
 	"options": {
-		"message": "Options",
+		"message": "Opties",
 		"description": "Options link"
 	},
 	"allRead": {
-		"message": "Mark all as read"
+		"message": "Alles als gelezen markeren"
 	},
 	"newToken": {
-		"message": "Request another token"
+		"message": "Een nieuwe token aanvragen"
 	},
 	"shortenerIdleString": {
-		"message": "Type a URL to make it shorter, or, click right here \u2192"
+		"message": "Type een URL om het korter te maken of klik rechts hier \u2192"
 	},
 	"timelineHome": {
 		"message": "Home",
-		"description": "The home time line tab"
+		"description": "The home timeline tab"
 	},
 	"timelineDM": {
 		"message": "DM",
-		"description": "The direct message time line tab"
+		"description": "The direct message timeline tab"
 	},
 	"timelineFavorites": {
-		"message": "Favorites",
-		"description": "The home time line tab"
+		"message": "Favorieten",
+		"description": "The home timeline tab"
 	},
 	"oAuthError": {
 		"message": "The following error occurred trying to authenticate: $errorMessage$. Please, <a href=\"javascript:OAuth.requestNewToken();\">click here to restart the authentication process</a>",
@@ -41,31 +41,31 @@
 		}
 	},
 	"justNow": {
-		"message": "just now"
+		"message": "kort geleden"
 	},
 	"minuteAgo": {
-		"message": "a minute ago"
+		"message": "minder dan een minuut geleden"
 	},
 	"minutes": {
-		"message": "$nr_of_minutes$ $minutes$ ago",
+		"message": "$nr_of_minutes$ $minute_string$ geleden",
 		"placeholders": {
 			"nr_of_minutes":{
 				"content": "$1"
 			},
-			"minutes": {
+			"minute_string": {
 				"content": "$2",
 				"example": "minute or minutes (singular / plural)"
 			}
 		}
 	},
 	"minute_singular": {
-		"message": "minute"
+		"message": "minuut"
 	},
 	"minute_plural": {
-		"message": "minutes"
+		"message": "minuten"
 	},
 	"timeAgo": {
-		"message": "about $time$ $time_string$ ago",
+		"message": "ongeveer $time$ $time_string$ geleden",
 		"placeholders": {
 			"time": {
 				"content": "$1"
@@ -76,24 +76,24 @@
 		}
 	},
 	"hour_singular": {
-		"message": "hour"
+		"message": "uur"
 	},
 	"hour_plural": {
-		"message": "hours"
+		"message": "uren"
 	},
 	"day_singular": {
-		"message": "day"
+		"message": "dag"
 	},
 	"day_plurar": {
-		"message": "days"
+		"message": "dagen"
 	},
 	"month_singular": {
-		"message": "month"
+		"message": "maand"
 	},
 	"month_plural": {
-		"message": "months"
+		"message": "maanden"
 	},
 	"yearsAgo": {
-		"message": "yearsAgo"
+		"message": "jaren geleden"
 	}
 }
