@@ -176,13 +176,15 @@ $(function() {
     var desc = SHORTENERS_BACKEND[key].desc;
     $("select[name='url_shortener']").append($("<option>").attr('value', key).text(desc));
   }
-  $("select[name='url_shortener']").change(function() {
-    if(this.value=='bitly' || this.value=='jmp') {
+
+  var onShortenerChange = function() {
+    var shortenerSelect = $("select[name='url_shortener']")[0]
+    if(shortenerSelect.value=='bitly' || shortenerSelect.value=='jmp') {
       $("#shortener_opts").show();
     } else {
       $("#shortener_opts").hide();
     }
-  });
+  };
   var onShortenerAcctClick = function() {
     if($("input[name='shortener_acct']").attr('checked')) {
       $("input[name='shortener_login']").removeAttr('disabled');
@@ -192,6 +194,7 @@ $(function() {
       $("input[name='shortener_key']").val('').attr('disabled', 'disabled');
     }
   };
+  $("select[name='url_shortener']").change(onShortenerChange);
   $("input[name='shortener_acct']").click(onShortenerAcctClick);
 
   $('canvas.color_selector').ColorPicker({
@@ -202,10 +205,11 @@ $(function() {
     }
   });
   options.load();
+  onShortenerChange();
   onShortenerAcctClick();
 
   updatePredictedHitsCount();
-  var timelines = ['home', 'mentions', 'dms', 'lists', 'favorites'];
+  var timelines = ['unified', 'home', 'mentions', 'dms', 'lists', 'favorites'];
   for(var i = 0; i < timelines.length; ++i) {
     $('table.timelines input, table.timelines select')
       .keyup(updatePredictedHitsCount)
@@ -218,13 +222,22 @@ $(function() {
 function updatePredictedHitsCount() {
   var timelines = ['home', 'mentions', 'dms', 'lists', 'favorites'];
   var totalHits = 0;
+  var unifiedVisible = $('input[name="unified_visible"]').is(':checked');
   for(var i = 0; i < timelines.length; ++i) {
+    var inputUnifiedEl = $('input[name="' +  timelines[i] + '_include_unified"]');
+    if(!unifiedVisible) {
+      inputUnifiedEl.attr('disabled', 'disabled');
+    } else {
+      inputUnifiedEl.removeAttr('disabled');
+    }
     var inputVisibleEl = $('input[name="' +  timelines[i] + '_visible"]');
-    if(!inputVisibleEl.is(':checked')) {
+    if(!inputVisibleEl.is(':checked') && !(unifiedVisible && inputUnifiedEl.is(':checked'))) {
       continue;
     }
-    var inputEl = $('input[name="' +  timelines[i] + '_refresh_interval"]');
-    var intVal = parseInt(inputEl.val());
+
+
+    var inputRefreshEl = $('input[name="' +  timelines[i] + '_refresh_interval"]');
+    var intVal = parseInt(inputRefreshEl.val());
     var timelineHits = (60 * 60 * 1000) / intVal;
     var timelineCount = $('select[name="' +  timelines[i] + '_count"]').val() || 1;
     totalHits += timelineHits * timelineCount;
@@ -282,7 +295,7 @@ function updatePredictedHitsCount() {
     <label for="reply_all">Reply to all mentioned:</label>
     <input type="checkbox" id="reply_all" name="reply_all" />
     <br />
-    
+
     <label>*Icon color:</label>
     <canvas name="idle_color" width="19" height="19" class="color_selector"></canvas>
   </fieldset>
@@ -353,23 +366,34 @@ function updatePredictedHitsCount() {
         <th>*Visible</th>
         <th>*Refresh Interval (ms)</th>
         <th>*Tabs Count</th>
+        <th>*Include in unified timeline</th>
+      <tr>
+        <td class="label">Unified Timeline:</td>
+        <td><input type="checkbox" name="unified_visible"></td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+      </tr>
       <tr>
         <td class="label">Home:</td>
         <td><input type="checkbox" name="home_visible"></td>
         <td><input type="text" name="home_refresh_interval" validator="required,number,minRefresh"></td>
         <td>1</td>
+        <td><input type="checkbox" name="home_include_unified"></td>
       </tr>
       <tr>
         <td class="label">Mentions:</td>
         <td><input type="checkbox" name="mentions_visible"></td>
         <td><input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh"></td>
         <td>1</td>
+        <td><input type="checkbox" name="mentions_include_unified"></td>
       </tr>
       <tr>
         <td class="label">DM:</td>
         <td><input type="checkbox" name="dms_visible"></td>
         <td><input type="text" name="dms_refresh_interval" validator="required,number,minRefresh"></td>
         <td>1</td>
+        <td><input type="checkbox" name="dms_include_unified"></td>
       </tr>
       <tr>
         <td class="label">Lists:</td>
@@ -384,12 +408,14 @@ function updatePredictedHitsCount() {
             <option value="5">5</option>
           </select>
         </td>
+        <td><input type="checkbox" name="lists_include_unified"></td>
       </tr>
       <tr>
         <td class="label">Favorites:</td>
         <td><input type="checkbox" name="favorites_visible"></td>
         <td><input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh"></td>
         <td>1</td>
+        <td><input type="checkbox" name="favorites_include_unified"></td>
       </tr>
     </table>
   </fieldset>

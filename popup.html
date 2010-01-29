@@ -244,7 +244,7 @@ var Composer = {
 
     var textArea = $("#compose_tweet_area textarea");
     var currentVal = textArea.val();
-    var user = $(".user", node).attr('screen_name');    
+    var user = $(".user", node).attr('screen_name');
     var replies = [];
     var ownName = tweetManager.twitterBackend.username();
     if (reply_all) {
@@ -955,6 +955,8 @@ function initializeWorkspace() {
       name = 'DM';
     } else if(timelineId == 'favorites') {
       name = 'Favorites';
+    } else if(timelineId == 'unified') {
+      name = 'Unified';
     }
     $("#tabs").tabs('add', '#timeline-' + timelineId, name);
   });
@@ -1020,9 +1022,9 @@ $(function() {
     }
     return;
   }
-  
+
   console.log('executed!');
-  
+
   initializeWorkspace();
 
   chrome.tabs.getAllInWindow(null, function(tabs) {
