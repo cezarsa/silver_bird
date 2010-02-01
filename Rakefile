@@ -26,7 +26,7 @@ end
 
 def make_crx(key_file)
   crxmake_hash = @crxmake_hash.dup
-  crxmake_hash[pkey] = key_file
+  crxmake_hash[:pkey] = key_file
   CrxMake.make(crxmake_hash) do |extension|
     get_filename(extension, 'crx')
   end
