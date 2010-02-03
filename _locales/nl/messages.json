@@ -84,7 +84,7 @@
 	"day_singular": {
 		"message": "dag"
 	},
-	"day_plurar": {
+	"day_plural": {
 		"message": "dagen"
 	},
 	"month_singular": {
