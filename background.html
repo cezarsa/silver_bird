@@ -109,9 +109,10 @@ Utils = {
   }
 };
 
-function UnifiedTweetsTimeline(manager, timelines) {
+function UnifiedTweetsTimeline(timelines) {
   this.timelines = timelines;
   this.timelineId = 'unified';
+  this.currentScroll = 0;
 }
 UnifiedTweetsTimeline.prototype = {
 
@@ -335,7 +336,7 @@ TweetsTimeline.prototype = {
     }
 
     if(tweets.length > 0) {
-      this.manager.notifyNewTweets(this.timelineId, this.newTweetsCache.length, unreadLength);
+      this.manager.notifyNewTweets();
     }
     if(context.onFinish)
       context.onFinish(tweets.length);
@@ -571,25 +572,19 @@ function TweetManager() {
   this.listsCache = null;
   this.listsTabCount = OptionsBackend.get('lists_count');
 
-  this.listIncludeInUnified = false;
-  var unifiedVisible = OptionsBackend.get('unified_visible');
-  var createUnifiedTab = false;
+  this.unifiedVisible = OptionsBackend.get('unified_visible');
   var timelineNames = ["home", "mentions", "dms", "favorites", "lists"];
   for(var i = 0; i < timelineNames.length; ++i) {
     var refreshInterval = OptionsBackend.get(timelineNames[i] + '_refresh_interval');
     var visible = OptionsBackend.get(timelineNames[i] + '_visible');
     var includeInUnified = false;
-    if(unifiedVisible) {
+    if(this.unifiedVisible) {
       includeInUnified = OptionsBackend.get(timelineNames[i] + '_include_unified');
     }
     if(!visible && !includeInUnified) {
       continue;
     }
-    if(includeInUnified) {
-      createUnifiedTab = true;
-    }
     if(timelineNames[i] == "lists") {
-      this.listIncludeInUnified = includeInUnified;
       for(var j = 0; j < this.listsTabCount; ++j) {
         var listTimeline = new TweetsTimeline("lists_" + j, this, refreshInterval);
         listTimeline.includeInUnified = includeInUnified;
@@ -605,8 +600,9 @@ function TweetManager() {
     }
   }
 
-  if(createUnifiedTab) {
-    this.timelines['unified'] = new UnifiedTweetsTimeline(this, this.timelines);
+  if(this.unifiedVisible) {
+    this.timelines['unified'] = new UnifiedTweetsTimeline(this.timelines);
+    this.currentTimeline = 'unified';
   }
 
   this.lastAvailableHits = null;
@@ -674,7 +670,7 @@ TweetManager.prototype = {
   },
 
   getSelectedLists: function() {
-    var selectedListsStr = localStorage['selected_lists']
+    var selectedListsStr = localStorage['selected_lists'];
     if(selectedListsStr) {
       return JSON.parse(selectedListsStr);
     }
@@ -854,11 +850,7 @@ TweetManager.prototype = {
   readTweet: function(id) {
     this.readTweets[id] = true;
     delete this.unreadTweets[id];
-    var _this = this;
-    this.eachTimeline(function(timeline) {
-      var newTweets = timeline.newTweetsCount();
-      _this.notifyNewTweets(this, newTweets[0], newTweets[1]);
-    });
+    this.notifyNewTweets();
   },
 
   isTweetRead: function(id) {
@@ -869,13 +861,17 @@ TweetManager.prototype = {
     return this.retweets[id];
   },
 
-  notifyNewTweets: function(timelineId, size, unreadSize) {
-    try {
-      // The callback might be invalid (popup not active), so let's ignore errors for now.
-      if(this.newTweetsCallback) {
-        this.newTweetsCallback(size, unreadSize, timelineId);
-      }
-    } catch(e) { /* ignoring */ }
+  notifyNewTweets: function() {
+    if(this.newTweetsCallback) {
+      var _this = this;
+      this.eachTimeline(function(timeline) {
+        var newTweets = timeline.newTweetsCount();
+        try {
+          // The callback might be invalid (popup not active), so let's ignore errors for now.
+          _this.newTweetsCallback(newTweets[0], newTweets[1], timeline.timelineId);
+        } catch(e) { /* ignoring */ }
+      });
+    }
 
     this.updateAlert();
   },
@@ -977,7 +973,7 @@ TweetManager.prototype = {
       delete this.timelines[timelineName];
       timeline = this.timelines[timelineName] = new TweetsTimeline(timelineName, this, OptionsBackend.get('lists_refresh_interval'));
     }
-    timeline.includeInUnified = this.listIncludeInUnified;
+    timeline.includeInUnified = this.unifiedVisible && OptionsBackend.get('lists_include_unified');
     timeline.listId = listId;
     timeline.setTimelinePath(this.twitterBackend.username() + '/lists/' + listId + '/statuses');
     return timeline;

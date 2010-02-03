@@ -544,6 +544,8 @@ var Renderer = {
     }
     text = this.transformTweetText(text);
 
+    var tweetTimeline = tweet.timelineId || tweetManager.currentTimeline;
+
     var tweetClass = 'tweet';
     if(!tweetManager.isTweetRead(tweet.id)) {
       tweetClass += ' unread';
@@ -602,7 +604,7 @@ var Renderer = {
     str += '</div></div>';
 
     str += '<div class="new_actions">';
-    if(tweetManager.currentTimeline != "dms") {
+    if(tweetTimeline != "dms") {
       if(tweet.favorited) {
         str += '<img src="img/star_hover.png" title="Unmark as favorite" class="starred" onclick="Composer.unFavorite(this.parentNode.parentNode);"></img><br>';
       } else {
@@ -618,7 +620,7 @@ var Renderer = {
       if(tweetManager.isRetweet(tweet.id)) {
         //TODO: undo retweet
       } else {
-        if(tweetManager.currentTimeline != "dms") {
+        if(tweetTimeline != "dms") {
           str += '<img src="img/rt.png" title="Retweet" onclick="Composer.retweet(this.parentNode.parentNode)"></img><br>';
           str += '<div class="rt_confirm">Retweet this message: <a href="javascript:Composer.confirmRT();">Yes</a> <a href="javascript:Composer.denyRT();">No</a></div>';
         }
@@ -894,20 +896,25 @@ function loadNewTweets() {
 
 function prepareAndLoadTimeline() {
   $("#update_tweets").hide();
-  var currentTimeline = tweetManager.currentTimeline;
 
-  tweetManager.eachTimeline(function(timeline) {
-    var timelineId = this;
+  var updateNotificationFunc = function(timeline, isCurrent) {
+    var timelineId = timeline.timelineId;
     var newTweetsInfo = tweetManager.newTweetsCount(timelineId);
     var newTweetsCount = newTweetsInfo[0];
     if(newTweetsCount > 0) {
-      if(currentTimeline == timelineId &&
-          timeline.currentScroll == 0) {
+      if(isCurrent) {
         tweetManager.updateNewTweets();
         $("#tab_modifier_" + timelineId).remove();
       } else {
         newTweetsAvailable(newTweetsCount, newTweetsInfo[1], timelineId);
       }
+    }
+  };
+
+  updateNotificationFunc(tweetManager.getCurrentTimeline(), true);
+  tweetManager.eachTimeline(function(timeline) {
+    if(timeline.timelineId != tweetManager.currentTimeline) {
+      updateNotificationFunc(timeline, false);
     }
   });
 

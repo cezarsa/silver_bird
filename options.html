@@ -61,6 +61,11 @@ function Options() {
         }
       }
     });
+    var validInfo = Validator.global();
+    if(validInfo !== true) {
+      hasErrors = true;
+      this.addValidationError(null, validInfo);
+    }
     if(!hasErrors) {
       $('input,select,canvas.color_selector').each(function() {
         var $this = $(this);
@@ -88,7 +93,11 @@ function Options() {
 
   this.addValidationError = function($el, error) {
     var errorEl = $("<span>").attr('class', 'error').html(error);
-    $el.after(errorEl);
+    if($el) {
+      $el.after(errorEl);
+    } else {
+      $("#buttons_area").before(errorEl);
+    }
   };
 
   this.clearErrors = function() {
@@ -100,7 +109,21 @@ function Options() {
 /* ---- validation ---- */
 Validator = {
   global: function() {
-
+    var atLeastOneVisible = false;
+    $("input[type='checkbox']").each(function() {
+      var isVisibleCheck = $(this).attr('name').match(/_visible$/);
+      if(isVisibleCheck) {
+        var checked = $(this).is(":checked");
+        if(checked) {
+          atLeastOneVisible = true;
+          return false;
+        }
+      }
+    });
+    if(!atLeastOneVisible) {
+      return 'You should select at least one timeline as visible.';
+    }
+    return true;
   },
 
   required: function ($el) {
@@ -134,6 +157,27 @@ Validator = {
       return true;
     }
     return 'It should be a valid URL.';
+  },
+
+  unifiedValidator: function($el) {
+    if(!$el.is(":checked")) {
+      return true;
+    }
+    var atLeastOneSelected = false;
+    $("input[type='checkbox']").each(function() {
+      var isIncludeUnifiedCheck = $(this).attr('name').match(/include_unified$/);
+      if(isIncludeUnifiedCheck) {
+        var checked = $(this).is(":checked");
+        if(checked) {
+          atLeastOneSelected = true;
+          return false;
+        }
+      }
+    });
+    if(!atLeastOneSelected) {
+      return 'You should select at least one timeline to compose the unified timeline.';
+    }
+    return true;
   }
 }
 /* ---- end validation ---- */
@@ -369,7 +413,7 @@ function updatePredictedHitsCount() {
         <th>*Include in unified timeline</th>
       <tr>
         <td class="label">Unified Timeline:</td>
-        <td><input type="checkbox" name="unified_visible"></td>
+        <td><input type="checkbox" name="unified_visible" validator="unifiedValidator"></td>
         <td>-</td>
         <td>-</td>
         <td>-</td>
@@ -441,9 +485,11 @@ function updatePredictedHitsCount() {
   </fieldset>
 
   <br>
-  <input type="button" value="Save" onclick="options.save();">
-  <input type="button" value="Reset" onclick="options.load();">
-  <input type="button" value="Reset to default" onclick="options.loadDefaults();">
+  <div id="buttons_area">
+    <input type="button" value="Save" onclick="options.save();">
+    <input type="button" value="Reset" onclick="options.load();">
+    <input type="button" value="Reset to default" onclick="options.loadDefaults();">
+  </div>
 </div>
 
 </body>
