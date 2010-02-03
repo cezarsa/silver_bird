@@ -1,3 +1,15 @@
+1.5.1 (2010-02-01)
+(Mostly bugfixes, major release coming next weekend)
+
+Fixed issue causing tweets to stop updating when closing the popup window while scrolling down
+Fixed issue that caused API hits even after logging out
+Proper initializing badge text to avoid stalled new tweets count
+Groundwork for using desktop notification (still disabled and not in the options page)
+New url shortener: twieat.us (Thanks Edward J. Yoon)
+Fixed issue causing reply all feature to include user's own screenname to the tweet (Thanks Xiaoxin Lu [hyperlink])
+Added custom scrollbars to darkness theme (Thanks hyperlink)
+Fixed darkness theme where character counter was not visible (Thanks hyperlink)
+
 1.5.0 (2010-01-24)
 
 * Re-enabling 1.4.9 fixes and features
