@@ -974,7 +974,7 @@ TweetManager.prototype = {
     }, id);
   },
 
-  destroy: function(callback, id) {
+  destroy: function(callback, tweetTimelineId, id) {
     var _this = this;
     var firstCallback = function(success, data, status) {
       if(success) {
@@ -984,7 +984,7 @@ TweetManager.prototype = {
       }
       callback(success, data, status);
     };
-    if(this.currentTimeline == "dms") {
+    if(tweetTimelineId == "dms") {
       return this.twitterBackend.destroyDM(firstCallback, id);
     } else {
       return this.twitterBackend.destroy(firstCallback, id);

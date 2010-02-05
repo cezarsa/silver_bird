@@ -123,6 +123,7 @@ var Composer = {
   rtId: null,
   destroyId: null,
   favoriteId: null,
+  destroyTimelineId: null,
 
   init: function() {
     if(tweetManager.composerData.isComposing) {
@@ -147,6 +148,7 @@ var Composer = {
     $("#loading").show();
     $(".rt_confirm").hide();
     var _this = this;
+
     tweetManager.destroy(function(success, data, status) {
       $("#loading").hide();
       var notFound = status && status.match(/Not Found/);
@@ -159,7 +161,7 @@ var Composer = {
       } else {
         Renderer.showError('Unexpected error ' + status + ' deleting tweet.', 'Composer.confirmDestroy');
       }
-    }, _this.destroyId);
+    }, this.destroyTimelineId, this.destroyId);
   },
 
   denyDestroy: function() {
@@ -170,6 +172,7 @@ var Composer = {
     $(".rt_confirm").hide();
     $(".rt_confirm.destroy", node).show();
     this.destroyId = $(node).attr('tweetid');
+    this.destroyTimelineId = $(node).attr('timelineid');
   },
 
   confirmRT: function() {
