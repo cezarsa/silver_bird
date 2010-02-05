@@ -260,7 +260,8 @@ var Composer = {
       this.addUser(user, replies);
       return;
     } else {
-      if(tweetManager.currentTimeline == "dms") {
+      var timelineId = $(node).attr('timelineid');
+      if(timelineId == "dms") {
         textArea.val("d " + user + " ");
       } else {
         this.addUser(user, replies);
@@ -576,7 +577,7 @@ var Renderer = {
       tweetTitleUserName = '';
     }
 
-    var str = '<div tweetid="' + tweet.id + '" class="' + tweetClass + '">';
+    var str = '<div timelineid="' + tweetTimeline + '" tweetid="' + tweet.id + '" class="' + tweetClass + '">';
     str += '<div class="first_container">';
     str += '<img class="profile" src="' + user.profile_image_url + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')"></img>';
     str += '<a href="#" class="user" screen_name="' + user.screen_name + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')" title="' + tweetTitleUserName + '">' + tweetUserName + '</a>';
@@ -886,35 +887,36 @@ function newTweetsAvailable(count, unreadCount, timelineId) {
   $("#update_tweets").fadeIn();
 }
 
+function updateNotificationFunc(timeline) {
+  var timelineId = timeline.timelineId;
+  var newTweetsInfo = tweetManager.newTweetsCount(timelineId);
+  var newTweetsCount = newTweetsInfo[0];
+
+  if(timeline.timelineId == tweetManager.currentTimeline && timeline.currentScroll == 0) {
+    if(newTweetsCount > 0) {
+      tweetManager.updateNewTweets();
+      $("#tab_modifier_" + timelineId).remove();
+    }
+  } else {
+    newTweetsAvailable(newTweetsCount, newTweetsInfo[1], timelineId);
+  }
+}
+
 function loadNewTweets() {
   Paginator.firstPage(true);
-  tweetManager.updateNewTweets();
   $("#tab_modifier_" + tweetManager.currentTimeline).remove();
   $("#update_tweets").fadeOut();
-  loadTimeline();
+
+  prepareAndLoadTimeline();
 }
 
 function prepareAndLoadTimeline() {
   $("#update_tweets").hide();
 
-  var updateNotificationFunc = function(timeline, isCurrent) {
-    var timelineId = timeline.timelineId;
-    var newTweetsInfo = tweetManager.newTweetsCount(timelineId);
-    var newTweetsCount = newTweetsInfo[0];
-    if(newTweetsCount > 0) {
-      if(isCurrent) {
-        tweetManager.updateNewTweets();
-        $("#tab_modifier_" + timelineId).remove();
-      } else {
-        newTweetsAvailable(newTweetsCount, newTweetsInfo[1], timelineId);
-      }
-    }
-  };
-
-  updateNotificationFunc(tweetManager.getCurrentTimeline(), true);
+  updateNotificationFunc(tweetManager.getCurrentTimeline());
   tweetManager.eachTimeline(function(timeline) {
     if(timeline.timelineId != tweetManager.currentTimeline) {
-      updateNotificationFunc(timeline, false);
+      updateNotificationFunc(timeline);
     }
   });
 
