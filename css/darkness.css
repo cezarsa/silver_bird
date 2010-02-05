@@ -2,209 +2,209 @@
 
 /* Turn on a 16x16 scrollbar */
 ::-webkit-scrollbar {
-    width: 16px;
-    height: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 /* Turn on single button up on top, and down on bottom */
 ::-webkit-scrollbar-button:start:decrement,
 ::-webkit-scrollbar-button:end:increment {
-    display: block;
+  display: block;
 }
 
 /* Turn off the down area up on top, and up area on bottom */
 ::-webkit-scrollbar-button:vertical:start:increment,
 ::-webkit-scrollbar-button:vertical:end:decrement {
-    display: none;
+  display: none;
 }
- 
+
 /* Place The scroll down button at the bottom */
 ::-webkit-scrollbar-button:end:increment {
-    background-image: url(darkness-theme/images/scroll_cntrl_dwn.png);
+  background-image: url(darkness-theme/images/scroll_cntrl_dwn.png);
 }
- 
+
 /* Place The scroll up button at the up */
 ::-webkit-scrollbar-button:start:decrement {
-    background-image: url(darkness-theme/images/scroll_cntrl_up.png);
+  background-image: url(darkness-theme/images/scroll_cntrl_up.png);
 }
- 
+
 /* Top area above thumb and below up button */
 ::-webkit-scrollbar-track-piece:vertical:start {
-    background-image: url(darkness-theme/images/scroll_gutter_top.png), url(darkness-theme/images/scroll_gutter_mid.png);
-    background-repeat: no-repeat, repeat-y;
+  background-image: url(darkness-theme/images/scroll_gutter_top.png), url(darkness-theme/images/scroll_gutter_mid.png);
+  background-repeat: no-repeat, repeat-y;
 }
- 
+
 /* Bottom area below thumb and down button */
 ::-webkit-scrollbar-track-piece:vertical:end {
-    background-image: url(darkness-theme/images/scroll_gutter_btm.png), url(darkness-theme/images/scroll_gutter_mid.png);
-    background-repeat: no-repeat, repeat-y;
-    background-position: bottom left, 0 0;
+  background-image: url(darkness-theme/images/scroll_gutter_btm.png), url(darkness-theme/images/scroll_gutter_mid.png);
+  background-repeat: no-repeat, repeat-y;
+  background-position: bottom left, 0 0;
 }
- 
+
 /* The thumb itself */
 ::-webkit-scrollbar-thumb:vertical {
-    height: 56px;
-    -webkit-border-image: url(darkness-theme/images/scroll_thumb.png) 8 0 8 0 stretch stretch;
-    border-width: 8 0 8 0;
+  height: 56px;
+  -webkit-border-image: url(darkness-theme/images/scroll_thumb.png) 8 0 8 0 stretch stretch;
+  border-width: 8 0 8 0;
 }
- 
+
 
 input[type='text'] {
-    -webkit-border-radius: 5px;
-    border: 1px solid #882;
+  -webkit-border-radius: 5px;
+  border: 1px solid #882;
 }
 
 #warning {
-    background-color: #000;	
-    color: #eee;
-    padding: 5px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+  background-color: #000;
+  color: #eee;
+  padding: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 #shortener_button div {
-    border-bottom-left-radius: 5px 5px;
-    border-bottom-right-radius: 5px 5px;
-    background-color: #EDEDB1;
+  border-bottom-left-radius: 5px 5px;
+  border-bottom-right-radius: 5px 5px;
+  background-color: #EDEDB1;
 }
 
 #shortener_button div:hover {
-    background-color: #ee7;
+  background-color: #ee7;
 }
 
 #shorten_current {
-    background: #fff url(../img/globe_yellow.png) repeat-x 0 0;
+  background: #fff url(../img/globe_yellow.png) repeat-x 0 0;
 }
 
 #compose_tweet_area textarea {
-    border: 1px solid #882;
+  border: 1px solid #882;
 }
 
 .header_link_left, .header_link_left a, .header_link_right {
-    color: #eee;
+  color: #eee;
 }
 
 .header_link_right {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 .header_link_left {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 .chars_left {
-    color: #eee !important;
-    margin-right:5px;
+  color: #eee !important;
+  margin-right:5px;
 }
 
 .tab_modifier {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 #compose_tweet_area input[type="button"]:hover:disabled {
-    outline: inherit;
+  outline: inherit;
 }
 
 #workspace {margin: 0 1px; padding: 0; background-color: #000}
 
 #compose_tweet_area input[type="button"], #update_tweets, #compose_tweet {
-    -webkit-border-radius: 5px;
-    background: #F58400 url(darkness-theme/images/ui-bg_inset-soft_30_f58400_1x100.png) repeat-x scroll 50% 50%;
-    color: #fff;
-    font-style: italic;
-    border: 1px solid #FFAF0F;
+  -webkit-border-radius: 5px;
+  background: #F58400 url(darkness-theme/images/ui-bg_inset-soft_30_f58400_1x100.png) repeat-x scroll 50% 50%;
+  color: #fff;
+  font-style: italic;
+  border: 1px solid #FFAF0F;
 }
 
 #compose_tweet_area input[type="button"]:hover, #update_tweets:hover, #compose_tweet:hover {
-    background: #0078A3 url(darkness-theme/images/ui-bg_glass_40_0078a3_1x400.png) repeat-x scroll 50% 50%;
-    border: 1px solid #59B4D4;
+  background: #0078A3 url(darkness-theme/images/ui-bg_glass_40_0078a3_1x400.png) repeat-x scroll 50% 50%;
+  border: 1px solid #59B4D4;
 }
 
 .ui-tabs .ui-tabs-nav li a {
-    padding: 0.3em 0.9em;
+  padding: 0.3em 0.9em;
 }
 
-.tweet {  
-    background-color: #000;  
-    border-bottom: 1px solid #666;  
-    margin-bottom: 0.5em;
+.tweet {
+  background-color: #000;
+  border-bottom: 1px solid #666;
+  margin-bottom: 0.5em;
 }
 
-.tweet .text {	
-    float: left;
-    margin-top: 3px;
-    width: 340px;
-    
+.tweet .text {
+  float: left;
+  margin-top: 3px;
+  width: 340px;
+
 }
 
 .footer .from_app {
-    display: none;
+  display: none;
 }
 
 .timeline {
-    padding: 0.1em 0.1em !important;
+  padding: 0.1em 0.1em !important;
 }
 
 .tweet.unread {
-    background-color: #333;
-    border-color: #fff;
+  background-color: #333;
+  border-color: #fff;
 }
 
 .tweet .user {
-    color: #666;
-    font-weight: bold;
-    font-style: italic;
-    text-decoration: none;
+  color: #666;
+  font-weight: bold;
+  font-style: italic;
+  text-decoration: none;
 }
 
 .tweet .footer {
-    color: #999;
-    text-align: right;
-    font-style: italic;
-    position: absolute;
-    top: 3px;
-    right: 50px;
+  color: #999;
+  text-align: right;
+  font-style: italic;
+  position: absolute;
+  top: 3px;
+  right: 50px;
 }
 
 .tweet .new_actions {
-    right: 30px;
-    top: 2px;
+  right: 30px;
+  top: 2px;
 }
 
 .tweet img.profile {
-    -webkit-border-radius: 5px;
+  -webkit-border-radius: 5px;
 }
 
 .tweet .rt_confirm {
-    -webkit-border-radius: 5px;
-    background-color: #EDEDB1;
-    color: #000000;
+  -webkit-border-radius: 5px;
+  background-color: #EDEDB1;
+  color: #000000;
 }
 
 .tweet .rt_confirm a {
-    color: #000000;
+  color: #000000;
 }
 
 .tweet .extra_tweet_data {
-    color: #999;
+  color: #999;
 }
 
 /* Simple Select */
 div.simple_select .label {
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F2ED97), color-stop(0.5, #FECE2F), to(#F2ED97));
-    -webkit-border-radius: 8px;
-    border: 1px solid #FECE2F;
-    color: #381F00;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F2ED97), color-stop(0.5, #FECE2F), to(#F2ED97));
+  -webkit-border-radius: 8px;
+  border: 1px solid #FECE2F;
+  color: #381F00;
 }
 
 div.simple_select .options_area ul li:hover {
-    background-color: rgb(253, 240, 151);
+  background-color: rgb(253, 240, 151);
 }
 
 div.simple_select ul li {
-    clear: left;
+  clear: left;
 }
 
 div.simple_select ul li.selected {
-    background-color: rgb(253, 240, 151);
+  background-color: rgb(253, 240, 151);
 }
