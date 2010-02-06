@@ -180,6 +180,7 @@ UnifiedTweetsTimeline.prototype = {
     var requiredTweets = (this.currentPage + 1) * this.tweetsPerPage;
 
     var resultTweetsList = [];
+    var usedTweetsMap = {};
 
     var findMaxBefore = function(maxDate) {
       var maxBeforeDate = null;
@@ -187,17 +188,22 @@ UnifiedTweetsTimeline.prototype = {
       for(var timelineId in tweetsCache) {
         var tweetsInTimeline = tweetsCache[timelineId];
         for(var i = 0, len = tweetsInTimeline.length; i < len; ++i) {
-          var date = Date.parse(tweetsInTimeline[i].created_at);
-          if(maxDate && date >= maxDate) {
+          var tweet = tweetsInTimeline[i];
+          if(usedTweetsMap[tweet.id]) {
+            continue;
+          }
+          var date = Date.parse(tweet.created_at);
+          if(maxDate && date > maxDate) {
             continue;
           }
           if(!maxBeforeDate || date > maxBeforeDate) {
             maxBeforeDate = date;
-            maxBeforeTweet = tweetsInTimeline[i];
+            maxBeforeTweet = tweet;
             maxBeforeTweet.timelineId = timelineId;
           }
         }
       }
+      usedTweetsMap[maxBeforeTweet.id] = true;
       return maxBeforeTweet;
     }
 
@@ -1089,6 +1095,17 @@ TweetManager.prototype = {
     if(!timeline) {
       callback([], timelineId);
       return;
+    }
+    if(syncNew && this.unifiedVisible) {
+      var timelineBaseId = timelineId.replace(/_.*$/, '');
+      if(OptionsBackend.get(timelineBaseId + '_include_unified')) {
+        var originalCallback = callback;
+        var _this = this;
+        callback = function(tweets, timelineId) {
+          originalCallback(tweets, timelineId);
+          _this.timelines['unified'].giveMeTweets(originalCallback, false, true);
+        };
+      }
     }
     return timeline.giveMeTweets(callback, syncNew, cacheOnly);
   },
