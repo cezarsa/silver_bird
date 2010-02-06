@@ -122,7 +122,8 @@ function UnifiedTweetsTimeline(timelines) {
   this.timelines = timelines;
   this.timelineId = 'unified';
   this.tweetsPerPage = OptionsBackend.get('tweets_per_page');
-  this.tweetsCache = [];
+  this.visibleTweetsList = [];
+  this.currentPage = 0;
   this.currentScroll = 0;
 }
 UnifiedTweetsTimeline.prototype = {
@@ -154,13 +155,6 @@ UnifiedTweetsTimeline.prototype = {
     return count;
   },
 
-  cleanUpCache: function() {
-    var len = this.tweetsCache.length;
-    if(len <= OptionsBackend.get('max_cached_tweets'))
-      return;
-    this.tweetsCache = this.tweetsCache.slice(0, OptionsBackend.get('max_cached_tweets') + 1);
-  },
-
   giveMeTweets: function(callback, syncNew, cacheOnly) {
     // We shouldn't receive syncNew requests so they'll be ignored.
 
@@ -172,41 +166,38 @@ UnifiedTweetsTimeline.prototype = {
     }
     this.currentCallback = callback;
 
-    var requiredTweets = this.tweetsCache.length;
-    if(requiredTweets == 0 || !cacheOnly) {
-      requiredTweets += this.tweetsPerPage;
-    } else {
+    if(cacheOnly) {
       if(this.currentScroll == 0) {
-        this.cleanUpCache();
-        requiredTweets = this.tweetsCache.length;
+        this.currentPage = 0;
       }
+    } else {
+      this.currentPage += 1;
     }
 
     var _this = this;
     var errorAbort = false;
-    var tweetsCacheByTimeline = {};
+    var tweetsCache = {};
+    var requiredTweets = (this.currentPage + 1) * this.tweetsPerPage;
 
-    var usedTweetsMap = {};
+    var resultTweetsList = [];
 
     var findMaxBefore = function(maxDate) {
       var maxBeforeDate = null;
       var maxBeforeTweet = null;
-      for(var timelineId in tweetsCacheByTimeline) {
-        var tweetsInTimeline = tweetsCacheByTimeline[timelineId];
+      for(var timelineId in tweetsCache) {
+        var tweetsInTimeline = tweetsCache[timelineId];
         for(var i = 0, len = tweetsInTimeline.length; i < len; ++i) {
-          var tweet = tweetsInTimeline[i];
-          var date = Date.parse(tweet.created_at);
-          if(maxDate && date > maxDate) {
+          var date = Date.parse(tweetsInTimeline[i].created_at);
+          if(maxDate && date >= maxDate) {
             continue;
           }
-          if((!maxBeforeDate || date > maxBeforeDate) && !usedTweetsMap[tweet.id]) {
+          if(!maxBeforeDate || date > maxBeforeDate) {
             maxBeforeDate = date;
-            maxBeforeTweet = tweet;
+            maxBeforeTweet = tweetsInTimeline[i];
             maxBeforeTweet.timelineId = timelineId;
           }
         }
       }
-      usedTweetsMap[maxBeforeTweet.id] = true;
       return maxBeforeTweet;
     }
 
@@ -217,8 +208,8 @@ UnifiedTweetsTimeline.prototype = {
       /* 2nd step: Let's cherry pick tweets until we get enough of them
          to compose our unified timeline.
       */
-      while(_this.tweetsCache.length < requiredTweets) {
-        var lastTweet = _this.tweetsCache[_this.tweetsCache.length - 1];
+      while(resultTweetsList.length < requiredTweets) {
+        var lastTweet = resultTweetsList[resultTweetsList.length - 1];
         var maxDate = null;
         if(lastTweet) {
           maxDate = Date.parse(lastTweet.created_at);
@@ -227,8 +218,8 @@ UnifiedTweetsTimeline.prototype = {
         if(!nextTweet) {
           break;
         }
-        _this.tweetsCache.push(nextTweet);
-        var timelineTweetsCache = tweetsCacheByTimeline[nextTweet.timelineId];
+        resultTweetsList.push(nextTweet);
+        var timelineTweetsCache = tweetsCache[nextTweet.timelineId];
         var isLastInTimelineCache = timelineTweetsCache[timelineTweetsCache.length - 1].id == nextTweet.id
         if(isLastInTimelineCache) {
           /* 3rd step: Some timeline went empty because all other tweets are already in
@@ -236,13 +227,14 @@ UnifiedTweetsTimeline.prototype = {
           */
           var newJoinableCallback = Utils.makeJoinableCallback(1, eachFunction, joinFunction);
           _this.timelines[nextTweet.timelineId].giveMeTweets(newJoinableCallback, false, false, true,
-              (requiredTweets - _this.tweetsCache.length) + 2);
+              (requiredTweets - resultTweetsList.length) + 2);
           return;
         }
       }
       /* 4th step now we're ready to return our unified timeline. */
       try {
-        _this.currentCallback(_this.tweetsCache, _this.timelineId);
+        _this.visibleTweetsList = resultTweetsList;
+        _this.currentCallback(resultTweetsList, _this.timelineId);
       } catch(e) {
         /* ignoring, popup dead? */
       }
@@ -259,39 +251,19 @@ UnifiedTweetsTimeline.prototype = {
         _this.currentCallback = null;
         return;
       }
-      var currentTweets = tweetsCacheByTimeline[timelineId];
-      tweetsCacheByTimeline[timelineId] = tweets;
+      var currentTweets = tweetsCache[timelineId];
+      tweetsCache[timelineId] = tweets;
     }
 
     /* 1st step: Let's get cached results from each timeline and call
        joinFunction when we get all the results.
     */
-    if(this.tweetsCache.length < requiredTweets) {
-      var joinCount = this.countTimelines();
-      var joinableCallback = Utils.makeJoinableCallback(joinCount, eachFunction, joinFunction);
-      this.eachTimeline(function(timeline) {
-        timeline.giveMeTweets(joinableCallback, false, true, true);
-      });
-    } else {
-      try {
-        this.currentCallback(this.tweetsCache, this.timelineId);
-      } catch(e) {
-        /* ignoring, popup dead? */
-      }
-      this.currentCallback = null;
-    }
-
-  },
-
-  refreshNewTweets: function() {
-    var _this = this;
+    var joinCount = this.countTimelines();
+    var joinableCallback = Utils.makeJoinableCallback(joinCount, eachFunction, joinFunction);
     this.eachTimeline(function(timeline) {
-      var newTweetsInTimeline = timeline.newTweetsCache;
-      for(var i = 0, len = newTweetsInTimeline.length; i < len; ++i) {
-        newTweetsInTimeline[i].timelineId = timeline.timelineId;
-        Utils.pushTweet(_this.tweetsCache, newTweetsInTimeline[i]);
-      }
+      timeline.giveMeTweets(joinableCallback, false, true, true);
     });
+
   },
 
   updateNewTweets: function() {
@@ -319,14 +291,9 @@ UnifiedTweetsTimeline.prototype = {
   },
 
   removeFromCache: function(id) {
-    var i = 0;
-    for(; i < this.tweetsCache.length; ++i) {
-      if(this.tweetsCache[i].id == id)
-        break;
-    }
-    if(i != this.tweetsCache.length) {
-      this.tweetsCache.splice(i, 1);
-    }
+    this.eachTimeline(function(timeline) {
+      timeline.removeFromCache(id);
+    });
   },
 
   findTweet: function(id) {
@@ -342,7 +309,7 @@ UnifiedTweetsTimeline.prototype = {
   },
 
   getTweetsCache: function() {
-    return this.tweetsCache;
+    return this.visibleTweetsList;
   }
 }
 
@@ -597,10 +564,6 @@ TweetsTimeline.prototype = {
   },
 
   updateNewTweets: function() {
-    if(this.manager.unifiedVisible) {
-      //Maybe a hack?
-      this.manager.timelines['unified'].refreshNewTweets();
-    }
     this.tweetsCache = this.newTweetsCache.concat(this.tweetsCache);
     this.newTweetsCache = [];
     this.unreadNotified = [];
@@ -1126,17 +1089,6 @@ TweetManager.prototype = {
     if(!timeline) {
       callback([], timelineId);
       return;
-    }
-    if(syncNew && this.unifiedVisible) {
-      var timelineBaseId = timelineId.replace(/_.*$/, '');
-      if(OptionsBackend.get(timelineBaseId + '_include_unified')) {
-        var originalCallback = callback;
-        var _this = this;
-        callback = function(tweets, timelineId) {
-          originalCallback(_this.timelines['unified'].getTweetsCache(), 'unified');
-          originalCallback(tweets, timelineId);
-        };
-      }
     }
     return timeline.giveMeTweets(callback, syncNew, cacheOnly);
   },

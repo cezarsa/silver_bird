@@ -154,7 +154,7 @@ var Composer = {
       var notFound = status && status.match(/Not Found/);
       if(success || notFound) {
         $(".tweet[tweetid='" + _this.destroyId + "']").hide('blind', { direction: "vertical" });
-        var currentCount = tweetManager.getCurrentTimeline().getTweetsCache().length;
+        var currentCount = tweetManager.getCurrentTimeline().tweetsCache.length;
         if(currentCount < OptionsBackend.get('tweets_per_page')) {
           Paginator.nextPage();
         }
@@ -1034,6 +1034,8 @@ $(function() {
     }
     return;
   }
+
+  console.log('executed!');
 
   initializeWorkspace();
 
