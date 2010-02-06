@@ -242,9 +242,9 @@ $(function() {
   $("input[name='shortener_acct']").click(onShortenerAcctClick);
 
   $('canvas.color_selector').ColorPicker({
-    onChange: function (hsb, hex, rgb) {
+    onChange: function (hsb, hex, rgb, rgbaStr) {
       var canvas = this.data('colorpicker').el;
-      $(canvas).attr('hexColor', '#' + hex);
+      $(canvas).attr('hexColor', rgbaStr);
       paintIcon(canvas, rgb);
     }
   });
@@ -314,8 +314,7 @@ function updatePredictedHitsCount() {
     Remaining Twitter API Hits: <span class="twitter_hits_left"></span><br>
     Rate Limit Reset: <span class="twitter_hits_reset"></span>
   </p>
-
-   <fieldset>
+  <fieldset>
     <legend>UI</legend>
     <label for="name_attribute">Name in tweets:</label>
     <select name="name_attribute">
