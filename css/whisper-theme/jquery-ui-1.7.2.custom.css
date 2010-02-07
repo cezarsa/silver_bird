@@ -48,7 +48,7 @@
 
 /* Component containers
 ----------------------------------*/
-.ui-widget { font-family: Lucida Grande, Lucida Sans, Arial, sans-serif; font-size: 1.0em; }
+.ui-widget { font-family: Lucida Sans Unicode, Lucida Sans, Helvetica, Arial, sans-serif; font-size: 1.0em; }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Lucida Grande, Lucida Sans, Arial, sans-serif; font-size: 1em; }
 .ui-widget-content { border: 1px solid #8e846b; background: #ffffff url(images/ui-bg_flat_100_ffffff_40x100.png) 50% 50% repeat-x; color: #000000; }
 .ui-widget-header { border: 1px solid #827635; background: #f2ed97 url(images/ui-bg_gloss-wave_45_f2ed97_500x100.png) 50% 50% repeat-x; color: #000000; font-weight: bold; margin-bottom: 3px;}

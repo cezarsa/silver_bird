@@ -68,7 +68,7 @@ input[type='text'] {
 }
 
 .tweet_overlay {
-  -webkit-border-radius: 5px;
+  -webkit-border-radius: 2px;
 }
 
 .tweet {
