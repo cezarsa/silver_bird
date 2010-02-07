@@ -92,8 +92,22 @@ fieldset legend {
   padding: 2px 4px 2px 4px;
 }
 
-canvas.color_selector {
+.color_selector {
   cursor: pointer;
+}
+
+div.color_selector {
+  margin-left: auto;
+  margin-right: auto;
+  width: 40px;
+  height: 25px;
+  position: absolute;
+  margin-top: -7px;
+  margin-left: 30px;
+}
+
+div.checkerboard {
+  background-image: url(../img/checkerboard.png);
 }
 
 #saved_notice {

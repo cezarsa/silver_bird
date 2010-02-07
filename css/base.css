@@ -190,10 +190,16 @@ input[type='text'] {
 
 .tweet {
   width: 100%;
+  padding: 2px 22px 0px 4px;
+}
+
+.tweet_overlay {
+  width: 100%;
+  margin-top: -2px;
+  margin-left: -4px;
+  padding: 2px 22px 2px 4px;
   min-width: 400px;
-  padding: 2px 4px 2px 4px;
   min-height: 64px;
-  padding-right: 20px;
   position: relative;
 }
 

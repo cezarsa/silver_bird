@@ -20,16 +20,20 @@ function Options() {
   this.load = function(forceDefault) {
     this.optionsMap = OptionsBackend.load(forceDefault);
     var _this = this;
-    $('input,select,canvas.color_selector').each(function() {
+    $('input,select,.color_selector').each(function() {
       var $this = $(this);
       var name = $this.attr('name');
       if(name) {
         if($this.is('[type="checkbox"]')) {
           $this.attr('checked', _this.optionsMap[name]);
-        } else if($this.is('canvas')) {
-          $this.attr('hexColor', _this.optionsMap[name]);
-          paintIcon($this[0], _this.optionsMap[name]);
+        } else if($this.is('.color_selector')) {
+          $this.attr('strColor', _this.optionsMap[name]);
           $this.ColorPickerSetColor(_this.optionsMap[name]);
+          if($this.is('canvas')) {
+            paintIcon($this[0], _this.optionsMap[name]);
+          } else {
+            $this.css('backgroundColor', _this.optionsMap[name]);
+          }
         } else {
           $this.val(_this.optionsMap[name]);
         }
@@ -67,14 +71,14 @@ function Options() {
       this.addValidationError(null, validInfo);
     }
     if(!hasErrors) {
-      $('input,select,canvas.color_selector').each(function() {
+      $('input,select,.color_selector').each(function() {
         var $this = $(this);
         var name = $this.attr('name');
         if(name) {
           if($this.is('[type="checkbox"]')) {
              _this.optionsMap[name] = $this.attr('checked');
-          } else if($this.is('canvas')) {
-            _this.optionsMap[name] = $this.attr('hexColor');
+          } else if($this.is('.color_selector')) {
+            _this.optionsMap[name] = $this.attr('strColor');
           } else {
             var elValue = $this.val();
             var intValue = parseInt(elValue );
@@ -244,8 +248,15 @@ $(function() {
   $('canvas.color_selector').ColorPicker({
     onChange: function (hsb, hex, rgb, rgbaStr) {
       var canvas = this.data('colorpicker').el;
-      $(canvas).attr('hexColor', rgbaStr);
+      $(canvas).attr('strColor', rgbaStr);
       paintIcon(canvas, rgb);
+    }
+  });
+  $('div.color_selector').ColorPicker({
+    onChange: function (hsb, hex, rgb, rgbaStr) {
+      var div = this.data('colorpicker').el;
+      $(div).attr('strColor', rgbaStr);
+      $(div).css('backgroundColor', rgbaStr);
     }
   });
   options.load();
@@ -336,11 +347,46 @@ function updatePredictedHitsCount() {
     <label for="hover_timeout">Hover to read time (ms):</label>
     <input type="text" name="hover_timeout" validator="required,number,positive"><br>
     <label for="reply_all">Reply to all mentioned:</label>
-    <input type="checkbox" id="reply_all" name="reply_all" />
+    <input type="checkbox" style="margin-bottom: 7px;" id="reply_all" name="reply_all" />
     <br />
 
     <label>*Icon color:</label>
-    <canvas name="idle_color" width="19" height="19" class="color_selector"></canvas>
+    <canvas name="idle_color" width="19" height="19" class="color_selector"></canvas><br/>
+
+    <label for="tweets_color_only_unified">Colors only in unified:</label>
+    <input type="checkbox" name="tweets_color_only_unified" /><br/>
+    <table class="notifications">
+      <tr>
+        <th></th>
+        <th>Home</th>
+        <th>Mentions</th>
+        <th>DMs</th>
+        <th>Lists</th>
+        <th>Favorites</th>
+      <tr>
+        <td class="label">Tweet color:</td>
+        <td>
+          <div class="color_selector checkerboard"></div>
+          <div name="home_tweets_color" class="color_selector"></div>
+        </td>
+        <td>
+          <div class="color_selector checkerboard"></div>
+          <div name="mentions_tweets_color" class="color_selector"></div>
+        </td>
+        <td>
+          <div class="color_selector checkerboard"></div>
+          <div name="dms_tweets_color" class="color_selector"></div>
+        </td>
+        <td>
+          <div class="color_selector checkerboard"></div>
+          <div name="lists_tweets_color" class="color_selector"></div>
+        </td>
+        <td>
+          <div class="color_selector checkerboard"></div>
+          <div name="favorites_tweets_color" class="color_selector"></div>
+        </td>
+      </tr>
+    </table><br>
   </fieldset>
 
   <fieldset>

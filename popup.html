@@ -537,7 +537,7 @@ var Renderer = {
     return newText;
   },
 
-  renderTweet: function (tweet) {
+  renderTweet: function (tweet, useColors) {
     var user = tweet.user;
     var text = tweet.text;
     var tweetId = tweet.id;
@@ -581,6 +581,13 @@ var Renderer = {
     }
 
     var str = '<div timelineid="' + tweetTimeline + '" tweetid="' + tweet.id + '" class="' + tweetClass + '">';
+
+    var overlayStyle = '';
+    if(useColors) {
+      var baseTimelineId = tweetTimeline.replace(/_.*$/, '');
+      overlayStyle = 'background-color: ' + OptionsBackend.get(baseTimelineId + '_tweets_color') + ';';
+    }
+    str += '<div class="tweet_overlay" style="' + overlayStyle + '">';
     str += '<div class="first_container">';
     str += '<img class="profile" src="' + user.profile_image_url + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')"></img>';
     str += '<a href="#" class="user" screen_name="' + user.screen_name + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')" title="' + tweetTitleUserName + '">' + tweetUserName + '</a>';
@@ -634,7 +641,7 @@ var Renderer = {
     str += '</div>';
     str += '<div style="clear: both;"></div>';
 
-    str += '</div>'
+    str += '</div></div>'
     return str;
   },
 
@@ -655,10 +662,18 @@ var Renderer = {
     var destination = $("#timeline-" + timelineId);
     if(destination.length == 0)
       return;
+
+    var useColors = true;
+    if(OptionsBackend.get('tweets_color_only_unified')) {
+      if(timelineId != 'unified') {
+        useColors = false;
+      }
+    }
+
     var destinationDom = destination[0];
     var tweetsArray = [];
     for(var i = 0; i < tweets.length; ++i) {
-      tweetsArray[i] = Renderer.renderTweet(tweets[i]);
+      tweetsArray[i] = Renderer.renderTweet(tweets[i], useColors);
     }
     destinationDom.innerHTML = tweetsArray.join('');
 
