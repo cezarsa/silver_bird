@@ -617,26 +617,26 @@ var Renderer = {
     str += '<div class="new_actions">';
     if(tweetTimeline != "dms") {
       if(tweet.favorited) {
-        str += '<img src="img/star_hover.png" title="Unmark as favorite" class="starred" onclick="Composer.unFavorite(this.parentNode.parentNode);"></img><br>';
+        str += '<img src="img/star_hover.png" title="Unmark as favorite" class="starred" onclick="Composer.unFavorite(this.parentNode.parentNode.parentNode);"></img><br>';
       } else {
-        str += '<img src="img/star.png" title="Mark as favorite" class="unstarred" onclick="Composer.favorite(this.parentNode.parentNode);"></img><br>';
+        str += '<img src="img/star.png" title="Mark as favorite" class="unstarred" onclick="Composer.favorite(this.parentNode.parentNode.parentNode);"></img><br>';
       }
     }
 
     if(tweet.user.screen_name == tweetManager.twitterBackend.username()) {
-      str += '<img src="img/delete.png" title="Delete" onclick="Composer.destroy(this.parentNode.parentNode)"></img><br>';
+      str += '<img src="img/delete.png" title="Delete" onclick="Composer.destroy(this.parentNode.parentNode.parentNode)"></img><br>';
       str += '<div class="rt_confirm destroy">Delete this message: <a href="javascript:Composer.confirmDestroy();">Yes</a> <a href="javascript:Composer.denyDestroy();">No</a></div>';
     } else {
-      str += '<img src="img/reply.png" title="Reply" onclick="Composer.reply(this.parentNode.parentNode)"></img><br>';
+      str += '<img src="img/reply.png" title="Reply" onclick="Composer.reply(this.parentNode.parentNode.parentNode)"></img><br>';
       if(tweetManager.isRetweet(tweet.id)) {
         //TODO: undo retweet
       } else {
         if(tweetTimeline != "dms") {
-          str += '<img src="img/rt.png" title="Retweet" onclick="Composer.retweet(this.parentNode.parentNode)"></img><br>';
+          str += '<img src="img/rt.png" title="Retweet" onclick="Composer.retweet(this.parentNode.parentNode.parentNode)"></img><br>';
           str += '<div class="rt_confirm">Retweet this message: <a href="javascript:Composer.confirmRT();">Yes</a> <a href="javascript:Composer.denyRT();">No</a></div>';
         }
       }
-      str += '<img src="img/share.png" title="Share (old school RT)" onclick="Composer.share(this.parentNode.parentNode)"></img><br>';
+      str += '<img src="img/share.png" title="Share (old school RT)" onclick="Composer.share(this.parentNode.parentNode.parentNode)"></img><br>';
     }
     str += '</div>';
     str += '<div style="clear: both;"></div>';

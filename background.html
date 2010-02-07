@@ -192,7 +192,8 @@ UnifiedTweetsTimeline.prototype = {
     var findMaxBefore = function(maxDate) {
       var maxBeforeDate = null;
       var maxBeforeTweet = null;
-      for(var timelineId in tweetsCache) {
+
+      var checkMaxTweet = function(timelineId) {
         var tweetsInTimeline = tweetsCache[timelineId];
         for(var i = 0, len = tweetsInTimeline.length; i < len; ++i) {
           var tweet = tweetsInTimeline[i];
@@ -209,7 +210,20 @@ UnifiedTweetsTimeline.prototype = {
             maxBeforeTweet.timelineId = timelineId;
           }
         }
+      };
+      var checkFavorite = false;
+      for(var timelineId in tweetsCache) {
+        if(timelineId == 'favorites') {
+          //HACK: postpone
+          checkFavorite = true;
+          continue;
+        }
+        checkMaxTweet(timelineId);
       }
+      if(checkFavorite) {
+        checkMaxTweet('favorites');
+      }
+
       usedTweetsMap[maxBeforeTweet.id] = true;
       return maxBeforeTweet;
     }
@@ -273,6 +287,7 @@ UnifiedTweetsTimeline.prototype = {
     */
     var joinCount = this.countTimelines();
     var joinableCallback = Utils.makeJoinableCallback(joinCount, eachFunction, joinFunction);
+
     this.eachTimeline(function(timeline) {
       timeline.giveMeTweets(joinableCallback, false, true, true);
     });
@@ -1009,7 +1024,9 @@ TweetManager.prototype = {
     var firstCallback = function(success, data, status) {
       if(success) {
         var favTimeline = _this.timelines["favorites"];
-        favTimeline.pushTweet(data);
+        if(favTimeline) {
+          favTimeline.pushTweet(data);
+        }
         _this.eachTimeline(function(timeline) {
           var tweet = timeline.findTweet(id);
           if(tweet)
@@ -1026,7 +1043,9 @@ TweetManager.prototype = {
     var firstCallback = function(success, data, status) {
       if(success) {
         var favTimeline = _this.timelines["favorites"];
-        favTimeline.removeFromCache(id);
+        if(favTimeline) {
+          favTimeline.removeFromCache(id);
+        }
         _this.eachTimeline(function(timeline) {
           var tweet = timeline.findTweet(id);
           if(tweet)
