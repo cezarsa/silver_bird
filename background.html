@@ -6,8 +6,11 @@
 <script type="text/javascript" src="lib/3rdparty/sha1.js"></script>
 <script type="text/javascript" src="lib/twitter_lib.js"></script>
 <script type="text/javascript" src="lib/icon_creator.js"></script>
+<script type="text/javascript" src="lib/expander_lib.js"></script>
 
 <script>
+urlExpander = new Expander();
+
 OptionsBackend = {
   defaultOptions: {
     home_refresh_interval: 90 * 1000,
@@ -56,6 +59,7 @@ OptionsBackend = {
     lists_include_unified: false,
 
     reply_all: false,
+    show_expanded_urls: true,
 
     lists_count: 1,
 
