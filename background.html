@@ -355,7 +355,7 @@ function TweetsTimeline(timelineId, manager, recheckTime) {
   this.currentCallback = null;
   this.currentScroll = 0;
   this.firstRun = true;
-  this.timelinePath = timelineId;
+  this.timelinePath = null;
   this.usingPages = false;
   this.timelineId = timelineId;
   this.listId = null;
@@ -522,6 +522,10 @@ TweetsTimeline.prototype = {
   },
 
   giveMeTweets: function(callback, syncNew, cacheOnly, keepCache, suggestedCount) {
+    if(!this.timelinePath) {
+      callback([], this.timelineId);
+      return;
+    }
     if(this.currentCallback) {
       //Handling multiple calls to giveMeTweets, just update the registered
       //callback and let the first request finish.
@@ -552,7 +556,11 @@ TweetsTimeline.prototype = {
       if(!keepCache && this.currentScroll == 0) {
         this.cleanUpCache();
       }
-      callback(this.tweetsCache, this.timelineId);
+      try {
+        callback(this.tweetsCache, this.timelineId);
+      } catch(e) {
+        /* ignoring exception, popup might be closed */
+      }
       return;
     }
     //If we didn't return yet it's because we want to fetch old tweets
