@@ -51,7 +51,7 @@ OptionsBackend = {
     favorites_visible: true,
     lists_visible: true,
 
-    unified_visible: false,
+    unified_visible: true,
     home_include_unified: true,
     mentions_include_unified: true,
     dms_include_unified: true,
@@ -70,7 +70,7 @@ OptionsBackend = {
     favorites_color: '#7f870b',
     lists_color: '#7f870b',
 
-    tweets_color_only_unified: true,
+    tweets_color_only_unified: false,
     home_tweets_color: 'rgba(0, 72, 255, 0.15)',
     mentions_tweets_color: 'rgba(255, 255, 0, 0.15)',
     dms_tweets_color: 'rgba(0, 255, 0, 0.15)',
@@ -252,6 +252,9 @@ UnifiedTweetsTimeline.prototype = {
           break;
         }
         resultTweetsList.push(nextTweet);
+        if(resultTweetsList.length == requiredTweets) {
+          break;
+        }
         var timelineTweetsCache = tweetsCache[nextTweet.timelineId];
         var isLastInTimelineCache = timelineTweetsCache[timelineTweetsCache.length - 1].id == nextTweet.id
         if(isLastInTimelineCache) {
@@ -260,7 +263,7 @@ UnifiedTweetsTimeline.prototype = {
           */
           var newJoinableCallback = Utils.makeJoinableCallback(1, eachFunction, joinFunction);
           _this.timelines[nextTweet.timelineId].giveMeTweets(newJoinableCallback, false, false, true,
-              (requiredTweets - resultTweetsList.length) + 2);
+              (requiredTweets - resultTweetsList.length) + 1);
           return;
         }
       }
@@ -699,6 +702,11 @@ function TweetManager() {
   this.listsTabCount = OptionsBackend.get('lists_count');
 
   this.unifiedVisible = OptionsBackend.get('unified_visible');
+  if(this.unifiedVisible) {
+    this.timelines['unified'] = new UnifiedTweetsTimeline(this.timelines);
+    this.currentTimeline = 'unified';
+  }
+
   var timelineNames = ["home", "mentions", "dms", "favorites", "lists"];
   for(var i = 0; i < timelineNames.length; ++i) {
     var refreshInterval = OptionsBackend.get(timelineNames[i] + '_refresh_interval');
@@ -724,11 +732,6 @@ function TweetManager() {
     if(!this.currentTimeline) {
       this.currentTimeline = (timelineNames[i] == "lists") ? "lists_0" : timelineNames[i];
     }
-  }
-
-  if(this.unifiedVisible) {
-    this.timelines['unified'] = new UnifiedTweetsTimeline(this.timelines);
-    this.currentTimeline = 'unified';
   }
 
   this.lastAvailableHits = null;
