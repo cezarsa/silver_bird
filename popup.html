@@ -117,6 +117,19 @@ var ThemeManager = {
     $(theme.split(",")).each(function(i, p) {
       $("<link rel='stylesheet' type='text/css' class='theme' href='" + p + "'>").appendTo(document.head);
     });
+    var baseRules = document.styleSheets[0].cssRules;
+    if(baseRules && baseRules.length) {
+      var fontFamily = OptionsBackend.get('font_family');
+      var fontSize = OptionsBackend.get('font_size');
+      for(var i = 0, len = baseRules.length; i < len; ++i) {
+        var rule = baseRules[i];
+        if(rule.selectorText == ".tweet") {
+          rule.style.fontFamily = fontFamily;
+          rule.style.fontSize = fontSize;
+          break;
+        }
+      }
+    }
   }
 }
 

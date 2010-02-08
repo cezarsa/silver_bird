@@ -338,12 +338,23 @@ function updatePredictedHitsCount() {
       <option value="top">Top</option>
       <option value="bottom">Bottom</option>
     </select><br>
+
     <label for="theme">UI Theme:</label>
     <select name="theme">
       <option value="css/chromified.css,css/chromified-theme/jquery-ui-1.7.2.custom.css">Chromified</option>
       <option value="css/whisper.css,css/whisper-theme/jquery-ui-1.7.2.custom.css">Whispers</option>
       <option value="css/darkness-theme/jquery-ui-1.7.2.custom.css,css/darkness.css">Darkness</option>
     </select><br>
+    <label for="font_size">Font Size:</label>
+    <select name="font_size">
+      <option value="0.8em">Small</option>
+      <option value="1.0em">Normal</option>
+      <option value="1.2em">Large</option>
+      <option value="1.4em">Extra Large</option>
+    </select><br>
+    <label for="font_family">Font Family:</label>
+    <input type="text" style="width: 20em"; name="font_family" validator="required"><br>
+
     <label for="hover_timeout">Hover to read time (ms):</label>
     <input type="text" name="hover_timeout" validator="required,number,positive"><br>
     <label for="show_expanded_urls">Expand shortened URLs:</label>
