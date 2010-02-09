@@ -277,6 +277,9 @@ UnifiedTweetsTimeline.prototype = {
       _this.currentCallback = null;
     };
     var eachFunction = function (tweets, timelineId) {
+      if(errorAbort) {
+        return;
+      }
       if(!tweets) {
         errorAbort = true;
         try {
@@ -704,6 +707,7 @@ function TweetManager() {
   this.unifiedVisible = OptionsBackend.get('unified_visible');
   if(this.unifiedVisible) {
     this.timelines['unified'] = new UnifiedTweetsTimeline(this.timelines);
+    this.timelines['unified'].visible = true;
     this.currentTimeline = 'unified';
   }
 
@@ -722,11 +726,13 @@ function TweetManager() {
       for(var j = 0; j < this.listsTabCount; ++j) {
         var listTimeline = new TweetsTimeline("lists_" + j, this, refreshInterval);
         listTimeline.includeInUnified = includeInUnified;
+        listTimeline.visible = visible;
         this.timelines["lists_" + j] = listTimeline;
       }
     } else {
       var timeline = new TweetsTimeline(timelineNames[i], this, refreshInterval);
       timeline.includeInUnified = includeInUnified;
+      timeline.visible = visible;
       this.timelines[timelineNames[i]] = timeline;
     }
     if(!this.currentTimeline) {
@@ -749,7 +755,11 @@ function TweetManager() {
     function onAuthenticated() {
       for(var i = 0; i < timelineNames.length; ++i) {
         var visible = OptionsBackend.get(timelineNames[i] + '_visible');
-        if(!visible) {
+        var includeInUnified = false;
+        if(_this.unifiedVisible) {
+          includeInUnified = OptionsBackend.get(timelineNames[i] + '_include_unified');
+        }
+        if(!visible && !includeInUnified) {
           continue;
         }
         if(timelineNames[i] == "lists") {
@@ -1107,6 +1117,7 @@ TweetManager.prototype = {
       timeline = this.timelines[timelineName] = new TweetsTimeline(timelineName, this, OptionsBackend.get('lists_refresh_interval'));
     }
     timeline.includeInUnified = this.unifiedVisible && OptionsBackend.get('lists_include_unified');
+    timeline.visible = OptionsBackend.get('lists_visible');
     timeline.listId = listId;
     timeline.setTimelinePath(this.twitterBackend.username() + '/lists/' + listId + '/statuses');
     return timeline;

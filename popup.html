@@ -891,6 +891,9 @@ function onTimelineRetrieved(tweets, timelineId) {
     //Sanity check, popup might be closed.
     return;
   }
+  if(!tweetManager.getCurrentTimeline().visible) {
+    return;
+  }
   $("#loading").hide();
   if(tweets) {
     Paginator.needsMore = false;
@@ -925,6 +928,9 @@ function signout() {
 function newTweetsAvailable(count, unreadCount, timelineId) {
   if(!window) {
     //Sanity check, popup might be closed.
+    return;
+  }
+  if(!tweetManager.getCurrentTimeline().visible) {
     return;
   }
   var currentTimeline = tweetManager.currentTimeline;
@@ -980,6 +986,9 @@ function prepareAndLoadTimeline() {
 
   updateNotificationFunc(tweetManager.getCurrentTimeline());
   tweetManager.eachTimeline(function(timeline) {
+    if(!timeline.visible) {
+      return true;
+    }
     if(timeline.timelineId != tweetManager.currentTimeline) {
       updateNotificationFunc(timeline);
     }
@@ -1015,6 +1024,9 @@ function initializeWorkspace() {
   });
   var showLists = false;
   tweetManager.orderedEachTimeline(function(timeline) {
+    if(!timeline.visible) {
+      return true;
+    }
     var timelineId = this;
     if(timelineId.match(/^lists/)) {
       showLists = true;
@@ -1068,6 +1080,9 @@ function initializeWorkspace() {
     tabEl.scrollTop(tweetManager.getCurrentTimeline().currentScroll);
 
     tweetManager.eachTimeline(function(timeline) {
+      if(!timeline.visible) {
+        return true;
+      }
       var timelineId = this;
       var tabEl = $("#timeline-" + timelineId);
       tabEl.scroll(function(e) {
