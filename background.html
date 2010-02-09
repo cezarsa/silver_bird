@@ -1294,6 +1294,12 @@ function checkVersionChanges(manifest) {
           OptionsBackend.save(options);
         }
       }
+      if(compareVersions(storageVersion, [1, 5, 1]) <= 0) {
+        var storedOrder = localStorage['timeline_order'];
+        storedOrder = JSON.parse(storedOrder);
+        storedOrder.unshift('unified');
+        localStorage['timeline_order'] = JSON.stringify(storedOrder);
+      }
       //TODO: Maybe restart tweetManager
       localStorage['version'] = JSON.stringify(currentVersion);
     }
