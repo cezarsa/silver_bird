@@ -24,7 +24,10 @@ function Options() {
       var $this = $(this);
       var name = $this.attr('name');
       if(name) {
-        if($this.is('[type="checkbox"]')) {
+        var converter = $this.attr('converter');
+        if(converter) {
+          Converters[converter].load($this, _this.optionsMap[name]);
+        } else if($this.is('[type="checkbox"]')) {
           $this.attr('checked', _this.optionsMap[name]);
         } else if($this.is('.color_selector')) {
           $this.attr('strColor', _this.optionsMap[name]);
@@ -75,13 +78,16 @@ function Options() {
         var $this = $(this);
         var name = $this.attr('name');
         if(name) {
-          if($this.is('[type="checkbox"]')) {
+          var converter = $this.attr('converter');
+          if(converter) {
+            _this.optionsMap[name] = Converters[converter].save($this);
+          } else if($this.is('[type="checkbox"]')) {
              _this.optionsMap[name] = $this.attr('checked');
           } else if($this.is('.color_selector')) {
             _this.optionsMap[name] = $this.attr('strColor');
           } else {
             var elValue = $this.val();
-            var intValue = parseInt(elValue );
+            var intValue = parseInt(elValue);
             if(intValue == elValue) {
               elValue = intValue;
             }
@@ -109,6 +115,19 @@ function Options() {
   };
 
 }
+
+/* ---- converters ---- */
+
+Converters = {
+  RefreshInterval: {
+    load: function($el, val) {
+      $el.val(val / 1000);
+    },
+    save: function($el) {
+      return parseInt($el.val()) * 1000;
+    }
+  }
+};
 
 /* ---- validation ---- */
 Validator = {
@@ -151,8 +170,8 @@ Validator = {
   },
 
   minRefresh: function ($el) {
-    if(parseInt($el.val()) < 20000)
-      return 'Minimum interval is 20000ms';
+    if(parseInt($el.val()) < 20)
+      return 'Minimum interval is 20s';
     return true;
   },
 
@@ -293,7 +312,7 @@ function updatePredictedHitsCount() {
 
     var inputRefreshEl = $('input[name="' +  timelines[i] + '_refresh_interval"]');
     var intVal = parseInt(inputRefreshEl.val());
-    var timelineHits = (60 * 60 * 1000) / intVal;
+    var timelineHits = (60 * 60) / intVal;
     var timelineCount = $('select[name="' +  timelines[i] + '_count"]').val() || 1;
     totalHits += timelineHits * timelineCount;
   }
@@ -466,7 +485,7 @@ function updatePredictedHitsCount() {
       <tr>
         <th></th>
         <th>*Visible</th>
-        <th>*Refresh Interval (ms)</th>
+        <th>*Refresh Interval (s)</th>
         <th>*Tabs Count</th>
         <th>*Include in unified timeline</th>
       <tr>
@@ -479,28 +498,28 @@ function updatePredictedHitsCount() {
       <tr>
         <td class="label">Home:</td>
         <td><input type="checkbox" name="home_visible"></td>
-        <td><input type="text" name="home_refresh_interval" validator="required,number,minRefresh"></td>
+        <td><input type="text" name="home_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td>1</td>
         <td><input type="checkbox" name="home_include_unified"></td>
       </tr>
       <tr>
         <td class="label">Mentions:</td>
         <td><input type="checkbox" name="mentions_visible"></td>
-        <td><input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh"></td>
+        <td><input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td>1</td>
         <td><input type="checkbox" name="mentions_include_unified"></td>
       </tr>
       <tr>
         <td class="label">DM:</td>
         <td><input type="checkbox" name="dms_visible"></td>
-        <td><input type="text" name="dms_refresh_interval" validator="required,number,minRefresh"></td>
+        <td><input type="text" name="dms_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td>1</td>
         <td><input type="checkbox" name="dms_include_unified"></td>
       </tr>
       <tr>
         <td class="label">Lists:</td>
         <td><input type="checkbox" name="lists_visible"></td>
-        <td><input type="text" name="lists_refresh_interval" validator="required,number,minRefresh"></td>
+        <td><input type="text" name="lists_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td>
           <select name="lists_count" style="width: 40px;">
             <option value="1">1</option>
@@ -515,7 +534,7 @@ function updatePredictedHitsCount() {
       <tr>
         <td class="label">Favorites:</td>
         <td><input type="checkbox" name="favorites_visible"></td>
-        <td><input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh"></td>
+        <td><input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td>1</td>
         <td><input type="checkbox" name="favorites_include_unified"></td>
       </tr>
