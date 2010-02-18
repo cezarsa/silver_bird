@@ -2,7 +2,7 @@
 <html>
 <head>
 <!-- Theme specific CSS files are loaded later by the ThemeManager -->
-<link rel="stylesheet" type="text/css" href="css/base.css" />
+<link id="base_stylesheet" rel="stylesheet" type="text/css" href="css/base.css" />
 <link rel="stylesheet" type="text/css" href="css/simple_select.css" />
 <link rel="stylesheet" type="text/css" href="css/tipsy.css" />
 
@@ -117,8 +117,9 @@ var ThemeManager = {
     $(theme.split(",")).each(function(i, p) {
       $("<link rel='stylesheet' type='text/css' class='theme' href='" + p + "'>").appendTo(document.head);
     });
-    var baseRules = document.styleSheets[0].cssRules;
-    if(baseRules && baseRules.length) {
+    var baseStyles = $("#base_stylesheet")[0];
+    var baseRules = baseStyles.cssRules;
+    if(baseRules) {
       var fontFamily = OptionsBackend.get('font_family');
       var fontSize = OptionsBackend.get('font_size');
       for(var i = 0, len = baseRules.length; i < len; ++i) {
