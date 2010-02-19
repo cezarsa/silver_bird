@@ -1,3 +1,11 @@
+1.6.1 (2010-02-18)
+(Small release only with bugfixes.)
+
+* Better handling OAuth authentication page with multiple clones.
+  (To better support multiple accounts with http://crxclone.appspot.com)
+* Fixing overlapping names in Darkness theme
+* Trying to address bug with fonts going back to original state after a while
+
 1.6.0 (2010-02-08)
 
 * Awesome new unified timeline. Now you can select multiple timelines and join them
