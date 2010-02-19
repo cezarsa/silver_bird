@@ -117,9 +117,9 @@ var ThemeManager = {
     $(theme.split(",")).each(function(i, p) {
       $("<link rel='stylesheet' type='text/css' class='theme' href='" + p + "'>").appendTo(document.head);
     });
-    var baseStyles = $("#base_stylesheet")[0];
-    var baseRules = baseStyles.cssRules;
-    if(baseRules) {
+    var baseStyle = $("#base_stylesheet")[0];
+    if(baseStyle.sheet && baseStyle.sheet.cssRules) {
+      var baseRules = baseStyle.sheet.cssRules;
       var fontFamily = OptionsBackend.get('font_family');
       var fontSize = OptionsBackend.get('font_size');
       for(var i = 0, len = baseRules.length; i < len; ++i) {
