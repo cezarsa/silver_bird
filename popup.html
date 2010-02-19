@@ -558,7 +558,7 @@ var Renderer = {
     var transformList = [
       {
         //create links
-        'expression': /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig,
+        'expression': /(\b(((https?|ftp|file):\/\/)|www\.)[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig,
         'replacement': "<a href='javascript:' onclick=\"javascript:openTab('$1')\" onmouseover=\"Renderer.expandLink(this, '$1')\">$1</a>"
       },
       {
@@ -882,6 +882,8 @@ function openTab(tabUrl) {
   var selected = true;
   if(button == 1 || event.ctrlKey) // Middle Button or Ctrl click
     selected = false;
+  if(tabUrl.match(/^www/i))
+    tabUrl = "http://" + tabUrl;
   chrome.tabs.create({ url: tabUrl, selected: selected });
 }
 
