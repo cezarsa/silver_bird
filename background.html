@@ -4,6 +4,8 @@
 <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
 <script type="text/javascript" src="lib/3rdparty/oauth.js"></script>
 <script type="text/javascript" src="lib/3rdparty/sha1.js"></script>
+
+<script type="text/javascript" src="lib/persistence.js"></script>
 <script type="text/javascript" src="lib/twitter_lib.js"></script>
 <script type="text/javascript" src="lib/icon_creator.js"></script>
 <script type="text/javascript" src="lib/expander_lib.js"></script>
@@ -83,8 +85,9 @@ OptionsBackend = {
     font_size: '1.0em'
   },
   cachedOptions: null,
+  optionsData: Persistence.options(),
   save: function(optionsMap) {
-    localStorage['options'] = JSON.stringify(optionsMap);
+    this.optionsData.save(JSON.stringify(optionsMap));
     this.cachedOptions = this.load();
   },
   load: function(forceDefault) {
@@ -93,7 +96,7 @@ OptionsBackend = {
       return map;
     }
     try {
-      var parsedMap = JSON.parse(localStorage['options']);
+      var parsedMap = JSON.parse(this.optionsData.val());
       if(parsedMap)
         $.extend(true, map, parsedMap);
     } catch(e) { /* ignored */ }
@@ -711,6 +714,10 @@ function TweetManager() {
     this.currentTimeline = 'unified';
   }
 
+  this.selectedListsData = Persistence.selectedLists();
+  this.timelineOrderData = Persistence.timelineOrder();
+  this.oauthTokenData = Persistence.oauthTokenData();
+
   var timelineNames = ["home", "mentions", "dms", "favorites", "lists"];
   for(var i = 0; i < timelineNames.length; ++i) {
     var refreshInterval = OptionsBackend.get(timelineNames[i] + '_refresh_interval');
@@ -781,7 +788,8 @@ function TweetManager() {
     },
     OptionsBackend.get('base_url'),
     OptionsBackend.get('base_authorize_url'),
-    OptionsBackend.get('base_signing_url')
+    OptionsBackend.get('base_signing_url'),
+    this.oauthTokenData
   );
 }
 
@@ -809,7 +817,7 @@ TweetManager.prototype = {
   },
 
   getSelectedLists: function() {
-    var selectedListsStr = localStorage['selected_lists'];
+    var selectedListsStr = this.selectedListsData.val();
     if(selectedListsStr) {
       return JSON.parse(selectedListsStr);
     }
@@ -819,7 +827,7 @@ TweetManager.prototype = {
   registerSelectedList: function(timelineId, listId) {
     var selectedLists = this.getSelectedLists();
     selectedLists[timelineId] = listId;
-    localStorage['selected_lists'] = JSON.stringify(selectedLists);
+    this.selectedListsData.save(JSON.stringify(selectedLists));
   },
 
   eachTimeline: function(callback) {
@@ -851,7 +859,7 @@ TweetManager.prototype = {
 
   getTimelinePosition: function(timelineId) {
     if(!this.timelineOrderCache) {
-      var storedOrder = localStorage['timeline_order'];
+      var storedOrder = this.timelineOrderData.val();
       if(storedOrder) {
         this.timelineOrderCache = JSON.parse(storedOrder);
       } else {
@@ -868,7 +876,7 @@ TweetManager.prototype = {
 
   setTimelineOrder: function(sortedTimelinesArray) {
     this.timelineOrderCache = sortedTimelinesArray;
-    localStorage['timeline_order'] = JSON.stringify(sortedTimelinesArray);
+    this.timelineOrderData.save(JSON.stringify(sortedTimelinesArray));
   },
 
   initIconAndAlerts: function() {
@@ -1200,8 +1208,8 @@ TweetManager.prototype = {
   },
 
   signout: function() {
-    localStorage.removeItem('oauth_token_data');
-    localStorage.removeItem('selected_lists');
+    this.oauthTokenData.remove();
+    this.selectedListsData.remove();
     this.stopAll();
     TweetManager.instance = new TweetManager();
   },
@@ -1257,11 +1265,7 @@ TweetManager.prototype = {
 }
 
 /* Clean up old versions mess */
-localStorage.removeItem('password');
-localStorage.removeItem('logged');
-localStorage.removeItem('username');
-localStorage.removeItem('remember');
-localStorage.removeItem('currentTheme');
+Persistence.cleanupOldData();
 
 function compareVersions(v1, v2) {
   if(!v1) return -1;
@@ -1279,7 +1283,8 @@ function compareVersions(v1, v2) {
 function checkVersionChanges(manifest) {
   try {
     var currentVersion = manifest.version.split('.');
-    var storageVersion = localStorage['version'];
+    var storageData = Persistence.version();
+    var storageVersion = storageData.val();
     if(storageVersion) {
       storageVersion = JSON.parse(storageVersion);
     }
@@ -1295,13 +1300,14 @@ function checkVersionChanges(manifest) {
         }
       }
       if(compareVersions(storageVersion, [1, 5, 1]) <= 0) {
-        var storedOrder = localStorage['timeline_order'];
+        var timelineOrderData = Persistence.timelineOrder();
+        var storedOrder = timelineOrderData.val();
         storedOrder = JSON.parse(storedOrder);
         storedOrder.unshift('unified');
-        localStorage['timeline_order'] = JSON.stringify(storedOrder);
+        timelineOrderData.save(JSON.stringify(storedOrder));
       }
       //TODO: Maybe restart tweetManager
-      localStorage['version'] = JSON.stringify(currentVersion);
+      storageData.save(JSON.stringify(currentVersion));
     }
   } catch(e) {
     /* experimental code, something can go wrong */
