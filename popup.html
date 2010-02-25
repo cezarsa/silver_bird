@@ -145,9 +145,9 @@ var ThemeManager = {
       $(".inner_timeline").height('400px');
     }
   },
+  popupSizeData: Persistence.popupSize(),
   handleWindowResizing: function () {
-    var popupSizeData = Persistence.popupSize();
-    var sizeArray = popupSizeData.val();
+    var sizeArray = ThemeManager.popupSizeData.val();
     if(sizeArray) {
       sizeArray = sizeArray.split('x');
       ThemeManager.setPopupSize(sizeArray[0], sizeArray[1]);
@@ -162,11 +162,11 @@ var ThemeManager = {
         ThemeManager.setPopupSize($this.width(), $this.height());
       },
       stop: function(e, ui) {
-        popupSizeData.save($(this).width() + 'x' + $(this).height());
+        ThemeManager.popupSizeData.save($(this).width() + 'x' + $(this).height());
       }
     });
     $(".ui-resizable-handle").dblclick(function(e) {
-      popupSizeData.remove();
+      ThemeManager.popupSizeData.remove();
       ThemeManager.setPopupSize();
     });
   }

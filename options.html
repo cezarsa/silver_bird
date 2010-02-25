@@ -13,6 +13,7 @@
 <script type="text/javascript">
 
 var OptionsBackend = chrome.extension.getBackgroundPage().OptionsBackend;
+var Persistence = chrome.extension.getBackgroundPage().Persistence;
 
 function Options() {
   this.optionsMap = {};
@@ -45,6 +46,7 @@ function Options() {
   };
 
   this.loadDefaults = function() {
+    Persistence.popupSize().remove();
     this.load(true);
     this.save();
   };
@@ -373,7 +375,6 @@ function updatePredictedHitsCount() {
     </select><br>
     <label for="font_family">Font Family:</label>
     <input type="text" style="width: 20em"; name="font_family" validator="required"><br>
-
     <label for="hover_timeout">Hover to read time (ms):</label>
     <input type="text" name="hover_timeout" validator="required,number,positive"><br>
     <label for="show_expanded_urls">Expand shortened URLs:</label>
@@ -419,6 +420,7 @@ function updatePredictedHitsCount() {
         </td>
       </tr>
     </table><br>
+    <input type="button" value="Reset Popup Size" onclick="Persistence.popupSize().remove();">
   </fieldset>
 
   <fieldset>
