@@ -105,11 +105,18 @@ input[type='text'] {
   padding-top: 6px;
 }
 
-.timeline {
+.timeline div.ui-resizable-se {
+  bottom: -3px;
+  right: -3px;
+  width: 5px;
+  height: 5px;
+  background-image: none;
+}
+
+.inner_timeline {
   margin: 0px;
   padding: 0px;
   padding-right: 35px;
-  max-height: 400px;
   overflow: auto;
   overflow-x: hidden;
 }

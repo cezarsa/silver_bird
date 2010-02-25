@@ -8,6 +8,7 @@
 
 <script>
 var MAX_TWEET_SIZE = 140;
+var Persistence = chrome.extension.getBackgroundPage().Persistence;
 var urlExpander = chrome.extension.getBackgroundPage().urlExpander;
 var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
 var twitterBackend = tweetManager.twitterBackend;
@@ -101,7 +102,7 @@ var Paginator = {
   firstPage: function(shouldScrollTop) {
     this.needsMore = false;
     if(shouldScrollTop) {
-      $("#timeline-" + tweetManager.currentTimeline).scrollTop(0);
+      $("#timeline-" + tweetManager.currentTimeline + ' .inner_timeline').scrollTop(0);
     }
   },
   nextPage: function() {
@@ -131,6 +132,43 @@ var ThemeManager = {
         }
       }
     }
+  },
+  setPopupSize: function(width, height) {
+    if(width) {
+      $(".timeline").width(width + 'px');
+    } else {
+      $(".timeline").width('490px');
+    }
+    if(height) {
+      $(".inner_timeline").height(height + 'px');
+    } else {
+      $(".inner_timeline").height('400px');
+    }
+  },
+  handleWindowResizing: function () {
+    var popupSizeData = Persistence.popupSize();
+    var sizeArray = popupSizeData.val();
+    if(sizeArray) {
+      sizeArray = sizeArray.split('x');
+      ThemeManager.setPopupSize(sizeArray[0], sizeArray[1]);
+    } else {
+      ThemeManager.setPopupSize();
+    }
+    $(".timeline").resizable({
+      handles: 'e, s, se',
+      minWidth: 450,
+      resize: function(e, ui) {
+        var $this = $(this);
+        ThemeManager.setPopupSize($this.width(), $this.height());
+      },
+      stop: function(e, ui) {
+        popupSizeData.save($(this).width() + 'x' + $(this).height());
+      }
+    });
+    $(".ui-resizable-handle").dblclick(function(e) {
+      popupSizeData.remove();
+      ThemeManager.setPopupSize();
+    });
   }
 }
 
@@ -707,7 +745,7 @@ var Renderer = {
   },
 
   assemblyTweets: function (tweets, timelineId) {
-    var destination = $("#timeline-" + timelineId);
+    var destination = $("#timeline-" + timelineId + " .inner_timeline");
     if(destination.length == 0)
       return;
 
@@ -871,6 +909,7 @@ var Lists = {
           }
         });
       }
+      ThemeManager.handleWindowResizing();
     });
   }
 }
@@ -1012,7 +1051,7 @@ function initializeWorkspace() {
   ThemeManager.init();
 
   $("#tabs").tabs({
-    panelTemplate: '<div class="timeline"></div>',
+    panelTemplate: '<div class="timeline"><div class="inner_timeline"></div></div>',
     tabTemplate: '<li id="tab_#{href}"><a href="#{href}"><span>#{label}</span></a></li>',
     selected: 0,
     select: function(event, ui) {
@@ -1022,7 +1061,7 @@ function initializeWorkspace() {
       }
     },
     show: function(event, ui) {
-      $(ui.panel).scrollTop(tweetManager.getCurrentTimeline().currentScroll);
+      $('.inner_timeline', ui.panel).scrollTop(tweetManager.getCurrentTimeline().currentScroll);
     }
   });
   var showLists = false;
@@ -1069,6 +1108,7 @@ function initializeWorkspace() {
 
   //Delay loading, improving responsiveness
   setTimeout(function() {
+    ThemeManager.handleWindowResizing();
     if(showLists) {
       Lists.init();
     }
@@ -1079,7 +1119,7 @@ function initializeWorkspace() {
     if(!tweetManager.currentTimeline.match(/^lists/) || tweetManager.getListId()) {
       prepareAndLoadTimeline();
     }
-    var tabEl = $("#timeline-" + tweetManager.currentTimeline);
+    var tabEl = $("#timeline-" + tweetManager.currentTimeline + ' .inner_timeline');
     tabEl.scrollTop(tweetManager.getCurrentTimeline().currentScroll);
 
     tweetManager.eachTimeline(function(timeline) {
@@ -1087,7 +1127,7 @@ function initializeWorkspace() {
         return true;
       }
       var timelineId = this;
-      var tabEl = $("#timeline-" + timelineId);
+      var tabEl = $("#timeline-" + timelineId + ' .inner_timeline');
       tabEl.scroll(function(e) {
         var $this = $(this);
         var threshold = 50;
