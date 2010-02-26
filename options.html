@@ -17,6 +17,11 @@ var Persistence = chrome.extension.getBackgroundPage().Persistence;
 
 function Options() {
   this.optionsMap = {};
+  this.onloadCallback = null;
+
+  this.onload = function(callback) {
+    this.onloadCallback = callback;
+  };
 
   this.load = function(forceDefault) {
     this.optionsMap = OptionsBackend.load(forceDefault);
@@ -43,6 +48,9 @@ function Options() {
         }
       }
     });
+    if(this.onloadCallback) {
+      this.onloadCallback();
+    }
   };
 
   this.loadDefaults = function() {
@@ -266,6 +274,28 @@ $(function() {
   $("select[name='url_shortener']").change(onShortenerChange);
   $("input[name='shortener_acct']").click(onShortenerAcctClick);
 
+  var onSigningUrlCheck = function() {
+    var $check = $("input[name='same_signing_urls']");
+    if($check.attr('checked')) {
+      $("input[name='base_signing_url'], input[name='base_oauth_signing_url']").attr('disabled', 'disabled');
+      $("input[name='base_signing_url']").val($("input[name='base_url']").val());
+      $("input[name='base_oauth_signing_url']").val($("input[name='base_oauth_url']").val());
+
+      $("input[name='base_url']").bind('keyup blur', function() {
+        $("input[name='base_signing_url']").val($(this).val());
+      });
+      $("input[name='base_oauth_url']").bind('keyup blur', function() {
+        $("input[name='base_oauth_signing_url']").val($(this).val());
+      });
+    } else {
+      $("input[name='base_signing_url'], input[name='base_oauth_signing_url']").removeAttr('disabled');
+
+      $("input[name='base_url']").unbind('keyup blur');
+      $("input[name='base_oauth_url']").unbind('keyup blur');
+    }
+  };
+  $("input[name='same_signing_urls']").click(onSigningUrlCheck);
+
   $('canvas.color_selector').ColorPicker({
     onChange: function (hsb, hex, rgb, rgbaStr) {
       var canvas = this.data('colorpicker').el;
@@ -280,9 +310,12 @@ $(function() {
       $(div).css('backgroundColor', rgbaStr);
     }
   });
+  options.onload(function() {
+    onShortenerChange();
+    onShortenerAcctClick();
+    onSigningUrlCheck();
+  });
   options.load();
-  onShortenerChange();
-  onShortenerAcctClick();
 
   updatePredictedHitsCount();
   var timelines = ['unified', 'home', 'mentions', 'dms', 'lists', 'favorites'];
@@ -557,10 +590,16 @@ function updatePredictedHitsCount() {
     <input type="text" name="request_timeout" validator="required,number,positive"><br>
     <label for="base_url">*Twitter's API URL:</label>
     <input type="text" name="base_url" style="width: 300px;" validator="required,url"><br>
-    <label for="base_signing_url">*OAuth Signature URL:</label>
+    <label for="base_oauth_url">*OAuth URL:</label>
+    <input type="text" name="base_oauth_url" style="width: 300px;" validator="required,url"><br>
+
+    <label for="same_signing_urls">Same signing URLs:</label>
+    <input type="checkbox" name="same_signing_urls"><br>
+
+    <label for="base_signing_url">*API Signing URL:</label>
     <input type="text" name="base_signing_url" style="width: 300px;" validator="required,url"><br>
-    <label for="base_authorize_url">*OAuth Authorize URL:</label>
-    <input type="text" name="base_authorize_url" style="width: 300px;" validator="required,url"><br>
+    <label for="base_oauth_signing_url">*OAuth Signing URL:</label>
+    <input type="text" name="base_oauth_signing_url" style="width: 300px;" validator="required,url"><br>
   </fieldset>
 
   <br>

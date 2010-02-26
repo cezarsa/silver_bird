@@ -31,9 +31,13 @@ OptionsBackend = {
     compose_position: 'top',
     hover_timeout: 1000,
 
-    base_url: 'http://twitter.com/',
-    base_signing_url: 'http://twitter.com/',
-    base_authorize_url: 'https://twitter.com/oauth/authorize?oauth_token=',
+    base_url: 'http://api.twitter.com/1/',
+    base_oauth_url: 'https://twitter.com/oauth/',
+
+    same_signing_urls: true,
+
+    base_signing_url: 'http://api.twitter.com/1/',
+    base_oauth_signing_url: 'https://twitter.com/oauth/',
 
     use_desktop_notifications: false,
     home_on_page: false,
@@ -787,8 +791,9 @@ function TweetManager() {
       _this.onHitsUpdated.call(_this, remainingHits, nextHitsReset, hourlyLimit);
     },
     OptionsBackend.get('base_url'),
-    OptionsBackend.get('base_authorize_url'),
+    OptionsBackend.get('base_oauth_url'),
     OptionsBackend.get('base_signing_url'),
+    OptionsBackend.get('base_oauth_signing_url'),
     this.oauthTokenData
   );
 }
@@ -1306,6 +1311,19 @@ function checkVersionChanges(manifest) {
         storedOrder.unshift('unified');
         timelineOrderData.save(JSON.stringify(storedOrder));
       }
+      if(compareVersions(storageVersion, [1, 6, 1]) <= 0) {
+        var options = OptionsBackend.load();
+        var baseUrl = options['base_url'];
+        if(baseUrl.match(/http:\/\/twitter\.com/)) {
+          options['base_url'] = 'http://api.twitter.com/1/';
+          options['base_signing_url'] = 'http://api.twitter.com/1/';
+        } else if(baseUrl.match(/https:\/\/twitter\.com/)) {
+          options['base_url'] = 'https://api.twitter.com/1/';
+          options['base_signing_url'] = 'https://api.twitter.com/1/';
+        }
+        OptionsBackend.save(options);
+      }
+
       //TODO: Maybe restart tweetManager
       storageData.save(JSON.stringify(currentVersion));
     }
