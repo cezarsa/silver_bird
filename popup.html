@@ -140,9 +140,9 @@ var ThemeManager = {
       $(".timeline").width('490px');
     }
     if(height) {
-      $(".inner_timeline").height(height + 'px');
+      $(".inner_timeline,.timeline").height(height + 'px');
     } else {
-      $(".inner_timeline").height('400px');
+      $(".inner_timeline,.timeline").height('400px');
     }
   },
   popupSizeData: Persistence.popupSize(),
@@ -165,6 +165,7 @@ var ThemeManager = {
         ThemeManager.popupSizeData.save($(this).width() + 'x' + $(this).height());
       }
     });
+    $(".ui-resizable-handle").attr('title', 'Double click to reset size');
     $(".ui-resizable-handle").dblclick(function(e) {
       ThemeManager.popupSizeData.remove();
       ThemeManager.setPopupSize();
