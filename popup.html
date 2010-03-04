@@ -841,10 +841,13 @@ var Renderer = {
     Renderer.showMessage(msg);
   },
 
-  showError: function(msg, tryAgainFunction) {
+  showError: function(msg, tryAgainFunction, params) {
     $("#warning .img_area img").attr('src', 'img/error.png');
     if(tryAgainFunction) {
-      msg += ' <a href="#" onclick="' + tryAgainFunction + '(); Renderer.hideMessage();">Try again</a>';
+      if(!params) {
+        params = '';
+      }
+      msg += ' <a href="#" onclick="' + tryAgainFunction + '(' + params + '); Renderer.hideMessage();">Try again</a>';
     }
     Renderer.showMessage(msg);
   },
@@ -871,8 +874,11 @@ var Lists = {
     var _this = this;
     tweetManager.lists(force, function(success, lists, status) {
       if(!success) {
-        Renderer.showError('Unexpected error ' + status + ' fetching lists.', 'Lists.init');
-        return;
+        if(force) {
+          Renderer.showError('Unexpected error ' + status + ' fetching lists.', 'Lists.init', 'true');
+          return;
+        }
+        lists = [];
       }
       var listsTabCount = tweetManager.listsTabCount;
       for(var i = 0; i < listsTabCount; ++i) {
@@ -942,7 +948,12 @@ function onTimelineRetrieved(tweets, timelineId) {
     Paginator.needsMore = false;
     Renderer.assemblyTweets(tweets, timelineId);
   } else {
-    Renderer.showError('Unexpected error ' + tweetManager.currentError() + ' updating tweets.', 'loadTimeline');
+    var baseErrorMsg = tweetManager.currentError();
+    var errorMsg = 'Unexpected error ' + errorMsg + ' updating tweets.';
+    if(baseErrorMsg == '(timeout)') {
+      errorMsg += ' If this timeout error is being shown repeatedly, please try logging out and logging in again.';
+    }
+    Renderer.showError(errorMsg, 'loadTimeline');
   }
   loadingNewTweets = false;
 }

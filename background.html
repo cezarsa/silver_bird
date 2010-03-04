@@ -156,11 +156,23 @@ UnifiedTweetsTimeline.prototype = {
     /*noop*/
   },
 
+  getError: function() {
+    var err = null;
+    this.eachTimeline(function(timeline) {
+      if(timeline.getError()) {
+        err = timeline.getError();
+        return false;
+      }
+    });
+    return err;
+  },
+
   eachTimeline: function(callback) {
     for(var tId in this.timelines) {
       var timeline = this.timelines[tId];
       if(timeline.includeInUnified) {
-        callback.call(this, timeline);
+        if(callback.call(this, timeline) === false)
+          break;
       }
     }
   },
@@ -400,6 +412,10 @@ TweetsTimeline.prototype = {
 
   setError: function(status) {
     this.currentError = status;
+  },
+
+  getError: function() {
+    return this.currentError;
   },
 
   setTimelinePath: function(path) {
@@ -1202,7 +1218,7 @@ TweetManager.prototype = {
   },
 
   currentError: function() {
-    return this.timelines[this.currentTimeline].currentError;
+    return this.timelines[this.currentTimeline].getError();
   },
 
   stopAll: function() {
