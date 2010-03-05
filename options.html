@@ -35,6 +35,10 @@ function Options() {
           Converters[converter].load($this, _this.optionsMap[name]);
         } else if($this.is('[type="checkbox"]')) {
           $this.attr('checked', _this.optionsMap[name]);
+        } else if($this.is('[type="radio"]')) {
+          if(_this.optionsMap[name] == $this.val()) {
+            $this.attr('checked', true);
+          }
         } else if($this.is('.color_selector')) {
           $this.attr('strColor', _this.optionsMap[name]);
           $this.ColorPickerSetColor(_this.optionsMap[name]);
@@ -96,6 +100,11 @@ function Options() {
             newValue = Converters[converter].save($this);
           } else if($this.is('[type="checkbox"]')) {
             newValue = $this.attr('checked');
+          } else if($this.is('[type="radio"]')) {
+            if(!$this.attr('checked')) {
+              return true;
+            }
+            newValue = $this.val();
           } else if($this.is('.color_selector')) {
             newValue = $this.attr('strColor');
           } else {
@@ -342,6 +351,33 @@ $(function() {
       .click(updatePredictedHitsCount)
       .change(updatePredictedHitsCount);
   }
+
+  $("input[name='microblogging_service']").mousedown(function(e) {
+    var el = $(e.target);
+    if(!el.is(':checked')) {
+      var proceed = confirm("This will reset any custom API URL configuration. Proceed?");
+      if(proceed) {
+        el.click();
+        var sameSigningEl = $("input[name='same_signing_urls']");
+        var baseUrlEl = $("input[name='base_url']");
+        var baseOauthUrlEl = $("input[name='base_oauth_url']");
+
+        if(el.val() == 'twitter') {
+          baseUrlEl.val('http://api.twitter.com/1/');
+          baseOauthUrlEl.val('https://twitter.com/oauth/');
+        } else if(el.val() == 'identica') {
+          baseUrlEl.val('http://identi.ca/api/');
+          baseOauthUrlEl.val('https://identi.ca/api/oauth/');
+        }
+        baseUrlEl.blur();
+        baseOauthUrlEl.blur();
+        if(!sameSigningEl.is(':checked')) {
+          sameSigningEl.attr('checked', true).click().attr('checked', true);
+        }
+      }
+    }
+    return true;
+  });
 });
 
 function updatePredictedHitsCount() {
@@ -360,7 +396,6 @@ function updatePredictedHitsCount() {
       continue;
     }
 
-
     var inputRefreshEl = $('input[name="' +  timelines[i] + '_refresh_interval"]');
     var intVal = parseInt(inputRefreshEl.val());
     var timelineHits = (60 * 60) / intVal;
@@ -378,7 +413,6 @@ function updatePredictedHitsCount() {
   }
   return totalHits;
 }
-
 </script>
 
 </head>
@@ -595,6 +629,12 @@ function updatePredictedHitsCount() {
     <input type="text" name="tweets_per_page" validator="required,number,positive" must_restart><br>
     <label for="max_cached_tweets">Max Shown Tweets:</label>
     <input type="text" name="max_cached_tweets" validator="required,number,positive" must_restart><br>
+  </fieldset>
+
+  <fieldset>
+    <legend>Microblogging Service</legend>
+    <input type="radio" name="microblogging_service" value="twitter" must_restart> Twitter
+    <input type="radio" name="microblogging_service" value="identica" must_restart> identi.ca
   </fieldset>
 
   <fieldset>

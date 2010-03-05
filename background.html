@@ -31,6 +31,8 @@ OptionsBackend = {
     compose_position: 'top',
     hover_timeout: 1000,
 
+    microblogging_service: 'twitter',
+
     base_url: 'http://api.twitter.com/1/',
     base_oauth_url: 'https://twitter.com/oauth/',
 
@@ -249,7 +251,9 @@ UnifiedTweetsTimeline.prototype = {
         checkMaxTweet('favorites');
       }
 
-      usedTweetsMap[maxBeforeTweet.id] = true;
+      if(maxBeforeTweet) {
+        usedTweetsMap[maxBeforeTweet.id] = true;
+      }
       return maxBeforeTweet;
     }
 
@@ -737,6 +741,15 @@ function TweetManager() {
   this.selectedListsData = Persistence.selectedLists();
   this.timelineOrderData = Persistence.timelineOrder();
   this.oauthTokenData = Persistence.oauthTokenData();
+  this.oauthTokenService = Persistence.oauthTokenService();
+
+  var currentService = OptionsBackend.get('microblogging_service');
+  if(!this.oauthTokenService.val()) {
+    this.oauthTokenService.save(currentService);
+  } else if(currentService != this.oauthTokenService.val()) {
+    this.oauthTokenService.save(currentService);
+    this.oauthTokenData.remove();
+  }
 
   var timelineNames = ["home", "mentions", "dms", "favorites", "lists"];
   for(var i = 0; i < timelineNames.length; ++i) {
@@ -806,6 +819,7 @@ function TweetManager() {
     function(remainingHits, nextHitsReset, hourlyLimit) {
       _this.onHitsUpdated.call(_this, remainingHits, nextHitsReset, hourlyLimit);
     },
+    OptionsBackend.get('microblogging_service'),
     OptionsBackend.get('base_url'),
     OptionsBackend.get('base_oauth_url'),
     OptionsBackend.get('base_signing_url'),

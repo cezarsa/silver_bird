@@ -22,6 +22,10 @@
     {
       "matches": ["http://twitter.com/oauth/authorize", "https://twitter.com/oauth/authorize"],
       "js": ["lib/3rdparty/jquery.js", "lib/oauth_authorizer.js"]
+    },
+    {
+      "matches": ["http://identi.ca/api/oauth/authorize", "https://identi.ca/api/oauth/authorize"],
+      "js": ["lib/3rdparty/jquery.js", "lib/oauth_identica_authorizer.js"]
     }
   ],
   "options_page": "options.html",
