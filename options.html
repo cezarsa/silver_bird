@@ -84,28 +84,44 @@ function Options() {
       this.addValidationError(null, validInfo);
     }
     if(!hasErrors) {
+      var mustRestart = false;
+      var restartedAsked = false;
       $('input,select,.color_selector').each(function() {
         var $this = $(this);
         var name = $this.attr('name');
         if(name) {
           var converter = $this.attr('converter');
+          var newValue = null;
           if(converter) {
-            _this.optionsMap[name] = Converters[converter].save($this);
+            newValue = Converters[converter].save($this);
           } else if($this.is('[type="checkbox"]')) {
-             _this.optionsMap[name] = $this.attr('checked');
+            newValue = $this.attr('checked');
           } else if($this.is('.color_selector')) {
-            _this.optionsMap[name] = $this.attr('strColor');
+            newValue = $this.attr('strColor');
           } else {
             var elValue = $this.val();
             var intValue = parseInt(elValue);
             if(intValue == elValue) {
               elValue = intValue;
             }
-            _this.optionsMap[name] = elValue;
+            newValue = elValue;
+          }
+          var oldValue = _this.optionsMap[name];
+          if(oldValue != newValue) {
+            if($this.attr('must_restart') !== undefined && !restartedAsked) {
+              restartedAsked = true;
+              if(confirm('Some of the changed options require the extension to be restarted, do you want to restart it now?')) {
+                mustRestart = true;
+              }
+            }
+            _this.optionsMap[name] = newValue;
           }
         }
       });
       OptionsBackend.save(this.optionsMap);
+      if(mustRestart) {
+        chrome.extension.getBackgroundPage().TweetManager.instance.restart();
+      }
       $(document).scrollTop(0);
       $("#saved_notice").stop().show().css('opacity', '1.0').fadeOut(5000);
     }
@@ -372,9 +388,6 @@ function updatePredictedHitsCount() {
 
 <div id="saved_notice">Your configuration has been successfully saved!</div>
 <div id="main_area">
-  <p class="notice">
-    Please notice that options denoted with asterisk "*" will only take effect if you restart the extension. (Disabling and enabling it again)
-  </p>
   <p>
     Remaining Twitter API Hits: <span class="twitter_hits_left"></span><br>
     Rate Limit Reset: <span class="twitter_hits_reset"></span>
@@ -416,8 +429,8 @@ function updatePredictedHitsCount() {
     <input type="checkbox" style="margin-bottom: 7px;" id="reply_all" name="reply_all" />
     <br />
 
-    <label>*Icon color:</label>
-    <canvas name="idle_color" width="19" height="19" class="color_selector"></canvas><br/>
+    <label>Icon color:</label>
+    <canvas name="idle_color" width="19" height="19" class="color_selector" must_restart></canvas><br/>
 
     <label for="tweets_color_only_unified">Colors only in unified:</label>
     <input type="checkbox" name="tweets_color_only_unified" /><br/>
@@ -519,44 +532,44 @@ function updatePredictedHitsCount() {
     <table class="timelines">
       <tr>
         <th></th>
-        <th>*Visible</th>
-        <th>*Refresh Interval (s)</th>
-        <th>*Tabs Count</th>
-        <th>*Include in unified timeline</th>
+        <th>Visible</th>
+        <th>Refresh Interval (s)</th>
+        <th>Tabs Count</th>
+        <th>Include in unified timeline</th>
       <tr>
         <td class="label">Unified Timeline:</td>
-        <td><input type="checkbox" name="unified_visible" validator="unifiedValidator"></td>
+        <td><input type="checkbox" name="unified_visible" validator="unifiedValidator" must_restart></td>
         <td>-</td>
         <td>-</td>
         <td>-</td>
       </tr>
       <tr>
         <td class="label">Home:</td>
-        <td><input type="checkbox" name="home_visible"></td>
-        <td><input type="text" name="home_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="home_visible" must_restart></td>
+        <td><input type="text" name="home_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval" must_restart></td>
         <td>1</td>
-        <td><input type="checkbox" name="home_include_unified"></td>
+        <td><input type="checkbox" name="home_include_unified" must_restart></td>
       </tr>
       <tr>
         <td class="label">Mentions:</td>
-        <td><input type="checkbox" name="mentions_visible"></td>
-        <td><input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="mentions_visible" must_restart></td>
+        <td><input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval" must_restart></td>
         <td>1</td>
-        <td><input type="checkbox" name="mentions_include_unified"></td>
+        <td><input type="checkbox" name="mentions_include_unified" must_restart></td>
       </tr>
       <tr>
         <td class="label">DM:</td>
-        <td><input type="checkbox" name="dms_visible"></td>
-        <td><input type="text" name="dms_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="dms_visible" must_restart></td>
+        <td><input type="text" name="dms_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval" must_restart></td>
         <td>1</td>
-        <td><input type="checkbox" name="dms_include_unified"></td>
+        <td><input type="checkbox" name="dms_include_unified" must_restart></td>
       </tr>
       <tr>
         <td class="label">Lists:</td>
-        <td><input type="checkbox" name="lists_visible"></td>
-        <td><input type="text" name="lists_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="lists_visible" must_restart></td>
+        <td><input type="text" name="lists_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval" must_restart></td>
         <td>
-          <select name="lists_count" style="width: 40px;">
+          <select name="lists_count" style="width: 40px;" must_restart>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -564,42 +577,42 @@ function updatePredictedHitsCount() {
             <option value="5">5</option>
           </select>
         </td>
-        <td><input type="checkbox" name="lists_include_unified"></td>
+        <td><input type="checkbox" name="lists_include_unified" must_restart></td>
       </tr>
       <tr>
         <td class="label">Favorites:</td>
-        <td><input type="checkbox" name="favorites_visible"></td>
-        <td><input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="favorites_visible" must_restart></td>
+        <td><input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval" must_restart></td>
         <td>1</td>
-        <td><input type="checkbox" name="favorites_include_unified"></td>
+        <td><input type="checkbox" name="favorites_include_unified" must_restart></td>
       </tr>
     </table>
   </fieldset>
 
   <fieldset>
     <legend>Timelines</legend>
-    <label for="tweets_per_page">*Tweets per Page:</label>
-    <input type="text" name="tweets_per_page" validator="required,number,positive"><br>
-    <label for="max_cached_tweets">*Max Shown Tweets:</label>
-    <input type="text" name="max_cached_tweets" validator="required,number,positive"><br>
+    <label for="tweets_per_page">Tweets per Page:</label>
+    <input type="text" name="tweets_per_page" validator="required,number,positive" must_restart><br>
+    <label for="max_cached_tweets">Max Shown Tweets:</label>
+    <input type="text" name="max_cached_tweets" validator="required,number,positive" must_restart><br>
   </fieldset>
 
   <fieldset>
     <legend>Advanced</legend>
-    <label for="request_timeout">*Request Timeout (ms):</label>
-    <input type="text" name="request_timeout" validator="required,number,positive"><br>
-    <label for="base_url">*Twitter's API URL:</label>
-    <input type="text" name="base_url" style="width: 300px;" validator="required,url"><br>
-    <label for="base_oauth_url">*OAuth URL:</label>
-    <input type="text" name="base_oauth_url" style="width: 300px;" validator="required,url"><br>
+    <label for="request_timeout">Request Timeout (ms):</label>
+    <input type="text" name="request_timeout" validator="required,number,positive" must_restart><br>
+    <label for="base_url">Twitter's API URL:</label>
+    <input type="text" name="base_url" style="width: 300px;" validator="required,url" must_restart><br>
+    <label for="base_oauth_url">OAuth URL:</label>
+    <input type="text" name="base_oauth_url" style="width: 300px;" validator="required,url" must_restart><br>
 
     <label for="same_signing_urls">Same signing URLs:</label>
     <input type="checkbox" name="same_signing_urls"><br>
 
-    <label for="base_signing_url">*API Signing URL:</label>
-    <input type="text" name="base_signing_url" style="width: 300px;" validator="required,url"><br>
-    <label for="base_oauth_signing_url">*OAuth Signing URL:</label>
-    <input type="text" name="base_oauth_signing_url" style="width: 300px;" validator="required,url"><br>
+    <label for="base_signing_url">API Signing URL:</label>
+    <input type="text" name="base_signing_url" style="width: 300px;" validator="required,url" must_restart><br>
+    <label for="base_oauth_signing_url">OAuth Signing URL:</label>
+    <input type="text" name="base_oauth_signing_url" style="width: 300px;" validator="required,url" must_restart><br>
   </fieldset>
 
   <br>

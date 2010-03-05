@@ -1235,6 +1235,11 @@ TweetManager.prototype = {
     TweetManager.instance = new TweetManager();
   },
 
+  restart: function() {
+    this.stopAll();
+    TweetManager.instance = new TweetManager();
+  },
+
   markTimelineAsRead: function() {
     var tweetsToRead = this.getCurrentTimeline().getTweetsCache();
     for(var i = 0; i < tweetsToRead.length; ++i) {
