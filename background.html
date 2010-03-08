@@ -5,6 +5,7 @@
 <script type="text/javascript" src="lib/3rdparty/oauth.js"></script>
 <script type="text/javascript" src="lib/3rdparty/sha1.js"></script>
 
+<script type="text/javascript" src="lib/math_utils.js"></script>
 <script type="text/javascript" src="lib/persistence.js"></script>
 <script type="text/javascript" src="lib/twitter_lib.js"></script>
 <script type="text/javascript" src="lib/icon_creator.js"></script>
@@ -780,13 +781,13 @@ function TweetManager() {
     }
   }
 
-  this.lastAvailableHits = null;
-  this.lastAvailableHitsTime = null;
-
   this.warningsCallback = null;
   this.warningMessage = null;
   this.autoClearWarning = false;
-  this.tooManyHitsCount = 0;
+
+  this.maxApiHitsStates = 30;
+  this.apiHitsStates = [];
+  this.firstPossibleWarnTime = null;
 
   this.initIconAndAlerts();
 
@@ -1275,31 +1276,40 @@ TweetManager.prototype = {
       this.autoClearWarning = false;
       this.clearWarning();
     }
-    if(this.lastAvailableHitsTime == null) {
-      this.lastAvailableHitsTime = new Date();
-      this.lastAvailableHits = remainingHits;
+
+    if(this.apiHitsStates.length > 0) {
+      if(remainingHits > this.apiHitsStates[this.apiHitsStates.length - 1][1]) {
+        // Rate limit was reset
+        this.apiHitsStates = [];
+      }
     }
-    var timeDiff = new Date() - this.lastAvailableHitsTime;
-    if(timeDiff >= 5 * 60 * 1000) {
-      var realHitsPerHour = ((this.lastAvailableHits - remainingHits) / timeDiff) * 60 * 60 * 1000;
-      if(realHitsPerHour > hourlyLimit) {
-        // If we keep this same speed we're gonna exhaust our hits limit.
-        this.tooManyHitsCount += 1;
-        if(this.tooManyHitsCount >= 2) {
-          // We've exceeded the limit twice in a row, let's warn users.
-          this.setWarning("Hey! Your remaining API hits are ending too fast.<br>" +
-                           "Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"" + chrome.extension.getURL('options.html') + "\"})'>options page</a>. " +
-                           "Take special care if you're running multiple Twitter clients, as they all share the same limit.<br>" +
-                           "Available hits left: " + remainingHits + " - Next hits reset: " + nextResetDate.toLocaleDateString() + " " + nextResetDate.toLocaleTimeString());
-          this.tooManyHitsCount = 0;
+
+    this.apiHitsStates.push([(new Date()).getTime(), parseInt(remainingHits)]);
+    if(this.apiHitsStates.length > this.maxApiHitsStates) {
+      this.apiHitsStates.shift();
+    }
+    if(this.apiHitsStates.length > 20) {
+      var offset = this.apiHitsStates[0][0];
+      var tendencyFunction = Math.linearLeastSquares(this.apiHitsStates, offset);
+      var projectedRemainingHits = tendencyFunction(nextResetDate.getTime() - offset);
+      if(projectedRemainingHits < 0) {
+        if(this.firstPossibleWarnTime) {
+          var timeDiff = new Date() - this.firstPossibleWarnTime;
+          if(timeDiff > 3 * 60 * 1000) {
+            // We've been keeping this tendency for 5 minutes, so we'll probably
+            // exceed the limit if we keep this same rate, let's warn users.
+            this.setWarning("Hey! Your remaining API hits are ending too fast.<br>" +
+                            "Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"" + chrome.extension.getURL('options.html') + "\"})'>options page</a>. " +
+                            "Take special care if you're running multiple Twitter clients, as they all share the same limit.<br>" +
+                            "Available hits left: " + remainingHits + " - Next hits reset: " + nextResetDate.toLocaleDateString() + " " + nextResetDate.toLocaleTimeString());
+            this.firstPossibleWarnTime = null;
+          }
+        } else {
+          this.firstPossibleWarnTime = new Date();
         }
       } else {
-        // We only wanna warn users if we exceed hits limit more than once
-        // in a row, so let's just reset the counter.
-        this.tooManyHitsCount = 0;
+        this.firstPossibleWarnTime = null;
       }
-      this.lastAvailableHitsTime = new Date();
-      this.lastAvailableHits = remainingHits;
     }
   }
 }

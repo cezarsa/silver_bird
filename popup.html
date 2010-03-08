@@ -961,7 +961,7 @@ function onTimelineRetrieved(tweets, timelineId) {
     Renderer.assemblyTweets(tweets, timelineId);
   } else {
     var baseErrorMsg = tweetManager.currentError();
-    var errorMsg = 'Unexpected error ' + errorMsg + ' updating tweets.';
+    var errorMsg = 'Unexpected error ' + baseErrorMsg + ' updating tweets.';
     if(baseErrorMsg == '(timeout)') {
       errorMsg += ' If this timeout error is being shown repeatedly, please try logging out and logging in again.';
     }

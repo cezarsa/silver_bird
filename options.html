@@ -7,6 +7,7 @@
 <link rel="stylesheet" type="text/css" href="css/colorpicker/colorpicker.css" />
 <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
 <script type="text/javascript" src="lib/3rdparty/colorpicker.js"></script>
+<script type="text/javascript" src="lib/math_utils.js"></script>
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
 <title>Chromed Bird Options</title>
 
@@ -261,12 +262,13 @@ function paintIcon(canvas, color) {
 
 var hourlyLimit = 150;
 $(function() {
+  var resetDateObj = new Date();
   if(twitterBackend) {
     var hitsInfo = twitterBackend.remainingHitsInfo();
     $(".twitter_hits_left").text(hitsInfo[0]);
-    var dateObj = new Date();
-    dateObj.setTime(parseInt(hitsInfo[1]) * 1000);
-    $(".twitter_hits_reset").text(dateObj.toLocaleDateString() + " " + dateObj.toLocaleTimeString());
+
+    resetDateObj.setTime(parseInt(hitsInfo[1]) * 1000);
+    $(".twitter_hits_reset").text(resetDateObj.toLocaleDateString() + " " + resetDateObj.toLocaleTimeString());
 
     if(hitsInfo[2]) {
       hourlyLimit = parseInt(hitsInfo[2]);
@@ -378,6 +380,15 @@ $(function() {
     }
     return true;
   });
+
+  $("#nerds_link").click(function() {
+    var $canvas = $("#nerds");
+    $canvas.toggle();
+    if($canvas.is(":visible")) {
+      var points = chrome.extension.getBackgroundPage().TweetManager.instance.apiHitsStates;
+      Math.generateTendencyGraph($canvas[0], points, resetDateObj.getTime());
+    }
+  });
 });
 
 function updatePredictedHitsCount() {
@@ -425,6 +436,8 @@ function updatePredictedHitsCount() {
   <p>
     Remaining Twitter API Hits: <span class="twitter_hits_left"></span><br>
     Rate Limit Reset: <span class="twitter_hits_reset"></span>
+    <a id="nerds_link" href="#">API Hits stats (for nerds)</a>
+    <canvas id="nerds" width="650" height="500" style="display: none;"></canvas>
   </p>
   <fieldset>
     <legend>UI</legend>

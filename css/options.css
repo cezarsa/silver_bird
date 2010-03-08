@@ -128,3 +128,7 @@ div.checkerboard {
   margin: 0;
   padding: 0;
 }
+
+canvas#nerds {
+  display: block;
+}
