@@ -314,8 +314,16 @@ var Composer = {
     Composer.showComposeArea(true);
 
     var textArea = $("#compose_tweet_area textarea");
-    var currentVal = textArea.val();
     var user = $(".user", node).attr('screen_name');
+    var timelineId = $(node).attr('timelineid');
+
+    if(timelineId == "dms") {
+      textArea.val("d " + user + " ");
+      Composer.textareaChanged();
+      return;
+    }
+
+    var currentVal = textArea.val();
     var replies = [];
     var ownName = tweetManager.twitterBackend.username();
     if (reply_all) {
@@ -329,17 +337,14 @@ var Composer = {
 
     if(Composer.replyId && currentVal.indexOf(Composer.replyUser) != -1) {
       this.addUser(user, replies);
+      Composer.textareaChanged();
       return;
-    } else {
-      var timelineId = $(node).attr('timelineid');
-      if(timelineId == "dms") {
-        textArea.val("d " + user + " ");
-      } else {
-        this.addUser(user, replies);
-      }
-      tweetManager.composerData.replyId = Composer.replyId = $(node).attr('tweetid');
-      tweetManager.composerData.replyUser = Composer.replyUser = user;
     }
+
+    this.addUser(user, replies);
+    tweetManager.composerData.replyId = Composer.replyId = $(node).attr('tweetid');
+    tweetManager.composerData.replyUser = Composer.replyUser = user;
+
     Composer.textareaChanged();
   },
 
@@ -417,9 +422,7 @@ var Composer = {
         Composer.showComposeArea();
         Shortener.clear();
 
-        if(msg.match(/^d\s\w*?\s/i)) {
-          loadTimeline(true, "dms");
-        } else {
+        if(!msg.match(/^d\s\w*?\s/i)) {
           loadTimeline(true, "home");
         }
         textArea.val("");
@@ -968,6 +971,8 @@ function onTimelineRetrieved(tweets, timelineId) {
     Renderer.showError(errorMsg, 'loadTimeline');
   }
   loadingNewTweets = false;
+
+  prepareTimelines();
 }
 
 function loadTimeline(force, forcedTimeline) {
@@ -1047,7 +1052,7 @@ function loadNewTweets() {
   prepareAndLoadTimeline();
 }
 
-function prepareAndLoadTimeline() {
+function prepareTimelines() {
   $("#update_tweets").hide();
 
   updateNotificationFunc(tweetManager.getCurrentTimeline());
@@ -1059,7 +1064,10 @@ function prepareAndLoadTimeline() {
       updateNotificationFunc(timeline);
     }
   });
+}
 
+function prepareAndLoadTimeline() {
+  prepareTimelines();
   loadTimeline();
 }
 
