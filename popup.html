@@ -431,6 +431,10 @@ var Composer = {
         Renderer.showError('Unexpected error ' + status + ' sending tweet.', 'Composer.sendTweet');
       }
     }, $("#compose_tweet_area textarea").val(), Composer.replyId);
+  },
+
+  refreshNew: function() {
+    loadTimeline(true);
   }
 }
 
@@ -1236,7 +1240,8 @@ $(function() {
 
   <span class="header_link_left">
     <a href="javascript:signout()">Log out</a> |
-    <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))">Options</a>
+    <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))">Options</a> |
+    <a href="javascript:Composer.refreshNew();">Refresh</a>
   </span>
   <a class="header_link_right" href="javascript:Renderer.markAllAsRead();">Mark all as read</a>
   <img src="img/loading.gif" id="loading" style="display: none;"/>

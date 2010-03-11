@@ -193,8 +193,6 @@ UnifiedTweetsTimeline.prototype = {
   },
 
   giveMeTweets: function(callback, syncNew, cacheOnly) {
-    // We shouldn't receive syncNew requests so they'll be ignored.
-
     if(this.currentCallback) {
       //Handling multiple calls to giveMeTweets, just update the registered
       //callback and let the first request finish.
@@ -332,7 +330,7 @@ UnifiedTweetsTimeline.prototype = {
     var joinableCallback = Utils.makeJoinableCallback(joinCount, eachFunction, joinFunction);
 
     this.eachTimeline(function(timeline) {
-      timeline.giveMeTweets(joinableCallback, false, true, true);
+      timeline.giveMeTweets(joinableCallback, syncNew, true, true);
     });
 
   },
