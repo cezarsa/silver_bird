@@ -18,7 +18,7 @@ fieldset legend {
 
 #main_area label {
   float: left;
-  width: 150px;
+  width: 180px;
 }
 
 #main_area input[type="text"], #main_area input[type="password"], #main_area select {

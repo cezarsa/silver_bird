@@ -511,17 +511,17 @@ var Shortener = {
     chrome.tabs.getSelected(null, function(tab) {
       var shortenerInput = $("#shortener_area input");
       shortenerInput.val(tab.url);
-      _this.shortenIt();
+      _this.shortenIt({title: tab.title});
     });
   },
 
-  shortenIt: function() {
+  shortenIt: function(context) {
     var shortenerInput = $("#shortener_area input");
     var longUrl = shortenerInput.val();
-    this.shortenPage(longUrl);
+    this.shortenPage(longUrl, context);
   },
 
-  shortenPage: function(longUrl) {
+  shortenPage: function(longUrl, context) {
     $("#loading").show();
     var shortenerInput = $("#shortener_area input");
     shortenerInput.attr('disabled', 'disabled');
@@ -537,6 +537,9 @@ var Shortener = {
         var newText = textarea.val();
         if(newText.length > 0 && newText[newText.length - 1] != ' ') {
           newText += ' ';
+        }
+        if(context && context.title && OptionsBackend.get('share_include_title')) {
+          shortUrl = context.title + ' - ' + shortUrl;
         }
         newText += shortUrl;
         textarea.val(newText);
