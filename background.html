@@ -145,6 +145,8 @@ function UnifiedTweetsTimeline(timelines) {
   this.timelines = timelines;
   this.timelineId = 'unified';
   this.tweetsPerPage = OptionsBackend.get('tweets_per_page');
+  this.maxCachedTweets = OptionsBackend.get('max_cached_tweets');
+  this.maxCachedPages = parseInt((this.maxCachedTweets / this.tweetsPerPage) - 1);
   this.visibleTweetsList = [];
   this.currentPage = 0;
   this.currentScroll = 0;
@@ -203,7 +205,12 @@ UnifiedTweetsTimeline.prototype = {
 
     if(cacheOnly) {
       if(this.currentScroll == 0) {
-        this.currentPage = 0;
+        if(this.currentPage > this.maxCachedPages) {
+          this.currentPage = this.maxCachedPages;
+          this.eachTimeline(function(timeline) {
+            timeline.cleanUpCache();
+          });
+        }
       }
     } else {
       this.currentPage += 1;
@@ -593,7 +600,7 @@ TweetsTimeline.prototype = {
     }
     if(cacheOnly && !this.firstRun) {
       //Only return cached results if this is not the first run.
-      if(!keepCache && this.currentScroll == 0) {
+      if(!keepCache) {
         this.cleanUpCache();
       }
       try {
@@ -633,6 +640,9 @@ TweetsTimeline.prototype = {
   },
 
   cleanUpCache: function() {
+    if(this.currentScroll != 0) {
+      return;
+    }
     var len = this.tweetsCache.length;
     if(len <= OptionsBackend.get('max_cached_tweets'))
       return;
