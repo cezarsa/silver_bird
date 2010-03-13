@@ -21,6 +21,11 @@ fieldset legend {
   width: 180px;
 }
 
+#main_area label.radio_opt {
+  float: none;
+  width: inherit;
+}
+
 #main_area input[type="text"], #main_area input[type="password"], #main_area select {
   border: 1px solid #b4cff2;
   width: 140px;
