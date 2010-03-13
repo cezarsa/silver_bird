@@ -481,7 +481,7 @@ function updatePredictedHitsCount() {
 
     <label for="tweets_color_only_unified">Colors only in unified:</label>
     <input type="checkbox" name="tweets_color_only_unified" /><br/>
-    <table class="notifications">
+    <table class="tweet_color">
       <tr>
         <th></th>
         <th>Home</th>
@@ -521,7 +521,7 @@ function updatePredictedHitsCount() {
     <table class="notifications">
       <tr>
         <th></th>
-        <th>Show on Page</th>
+        <th>Tweet Notification</th>
         <th>Change Icon</th>
         <th>Icon Color</th>
       <tr>
@@ -549,6 +549,9 @@ function updatePredictedHitsCount() {
         <td><canvas name="lists_color" width="19" height="19" class="color_selector"></canvas></td>
       </tr>
     </table><br>
+    <label for="tweets_notification_style">Notification Style:</label>
+    <input type="radio" name="tweets_notification_style" value="on_page"> Notify on Page
+    <input type="radio" name="tweets_notification_style" value="desktop"> Desktop Notifications<br>
     <label for="notification_fade_timeout">On Page Fade Timeout:</label>
     <input type="text" name="notification_fade_timeout" validator="required,number,positive"><br>
   </fieldset>

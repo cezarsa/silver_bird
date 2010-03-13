@@ -43,7 +43,7 @@ OptionsBackend = {
     base_signing_url: 'http://api.twitter.com/1/',
     base_oauth_signing_url: 'https://twitter.com/oauth/',
 
-    use_desktop_notifications: false,
+    tweets_notification_style: 'on_page',
     home_on_page: false,
     home_icon: true,
     mentions_on_page: true,
@@ -985,14 +985,18 @@ TweetManager.prototype = {
   showTweetsNotifications: function(tweetsToNotify, forceOnPage) {
     this.injectTweets = tweetsToNotify;
 
-    if(!forceOnPage && OptionsBackend.get('use_desktop_notifications')) {
+    var notificationStyle = OptionsBackend.get('tweets_notification_style');
+    if(!forceOnPage && notificationStyle == 'desktop') {
       try {
         var notificationCenter = window.notifications || window.webkitNotifications;
-        var notification = notificationCenter.createHTMLNotification(
-          chrome.extension.getURL('tweets_notifier.html')
-        );
-        notification.show();
+        for(var i = 0; i < tweetsToNotify.length; ++i) {
+          var notification = notificationCenter.createHTMLNotification(
+            chrome.extension.getURL('tweets_notifier.html')
+          );
+          notification.show();
+        }
       } catch(e) {
+        console.warn(e);
         // Fallback to 'on page' notifications
         this.showTweetsNotifications(tweetsToNotify, true);
       }
@@ -1416,13 +1420,18 @@ function initializeExtension() {
   var biggestArea = -1;
   chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     if(request.cb_requesting_tweets_immediate) {
+      var tweetToSend = null;
+      if(TweetManager.instance.injectTweets) {
+        tweetToSend = TweetManager.instance.injectTweets.shift();
+        if(TweetManager.instance.injectTweets.length == 0) {
+          TweetManager.instance.injectTweets = null;
+        }
+      }
       sendResponse({
-        tweets: TweetManager.instance.injectTweets,
+        tweet: tweetToSend,
         nameAttribute: OptionsBackend.get('name_attribute'),
-        extensionId: location.host,
         fadeTimeout: OptionsBackend.get('notification_fade_timeout')
       });
-      TweetManager.instance.injectTweets = null;
     } else if(request.cb_requesting_tweets) {
       if(waitingFirstRequest) {
         waitingFirstRequest = false;
@@ -1431,7 +1440,6 @@ function initializeExtension() {
             selectedResponse({
               tweets: TweetManager.instance.injectTweets,
               nameAttribute: OptionsBackend.get('name_attribute'),
-              extensionId: location.host,
               fadeTimeout: OptionsBackend.get('notification_fade_timeout')
             });
           }

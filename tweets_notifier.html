@@ -1,56 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
+  <script type="text/javascript" src="lib/tweets_assembler.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="css/injectedTweets.css" />
+  <link rel="stylesheet" type="text/css" href="css/desktopTweets.css" />
+
+  <base target="_blank">
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function onload() {
+    if(document.readyState != "complete") {
+      setTimeout(arguments.callee, 100);
+      return;
+    }
+    initNotifier();
+    document.removeEventListener("DOMContentLoaded", onload, false);
+  }, false);
+
+  function initNotifier() {
+    chrome.extension.sendRequest({
+      cb_requesting_tweets_immediate: true
+    }, function(response) {
+      var tweet = response.tweet;
+      if(tweet) {
+        Renderer.nameAttribute = response.nameAttribute;
+        Renderer.fadeTimeout = response.fadeTimeout;
+        $(document.body).prepend(Renderer.simpleAssemblyTweets([tweet]));
+
+        $('#progress').show().css('bottom', '0px').animate({width: '0px'}, response.fadeTimeout, 'linear', function() {
+          window.close();
+        });
+        $(document.body).click(function() {
+          $('#progress').stop().hide();
+        });
+      } else {
+        window.close();
+      }
+    });
+  }
+  </script>
 </head>
 <body>
-
-<script>
-var scriptjQuery = document.createElement('script');
-scriptjQuery.src = chrome.extension.getURL('lib/3rdparty/jquery.js');
-scriptjQuery.type = 'text/javascript';
-
-var scriptAssembler = document.createElement('script');
-scriptAssembler.src = chrome.extension.getURL('lib/tweets_assembler.js');
-scriptAssembler.type = 'text/javascript';
-
-var linkCss = document.createElement('link');
-linkCss.rel = 'stylesheet';
-linkCss.href = chrome.extension.getURL('css/injectedTweets.css');
-linkCss.type = 'text/css';
-
-document.head.appendChild(scriptjQuery);
-document.head.appendChild(scriptAssembler);
-document.head.appendChild(linkCss);
-
-var assemblerLoaded = false;
-scriptAssembler.onload = function() {
-  assemblerLoaded = true;
-}
-
-scriptjQuery.onload = function() {
-  if(!assemblerLoaded) {
-    scriptAssembler.onload = function() {
-      initNotifier();
-    }
-  } else {
-    initNotifier();
-  }
-}
-
-function initNotifier() {
-  chrome.extension.sendRequest({
-    cb_requesting_tweets_immediate: true
-  }, function(response) {
-    var tweets = response.tweets;
-    if(tweets && tweets.length > 0) {
-      Renderer.nameAttribute = response.nameAttribute;
-      Renderer.extensionId = response.extensionId;
-      Renderer.fadeTimeout = response.fadeTimeout;
-      $(document.body).prepend(Renderer.simpleAssemblyTweets(tweets));
-    }
-  });
-}
-</script>
-
+  <div id="progress">Click to prevent closing.</div>
 </body>
 </html>

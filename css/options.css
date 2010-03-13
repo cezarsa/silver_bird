@@ -66,6 +66,10 @@ fieldset legend {
 }
 
 #main_area table.notifications td {
+  width: 120px;
+}
+
+#main_area table.tweet_color td {
   width: 100px;
 }
 
