@@ -121,16 +121,34 @@ div.checkerboard {
 
 #saved_notice {
   -webkit-border-radius: 5px;
-  position: absolute;
+  position: fixed;
+  top: 50%;
   left: 50%;
-  margin-left: -350px;
-  margin-top: -20px;
-  width: 700px;
-  border: 1px solid #B31E04;
-  background-color: #FF2B05;
+  width: 400px;
+  height: 100px;
+  margin-left: -200px;
+  margin-top: -50px;
   color: #fff;
   text-align: center;
+  font-size: 12pt;
+  padding: 5px;
   display: none;
+}
+
+#saved_notice.needConfirmation {
+  border: 5px solid #6f8030;
+  background-color: #b8d34f;
+}
+
+#saved_notice.noConfirmation {
+  border: 5px solid #51802f;
+  background-color: #8bdb50;
+  line-height: 100px;
+}
+
+#restart_notice {
+  font-size: 10pt;
+  margin-top: 5px;
 }
 
 #shortener_opts {

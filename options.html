@@ -19,6 +19,7 @@ var Persistence = chrome.extension.getBackgroundPage().Persistence;
 function Options() {
   this.optionsMap = {};
   this.onloadCallback = null;
+  this.waitingRestartConfirmation = false;
 
   this.onload = function(callback) {
     this.onloadCallback = callback;
@@ -89,8 +90,7 @@ function Options() {
       this.addValidationError(null, validInfo);
     }
     if(!hasErrors) {
-      var mustRestart = false;
-      var restartedAsked = false;
+      var askForRestart = false;
       $('input,select,.color_selector').each(function() {
         var $this = $(this);
         var name = $this.attr('name');
@@ -118,23 +118,38 @@ function Options() {
           }
           var oldValue = _this.optionsMap[name];
           if(oldValue != newValue) {
-            if($this.attr('must_restart') !== undefined && !restartedAsked) {
-              restartedAsked = true;
-              if(confirm('Some of the changed options require the extension to be restarted, do you want to restart it now?')) {
-                mustRestart = true;
-              }
+            if($this.attr('must_restart') !== undefined) {
+              askForRestart = true;
             }
             _this.optionsMap[name] = newValue;
           }
         }
       });
       OptionsBackend.save(this.optionsMap);
-      if(mustRestart) {
-        chrome.extension.getBackgroundPage().TweetManager.instance.restart();
+      askForRestart = askForRestart || this.waitingRestartConfirmation;
+      if(askForRestart) {
+        this.waitingRestartConfirmation = true;
+        $("#restart_notice").show();
+      } else {
+        $("#restart_notice").hide();
       }
-      $(document).scrollTop(0);
-      $("#saved_notice").stop().show().css('opacity', '1.0').fadeOut(5000);
+      var savedNotice = $("#saved_notice").stop().css('opacity', '1.0').hide().fadeIn(300);
+      if(askForRestart) {
+        savedNotice.addClass('needConfirmation').removeClass('noConfirmation');
+      } else {
+        savedNotice.addClass('noConfirmation').removeClass('needConfirmation').fadeOut(1000);
+      }
     }
+  };
+
+  this.confirmRestart = function() {
+    chrome.extension.getBackgroundPage().TweetManager.instance.restart();
+    this.denyRestart();
+  };
+
+  this.denyRestart = function() {
+    this.waitingRestartConfirmation = false;
+    $("#saved_notice").stop().fadeOut(300);
   };
 
   this.addValidationError = function($el, error) {
@@ -354,8 +369,11 @@ $(function() {
       .change(updatePredictedHitsCount);
   }
 
-  $("input[name='microblogging_service']").mousedown(function(e) {
+  $("input[name='microblogging_service'],label[for='service_twitter'],label[for='service_identica']").mousedown(function(e) {
     var el = $(e.target);
+    if(el.is('label')) {
+      el = $('#' + el.attr('for'));
+    }
     if(!el.is(':checked')) {
       var proceed = confirm("This will reset any custom API URL configuration. Proceed?");
       if(proceed) {
@@ -431,7 +449,16 @@ function updatePredictedHitsCount() {
 
 <h1>Chromed Bird Options</h1>
 
-<div id="saved_notice">Your configuration has been successfully saved!</div>
+<div id="saved_notice">
+  Your configuration has been successfully saved!
+  <div id="restart_notice">
+    However, some of your changes require the extension to be restarted. Would you like to do it now?<br>
+    (This will reset your unread tweets count.)
+    <br>
+    <input type="button" onclick="options.confirmRestart();" value="Yes">
+    <input type="button" onclick="options.denyRestart();" value="No">
+  </div>
+</div>
 <div id="main_area">
   <p>
     Remaining Twitter API Hits: <span class="twitter_hits_left"></span><br>
