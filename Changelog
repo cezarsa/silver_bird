@@ -1,3 +1,26 @@
+1.7.0 (2010-03-17)
+
+* Allowing popup window to be dynamically resized
+* Adding support to identi.ca microblogging service
+  (Right now you can use either Twitter or identi.ca, but that's a non-issue with http://crxclone.appspot.com)
+* Full support for desktop notifications on platforms that have them available
+  (The old 'on page' notifications are still available if you prefer them)
+* Greatly improving options page making it a lot smarter about options that require the extension to be restarted
+* New awesome statistical method of verifying when API hits are ending too fast
+  (Including a useless but awesome looking tendency graph in the options page.)
+* Simplifying configuring Twitter API url endpoints
+* Linkifying urls starting with 'www.'
+* Adding an action link to refresh the current timeline
+* Adding option to include page title when clicking the 'Share current page' icon
+* Trying to workaround OAuth failures due to incorrect client time settings
+* Silently ignoring errors when fetching lists until manually trying to update them
+* Fixing bug that caused reply to all feature to skip some users
+* Fixing error messages not showing correctly when using unified timeline
+* Fixing some bugs regarding timeline updates after sending a tweet
+* Better handling persistent variables across the code
+* Updating jQuery version to 1.4.2
+
+
 1.6.1 (2010-02-18)
 (Small release only with bugfixes.)
 
