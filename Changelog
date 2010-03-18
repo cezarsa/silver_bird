@@ -4,7 +4,7 @@
 * Adding support to identi.ca microblogging service
   (Right now you can use either Twitter or identi.ca, but that's a non-issue with http://crxclone.appspot.com)
 * Full support for desktop notifications on platforms that have them available
-  (The old 'on page' notifications are still available if you prefer them)
+  (You'll have to enable them in the options page.)
 * Greatly improving options page making it a lot smarter about options that require the extension to be restarted
 * New awesome statistical method of verifying when API hits are ending too fast
   (Including a useless but awesome looking tendency graph in the options page.)

@@ -19,10 +19,15 @@ var Persistence = chrome.extension.getBackgroundPage().Persistence;
 function Options() {
   this.optionsMap = {};
   this.onloadCallback = null;
+  this.onsaveCallback = null;
   this.waitingRestartConfirmation = false;
 
   this.onload = function(callback) {
     this.onloadCallback = callback;
+  };
+
+  this.onsave = function(callback) {
+    this.onsaveCallback = callback;
   };
 
   this.load = function(forceDefault) {
@@ -139,6 +144,9 @@ function Options() {
       } else {
         savedNotice.addClass('noConfirmation').removeClass('needConfirmation').fadeOut(1000);
       }
+    }
+    if(this.onsaveCallback) {
+      this.onsaveCallback();
     }
   };
 
@@ -356,6 +364,29 @@ $(function() {
     onShortenerChange();
     onShortenerAcctClick();
     onSigningUrlCheck();
+  });
+  options.onsave(function() {
+    if($("#noti_desktop").is(":checked")) {
+      try {
+        var notificationCenter = window.notifications || window.webkitNotifications;
+        if(!notificationCenter) {
+          throw 'out';
+        }
+        var authStatus = notificationCenter.checkPermission();
+        if(authStatus == 1 || authStatus == 2) { // Not allowed or Denied
+          notificationCenter.requestPermission(function() {
+            var authStatus = notificationCenter.checkPermission();
+            if(authStatus != 0) { // Permission denied
+              $("#noti_on_page").click();
+              options.save();
+            }
+          });
+        }
+      } catch(boom) {
+        $("#noti_on_page").click();
+        options.save();
+      }
+    }
   });
   options.load();
 

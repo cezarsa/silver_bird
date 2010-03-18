@@ -43,7 +43,7 @@ OptionsBackend = {
     base_signing_url: 'http://api.twitter.com/1/',
     base_oauth_signing_url: 'https://twitter.com/oauth/',
 
-    tweets_notification_style: 'desktop',
+    tweets_notification_style: 'on_page',
     home_on_page: false,
     home_icon: true,
     mentions_on_page: true,
@@ -989,6 +989,16 @@ TweetManager.prototype = {
     if(!forceOnPage && notificationStyle == 'desktop') {
       try {
         var notificationCenter = window.notifications || window.webkitNotifications;
+        if(!notificationCenter) {
+          throw 'NotificationCenter not available';
+        }
+        var authStatus = notificationCenter.checkPermission();
+        if(authStatus == 1 || authStatus == 2) { //Not Allowed or Denied
+          var options = OptionsBackend.load();
+          options['tweets_notification_style'] = 'on_page';
+          OptionsBackend.save(options);
+          throw 'Desktop notifications not allowed';
+        }
         for(var i = 0; i < tweetsToNotify.length; ++i) {
           var notification = notificationCenter.createHTMLNotification(
             chrome.extension.getURL('tweets_notifier.html')
