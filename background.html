@@ -202,7 +202,7 @@ UnifiedTweetsTimeline.prototype = {
     }
     this.currentCallback = callback;
 
-    if(cacheOnly) {
+    if(cacheOnly || syncNew) {
       if(this.currentScroll == 0) {
         if(this.currentPage > this.maxCachedPages) {
           this.currentPage = this.maxCachedPages;
@@ -1207,7 +1207,7 @@ TweetManager.prototype = {
       callback([], timelineId);
       return;
     }
-    if(syncNew && this.unifiedVisible) {
+    if(syncNew && this.unifiedVisible && timelineId != 'unified') {
       var timelineBaseId = timelineId.replace(/_.*$/, '');
       if(OptionsBackend.get(timelineBaseId + '_include_unified')) {
         var originalCallback = callback;
