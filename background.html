@@ -982,7 +982,17 @@ TweetManager.prototype = {
     }
   },
 
+  safeTweetsNotifications: function(tweetsToNotify) {
+    var options = OptionsBackend.load();
+    options['tweets_notification_style'] = 'on_page';
+    OptionsBackend.save(options);
+    this.showTweetsNotifications(tweetsToNotify, true);
+  },
+
   showTweetsNotifications: function(tweetsToNotify, forceOnPage) {
+    if(!tweetsToNotify || tweetsToNotify.length == 0) {
+      return;
+    }
     this.injectTweets = tweetsToNotify;
 
     var notificationStyle = OptionsBackend.get('tweets_notification_style');
@@ -994,21 +1004,33 @@ TweetManager.prototype = {
         }
         var authStatus = notificationCenter.checkPermission();
         if(authStatus == 1 || authStatus == 2) { //Not Allowed or Denied
-          var options = OptionsBackend.load();
-          options['tweets_notification_style'] = 'on_page';
-          OptionsBackend.save(options);
           throw 'Desktop notifications not allowed';
         }
+
+        // FIXME: This check is here because stable channel releases
+        // currently silently fail in showing html notifications
+        var notificationDisplayed = false;
+        var onDisplayFunc = function() {
+          notificationDisplayed = true;
+        };
+        var _this = this;
+        setTimeout(function() {
+          if(!notificationDisplayed) {
+            _this.safeTweetsNotifications(tweetsToNotify);
+          }
+        }, 1000);
+
         for(var i = 0; i < tweetsToNotify.length; ++i) {
           var notification = notificationCenter.createHTMLNotification(
             chrome.extension.getURL('tweets_notifier.html')
           );
+          notification.ondisplay = onDisplayFunc;
           notification.show();
         }
       } catch(e) {
         console.warn(e);
         // Fallback to 'on page' notifications
-        this.showTweetsNotifications(tweetsToNotify, true);
+        this.safeTweetsNotifications(tweetsToNotify);
       }
     } else {
       var injectHelper = function(action, file, allFrames, callback) {
