@@ -13,7 +13,6 @@ html, body {
 }
 
 #progress {
-  width: 100%;
   position: absolute;
   display: none;
   background-color: rgba(0, 0, 0, 0.4);
@@ -22,4 +21,5 @@ html, body {
   font-size: 8pt;
   white-space: nowrap;
   overflow: hidden;
+  left: 0px;
 }
