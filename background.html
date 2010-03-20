@@ -729,6 +729,7 @@ function ComposerData() {
 function TweetManager() {
   this.unreadTweets = {};
   this.readTweets = {};
+  this.shouldNotReadMap = {};
   this.retweets = {};
   this.injectTweets = null;
 
@@ -1024,6 +1025,11 @@ TweetManager.prototype = {
           var notification = notificationCenter.createHTMLNotification(
             chrome.extension.getURL('tweets_notifier.html')
           );
+          (function inClosure(tweet) {
+            notification.onclose = function(e) {
+              _this.readTweet(tweet.id);
+            };
+          })(tweetsToNotify[i]);
           notification.ondisplay = onDisplayFunc;
           notification.show();
         }
@@ -1076,6 +1082,10 @@ TweetManager.prototype = {
   },
 
   readTweet: function(id) {
+    if(this.shouldNotReadMap[id]) {
+      delete this.shouldNotReadMap[id];
+      return;
+    }
     this.readTweets[id] = true;
     delete this.unreadTweets[id];
     this.notifyNewTweets();
@@ -1451,6 +1461,10 @@ function initializeExtension() {
   var selectedResponse = null;
   var biggestArea = -1;
   chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+    if(request.cb_tweet_should_not_read) {
+      TweetManager.instance.shouldNotReadMap[request.tweet_id] = true;
+      return;
+    }
     if(request.cb_requesting_tweets_immediate) {
       var tweetToSend = null;
       if(TweetManager.instance.injectTweets) {
@@ -1464,7 +1478,9 @@ function initializeExtension() {
         nameAttribute: OptionsBackend.get('name_attribute'),
         fadeTimeout: OptionsBackend.get('notification_fade_timeout')
       });
-    } else if(request.cb_requesting_tweets) {
+      return;
+    }
+    if(request.cb_requesting_tweets) {
       if(waitingFirstRequest) {
         waitingFirstRequest = false;
         setTimeout(function() {
@@ -1485,6 +1501,7 @@ function initializeExtension() {
         biggestArea = area;
         selectedResponse = sendResponse;
       }
+      return;
     }
   });
 }
