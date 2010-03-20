@@ -21,6 +21,7 @@ OptionsBackend = {
     dms_refresh_interval: 150 * 1000,
     lists_refresh_interval: 150 * 1000,
     favorites_refresh_interval: 600 * 1000,
+    blockedusers_refresh_interval: 3600 * 1000,
     tweets_per_page: 10,
     max_cached_tweets: 30,
     url_shortener: 'bitly',
@@ -513,7 +514,7 @@ TweetsTimeline.prototype = {
       }
     }
     this.manager.twitterBackend.timeline(this.timelinePath, function(success, tweets, status, context) {
-      _this.onFetchNew.call(_this, success, tweets, status, context);
+      _this.onFetchNew.call(_this, success, _this.filterBlockedTweets(tweets), status, context);
     }, context, params);
   },
 
@@ -634,7 +635,7 @@ TweetsTimeline.prototype = {
       }
     }
     this.manager.twitterBackend.timeline(this.timelinePath, function(success, tweets, status, context) {
-      _this.onFetch.call(_this, success, tweets, status, context);
+      _this.onFetch.call(_this, success, _this.filterBlockedTweets(tweets), status, context);
     }, context, params);
   },
 
@@ -685,6 +686,23 @@ TweetsTimeline.prototype = {
     return unreadNewIds;
   },
 
+  /**
+  * Filter-out all tweets and retweets that contain a status.user.id
+  * or status.retweeted_status.user.id in this.manager.blockedUserIds.
+  *
+  * @param json tweets - response as returned by a Twitter timeline REST method
+  * @return json
+  */
+  filterBlockedTweets: function(tweets) {
+    var filteredTweets = [];
+    for(var i in tweets) {
+      if(!(tweets[i].user && tweets[i].user.id in this.manager.blockedUserIds || tweets[i].retweeted_status && tweets[i].retweeted_status.user.id in this.manager.blockedUserIds)) {
+        filteredTweets.push(tweets[i]);
+      }
+    }
+    return filteredTweets;
+  },
+
   removeFromCache: function(id) {
     var i = 0;
     for(; i < this.tweetsCache.length; ++i) {
@@ -732,6 +750,9 @@ function TweetManager() {
   this.shouldNotReadMap = {};
   this.retweets = {};
   this.injectTweets = null;
+
+  // Using an object instead of an array to take advantage of hash look-ups
+  this.blockedUserIds = {};
 
   this.newTweetsCallback = null;
 
@@ -804,6 +825,7 @@ function TweetManager() {
   var _this = this;
   this.twitterBackend = new TwitterLib(OptionsBackend.get('request_timeout'),
     function onAuthenticated() {
+      _this.retrieveBlockedUserIds();
       for(var i = 0; i < timelineNames.length; ++i) {
         var visible = OptionsBackend.get(timelineNames[i] + '_visible');
         var includeInUnified = false;
@@ -860,6 +882,25 @@ TweetManager.prototype = {
     if(this.warningMessage && this.warningsCallback) {
       this.warningsCallback(this.warningMessage);
     }
+  },
+
+  /**
+  * Update this.blockedUserIds and schedule another update after
+  * "blockedusers_refresh_interval" time has elapsed.
+  */
+  retrieveBlockedUserIds: function() {
+    var _this = this;
+    this.twitterBackend.blockedUserIds(function(success, data, status, context) {
+        if(success) {
+          _this.blockedUserIds = {};
+          for(var i in data) {
+            _this.blockedUserIds[data[i]] = data[i];
+          }
+        } else {
+          _this.setWarning("Could not retrieve your list of blocked users. Will auto retry later.");
+        }
+        setTimeout(function() { _this.retrieveBlockedUserIds(); }, OptionsBackend.get('blockedusers_refresh_interval'));
+    });
   },
 
   getSelectedLists: function() {

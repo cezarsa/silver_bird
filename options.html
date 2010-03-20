@@ -462,6 +462,7 @@ function updatePredictedHitsCount() {
     var timelineCount = $('select[name="' +  timelines[i] + '_count"]').val() || 1;
     totalHits += timelineHits * timelineCount;
   }
+  totalHits += (60 * 60) / parseInt($('input[name="blockedusers_refresh_interval"]').val());
   totalHits = parseInt(totalHits);
   $('#predicted_hits_count').text(totalHits);
   if(totalHits >= hourlyLimit) {
@@ -695,6 +696,13 @@ function updatePredictedHitsCount() {
         <td><input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval" must_restart></td>
         <td>1</td>
         <td><input type="checkbox" name="favorites_include_unified" must_restart></td>
+      </tr>
+      <tr>
+        <td class="label">Blocked Users:</td>
+        <td>-</td>
+        <td><input type="text" name="blockedusers_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval" must_restart></td>
+        <td>-</td>
+        <td>-</td>
       </tr>
     </table>
   </fieldset>
