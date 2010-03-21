@@ -1100,37 +1100,17 @@ function initializeWorkspace() {
     selected: 0,
     select: function(event, ui) {
       tweetManager.currentTimeline = ui.panel.id.split('-')[1];
-      if(!tweetManager.currentTimeline.match(/^lists/) || tweetManager.getListId()) {
-        prepareAndLoadTimeline();
-      }
+      prepareAndLoadTimeline();
     },
     show: function(event, ui) {
       $('.inner_timeline', ui.panel).scrollTop(tweetManager.getCurrentTimeline().currentScroll);
     }
   });
-  var showLists = false;
   tweetManager.orderedEachTimeline(function(timeline) {
     if(!timeline.visible) {
       return true;
     }
-    var timelineId = this;
-    if(timelineId.match(/^lists/)) {
-      showLists = true;
-      return true;
-    }
-    var name = '';
-    if(timelineId == 'home') {
-      name = 'Home';
-    } else if(timelineId == 'mentions') {
-      name = '@<span class="__username">';
-    } else if(timelineId == 'dms') {
-      name = 'DM';
-    } else if(timelineId == 'favorites') {
-      name = 'Favorites';
-    } else if(timelineId == 'unified') {
-      name = 'Unified';
-    }
-    $("#tabs").tabs('add', '#timeline-' + timelineId, name);
+    $("#tabs").tabs('add', '#timeline-' + timeline.timelineId, timeline.timelineName);
   });
   $(".__username").text(tweetManager.twitterBackend.username());
   $("#tabs .ui-tabs-nav").sortable({
@@ -1153,16 +1133,13 @@ function initializeWorkspace() {
   //Delay loading, improving responsiveness
   setTimeout(function() {
     ThemeManager.handleWindowResizing();
-    if(showLists) {
-      Lists.init();
-    }
+    Lists.init();
+
     $("#tabs").tabs('select', '#timeline-' + tweetManager.currentTimeline);
     Composer.init();
     Shortener.init();
 
-    if(!tweetManager.currentTimeline.match(/^lists/) || tweetManager.getListId()) {
-      prepareAndLoadTimeline();
-    }
+    prepareAndLoadTimeline();
     var tabEl = $("#timeline-" + tweetManager.currentTimeline + ' .inner_timeline');
     tabEl.scrollTop(tweetManager.getCurrentTimeline().currentScroll);
 

@@ -146,6 +146,7 @@ Utils = {
 function UnifiedTweetsTimeline(timelines) {
   this.timelines = timelines;
   this.timelineId = 'unified';
+  this.timelineName = 'Unified';
   this.tweetsPerPage = OptionsBackend.get('tweets_per_page');
   this.maxCachedTweets = OptionsBackend.get('max_cached_tweets');
   this.maxCachedPages = parseInt((this.maxCachedTweets / this.tweetsPerPage) - 1);
@@ -407,16 +408,20 @@ function TweetsTimeline(timelineId, manager, recheckTime) {
   switch(timelineId) {
     case 'home':
       this.timelinePath = 'statuses/home_timeline';
+      this.timelineName = 'Home';
       break;
     case 'mentions':
       this.timelinePath = 'statuses/mentions';
+      this.timelineName = '@<span class="__username">';
       break;
     case 'dms':
       this.timelinePath = 'direct_messages';
+      this.timelineName = 'DM';
       break;
     case 'favorites':
       this.timelinePath = 'favorites';
       this.usingPages = true;
+      this.timelineName = 'Favorites';
       break;
   }
 }
@@ -762,6 +767,7 @@ function TweetManager() {
   this.iconImg = null;
   this.listsCache = null;
   this.listsTabCount = OptionsBackend.get('lists_count');
+  this.showListsTab = false;
 
   this.unifiedVisible = OptionsBackend.get('unified_visible');
   if(this.unifiedVisible) {
@@ -795,6 +801,9 @@ function TweetManager() {
       continue;
     }
     if(timelineNames[i] == "lists") {
+      if(visible) {
+        this.showListsTab = true;
+      }
       for(var j = 0; j < this.listsTabCount; ++j) {
         var listTimeline = new TweetsTimeline("lists_" + j, this, refreshInterval);
         listTimeline.includeInUnified = includeInUnified;
@@ -923,6 +932,7 @@ TweetManager.prototype = {
     }
   },
 
+  /* Lists timelines won't be included as they'll only be shown later */
   orderedEachTimeline: function(callback) {
     var retList = [];
     for(var tId in this.timelines) {
@@ -938,6 +948,9 @@ TweetManager.prototype = {
     }
     for(var i = 0; i < retList.length; ++i) {
       var tId = retList[i];
+      if(tId.match(/^lists/)) {
+        continue;
+      }
       if(tId) {
         callback.call(tId, this.timelines[tId]);
       }
@@ -1225,6 +1238,10 @@ TweetManager.prototype = {
   },
 
   lists: function(force, callback) {
+    if(!this.showListsTab) {
+      /* No lists tab should be shown, let's just ignore the callback */
+      return;
+    }
     if(force) {
       this.listsCache = null;
     }
