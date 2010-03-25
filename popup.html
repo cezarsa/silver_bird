@@ -114,7 +114,7 @@ var Paginator = {
   firstPage: function(shouldScrollTop) {
     this.needsMore = false;
     if(shouldScrollTop) {
-      $("#timeline-" + tweetManager.currentTimeline + ' .inner_timeline').scrollTop(0);
+      $("#timeline-" + tweetManager.currentTimelineId + ' .inner_timeline').scrollTop(0);
     }
   },
   nextPage: function() {
@@ -660,7 +660,7 @@ var Renderer = {
     }
     text = this.transformTweetText(text);
 
-    var tweetTimeline = tweet.timelineId || tweetManager.currentTimeline;
+    var tweetTimeline = tweet.timelineId || tweetManager.currentTimelineId;
 
     var tweetClass = 'tweet';
     if(!tweetManager.isTweetRead(tweet.id)) {
@@ -967,7 +967,7 @@ function onTimelineRetrieved(tweets, timelineId) {
     //Sanity check, popup might be closed.
     return;
   }
-  if(!tweetManager.getCurrentTimeline().visible) {
+  if(!tweetManager.getCurrentTimeline().template.visible) {
     return;
   }
   $("#loading").hide();
@@ -998,7 +998,7 @@ function loadTimeline(force, forcedTimeline) {
     cacheOnly = false;
   }
   if(!forcedTimeline) {
-    forcedTimeline = tweetManager.currentTimeline;
+    forcedTimeline = tweetManager.currentTimelineId;
   }
   tweetManager.giveMeTweets(forcedTimeline, onTimelineRetrieved, force, cacheOnly);
 }
@@ -1013,10 +1013,7 @@ function newTweetsAvailable(count, unreadCount, timelineId) {
     //Sanity check, popup might be closed.
     return;
   }
-  if(!tweetManager.getCurrentTimeline().visible) {
-    return;
-  }
-  var currentTimeline = tweetManager.currentTimeline;
+  var currentTimeline = tweetManager.currentTimelineId;
   if(timelineId != currentTimeline) {
     if(unreadCount == 0) {
       $("#tab_modifier_" + timelineId).remove();
@@ -1046,7 +1043,7 @@ function updateNotificationFunc(timeline) {
   var newTweetsInfo = tweetManager.newTweetsCount(timelineId);
   var newTweetsCount = newTweetsInfo[0];
 
-  if(timeline.timelineId == tweetManager.currentTimeline && timeline.currentScroll == 0) {
+  if(timeline.timelineId == tweetManager.currentTimelineId && timeline.currentScroll == 0) {
     if(newTweetsCount > 0) {
       tweetManager.updateNewTweets();
       $("#tab_modifier_" + timelineId).remove();
@@ -1058,7 +1055,7 @@ function updateNotificationFunc(timeline) {
 
 function loadNewTweets() {
   Paginator.firstPage(true);
-  $("#tab_modifier_" + tweetManager.currentTimeline).remove();
+  $("#tab_modifier_" + tweetManager.currentTimelineId).remove();
   $("#update_tweets").fadeOut();
 
   prepareAndLoadTimeline();
@@ -1069,10 +1066,7 @@ function prepareTimelines() {
 
   updateNotificationFunc(tweetManager.getCurrentTimeline());
   tweetManager.eachTimeline(function(timeline) {
-    if(!timeline.visible) {
-      return true;
-    }
-    if(timeline.timelineId != tweetManager.currentTimeline) {
+    if(timeline.timelineId != tweetManager.currentTimelineId) {
       updateNotificationFunc(timeline);
     }
   });
@@ -1096,10 +1090,10 @@ function initializeWorkspace() {
 
   $("#tabs").tabs({
     panelTemplate: '<div class="timeline"><div class="inner_timeline"></div></div>',
-    tabTemplate: '<li id="tab_#{href}"><a href="#{href}"><span>#{label}</span></a></li>',
+    tabTemplate: '<li id="tab_#{href}" class="timeline_tab"><a href="#{href}"><span>#{label}</span></a></li>',
     selected: 0,
     select: function(event, ui) {
-      tweetManager.currentTimeline = ui.panel.id.split('-')[1];
+      tweetManager.currentTimelineId = ui.panel.id.split('-')[1];
       prepareAndLoadTimeline();
     },
     show: function(event, ui) {
@@ -1107,10 +1101,7 @@ function initializeWorkspace() {
     }
   });
   tweetManager.orderedEachTimeline(function(timeline) {
-    if(!timeline.visible) {
-      return true;
-    }
-    $("#tabs").tabs('add', '#timeline-' + timeline.timelineId, timeline.timelineName);
+    $("#tabs").tabs('add', '#timeline-' + timeline.timelineId, timeline.template.timelineName);
   });
   $(".__username").text(tweetManager.twitterBackend.username());
   $("#tabs .ui-tabs-nav").sortable({
@@ -1135,18 +1126,15 @@ function initializeWorkspace() {
     ThemeManager.handleWindowResizing();
     Lists.init();
 
-    $("#tabs").tabs('select', '#timeline-' + tweetManager.currentTimeline);
+    $("#tabs").tabs('select', '#timeline-' + tweetManager.currentTimelineId);
     Composer.init();
     Shortener.init();
 
     prepareAndLoadTimeline();
-    var tabEl = $("#timeline-" + tweetManager.currentTimeline + ' .inner_timeline');
+    var tabEl = $("#timeline-" + tweetManager.currentTimelineId + ' .inner_timeline');
     tabEl.scrollTop(tweetManager.getCurrentTimeline().currentScroll);
 
     tweetManager.eachTimeline(function(timeline) {
-      if(!timeline.visible) {
-        return true;
-      }
       var timelineId = this;
       var tabEl = $("#timeline-" + timelineId + ' .inner_timeline');
       tabEl.scroll(function(e) {

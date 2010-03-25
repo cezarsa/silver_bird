@@ -11,735 +11,19 @@
 <script type="text/javascript" src="lib/icon_creator.js"></script>
 <script type="text/javascript" src="lib/expander_lib.js"></script>
 
+<script type="text/javascript" src="lib/options_backend.js"></script>
+
+<script type="text/javascript" src="lib/timeline_factory.js"></script>
+<script type="text/javascript" src="lib/timeline_template.js"></script>
+
+<script type="text/javascript" src="lib/timelines/timeline.js"></script>
+<script type="text/javascript" src="lib/timelines/lists_timeline.js"></script>
+<script type="text/javascript" src="lib/timelines/favorites_timeline.js"></script>
+<script type="text/javascript" src="lib/timelines/unified_timeline.js"></script>
+
+
 <script>
 urlExpander = new Expander();
-
-OptionsBackend = {
-  defaultOptions: {
-    home_refresh_interval: 90 * 1000,
-    mentions_refresh_interval: 150 * 1000,
-    dms_refresh_interval: 150 * 1000,
-    lists_refresh_interval: 150 * 1000,
-    favorites_refresh_interval: 600 * 1000,
-    blockedusers_refresh_interval: 3600 * 1000,
-    tweets_per_page: 10,
-    max_cached_tweets: 30,
-    url_shortener: 'bitly',
-    shortener_acct: false,
-    shortener_login: '',
-    shortener_key: '',
-    share_include_title: false,
-    name_attribute: 'name',
-    request_timeout: 6000,
-    compose_position: 'top',
-    hover_timeout: 1000,
-
-    microblogging_service: 'twitter',
-
-    base_url: 'http://api.twitter.com/1/',
-    base_oauth_url: 'https://twitter.com/oauth/',
-
-    same_signing_urls: true,
-
-    base_signing_url: 'http://api.twitter.com/1/',
-    base_oauth_signing_url: 'https://twitter.com/oauth/',
-
-    tweets_notification_style: 'on_page',
-    home_on_page: false,
-    home_icon: true,
-    mentions_on_page: true,
-    mentions_icon: true,
-    dms_on_page: true,
-    dms_icon: true,
-    favorites_on_page: false,
-    favorites_icon: false,
-    lists_on_page: true,
-    lists_icon: true,
-
-    home_visible: true,
-    mentions_visible: true,
-    dms_visible: true,
-    favorites_visible: true,
-    lists_visible: true,
-
-    unified_visible: true,
-    home_include_unified: true,
-    mentions_include_unified: true,
-    dms_include_unified: true,
-    favorites_include_unified: false,
-    lists_include_unified: false,
-
-    reply_all: false,
-    show_expanded_urls: true,
-
-    lists_count: 1,
-
-    idle_color: '#4880a6',
-    home_color: '#9c2e2e',
-    mentions_color: '#7f870b',
-    dms_color: '#7f870b',
-    favorites_color: '#7f870b',
-    lists_color: '#7f870b',
-
-    tweets_color_only_unified: false,
-    home_tweets_color: 'rgba(0, 72, 255, 0.15)',
-    mentions_tweets_color: 'rgba(255, 255, 0, 0.15)',
-    dms_tweets_color: 'rgba(0, 255, 0, 0.15)',
-    lists_tweets_color: 'rgba(255, 0, 0, 0.15)',
-    favorites_tweets_color: 'rgba(0, 0, 0, 0)',
-
-    notification_fade_timeout: 6000,
-    theme: 'css/chromified.css,css/chromified-theme/jquery-ui-1.7.2.custom.css',
-    font_family: 'Helvetica, Arial, sans-serif',
-    font_size: '1.0em'
-  },
-  cachedOptions: null,
-  optionsData: Persistence.options(),
-  save: function(optionsMap) {
-    this.optionsData.save(JSON.stringify(optionsMap));
-    this.cachedOptions = this.load();
-  },
-  load: function(forceDefault) {
-    var map = $.extend(true, {}, this.defaultOptions);
-    if(forceDefault) {
-      return map;
-    }
-    try {
-      var parsedMap = JSON.parse(this.optionsData.val());
-      if(parsedMap)
-        $.extend(true, map, parsedMap);
-    } catch(e) { /* ignored */ }
-    return map;
-  },
-  get: function(option) {
-    if(this.cachedOptions == null) {
-      this.cachedOptions = this.load();
-    }
-    return this.cachedOptions[option];
-  }
-};
-
-Utils = {
-  pushTweet: function(list, tweet) {
-    var baseTime = Date.parse(tweet.created_at);
-    var i = 0;
-    for(; i < list.length; ++i) {
-      var tweetTime = Date.parse(list[i].created_at);
-      if(baseTime >= tweetTime) {
-        break;
-      }
-    }
-    if(i == list.length || list[i].id != tweet.id)
-      list.splice(i, 0, tweet);
-  },
-  makeJoinableCallback: function(joinCount, eachCallback, joinCallback) {
-    return function() {
-      joinCount--;
-      eachCallback.apply(this, arguments);
-      if(joinCount == 0) {
-        joinCallback();
-      }
-    };
-  }
-};
-
-function UnifiedTweetsTimeline(timelines) {
-  this.timelines = timelines;
-  this.timelineId = 'unified';
-  this.timelineName = 'Unified';
-  this.tweetsPerPage = OptionsBackend.get('tweets_per_page');
-  this.maxCachedTweets = OptionsBackend.get('max_cached_tweets');
-  this.maxCachedPages = parseInt((this.maxCachedTweets / this.tweetsPerPage) - 1);
-  this.visibleTweetsList = [];
-  this.currentPage = 0;
-  this.currentScroll = 0;
-}
-UnifiedTweetsTimeline.prototype = {
-
-  killTimeline: function() {
-    /*noop*/
-  },
-
-  stopTimer: function() {
-    /*noop*/
-  },
-
-  getError: function() {
-    var err = null;
-    this.eachTimeline(function(timeline) {
-      if(timeline.getError()) {
-        err = timeline.getError();
-        return false;
-      }
-    });
-    return err;
-  },
-
-  eachTimeline: function(callback) {
-    for(var tId in this.timelines) {
-      var timeline = this.timelines[tId];
-      if(timeline.includeInUnified) {
-        if(callback.call(this, timeline) === false)
-          break;
-      }
-    }
-  },
-
-  countTimelines: function() {
-    var count = 0;
-    this.eachTimeline(function(timeline) {
-      if(timeline.includeInUnified) {
-        ++count;
-      }
-    });
-    return count;
-  },
-
-  giveMeTweets: function(callback, syncNew, cacheOnly) {
-    if(this.currentCallback) {
-      //Handling multiple calls to giveMeTweets, just update the registered
-      //callback and let the first request finish.
-      this.currentCallback = callback;
-      return;
-    }
-    this.currentCallback = callback;
-
-    if(cacheOnly || syncNew) {
-      if(this.currentScroll == 0) {
-        if(this.currentPage > this.maxCachedPages) {
-          this.currentPage = this.maxCachedPages;
-          this.eachTimeline(function(timeline) {
-            timeline.cleanUpCache();
-          });
-        }
-      }
-    } else {
-      this.currentPage += 1;
-    }
-
-    var _this = this;
-    var errorAbort = false;
-    var tweetsCache = {};
-    var requiredTweets = (this.currentPage + 1) * this.tweetsPerPage;
-
-    var resultTweetsList = [];
-    var usedTweetsMap = {};
-
-    var findMaxBefore = function(maxDate) {
-      var maxBeforeDate = null;
-      var maxBeforeTweet = null;
-
-      var checkMaxTweet = function(timelineId) {
-        var tweetsInTimeline = tweetsCache[timelineId];
-        for(var i = 0, len = tweetsInTimeline.length; i < len; ++i) {
-          var tweet = tweetsInTimeline[i];
-          if(usedTweetsMap[tweet.id]) {
-            continue;
-          }
-          var date = Date.parse(tweet.created_at);
-          if(maxDate && date > maxDate) {
-            continue;
-          }
-          if(!maxBeforeDate || date > maxBeforeDate) {
-            maxBeforeDate = date;
-            maxBeforeTweet = tweet;
-            maxBeforeTweet.timelineId = timelineId;
-          }
-        }
-      };
-      var checkFavorite = false;
-      for(var timelineId in tweetsCache) {
-        if(timelineId == 'favorites') {
-          //HACK: postpone
-          checkFavorite = true;
-          continue;
-        }
-        checkMaxTweet(timelineId);
-      }
-      if(checkFavorite) {
-        checkMaxTweet('favorites');
-      }
-
-      if(maxBeforeTweet) {
-        usedTweetsMap[maxBeforeTweet.id] = true;
-      }
-      return maxBeforeTweet;
-    }
-
-    var joinFunction = function() {
-      if(errorAbort) {
-        return;
-      }
-      /* 2nd step: Let's cherry pick tweets until we get enough of them
-         to compose our unified timeline.
-      */
-      while(resultTweetsList.length < requiredTweets) {
-        var lastTweet = resultTweetsList[resultTweetsList.length - 1];
-        var maxDate = null;
-        if(lastTweet) {
-          maxDate = Date.parse(lastTweet.created_at);
-        }
-        var nextTweet = findMaxBefore(maxDate);
-        if(!nextTweet) {
-          break;
-        }
-        resultTweetsList.push(nextTweet);
-        if(resultTweetsList.length == requiredTweets) {
-          break;
-        }
-        var timelineTweetsCache = tweetsCache[nextTweet.timelineId];
-        var isLastInTimelineCache = timelineTweetsCache[timelineTweetsCache.length - 1].id == nextTweet.id
-        if(isLastInTimelineCache) {
-          /* 3rd step: Some timeline went empty because all other tweets are already in
-             the unified timeline, now we need to get more tweets from this timeline.
-          */
-          var newJoinableCallback = Utils.makeJoinableCallback(1, eachFunction, joinFunction);
-          _this.timelines[nextTweet.timelineId].giveMeTweets(newJoinableCallback, false, false, true,
-              (requiredTweets - resultTweetsList.length) + 1);
-          return;
-        }
-      }
-      /* 4th step now we're ready to return our unified timeline. */
-      try {
-        _this.visibleTweetsList = resultTweetsList;
-        _this.currentCallback(resultTweetsList, _this.timelineId);
-      } catch(e) {
-        /* ignoring, popup dead? */
-      }
-      _this.currentCallback = null;
-    };
-    var eachFunction = function (tweets, timelineId) {
-      if(errorAbort) {
-        return;
-      }
-      if(!tweets) {
-        errorAbort = true;
-        try {
-          _this.currentCallback(null, _this.timelineId);
-        } catch(e) {
-          /* ignoring, popup dead? */
-        }
-        _this.currentCallback = null;
-        return;
-      }
-      var currentTweets = tweetsCache[timelineId];
-      tweetsCache[timelineId] = tweets;
-    }
-
-    /* 1st step: Let's get cached results from each timeline and call
-       joinFunction when we get all the results.
-    */
-    var joinCount = this.countTimelines();
-    var joinableCallback = Utils.makeJoinableCallback(joinCount, eachFunction, joinFunction);
-
-    this.eachTimeline(function(timeline) {
-      timeline.giveMeTweets(joinableCallback, syncNew, true, true);
-    });
-
-  },
-
-  updateNewTweets: function() {
-    this.eachTimeline(function(timeline) {
-      timeline.updateNewTweets();
-    });
-  },
-
-  newTweetsCount: function() {
-    var ret = [0, 0];
-    this.eachTimeline(function(timeline) {
-      var timelineCount = timeline.newTweetsCount();
-      ret[0] += timelineCount[0];
-      ret[1] += timelineCount[1];
-    });
-    return ret;
-  },
-
-  getNewUnreadTweets: function() {
-    return [];
-  },
-
-  getNewUnreadIds: function() {
-    return [];
-  },
-
-  removeFromCache: function(id) {
-    this.eachTimeline(function(timeline) {
-      timeline.removeFromCache(id);
-    });
-  },
-
-  findTweet: function(id) {
-    return null;
-  },
-
-  pushTweet: function(tweet) {
-    return;
-  },
-
-  getNewTweetsCache: function() {
-    return [];
-  },
-
-  getTweetsCache: function() {
-    return this.visibleTweetsList;
-  }
-}
-
-function TweetsTimeline(timelineId, manager, recheckTime) {
-  this.timelineId = timelineId;
-  this.manager = manager;
-  this.recheckTime = recheckTime;
-
-  this.tweetsCache = [];
-  this.newTweetsCache = [];
-  this.unreadNotified = [];
-
-  this.timerId = null;
-  this.currentError = null;
-  this.currentCallback = null;
-  this.currentScroll = 0;
-  this.firstRun = true;
-  this.timelinePath = null;
-  this.usingPages = false;
-  this.timelineId = timelineId;
-  this.listId = null;
-  this.timelineStopped = false;
-
-  switch(timelineId) {
-    case 'home':
-      this.timelinePath = 'statuses/home_timeline';
-      this.timelineName = 'Home';
-      break;
-    case 'mentions':
-      this.timelinePath = 'statuses/mentions';
-      this.timelineName = '@<span class="__username">';
-      break;
-    case 'dms':
-      this.timelinePath = 'direct_messages';
-      this.timelineName = 'DM';
-      break;
-    case 'favorites':
-      this.timelinePath = 'favorites';
-      this.usingPages = true;
-      this.timelineName = 'Favorites';
-      break;
-  }
-}
-TweetsTimeline.prototype = {
-
-  setError: function(status) {
-    this.currentError = status;
-  },
-
-  getError: function() {
-    return this.currentError;
-  },
-
-  setTimelinePath: function(path) {
-    this.timelinePath = path;
-  },
-
-  killTimeline: function() {
-    this.timelineStopped = true;
-    this.stopTimer();
-  },
-
-  stopTimer: function() {
-    if(this.timerId) {
-      clearTimeout(this.timerId);
-      this.timerId = null;
-    }
-  },
-
-  onFetchNew: function(success, tweets, status, context) {
-    if(this.timelineStopped) {
-      return;
-    }
-    var _this = this;
-    if(!success) {
-      this.setError(status);
-      if(context.onFinish)
-        context.onFinish(0);
-      this.timerId = setTimeout(function() { _this.fetchNewTweets.call(_this); }, this.recheckTime);
-      return;
-    }
-    this.setError(null);
-
-    var unreadLength = 0;
-    if(this.usingPages) {
-      for(var i = 0; i < tweets.length; ++i) {
-        var j = 0;
-        for(; j < this.tweetsCache.length; ++j) {
-          if(tweets[i].id == this.tweetsCache[j].id) {
-            break;
-          }
-        }
-        if(j != this.tweetsCache.length) {
-          break;
-        }
-        this.newTweetsCache.push(tweets[i]);
-      }
-    } else {
-      for(var i = tweets.length - 1; i >= 0; --i) {
-        this.newTweetsCache.unshift(tweets[i]);
-        var tid = tweets[i].id;
-        if(context.onFinish) {
-          this.manager.readTweet(tid);
-        } else if(!this.manager.readTweets[tid]) {
-          ++unreadLength;
-          this.manager.unreadTweets[tid] = true;
-        }
-      }
-    }
-
-    if(tweets.length > 0) {
-      this.manager.notifyNewTweets();
-    }
-    if(context.onFinish)
-      context.onFinish(tweets.length);
-    this.timerId = setTimeout(function() { _this.fetchNewTweets.call(_this); }, this.recheckTime);
-  },
-
-  fetchNewTweets: function(onFinishCallback) {
-    this.stopTimer();
-    var lastId = null;
-    if(this.newTweetsCache.length > 0) {
-      lastId = this.newTweetsCache[0].id;
-    } else if(this.tweetsCache.length > 0) {
-      lastId = this.tweetsCache[0].id;
-    }
-    var _this = this;
-    var context = { onFinish: onFinishCallback };
-    var params = {};
-    if(this.usingPages) {
-      //No params
-    } else {
-      if(lastId) {
-        params.since_id = lastId;
-      }
-    }
-    this.manager.twitterBackend.timeline(this.timelinePath, function(success, tweets, status, context) {
-      _this.onFetchNew.call(_this, success, _this.filterBlockedTweets(tweets), status, context);
-    }, context, params);
-  },
-
-  onFetch: function(success, tweets, status, context) {
-    if(this.timelineStopped) {
-      return;
-    }
-    if(!success) {
-      this.setError(status);
-      try {
-        this.currentCallback(null);
-      } catch(e) {
-        /* ignoring exception, popup might be closed */
-      }
-
-      this.setError(null);
-      this.currentCallback = null;
-      return;
-    }
-    this.setError(null);
-    if(this.usingPages) {
-      for(var i = 0; i < tweets.length; ++i) {
-        this.pushTweet(tweets[i]);
-      }
-    } else {
-      var i = 0;
-      if(context.usingMaxId) {
-        // If we're fetching using maxId, ignore the first one (we already have it)
-        i = 1;
-      }
-      for(; i < tweets.length; ++i) {
-        this.tweetsCache.push(tweets[i]);
-      }
-    }
-
-    // Let's clean this.currentCallback before calling it as
-    // there might be unexpected errors and this should not block
-    // the extension.
-    var callback = this.currentCallback;
-    this.currentCallback = null;
-    try {
-      callback(this.tweetsCache, this.timelineId);
-    } catch(e) {
-      /* ignoring exception, popup might be closed */
-    }
-
-    if(this.firstRun) {
-      this.firstRun = false;
-      var _this = this;
-      this.timerId = setTimeout(function() { _this.fetchNewTweets.call(_this); }, this.recheckTime);
-    }
-  },
-
-  giveMeTweets: function(callback, syncNew, cacheOnly, keepCache, suggestedCount) {
-    if(!this.timelinePath) {
-      callback([], this.timelineId);
-      return;
-    }
-    if(this.currentCallback) {
-      //Handling multiple calls to giveMeTweets, just update the registered
-      //callback and let the first request finish.
-      this.currentCallback = callback;
-      return;
-    }
-    if(syncNew) {
-      //We should fetch new tweets, update the cache and then return the
-      //cached results.
-      var oldNewTweetsCallback = this.manager.newTweetsCallback;
-      var _this = this;
-      this.currentCallback = callback;
-      this.manager.newTweetsCallback = null;
-      var onFinishCallback = function() {
-        var tweetsCallback = _this.currentCallback;
-        _this.currentCallback = null;
-
-        _this.updateNewTweets();
-        _this.manager.updateAlert();
-        _this.giveMeTweets(tweetsCallback, false, true);
-        _this.manager.newTweetsCallback = oldNewTweetsCallback;
-      }
-      this.fetchNewTweets(onFinishCallback);
-      return;
-    }
-    if(cacheOnly && !this.firstRun) {
-      //Only return cached results if this is not the first run.
-      if(!keepCache) {
-        this.cleanUpCache();
-      }
-      try {
-        callback(this.tweetsCache, this.timelineId);
-      } catch(e) {
-        /* ignoring exception, popup might be closed */
-      }
-      return;
-    }
-    //If we didn't return yet it's because we want to fetch old tweets
-    //from twitter's API.
-
-    this.currentCallback = callback;
-    var _this = this;
-    var params, context;
-    if(this.usingPages) {
-      params = {page: (this.tweetsCache.length / 20) + 1};
-    } else {
-      var maxId = null;
-      if(this.tweetsCache.length > 0) {
-        maxId = this.tweetsCache[this.tweetsCache.length - 1].id;
-      }
-      context = {
-        usingMaxId: !!maxId
-      }
-      if(!suggestedCount) {
-        suggestedCount = OptionsBackend.get('tweets_per_page');
-      }
-      params = {count: suggestedCount, per_page: suggestedCount};
-      if(maxId) {
-        params.max_id = maxId;
-      }
-    }
-    this.manager.twitterBackend.timeline(this.timelinePath, function(success, tweets, status, context) {
-      _this.onFetch.call(_this, success, _this.filterBlockedTweets(tweets), status, context);
-    }, context, params);
-  },
-
-  cleanUpCache: function() {
-    if(this.currentScroll != 0) {
-      return;
-    }
-    var len = this.tweetsCache.length;
-    if(len <= OptionsBackend.get('max_cached_tweets'))
-      return;
-    this.tweetsCache = this.tweetsCache.slice(0, OptionsBackend.get('max_cached_tweets') + 1);
-  },
-
-  updateNewTweets: function() {
-    this.tweetsCache = this.newTweetsCache.concat(this.tweetsCache);
-    this.newTweetsCache = [];
-    this.unreadNotified = [];
-  },
-
-  newTweetsCount: function() {
-    var unreadCount = 0;
-    for(var i = this.newTweetsCache.length - 1; i >= 0; --i) {
-      if(!this.manager.isTweetRead(this.newTweetsCache[i].id)) {
-        ++unreadCount;
-      }
-    }
-    return [this.newTweetsCache.length, unreadCount];
-  },
-
-  getNewUnreadTweets: function() {
-    var unreadNewList = [];
-    for(var i = 0; i < this.newTweetsCache.length; ++i) {
-      if(!this.manager.isTweetRead(this.newTweetsCache[i].id) && !this.unreadNotified[this.newTweetsCache[i].id]) {
-        unreadNewList.push(this.newTweetsCache[i]);
-        this.unreadNotified[this.newTweetsCache[i].id] = true;
-      }
-    }
-    return unreadNewList;
-  },
-
-  getNewUnreadIds: function() {
-    var unreadNewIds = [];
-    for(var i = 0; i < this.newTweetsCache.length; ++i) {
-      if(!this.manager.isTweetRead(this.newTweetsCache[i].id)) {
-        unreadNewIds.push(this.newTweetsCache[i].id);
-      }
-    }
-    return unreadNewIds;
-  },
-
-  /**
-  * Filter-out all tweets and retweets that contain a status.user.id
-  * or status.retweeted_status.user.id in this.manager.blockedUserIds.
-  *
-  * @param json tweets - response as returned by a Twitter timeline REST method
-  * @return json
-  */
-  filterBlockedTweets: function(tweets) {
-    var filteredTweets = [];
-    for(var i in tweets) {
-      if(!(tweets[i].user && tweets[i].user.id in this.manager.blockedUserIds || tweets[i].retweeted_status && tweets[i].retweeted_status.user.id in this.manager.blockedUserIds)) {
-        filteredTweets.push(tweets[i]);
-      }
-    }
-    return filteredTweets;
-  },
-
-  removeFromCache: function(id) {
-    var i = 0;
-    for(; i < this.tweetsCache.length; ++i) {
-      if(this.tweetsCache[i].id == id)
-        break;
-    }
-    if(i != this.tweetsCache.length) {
-      this.tweetsCache.splice(i, 1);
-    }
-  },
-
-  findTweet: function(id) {
-    var i = 0;
-    for(; i < this.tweetsCache.length; ++i) {
-      if(this.tweetsCache[i].id == id)
-        return this.tweetsCache[i];
-    }
-    return null;
-  },
-
-  pushTweet: function(tweet) {
-    Utils.pushTweet(this.tweetsCache, tweet);
-  },
-
-  getNewTweetsCache: function() {
-    return this.newTweetsCache;
-  },
-
-  getTweetsCache: function() {
-    return this.tweetsCache;
-  }
-}
 
 function ComposerData() {
   this.saveMessage = '';
@@ -767,14 +51,6 @@ function TweetManager() {
   this.iconImg = null;
   this.listsCache = null;
   this.listsTabCount = OptionsBackend.get('lists_count');
-  this.showListsTab = false;
-
-  this.unifiedVisible = OptionsBackend.get('unified_visible');
-  if(this.unifiedVisible) {
-    this.timelines['unified'] = new UnifiedTweetsTimeline(this.timelines);
-    this.timelines['unified'].visible = true;
-    this.currentTimeline = 'unified';
-  }
 
   this.selectedListsData = Persistence.selectedLists();
   this.timelineOrderData = Persistence.timelineOrder();
@@ -789,37 +65,20 @@ function TweetManager() {
     this.oauthTokenData.remove();
   }
 
-  var timelineNames = ["home", "mentions", "dms", "favorites", "lists"];
-  for(var i = 0; i < timelineNames.length; ++i) {
-    var refreshInterval = OptionsBackend.get(timelineNames[i] + '_refresh_interval');
-    var visible = OptionsBackend.get(timelineNames[i] + '_visible');
-    var includeInUnified = false;
-    if(this.unifiedVisible) {
-      includeInUnified = OptionsBackend.get(timelineNames[i] + '_include_unified');
+  var _this = this;
+
+  TimelineTemplate.initTemplates(this);
+  TimelineTemplate.eachTimelineTemplate(function(template) {
+    var createdTimelines = template.createTimelines();
+    for(var i in createdTimelines) {
+      _this.timelines[createdTimelines[i].timelineId] = createdTimelines[i];
     }
-    if(!visible && !includeInUnified) {
-      continue;
-    }
-    if(timelineNames[i] == "lists") {
-      if(visible) {
-        this.showListsTab = true;
-      }
-      for(var j = 0; j < this.listsTabCount; ++j) {
-        var listTimeline = new TweetsTimeline("lists_" + j, this, refreshInterval);
-        listTimeline.includeInUnified = includeInUnified;
-        listTimeline.visible = visible;
-        this.timelines["lists_" + j] = listTimeline;
-      }
-    } else {
-      var timeline = new TweetsTimeline(timelineNames[i], this, refreshInterval);
-      timeline.includeInUnified = includeInUnified;
-      timeline.visible = visible;
-      this.timelines[timelineNames[i]] = timeline;
-    }
-    if(!this.currentTimeline) {
-      this.currentTimeline = (timelineNames[i] == "lists") ? "lists_0" : timelineNames[i];
-    }
-  }
+  });
+
+  this.orderedEachTimeline(function(timeline) {
+    _this.currentTimelineId = timeline.timelineId;
+    return false;
+  }, true);
 
   this.warningsCallback = null;
   this.warningMessage = null;
@@ -835,28 +94,10 @@ function TweetManager() {
   this.twitterBackend = new TwitterLib(OptionsBackend.get('request_timeout'),
     function onAuthenticated() {
       _this.retrieveBlockedUserIds();
-      for(var i = 0; i < timelineNames.length; ++i) {
-        var visible = OptionsBackend.get(timelineNames[i] + '_visible');
-        var includeInUnified = false;
-        if(_this.unifiedVisible) {
-          includeInUnified = OptionsBackend.get(timelineNames[i] + '_include_unified');
-        }
-        if(!visible && !includeInUnified) {
-          continue;
-        }
-        if(timelineNames[i] == "lists") {
-          _this.lists();
-          var selectedLists = _this.getSelectedLists();
-          for(var timelineId in selectedLists) {
-            var timeline = _this.changeList(timelineId, selectedLists[timelineId]);
-            if(timeline) {
-              timeline.giveMeTweets(function() {});
-            }
-          }
-        } else {
-          _this.giveMeTweets.call(_this, timelineNames[i], function() {});
-        }
-      }
+      _this.lists();
+      _this.eachTimeline(function(timeline) {
+        timeline.init();
+      }, true);
     },
     function(remainingHits, nextHitsReset, hourlyLimit) {
       _this.onHitsUpdated.call(_this, remainingHits, nextHitsReset, hourlyLimit);
@@ -871,6 +112,7 @@ function TweetManager() {
 }
 
 TweetManager.prototype = {
+
   setWarning: function(msg) {
     this.warningMessage = msg;
     try {
@@ -926,16 +168,24 @@ TweetManager.prototype = {
     this.selectedListsData.save(JSON.stringify(selectedLists));
   },
 
-  eachTimeline: function(callback) {
+  eachTimeline: function(callback, includeHidden) {
     for(var tId in this.timelines) {
+      var timeline = this.timelines[tId];
+      if(!includeHidden && !timeline.template.visible) {
+        continue;
+      }
       callback.call(tId, this.timelines[tId]);
     }
   },
 
   /* Lists timelines won't be included as they'll only be shown later */
-  orderedEachTimeline: function(callback) {
+  orderedEachTimeline: function(callback, includeLists) {
     var retList = [];
     for(var tId in this.timelines) {
+      var timeline = this.timelines[tId];
+      if(!includeLists && timeline.template.id == TimelineTemplate.LISTS) {
+        continue;
+      }
       var orderedPos = this.getTimelinePosition(tId);
       if(orderedPos == -1) {
         orderedPos = retList.length;
@@ -948,11 +198,14 @@ TweetManager.prototype = {
     }
     for(var i = 0; i < retList.length; ++i) {
       var tId = retList[i];
-      if(tId.match(/^lists/)) {
-        continue;
-      }
       if(tId) {
-        callback.call(tId, this.timelines[tId]);
+        var timeline = this.timelines[tId];
+        if(timeline.template.visible) {
+          var ret = callback.call(tId, timeline);
+          if(ret === false) {
+            break;
+          }
+        }
       }
     }
   },
@@ -1005,19 +258,17 @@ TweetManager.prototype = {
     this.eachTimeline(function(timeline) {
       var timelineId = this;
       var unreadNewIds = timeline.getNewUnreadIds();
+      var timelineTemplate = timeline.template;
       totalUnreadNewIds = totalUnreadNewIds.concat(unreadNewIds);
       if(unreadNewIds.length > 0) {
-        if(timelineId.match(/^lists/)) {
-          timelineId = 'lists';
+        if(timelineTemplate.showIconNotification) {
+          colors.push(timelineTemplate.iconNotificationColor);
         }
-        if(OptionsBackend.get(timelineId + '_icon')) {
-          colors.push(OptionsBackend.get(timelineId + '_color'));
-        }
-        if(OptionsBackend.get(timelineId + '_on_page')) {
+        if(timelineTemplate.showOnPageNotification) {
           unreadNewTweets = unreadNewTweets.concat(timeline.getNewUnreadTweets());
         }
       }
-    });
+    }, true);
     var totalUnreadNewCount = this.unique(totalUnreadNewIds).length;
     if(colors.length == 0) {
       chrome.browserAction.setTitle({title: "Chromed Bird"});
@@ -1038,9 +289,7 @@ TweetManager.prototype = {
   },
 
   safeTweetsNotifications: function(tweetsToNotify) {
-    var options = OptionsBackend.load();
-    options['tweets_notification_style'] = 'on_page';
-    OptionsBackend.save(options);
+    OptionsBackend.saveOption('tweets_notification_style', 'on_page');
     this.showTweetsNotifications(tweetsToNotify, true);
   },
 
@@ -1081,7 +330,9 @@ TweetManager.prototype = {
           );
           (function inClosure(tweet) {
             notification.onclose = function(e) {
-              _this.readTweet(tweet.id);
+              setTimeout(function() {
+                _this.readTweet(tweet.id);
+              }, 200);
             };
           })(tweetsToNotify[i]);
           notification.ondisplay = onDisplayFunc;
@@ -1188,11 +439,11 @@ TweetManager.prototype = {
       if(success) {
         _this.eachTimeline(function(timeline) {
           timeline.removeFromCache(id);
-        });
+        }, true);
       }
       callback(success, data, status);
     };
-    if(tweetTimelineId == "dms") {
+    if(tweetTimelineId == TimelineTemplate.DMS) {
       return this.twitterBackend.destroyDM(firstCallback, id);
     } else {
       return this.twitterBackend.destroy(firstCallback, id);
@@ -1203,7 +454,7 @@ TweetManager.prototype = {
     var _this = this;
     var firstCallback = function(success, data, status) {
       if(success) {
-        var favTimeline = _this.timelines["favorites"];
+        var favTimeline = _this.timelines[TimelineTemplate.FAVORITES];
         if(favTimeline) {
           favTimeline.pushTweet(data);
         }
@@ -1211,7 +462,7 @@ TweetManager.prototype = {
           var tweet = timeline.findTweet(id);
           if(tweet)
             tweet.favorited = true;
-        });
+        }, true);
       }
       callback(success, data, status);
     };
@@ -1222,7 +473,7 @@ TweetManager.prototype = {
     var _this = this;
     var firstCallback = function(success, data, status) {
       if(success) {
-        var favTimeline = _this.timelines["favorites"];
+        var favTimeline = _this.timelines[TimelineTemplate.FAVORITES];
         if(favTimeline) {
           favTimeline.removeFromCache(id);
         }
@@ -1230,7 +481,7 @@ TweetManager.prototype = {
           var tweet = timeline.findTweet(id);
           if(tweet)
             tweet.favorited = false;
-        });
+        }, true);
       }
       callback(success, data, status);
     };
@@ -1238,7 +489,7 @@ TweetManager.prototype = {
   },
 
   lists: function(force, callback) {
-    if(!this.showListsTab) {
+    if(!TimelineTemplate.getTemplate(TimelineTemplate.LISTS).visible) {
       /* No lists tab should be shown, let's just ignore the callback */
       return;
     }
@@ -1267,22 +518,12 @@ TweetManager.prototype = {
     if(!timeline) {
       return null;
     }
-    if(timeline.listId != listId) {
-      this.registerSelectedList(timelineName, listId);
-      timeline.stopTimer();
-      delete this.timelines[timelineName];
-      timeline = this.timelines[timelineName] = new TweetsTimeline(timelineName, this, OptionsBackend.get('lists_refresh_interval'));
-    }
-    timeline.includeInUnified = this.unifiedVisible && OptionsBackend.get('lists_include_unified');
-    timeline.visible = OptionsBackend.get('lists_visible');
-    timeline.listId = listId;
-    timeline.setTimelinePath(this.twitterBackend.username() + '/lists/' + listId + '/statuses');
-    return timeline;
+    timeline.changeList(listId);
   },
 
   getListId: function(timelineName) {
     if(!timelineName) {
-      timelineName = this.currentTimeline;
+      timelineName = this.currentTimelineId;
     }
     var timeline = this.timelines[timelineName];
     if(!timeline) {
@@ -1299,24 +540,19 @@ TweetManager.prototype = {
     return null;
   },
 
-  /* Delegates */
-
   giveMeTweets: function(timelineId, callback, syncNew, cacheOnly) {
     var timeline = this.timelines[timelineId];
     if(!timeline) {
       callback([], timelineId);
       return;
     }
-    if(syncNew && this.unifiedVisible && timelineId != 'unified') {
-      var timelineBaseId = timelineId.replace(/_.*$/, '');
-      if(OptionsBackend.get(timelineBaseId + '_include_unified')) {
-        var originalCallback = callback;
-        var _this = this;
-        callback = function(tweets, timelineId) {
-          originalCallback(tweets, timelineId);
-          _this.timelines['unified'].giveMeTweets(originalCallback, false, true);
-        };
-      }
+    if(syncNew && timeline.template.includeInUnified) {
+      var originalCallback = callback;
+      var _this = this;
+      callback = function(tweets, timelineId) {
+        originalCallback(tweets, timelineId);
+        _this.timelines[TimelineTemplate.UNIFIED].giveMeTweets(originalCallback, false, true);
+      };
     }
     return timeline.giveMeTweets(callback, syncNew, cacheOnly);
   },
@@ -1326,34 +562,39 @@ TweetManager.prototype = {
   },
 
   updateNewTweets: function() {
-    if(this.currentTimeline == 'favorites') {
-      var newTweets = this.timelines[this.currentTimeline].getNewTweetsCache();
+    var currentTimeline = this.timelines[this.currentTimelineId];
+    if(currentTimeline.template.id == TimelineTemplate.FAVORITES) {
+      var newTweets = this.timelines[this.currentTimelineId].getNewTweetsCache();
       for(var i = 0, len = newTweets.length; i < len; ++i) {
         var id = newTweets[i].id;
         this.eachTimeline(function(timeline) {
           var tweet = timeline.findTweet(id);
           if(tweet)
             tweet.favorited = true;
-        });
+        }, true);
       }
     }
-    this.timelines[this.currentTimeline].updateNewTweets();
+    currentTimeline.updateNewTweets();
     this.updateAlert();
   },
 
   getCurrentTimeline: function() {
-    return this.timelines[this.currentTimeline];
+    return this.timelines[this.currentTimelineId];
+  },
+
+  getTimeline: function(timeline) {
+    return this.timelines[timeline];
   },
 
   currentError: function() {
-    return this.timelines[this.currentTimeline].getError();
+    return this.timelines[this.currentTimelineId].getError();
   },
 
   stopAll: function() {
     this.eachTimeline(function(timeline) {
       timeline.killTimeline();
       delete timeline;
-    });
+    }, true);
   },
 
   signout: function() {
