@@ -1,0 +1,58 @@
+/* Generic context menu styles */
+.contextMenu {
+  position: absolute;
+  z-index: 99999;
+  border: solid 1px #CCC;
+  -webkit-border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 5px 0px 5px 0px;
+  margin: 0px;
+  display: none;
+  -webkit-box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+.contextMenu LI {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.contextMenu A {
+  color: #333;
+  text-decoration: none;
+  display: block;
+  line-height: 20px;
+  height: 20px;
+  background-position: 6px center;
+  background-repeat: no-repeat;
+  outline: none;
+  padding: 1px 5px;
+}
+
+.contextMenu LI.hover A {
+  color: #FFF;
+  background-color: #3399FF;
+}
+
+.contextMenu LI.disabled A {
+  color: #AAA;
+  cursor: default;
+}
+
+.contextMenu LI.hover.disabled A {
+  background-color: transparent;
+}
+
+.contextMenu LI.separator {
+  border-top: solid 1px #CCC;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.contextMenu LI.check_unmarked {
+
+}
+
+.contextMenu LI.check_marked A {
+  background-color: #3399FF;
+}

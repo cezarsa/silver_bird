@@ -5,6 +5,7 @@
 <link id="base_stylesheet" rel="stylesheet" type="text/css" href="css/base.css" />
 <link rel="stylesheet" type="text/css" href="css/simple_select.css" />
 <link rel="stylesheet" type="text/css" href="css/tipsy.css" />
+<link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.css" />
 
 <script>
 var MAX_TWEET_SIZE = 140;
@@ -13,6 +14,7 @@ var urlExpander = chrome.extension.getBackgroundPage().urlExpander;
 var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
 var twitterBackend = tweetManager.twitterBackend;
 var OptionsBackend = chrome.extension.getBackgroundPage().OptionsBackend;
+var TimelineTemplate = chrome.extension.getBackgroundPage().TimelineTemplate;
 
 var microbloggingService = OptionsBackend.get('microblogging_service');
 var TwitterLib;
@@ -41,6 +43,7 @@ if(!twitterBackend.authenticated() && !twitterBackend.tokenRequested()) {
 <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
 <script type="text/javascript" src="lib/3rdparty/jquery-ui-custom.js"></script>
 <script type='text/javascript' src='lib/3rdparty/jquery.tipsy.js'></script>
+<script type="text/javascript" src="lib/3rdparty/jquery.contextMenu.js"></script>
 
 <!--script type="text/javascript" src="lib/debug.js"></script-->
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
@@ -57,6 +60,12 @@ if(shortener_acct) {
 var reply_all = OptionsBackend.get('reply_all');
 var shortener = new Shortener(OptionsBackend.get('url_shortener'),
   shortener_acct, shortener_login, shortener_key);
+
+$.extend($.ui.tabs.prototype, {
+  refreshPositions: function() {
+    return this._tabify();
+  }
+});
 
 $.fn.hoverFor = function(time, mainCallback, startingCallback, abortCallback) {
   return this.each(function(){
@@ -182,6 +191,43 @@ var ThemeManager = {
       ThemeManager.popupSizeData.remove();
       ThemeManager.setPopupSize();
     });
+  },
+
+  sortableEl: null,
+  uiTabs: null,
+  handleSortableTabs: function() {
+    this.uiTabs = $("#tabs");
+    this.sortableEl = this.uiTabs.find(".ui-tabs-nav");
+    this.sortableEl.sortable({
+      stop: function(event, ui) {
+        ThemeManager.updateTabsOrder();
+      }
+    });
+  },
+
+  reOrderPanels: function(sortedTimelines) {
+    var panels = $("#tabs .ui-tabs-panel");
+    for(var i = 0, len = sortedTimelines.length; i < len; ++i) {
+      var correctTimeline = sortedTimelines[i];
+      var correctPanel = $("#timeline-" + correctTimeline);
+      var positionPanel = panels.eq(i);
+      if(correctPanel[0].id != positionPanel[0].id) {
+        correctPanel.remove();
+        positionPanel.before(correctPanel);
+        panels = $("#tabs .ui-tabs-panel");
+      }
+    }
+  },
+
+  updateTabsOrder: function() {
+    var sortedTabs = this.sortableEl.sortable('toArray');
+    var sortedTimelines = [];
+    for(var i = 0; i < sortedTabs.length; ++i) {
+      sortedTimelines[i] = sortedTabs[i].split('-')[1];
+    }
+    tweetManager.setTimelineOrder(sortedTimelines);
+    this.reOrderPanels(sortedTimelines);
+    this.uiTabs.tabs('refreshPositions');
   }
 }
 
@@ -907,23 +953,27 @@ var Lists = {
       if(!lists) {
         lists = [];
       }
-      var listsTabCount = tweetManager.listsTabCount;
-      for(var i = 0; i < listsTabCount; ++i) {
-        if(!force) {
-          var pos = tweetManager.getTimelinePosition('lists_' + i);
+      tweetManager.eachTimeline(function(timeline) {
+        if(timeline.template.id != TimelineTemplate.LISTS) {
+          return true;
+        }
+        var $listSelect = $("select#" + timeline.timelineId + "-selector");
+        if($listSelect.length == 0) {
+          var pos = tweetManager.getTimelinePosition(timeline.timelineId);
           if(pos == -1) {
             pos = undefined;
           }
-          $("#tabs").tabs('add', '#timeline-lists_' + i, '<select id="lists_' + i + '-selector"></select>', pos);
+          $("#tabs").tabs('add', '#timeline-' + timeline.timelineId, '<select id="' + timeline.timelineId + '-selector"></select>', pos);
+          $listSelect = $("select#" + timeline.timelineId + "-selector");
+          ContextMenu.initSingleTimeline(timeline.timelineId);
         }
-        var $listSelect = $("select#lists_" + i + "-selector");
         $listSelect.html('');
         $listSelect.append($("<option>").attr('value', _this.selector_value).text('- Select a list -'));
         for(var j = 0; j < lists.length; ++j) {
           $listSelect.append($("<option>").attr('value', lists[j].slug).text(lists[j].name));
         }
         $listSelect.append($("<option>").attr('value', _this.update_value).text('Update lists...'));
-        var selectedListId = tweetManager.getListId('lists_' + i);
+        var selectedListId = tweetManager.getListId(timeline.timelineId);
         if(selectedListId) {
           $listSelect.val(selectedListId);
         }
@@ -942,11 +992,109 @@ var Lists = {
             return true;
           }
         });
-      }
+      });
       ThemeManager.handleWindowResizing();
     });
   }
-}
+};
+
+var ContextMenu = {
+  init: function(selector) {
+    var _this = this;
+    if(!selector) {
+      selector = '.timeline_tab,ul.ui-tabs-nav';
+    }
+    $(selector).contextMenu({
+      menu: 'tab_context_menu',
+      onBeforeShow: function(el) {
+        return _this.createMenu(el);
+      }
+    }, function(action, el, pos) {
+      return _this.runMenuAction(action, el, pos);
+    });
+  },
+
+  initSingleTimeline: function(timelineId) {
+    this.init('#tab_\\#timeline-' + timelineId);
+  },
+
+  runMenuAction: function(action, el, pos) {
+    var actionParts = action.split('-');
+    if(actionParts[0] == 'show') {
+      var templateId = actionParts[1];
+      var createdTimelines = tweetManager.showTimelineTemplate(templateId);
+      if(templateId == TimelineTemplate.LISTS) {
+        Lists.init();
+      } else {
+        for(var i = 0, len = createdTimelines.length; i < len; ++i) {
+          var timeline = createdTimelines[i];
+          var pos = tweetManager.getTimelinePosition(timeline.timelineId);
+          if(pos == -1) {
+            pos = undefined;
+          }
+          $("#tabs").tabs('add', '#timeline-' + timeline.timelineId, timeline.template.timelineName, pos);
+          ContextMenu.initSingleTimeline(timeline.timelineId);
+        }
+        ThemeManager.handleWindowResizing();
+      }
+    } else if(actionParts[0] == 'remove') {
+      var timelineId = actionParts[1];
+      $("#tabs > ul li:has(a[href])").each(function(index, el) {
+        if($(el).attr('id') == 'tab_#timeline-' + timelineId) {
+          $("#tabs").tabs('remove', index);
+          return false;
+        }
+      });
+      tweetManager.hideTimeline(timelineId);
+    }
+    ThemeManager.updateTabsOrder();
+  },
+
+  createMenu: function(el) {
+    var specificMenu = [];
+    var timeline = null;
+    if(el.is('.timeline_tab')) {
+      timeline = tweetManager.getTimeline(el[0].id.split('-')[1]);
+      var label = 'Remove';
+      if(timeline.template.includeInUnified && !timeline.template.multipleTimelines) {
+        label = 'Hide';
+      }
+      specificMenu.push({action: 'remove-' + timeline.timelineId, label: label + ' Tab'});
+
+      if(timeline.template.id == TimelineTemplate.UNIFIED) {
+        specificMenu.push({label: 'separator'});
+        TimelineTemplate.eachTimelineTemplate(function(template) {
+          if(timeline.template.id == template.id) {
+            return true;
+          }
+          var className = 'check_unmarked';
+          if(template.includeInUnified) {
+            className = 'check_marked';
+          }
+          specificMenu.push({action: 'unified-' + template.id, label: template.timelineName, className: className});
+        });
+      }
+    }
+
+    var generalMenu = [];
+    TimelineTemplate.eachTimelineTemplate(function(template) {
+      if(!template.visible || template.multipleTimelines) {
+        var label = 'Show ';
+        if(template.multipleTimelines) {
+          label = 'Add ';
+        }
+        generalMenu.push({action: 'show-' + template.id, label: label + template.timelineName + ' Tab'});
+      }
+    });
+
+    if(specificMenu.length > 0 && generalMenu.length > 0) {
+      specificMenu.push({label: 'separator'});
+    }
+
+    return specificMenu.concat(generalMenu);
+  }
+
+};
 
 function openTab(tabUrl) {
   var button = event.button;
@@ -1103,17 +1251,7 @@ function initializeWorkspace() {
   tweetManager.orderedEachTimeline(function(timeline) {
     $("#tabs").tabs('add', '#timeline-' + timeline.timelineId, timeline.template.timelineName);
   });
-  $(".__username").text(tweetManager.twitterBackend.username());
-  $("#tabs .ui-tabs-nav").sortable({
-    stop: function(event, ui) {
-      var sortedTabs = ui.item.parent().sortable('toArray');
-      var sortedTimelines = [];
-      for(var i = 0; i < sortedTabs.length; ++i) {
-        sortedTimelines[i] = sortedTabs[i].split('-')[1];
-      }
-      tweetManager.setTimelineOrder(sortedTimelines);
-    }
-  });
+  ThemeManager.handleSortableTabs();
 
   if(OptionsBackend.get('compose_position') == 'bottom') {
     var composeArea = $("#compose_tweet_area").remove();
@@ -1125,6 +1263,7 @@ function initializeWorkspace() {
   setTimeout(function() {
     ThemeManager.handleWindowResizing();
     Lists.init();
+    ContextMenu.init();
 
     $("#tabs").tabs('select', '#timeline-' + tweetManager.currentTimelineId);
     Composer.init();
@@ -1238,6 +1377,9 @@ $(function() {
 </div>
 <div id="error_pin" style="display: none;">
 </div>
+
+<ul id="tab_context_menu" class="contextMenu">
+</ul>
 
 </body>
 </html>

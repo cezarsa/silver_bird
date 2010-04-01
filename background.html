@@ -17,6 +17,7 @@
 <script type="text/javascript" src="lib/timeline_template.js"></script>
 
 <script type="text/javascript" src="lib/timelines/timeline.js"></script>
+<script type="text/javascript" src="lib/timelines/mentions_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/lists_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/favorites_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/unified_timeline.js"></script>
@@ -112,6 +113,42 @@ function TweetManager() {
 }
 
 TweetManager.prototype = {
+
+  showTimelineTemplate: function(timelineTemplateId) {
+    var template = TimelineTemplate.getTemplate(timelineTemplateId);
+    template.setVisible(true);
+    var createdTimelines = [];
+    var shownTimelines = [];
+    if(template.multipleTimelines) {
+      createdTimelines = [template.addTimeline()];
+    } else {
+      var createTimelines = true;
+      this.eachTimeline(function(timeline) {
+        if(timeline.template.id == timelineTemplateId) {
+          createTimelines = false;
+          shownTimelines.push(timeline);
+        }
+      });
+      if(createTimelines) {
+        createdTimelines = template.createTimelines();
+      }
+    }
+    for(var i in createdTimelines) {
+      var timeline = createdTimelines[i];
+      this.timelines[timeline.timelineId] = timeline;
+      timeline.init();
+      shownTimelines.push(timeline);
+    }
+    return shownTimelines;
+  },
+
+  hideTimeline: function(timelineId){
+    var timeline = this.timelines[timelineId];
+    var shouldDelete = timeline.remove();
+    if(shouldDelete) {
+      delete this.timelines[timelineId];
+    }
+  },
 
   setWarning: function(msg) {
     this.warningMessage = msg;
