@@ -150,6 +150,11 @@ TweetManager.prototype = {
     }
   },
 
+  toggleUnified: function(templateId) {
+    var template = TimelineTemplate.getTemplate(templateId);
+    template.setIncludeInUnified(!template.includeInUnified);
+  },
+
   setWarning: function(msg) {
     this.warningMessage = msg;
     try {

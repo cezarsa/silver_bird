@@ -1036,11 +1036,18 @@ var ContextMenu = {
         }
         ThemeManager.handleWindowResizing();
       }
+      ThemeManager.updateTabsOrder();
     } else if(actionParts[0] == 'remove') {
       var timelineId = actionParts[1];
       TimelineTab.removeTab(timelineId);
+      ThemeManager.updateTabsOrder();
+    } else if(actionParts[0] == 'unified') {
+      var templateId = actionParts[1];
+      tweetManager.toggleUnified(templateId);
+      if(tweetManager.getCurrentTimeline().template.id == TimelineTemplate.UNIFIED) {
+        prepareAndLoadTimeline();
+      }
     }
-    ThemeManager.updateTabsOrder();
   },
 
   createMenu: function(el) {
