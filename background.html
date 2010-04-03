@@ -191,20 +191,6 @@ TweetManager.prototype = {
     });
   },
 
-  getSelectedLists: function() {
-    var selectedListsStr = this.selectedListsData.val();
-    if(selectedListsStr) {
-      return JSON.parse(selectedListsStr);
-    }
-    return {};
-  },
-
-  registerSelectedList: function(timelineId, listId) {
-    var selectedLists = this.getSelectedLists();
-    selectedLists[timelineId] = listId;
-    this.selectedListsData.save(JSON.stringify(selectedLists));
-  },
-
   eachTimeline: function(callback, includeHidden) {
     for(var tId in this.timelines) {
       var timeline = this.timelines[tId];
@@ -568,6 +554,7 @@ TweetManager.prototype = {
     }
     var listId = timeline.listId;
     if(listId && this.listsCache) {
+      // Check if the listId really exists
       for(var i = 0; i < this.listsCache.length; ++i) {
         if(this.listsCache[i].slug == listId) {
           return listId;
@@ -619,8 +606,8 @@ TweetManager.prototype = {
     return this.timelines[this.currentTimelineId];
   },
 
-  getTimeline: function(timeline) {
-    return this.timelines[timeline];
+  getTimeline: function(timelineId) {
+    return this.timelines[timelineId];
   },
 
   currentError: function() {
