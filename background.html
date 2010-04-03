@@ -189,8 +189,6 @@ TweetManager.prototype = {
           for(var i in data) {
             _this.blockedUserIds[data[i]] = data[i];
           }
-        } else {
-          _this.setWarning("Could not retrieve your list of blocked users. Will auto retry later.");
         }
         setTimeout(function() { _this.retrieveBlockedUserIds(); }, OptionsBackend.get('blockedusers_refresh_interval'));
     });
