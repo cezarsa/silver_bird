@@ -9,261 +9,11 @@
 <script type="text/javascript" src="lib/3rdparty/colorpicker.js"></script>
 <script type="text/javascript" src="lib/math_utils.js"></script>
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
+
+<script type="text/javascript" src="lib/options/options.js"></script>
 <title>Chromed Bird Options</title>
 
 <script type="text/javascript">
-
-var OptionsBackend = chrome.extension.getBackgroundPage().OptionsBackend;
-var Persistence = chrome.extension.getBackgroundPage().Persistence;
-
-function Options() {
-  this.optionsMap = {};
-  this.onloadCallback = null;
-  this.onsaveCallback = null;
-  this.waitingRestartConfirmation = false;
-
-  this.onload = function(callback) {
-    this.onloadCallback = callback;
-  };
-
-  this.onsave = function(callback) {
-    this.onsaveCallback = callback;
-  };
-
-  this.load = function(forceDefault) {
-    this.optionsMap = OptionsBackend.load(forceDefault);
-    var _this = this;
-    $('input,select,.color_selector').each(function() {
-      var $this = $(this);
-      var name = $this.attr('name');
-      if(name) {
-        var converter = $this.attr('converter');
-        if(converter) {
-          Converters[converter].load($this, _this.optionsMap[name]);
-        } else if($this.is('[type="checkbox"]')) {
-          $this.attr('checked', _this.optionsMap[name]);
-        } else if($this.is('[type="radio"]')) {
-          if(_this.optionsMap[name] == $this.val()) {
-            $this.attr('checked', true);
-          }
-        } else if($this.is('.color_selector')) {
-          $this.attr('strColor', _this.optionsMap[name]);
-          $this.ColorPickerSetColor(_this.optionsMap[name]);
-          if($this.is('canvas')) {
-            paintIcon($this[0], _this.optionsMap[name]);
-          } else {
-            $this.css('backgroundColor', _this.optionsMap[name]);
-          }
-        } else {
-          $this.val(_this.optionsMap[name]);
-        }
-      }
-    });
-    if(this.onloadCallback) {
-      this.onloadCallback();
-    }
-  };
-
-  this.loadDefaults = function() {
-    Persistence.popupSize().remove();
-    this.load(true);
-    this.save();
-  };
-
-  this.save = function() {
-    this.clearErrors();
-    var hasErrors = false;
-    var _this = this;
-    $('input,select').each(function() {
-      var $this = $(this);
-      var validator = $this.attr('validator');
-      if(validator) {
-        var validatorsArray = validator.split(',');
-        for(var i = 0; i < validatorsArray.length; ++i) {
-          var validInfo = Validator[validatorsArray[i]]($this);
-          if(validInfo !== true) {
-            hasErrors = true;
-            _this.addValidationError($this, validInfo);
-            return true;
-          }
-        }
-      }
-    });
-    var validInfo = Validator.global();
-    if(validInfo !== true) {
-      hasErrors = true;
-      this.addValidationError(null, validInfo);
-    }
-    if(!hasErrors) {
-      var askForRestart = false;
-      $('input,select,.color_selector').each(function() {
-        var $this = $(this);
-        var name = $this.attr('name');
-        if(name) {
-          var converter = $this.attr('converter');
-          var newValue = null;
-          if(converter) {
-            newValue = Converters[converter].save($this);
-          } else if($this.is('[type="checkbox"]')) {
-            newValue = $this.attr('checked');
-          } else if($this.is('[type="radio"]')) {
-            if(!$this.attr('checked')) {
-              return true;
-            }
-            newValue = $this.val();
-          } else if($this.is('.color_selector')) {
-            newValue = $this.attr('strColor');
-          } else {
-            var elValue = $this.val();
-            var intValue = parseInt(elValue);
-            if(intValue == elValue) {
-              elValue = intValue;
-            }
-            newValue = elValue;
-          }
-          var oldValue = _this.optionsMap[name];
-          if(oldValue != newValue) {
-            if($this.attr('must_restart') !== undefined) {
-              askForRestart = true;
-            }
-            _this.optionsMap[name] = newValue;
-          }
-        }
-      });
-      OptionsBackend.save(this.optionsMap);
-      askForRestart = askForRestart || this.waitingRestartConfirmation;
-      if(askForRestart) {
-        this.waitingRestartConfirmation = true;
-        $("#restart_notice").show();
-      } else {
-        $("#restart_notice").hide();
-      }
-      var savedNotice = $("#saved_notice").stop().css('opacity', '1.0').hide().fadeIn(300);
-      if(askForRestart) {
-        savedNotice.addClass('needConfirmation').removeClass('noConfirmation');
-      } else {
-        savedNotice.addClass('noConfirmation').removeClass('needConfirmation').fadeOut(1000);
-      }
-    }
-    if(this.onsaveCallback) {
-      this.onsaveCallback();
-    }
-  };
-
-  this.confirmRestart = function() {
-    chrome.extension.getBackgroundPage().TweetManager.instance.restart();
-    this.denyRestart();
-  };
-
-  this.denyRestart = function() {
-    this.waitingRestartConfirmation = false;
-    $("#saved_notice").stop().fadeOut(300);
-  };
-
-  this.addValidationError = function($el, error) {
-    var errorEl = $("<span>").attr('class', 'error').html(error);
-    if($el) {
-      $el.after(errorEl);
-    } else {
-      $("#buttons_area").before(errorEl);
-    }
-  };
-
-  this.clearErrors = function() {
-    $('.error').remove();
-  };
-
-}
-
-/* ---- converters ---- */
-
-Converters = {
-  RefreshInterval: {
-    load: function($el, val) {
-      $el.val(val / 1000);
-    },
-    save: function($el) {
-      return parseInt($el.val()) * 1000;
-    }
-  }
-};
-
-/* ---- validation ---- */
-Validator = {
-  global: function() {
-    var atLeastOneVisible = false;
-    $("input[type='checkbox']").each(function() {
-      var isVisibleCheck = $(this).attr('name').match(/_visible$/);
-      if(isVisibleCheck) {
-        var checked = $(this).is(":checked");
-        if(checked) {
-          atLeastOneVisible = true;
-          return false;
-        }
-      }
-    });
-    if(!atLeastOneVisible) {
-      return 'You should select at least one timeline as visible.';
-    }
-    return true;
-  },
-
-  required: function ($el) {
-    var val = $el.val()
-    if(!val)
-      return 'It can\'t be empty.';
-    return true;
-  },
-
-  number: function ($el) {
-    var intVal = parseInt($el.val());
-    if(isNaN(intVal))
-      return 'It should be a number.';
-    return true;
-  },
-
-  positive: function ($el) {
-    if(parseInt($el.val()) <= 0)
-      return 'It should be positive.';
-    return true;
-  },
-
-  minRefresh: function ($el) {
-    if(parseInt($el.val()) < 20)
-      return 'Minimum interval is 20s';
-    return true;
-  },
-
-  url: function ($el) {
-    if($el.val().match(/(\b(https?):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i)) {
-      return true;
-    }
-    return 'It should be a valid URL.';
-  },
-
-  unifiedValidator: function($el) {
-    if(!$el.is(":checked")) {
-      return true;
-    }
-    var atLeastOneSelected = false;
-    $("input[type='checkbox']").each(function() {
-      var isIncludeUnifiedCheck = $(this).attr('name').match(/include_unified$/);
-      if(isIncludeUnifiedCheck) {
-        var checked = $(this).is(":checked");
-        if(checked) {
-          atLeastOneSelected = true;
-          return false;
-        }
-      }
-    });
-    if(!atLeastOneSelected) {
-      return 'You should select at least one timeline to compose the unified timeline.';
-    }
-    return true;
-  }
-}
-/* ---- end validation ---- */
-
 var IconCreator = chrome.extension.getBackgroundPage().IconCreator;
 var twitterBackend = chrome.extension.getBackgroundPage().TweetManager.instance.twitterBackend;
 var options = new Options();
@@ -391,14 +141,11 @@ $(function() {
   options.load();
 
   updatePredictedHitsCount();
-  var timelines = ['unified', 'home', 'mentions', 'dms', 'lists', 'favorites'];
-  for(var i = 0; i < timelines.length; ++i) {
-    $('table.timelines input, table.timelines select')
-      .keyup(updatePredictedHitsCount)
-      .blur(updatePredictedHitsCount)
-      .click(updatePredictedHitsCount)
-      .change(updatePredictedHitsCount);
-  }
+  $('table.timelines input, table.timelines select')
+    .keyup(updatePredictedHitsCount)
+    .blur(updatePredictedHitsCount)
+    .click(updatePredictedHitsCount)
+    .change(updatePredictedHitsCount);
 
   $("input[name='microblogging_service'],label[for='service_twitter'],label[for='service_identica']").mousedown(function(e) {
     var el = $(e.target);
@@ -441,27 +188,37 @@ $(function() {
 });
 
 function updatePredictedHitsCount() {
-  var timelines = ['home', 'mentions', 'dms', 'lists', 'favorites'];
   var totalHits = 0;
   var unifiedVisible = $('input[name="unified_visible"]').is(':checked');
-  for(var i = 0; i < timelines.length; ++i) {
-    var inputUnifiedEl = $('input[name="' +  timelines[i] + '_include_unified"]');
+
+  TimelineTemplate.eachTimelineTemplate(function(template) {
+    if(template.id == TimelineTemplate.UNIFIED) {
+      return true;
+    }
+    var inputUnifiedEl = $('input[name="' +  template.id + '_include_unified"]');
     if(!unifiedVisible) {
       inputUnifiedEl.attr('disabled', 'disabled');
     } else {
       inputUnifiedEl.removeAttr('disabled');
     }
-    var inputVisibleEl = $('input[name="' +  timelines[i] + '_visible"]');
+    if(template.id == TimelineTemplate.SEARCH) {
+      return true;
+    }
+    var inputVisibleEl = $('input[name="' +  template.id + '_visible"]');
     if(!inputVisibleEl.is(':checked') && !(unifiedVisible && inputUnifiedEl.is(':checked'))) {
-      continue;
+      return true;
     }
 
-    var inputRefreshEl = $('input[name="' +  timelines[i] + '_refresh_interval"]');
+    var inputRefreshEl = $('input[name="' +  template.id + '_refresh_interval"]');
     var intVal = parseInt(inputRefreshEl.val());
     var timelineHits = (60 * 60) / intVal;
-    var timelineCount = $('select[name="' +  timelines[i] + '_count"]').val() || 1;
+    var timelineCount = 1;
+    var userData = template.getUserData();
+    if(userData && userData.length > 0) {
+      timelineCount = userData.length;
+    }
     totalHits += timelineHits * timelineCount;
-  }
+  });
   totalHits += (60 * 60) / parseInt($('input[name="blockedusers_refresh_interval"]').val());
   totalHits = parseInt(totalHits);
   $('#predicted_hits_count').text(totalHits);
@@ -548,6 +305,7 @@ function updatePredictedHitsCount() {
         <th>DMs</th>
         <th>Lists</th>
         <th>Favorites</th>
+        <th>Search</th>
       <tr>
         <td class="label">Tweet color:</td>
         <td>
@@ -569,6 +327,10 @@ function updatePredictedHitsCount() {
         <td>
           <div class="color_selector checkerboard"></div>
           <div name="favorites_tweets_color" class="color_selector"></div>
+        </td>
+        <td>
+          <div class="color_selector checkerboard"></div>
+          <div name="search_tweets_color" class="color_selector"></div>
         </td>
       </tr>
     </table><br>
@@ -606,6 +368,12 @@ function updatePredictedHitsCount() {
         <td><input type="checkbox" name="lists_on_page"></td>
         <td><input type="checkbox" name="lists_icon"></td>
         <td><canvas name="lists_color" width="19" height="19" class="color_selector"></canvas></td>
+      </tr>
+      <tr>
+        <td class="label">Search:</td>
+        <td><input type="checkbox" name="search_on_page"></td>
+        <td><input type="checkbox" name="search_icon"></td>
+        <td><canvas name="search_color" width="19" height="19" class="color_selector"></canvas></td>
       </tr>
     </table><br>
     <label for="tweets_notification_style">Notification Style:</label>
@@ -645,62 +413,61 @@ function updatePredictedHitsCount() {
         <th></th>
         <th>Visible</th>
         <th>Refresh Interval (s)</th>
-        <th>Tabs Count</th>
         <th>Include in unified timeline</th>
+        <th>Tabs Count</th>
       <tr>
         <td class="label">Unified Timeline:</td>
-        <td><input type="checkbox" name="unified_visible" validator="unifiedValidator" must_restart></td>
+        <td><input type="checkbox" name="unified_visible" validator="unifiedValidator"></td>
         <td>-</td>
         <td>-</td>
-        <td>-</td>
+        <td>1</td>
       </tr>
       <tr>
         <td class="label">Home:</td>
-        <td><input type="checkbox" name="home_visible" must_restart></td>
-        <td><input type="text" name="home_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval" must_restart></td>
+        <td><input type="checkbox" name="home_visible"></td>
+        <td><input type="text" name="home_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="home_include_unified"></td>
         <td>1</td>
-        <td><input type="checkbox" name="home_include_unified" must_restart></td>
       </tr>
       <tr>
         <td class="label">Mentions:</td>
-        <td><input type="checkbox" name="mentions_visible" must_restart></td>
-        <td><input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval" must_restart></td>
+        <td><input type="checkbox" name="mentions_visible"></td>
+        <td><input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="mentions_include_unified"></td>
         <td>1</td>
-        <td><input type="checkbox" name="mentions_include_unified" must_restart></td>
       </tr>
       <tr>
         <td class="label">DM:</td>
-        <td><input type="checkbox" name="dms_visible" must_restart></td>
-        <td><input type="text" name="dms_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval" must_restart></td>
+        <td><input type="checkbox" name="dms_visible"></td>
+        <td><input type="text" name="dms_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="dms_include_unified"></td>
         <td>1</td>
-        <td><input type="checkbox" name="dms_include_unified" must_restart></td>
       </tr>
       <tr>
         <td class="label">Lists:</td>
-        <td><input type="checkbox" name="lists_visible" must_restart></td>
-        <td><input type="text" name="lists_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval" must_restart></td>
-        <td>
-          <select name="lists_count" style="width: 40px;" must_restart>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-        </td>
-        <td><input type="checkbox" name="lists_include_unified" must_restart></td>
+        <td><input type="checkbox" name="lists_visible"></td>
+        <td><input type="text" name="lists_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="lists_include_unified"></td>
+        <td><script>document.write(TimelineTemplate.getTemplate(TimelineTemplate.LISTS).getUserData().length);</script></td>
+      </tr>
+      <tr>
+        <td class="label">Search:</td>
+        <td><input type="checkbox" name="search_visible"></td>
+        <td><input type="text" name="search_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="search_include_unified"></td>
+        <td><script>document.write(TimelineTemplate.getTemplate(TimelineTemplate.SEARCH).getUserData().length);</script></td>
       </tr>
       <tr>
         <td class="label">Favorites:</td>
-        <td><input type="checkbox" name="favorites_visible" must_restart></td>
-        <td><input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval" must_restart></td>
+        <td><input type="checkbox" name="favorites_visible"></td>
+        <td><input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="favorites_include_unified"></td>
         <td>1</td>
-        <td><input type="checkbox" name="favorites_include_unified" must_restart></td>
       </tr>
       <tr>
         <td class="label">Blocked Users:</td>
         <td>-</td>
-        <td><input type="text" name="blockedusers_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval" must_restart></td>
+        <td><input type="text" name="blockedusers_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td>-</td>
         <td>-</td>
       </tr>
