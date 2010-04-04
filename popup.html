@@ -715,7 +715,9 @@ var Renderer = {
 
     var from = null;
     if(tweet.source) {
-      from = tweet.source.replace(/(href=(['"])(.*?)\2)/i, "href='#' onclick=\"openTab('$3')\"");
+      var htmlNode = document.createElement('div');
+      htmlNode.innerHTML = tweet.source;
+      from = htmlNode.textContent.replace(/(href=(['"])(.*?)\2)/i, "href='#' onclick=\"openTab('$3')\"");
     }
 
     var inReply = null;
@@ -1032,7 +1034,11 @@ var ContextMenu = {
           if(pos == -1) {
             pos = undefined;
           }
-          TimelineTab.addTab(timeline.timelineId, timeline.template.timelineName, pos);
+          if(templateId == TimelineTemplate.SEARCH) {
+            SearchTab.addSearchTab(timeline.timelineId, pos);
+          } else {
+            TimelineTab.addTab(timeline.timelineId, timeline.template.timelineName, pos);
+          }
         }
         ThemeManager.handleWindowResizing();
       }
@@ -1096,6 +1102,32 @@ var ContextMenu = {
 
 };
 
+var SearchTab = {
+  addSearchTab: function(timelineId, pos) {
+    var inputHtml = '<input type="text" class="search_selector" id="' + timelineId + '-selector"></input>'
+    TimelineTab.addTab(timelineId, inputHtml, pos);
+    var inputEl = $('input#' + timelineId + '-selector');
+    inputEl.val(tweetManager.getSearchQuery(timelineId));
+
+    inputEl.blur(function(e) {
+      SearchTab.updateSearch(e);
+    });
+    inputEl.keyup(function(e) {
+      if(e && e.which == 13) { // Enter
+        inputEl.blur();
+      }
+    });
+  },
+
+  updateSearch: function(e) {
+    var timelineId = e.target.id.split('-')[0];
+    if(tweetManager.changeSearch(timelineId, $(e.target).val())) {
+      Paginator.firstPage(true);
+      prepareAndLoadTimeline();
+    }
+  }
+};
+
 var TimelineTab = {
   init: function() {
     $("#tabs").tabs({
@@ -1144,7 +1176,7 @@ var TimelineTab = {
   select: function(timelineId) {
     $("#tabs").tabs('select', '#timeline-' + timelineId);
   }
-}
+};
 
 function openTab(tabUrl) {
   var button = event.button;
@@ -1288,7 +1320,11 @@ function initializeWorkspace() {
 
   TimelineTab.init();
   tweetManager.orderedEachTimeline(function(timeline) {
-    TimelineTab.addTab(timeline.timelineId, timeline.template.timelineName);
+    if(timeline.template.id == TimelineTemplate.SEARCH) {
+      SearchTab.addSearchTab(timeline.timelineId);
+    } else {
+      TimelineTab.addTab(timeline.timelineId, timeline.template.timelineName);
+    }
   });
   ThemeManager.handleSortableTabs();
 

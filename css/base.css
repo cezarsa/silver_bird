@@ -199,6 +199,13 @@ input[type='text'] {
   cursor: pointer;
 }
 
+#tabs .timeline_tab input.search_selector {
+  width: 80px;
+  margin: 0;
+  padding: 0;
+  font-size: 0.8em;
+}
+
 .tweet {
   width: 100%;
   padding: 2px 22px 0px 4px;

@@ -18,9 +18,12 @@
 
 <script type="text/javascript" src="lib/timelines/timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/mentions_timeline.js"></script>
-<script type="text/javascript" src="lib/timelines/lists_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/favorites_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/unified_timeline.js"></script>
+
+<script type="text/javascript" src="lib/timelines/multiple_timeline.js"></script>
+<script type="text/javascript" src="lib/timelines/lists_timeline.js"></script>
+<script type="text/javascript" src="lib/timelines/search_timeline.js"></script>
 
 
 <script>
@@ -108,6 +111,7 @@ function TweetManager() {
     OptionsBackend.get('base_oauth_url'),
     OptionsBackend.get('base_signing_url'),
     OptionsBackend.get('base_oauth_signing_url'),
+    OptionsBackend.get('base_search_url'),
     this.oauthTokenData
   );
 }
@@ -539,6 +543,22 @@ TweetManager.prototype = {
     }
   },
 
+  changeSearch: function(timelineId, searchQuery) {
+    var timeline = this.timelines[timelineId];
+    if(!timeline) {
+      return false;
+    }
+    return timeline.changeSearchQuery(searchQuery);
+  },
+
+  getSearchQuery: function(timelineId) {
+    var timeline = this.timelines[timelineId];
+    if(!timeline) {
+      return null;
+    }
+    return timeline.getSearchQuery();
+  },
+
   changeList: function(timelineName, listId) {
     var timeline = this.timelines[timelineName];
     if(!timeline) {
@@ -555,7 +575,7 @@ TweetManager.prototype = {
     if(!timeline) {
       return null;
     }
-    var listId = timeline.listId;
+    var listId = timeline.getListId();
     if(listId && this.listsCache) {
       // Check if the listId really exists
       for(var i = 0; i < this.listsCache.length; ++i) {
