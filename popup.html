@@ -717,6 +717,7 @@ var Renderer = {
     text = this.transformTweetText(text);
 
     var tweetTimeline = tweet.timelineId || tweetManager.currentTimelineId;
+    var templateId = tweetTimeline.replace(/_.*$/, '');
 
     var tweetClass = 'tweet';
     if(!tweetManager.isTweetRead(tweet.id)) {
@@ -726,7 +727,7 @@ var Renderer = {
     var from = null;
     if(tweet.source) {
       var tweetSource = tweet.source;
-      if(tweetTimeline.indexOf('search') != -1) {
+      if(templateId == TimelineTemplate.SEARCH) {
         var htmlNode = document.createElement('div');
         htmlNode.innerHTML = tweet.source;
         tweetSource = htmlNode.textContent;
@@ -758,8 +759,7 @@ var Renderer = {
 
     var overlayStyle = '';
     if(useColors) {
-      var baseTimelineId = tweetTimeline.replace(/_.*$/, '');
-      overlayStyle = 'background-color: ' + OptionsBackend.get(baseTimelineId + '_tweets_color') + ';';
+      overlayStyle = 'background-color: ' + OptionsBackend.get(templateId + '_tweets_color') + ';';
     }
     str += '<div class="tweet_overlay" style="' + overlayStyle + '">';
     str += '<div class="first_container">';
@@ -789,7 +789,7 @@ var Renderer = {
     str += '</div></div>';
 
     str += '<div class="new_actions">';
-    if(tweetTimeline != "dms") {
+    if(templateId != TimelineTemplate.DMS) {
       if(tweet.favorited) {
         str += '<img src="img/star_hover.png" title="Unmark as favorite" class="starred" onclick="Composer.unFavorite(this.parentNode.parentNode.parentNode);"></img><br>';
       } else {
@@ -805,7 +805,7 @@ var Renderer = {
       if(tweetManager.isRetweet(tweet.id)) {
         //TODO: undo retweet
       } else {
-        if(tweetTimeline != "dms") {
+        if(templateId != TimelineTemplate.DMS) {
           str += '<img src="img/rt.png" title="Retweet" onclick="Composer.retweet(this.parentNode.parentNode.parentNode)"></img><br>';
           str += '<div class="rt_confirm">Retweet this message: <a href="javascript:Composer.confirmRT();">Yes</a> <a href="javascript:Composer.denyRT();">No</a></div>';
         }
