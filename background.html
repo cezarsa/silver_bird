@@ -121,6 +121,10 @@ TweetManager.prototype = {
   showTimelineTemplate: function(timelineTemplateId) {
     var template = TimelineTemplate.getTemplate(timelineTemplateId);
     template.setVisible(true);
+    return this.createTimelineTemplate(template);
+  },
+
+  createTimelineTemplate: function(template) {
     var createdTimelines = [];
     var shownTimelines = [];
     if(template.multipleTimelines) {
@@ -128,7 +132,7 @@ TweetManager.prototype = {
     } else {
       var createTimelines = true;
       this.eachTimeline(function(timeline) {
-        if(timeline.template.id == timelineTemplateId) {
+        if(timeline.template.id == template.id) {
           createTimelines = false;
           shownTimelines.push(timeline);
         }
@@ -157,6 +161,14 @@ TweetManager.prototype = {
   toggleUnified: function(templateId) {
     var template = TimelineTemplate.getTemplate(templateId);
     template.setIncludeInUnified(!template.includeInUnified);
+    if(template.multipleTimelines || template.visible) {
+      return;
+    }
+    if(template.includeInUnified) {
+      this.createTimelineTemplate(template);
+    } else {
+      this.hideTimeline(template.id);
+    }
   },
 
   setWarning: function(msg) {
