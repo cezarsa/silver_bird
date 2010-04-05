@@ -154,12 +154,21 @@ var ThemeManager = {
       }
     }
   },
-  setPopupSize: function(width, height) {
-    if(width) {
-      $(".timeline").width(width + 'px');
-    } else {
-      $(".timeline").width('490px');
+  setPopupSize: function(width, height, autoFitWidth) {
+    width = width || 490;
+    if(autoFitWidth) {
+      setTimeout(function() {
+        var tabsBarWidth = 0;
+        $("li.timeline_tab").each(function() {
+          tabsBarWidth += $(this).width();
+        });
+        tabsBarWidth += 40;
+        if(tabsBarWidth > width) {
+          ThemeManager.setPopupSize(tabsBarWidth, height);
+        }
+      }, 300);
     }
+    $(".timeline").width(width + 'px');
     if(height) {
       $(".inner_timeline,.timeline").height(height + 'px');
     } else {
@@ -171,9 +180,9 @@ var ThemeManager = {
     var sizeArray = ThemeManager.popupSizeData.val();
     if(sizeArray) {
       sizeArray = sizeArray.split('x');
-      ThemeManager.setPopupSize(sizeArray[0], sizeArray[1]);
+      ThemeManager.setPopupSize(sizeArray[0], sizeArray[1], true);
     } else {
-      ThemeManager.setPopupSize();
+      ThemeManager.setPopupSize(null, null, true);
     }
     $(".timeline").resizable({
       handles: 'e, s, se',
@@ -183,13 +192,14 @@ var ThemeManager = {
         ThemeManager.setPopupSize($this.width(), $this.height());
       },
       stop: function(e, ui) {
-        ThemeManager.popupSizeData.save($(this).width() + 'x' + $(this).height());
+        var $this = $(this);
+        ThemeManager.popupSizeData.save($this.width() + 'x' + $this.height());
       }
     });
     $(".ui-resizable-handle").attr('title', 'Double click to reset size');
     $(".ui-resizable-handle").dblclick(function(e) {
       ThemeManager.popupSizeData.remove();
-      ThemeManager.setPopupSize();
+      ThemeManager.setPopupSize(null, null, true);
     });
   },
 
@@ -1046,6 +1056,7 @@ var ContextMenu = {
     } else if(actionParts[0] == 'remove') {
       var timelineId = actionParts[1];
       TimelineTab.removeTab(timelineId);
+      ThemeManager.handleWindowResizing();
       ThemeManager.updateTabsOrder();
     } else if(actionParts[0] == 'unified') {
       var templateId = actionParts[1];
