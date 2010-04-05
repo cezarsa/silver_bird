@@ -725,9 +725,13 @@ var Renderer = {
 
     var from = null;
     if(tweet.source) {
-      var htmlNode = document.createElement('div');
-      htmlNode.innerHTML = tweet.source;
-      from = htmlNode.textContent.replace(/(href=(['"])(.*?)\2)/i, "href='#' onclick=\"openTab('$3')\"");
+      var tweetSource = tweet.source;
+      if(tweetTimeline.indexOf('search') != -1) {
+        var htmlNode = document.createElement('div');
+        htmlNode.innerHTML = tweet.source;
+        tweetSource = htmlNode.textContent;
+      }
+      from = tweetSource.replace(/(href=(['"])(.*?)\2)/i, "href='#' onclick=\"openTab('$3')\"");
     }
 
     var inReply = null;
