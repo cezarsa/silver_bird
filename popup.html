@@ -763,7 +763,12 @@ var Renderer = {
     }
     str += '<div class="tweet_overlay" style="' + overlayStyle + '">';
     str += '<div class="first_container">';
+    if(tweet.retweeted_status) {
+    str += '<img class="profile" style="margin-right: 0px;width: 40px; height: 40px" src="' + user.profile_image_url + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')" />';
+    str += '<img class="profile" style="margin-bottom: 16px;margin-right: -12px;position: relative; top: 24px;left: -16px; width: 24px; height: 24px;" src="'+ tweet.user.profile_image_url +'"/>'
+    } else {
     str += '<img class="profile" src="' + user.profile_image_url + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')"></img>';
+    }
     str += '<a href="#" class="user" screen_name="' + user.screen_name + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')" title="' + tweetTitleUserName + '">' + tweetUserName + '</a>';
 
     str += '<div class="text">';
