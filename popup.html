@@ -643,6 +643,21 @@ var Renderer = {
     return new Date(inputTimestamp).toLocaleDateString() + " " + new Date(inputTimestamp).toLocaleTimeString();
   },
 
+  geoImage: function (aElement, lat, long, name) {
+       $(aElement).tipsy({
+        title: function () {
+             lat = lat.toFixed(6).toString().replace(".", "");
+	     long = long.toFixed(6).toString().replace(".", "");
+	     var url =  'http://maps.google.com/mapdata?cc=JP&min_priority=1&w=160&h=160&latitude_e6=' + lat + '&longitude_e6=' + long + '&zm=2000&Point=b&Point.latitude_e6=' + lat + '&Point.longitude_e6=' + long + '&Point.iconid=33&Point=e';
+             return "<img src=\"" + url+ "\" />";
+        },
+        html: true,
+        showNow: true,
+        opacity: 1.0,
+        gravity: $.fn.tipsy.autoWE
+      });
+  },
+
   expandLink: function (aElement, url) {
     if(!OptionsBackend.get('show_expanded_urls')) {
       return;
@@ -743,6 +758,7 @@ var Renderer = {
     }
 
     var from = null;
+    var geo = null;
     if(tweet.source) {
       var tweetSource = tweet.source;
       if(templateId == TimelineTemplate.SEARCH) {
@@ -751,6 +767,14 @@ var Renderer = {
         tweetSource = htmlNode.textContent;
       }
       from = tweetSource.replace(/(href=(['"])(.*?)\2)/i, "href='#' onclick=\"openTab('$3')\"");
+    }
+    if (tweet.geo) {
+      geo = " <a href=\"#\" onclick=\"openTab('";
+      geo += "http://maps.google.com/maps?q=loc:" + tweet.geo.coordinates[0] + "," + tweet.geo.coordinates[1] + " "
+      geo += encodeURI("(" + tweet.user.screen_name + ")");
+      geo += "')\"";
+      geo += "onmouseover=\"Renderer.geoImage(this, " + tweet.geo.coordinates[0] + "," +  tweet.geo.coordinates[1] +  ")\">";
+      geo += "<img src=\"data:image/gif;base64, R0lGODlhCgAKAMZZAKRFP7NDN5s5RphLU6dUTLdpVbVZbopycK1vZKNxZqxyZ79oe8hSRMVST8xdTNJaWcRlU8FlWtNzXdVpZsh5atN6aKqEe7yFfsaGa8uVe9GUf791hN55h4yGiI6FipuRkKqHhbasrbi2t8KZg8Cal8mRmuObjMehls+nn/2njvewnMO+u8m6v/ykoPCusubFvsG6wv+/yM3Ex//Lz+7Qxe/Ryf/J2f/lzf/l4f/m5//j7//t7P/47f3z8f/19f/39f/88P/59P/49v/59//69v/69/L6/Pb6/fr4+fj6+f/7+fr8+f79+//9+/z5///4//z7//37///6/v/6//n//fn+//v+//39/f/9/f///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////yH5BAEAAH8ALAAAAAAKAAoAAAdJgH+CfyUbBgs2g38gMzMcAgMugjQXLRMPDQAEgi8KEAEMDhUFgwkUEBIpGBmDFggmKhojgywHJCgkijAeIYqCMh0ivoIfK8OCgQA7\" alt=\"[GEO]\"/></a>";
     }
 
     var inReply = null;
@@ -808,6 +832,9 @@ var Renderer = {
     }
     if(from) {
       str += '<span class="from_app">from ' + from + '</span>';
+    }
+    if (geo) {
+      str += '<span class="geo_tag">' + geo + '</span>';
     }
     str += '</div></div>';
 
