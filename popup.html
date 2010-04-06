@@ -836,6 +836,13 @@ var Renderer = {
     if (geo) {
       str += '<span class="geo_tag">' + geo + '</span>';
     }
+    if (tweetTimeline.match(/^lists_/) && tweetManager.currentTimeline != tweetTimeline) {
+      var list = tweetManager.getList(tweetTimeline);
+      if (list != null) {
+        var path = list.uri.substr(1);
+        str += ' (List: <a href="#" onclick="openTab(\''+TwitterLib.URLS.BASE + path + '\');" title="@' + path + '">' + list.name + '</a>)';
+      }
+    }
     str += '</div></div>';
 
     str += '<div class="new_actions">';
@@ -1035,7 +1042,7 @@ var Lists = {
         $listSelect.html('');
         $listSelect.append($("<option>").attr('value', _this.selector_value).text('- Select a list -'));
         for(var j = 0; j < lists.length; ++j) {
-          $listSelect.append($("<option>").attr('value', lists[j].slug).text(lists[j].name));
+          $listSelect.append($("<option>").attr('value', lists[j].uri).text(lists[j].name));
         }
         $listSelect.append($("<option>").attr('value', _this.update_value).text('Update lists...'));
         var selectedListId = tweetManager.getListId(timeline.timelineId);

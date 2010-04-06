@@ -566,6 +566,11 @@ TweetManager.prototype = {
         if(success) {
           _this.listsCache = data.lists;
         }
+      });
+      this.twitterBackend.subs(function(success, data, status) {
+        if(success) {
+          _this.listsCache = _this.listsCache.concat(data.lists);
+        }
         if(callback) {
           callback(success, _this.listsCache, status);
         }
@@ -613,8 +618,27 @@ TweetManager.prototype = {
     if(listId && this.listsCache) {
       // Check if the listId really exists
       for(var i = 0; i < this.listsCache.length; ++i) {
-        if(this.listsCache[i].slug == listId) {
+        if(this.listsCache[i].uri == listId) {
           return listId;
+        }
+      }
+    }
+    return null;
+  },
+
+  getList: function(timelineName) {
+    if(!timelineName) {
+      timelineName = this.currentTimeline;
+    }
+    var timeline = this.timelines[timelineName];
+    if(!timeline) {
+      return null;
+    }
+    var listId = timeline.listId;
+    if(listId && this.listsCache) {
+      for(var i = 0; i < this.listsCache.length; ++i) {
+        if(this.listsCache[i].uri == listId) {
+          return this.listsCache[i];
         }
       }
     }
