@@ -647,6 +647,24 @@ var Renderer = {
     if(!OptionsBackend.get('show_expanded_urls')) {
       return;
     }
+    var m = url.match(/http:\/\/(www\.)?(twitpic|twitgoo|yfrog|movapic).com\/(.*)/);
+    if (m) {
+       $(aElement).tipsy({
+        title: function () {
+           if (m[2] == "twitpic" || m[2] == "twitgoo") return "<img style=\"opacity:1.0\" src=\"http://" + m[2] + ".com/show/thumb/" + m[3] + "\" />";
+           if (m[2] == "yfrog") return "<img style=\"opacity:1.0\" src=\"http://yfrog.com/" + m[3] + ".th.jpg\" />";
+           if (m[2] == "movapic") {
+              var iid = m[3].split(/\//)[1];
+              return "<img style=\"opacity:1.0\" src=\"http://image.movapic.com/pic/t_" + iid + ".jpeg\" />";
+           }
+        },
+        html: true,
+        showNow: true,
+        opacity: 1.0,
+        gravity: $.fn.tipsy.autoWE
+      });
+     return;
+    }
     $(aElement).tipsy({
       title: function() {
         return '<img src="img/loading.gif" /> Loading long url...';
