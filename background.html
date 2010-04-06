@@ -118,16 +118,32 @@ function TweetManager() {
 
 TweetManager.prototype = {
 
-  showTimelineTemplate: function(timelineTemplateId) {
+  showTimelineTemplate: function(timelineTemplateId, showOnly) {
     var template = TimelineTemplate.getTemplate(timelineTemplateId);
     template.setVisible(true);
-    return this.createTimelineTemplate(template);
+    return this.createTimelineTemplate(template, showOnly);
   },
 
-  createTimelineTemplate: function(template) {
+  hideTimelineTemplate: function(timelineTemplateId) {
+    var template = TimelineTemplate.getTemplate(timelineTemplateId);
+    template.setVisible(false);
+    var toDelete = [];
+    this.eachTimeline(function(timeline) {
+      if(timeline.template.id == timelineTemplateId) {
+        timeline.killTimeline();
+        toDelete.push(timeline);
+      }
+    });
+    for(var i = 0, len = toDelete.length; i < len; ++i) {
+      var timeline = toDelete[i];
+      delete this.timelines[timeline.timelineId];
+    }
+  },
+
+  createTimelineTemplate: function(template, showOnly) {
     var createdTimelines = [];
     var shownTimelines = [];
-    if(template.multipleTimelines) {
+    if(template.multipleTimelines && !showOnly) {
       createdTimelines = [template.addTimeline()];
     } else {
       var createTimelines = true;
@@ -158,9 +174,13 @@ TweetManager.prototype = {
     }
   },
 
-  toggleUnified: function(templateId) {
+  toggleUnified: function(templateId, forcedState) {
     var template = TimelineTemplate.getTemplate(templateId);
-    template.setIncludeInUnified(!template.includeInUnified);
+    var newState = !template.includeInUnified;
+    if(forcedState !== undefined) {
+      newState = forcedState;
+    }
+    template.setIncludeInUnified(newState);
     if(template.multipleTimelines || template.visible) {
       return;
     }

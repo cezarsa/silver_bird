@@ -15,7 +15,8 @@
 
 <script type="text/javascript">
 var IconCreator = chrome.extension.getBackgroundPage().IconCreator;
-var twitterBackend = chrome.extension.getBackgroundPage().TweetManager.instance.twitterBackend;
+var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
+var twitterBackend = tweetManager.twitterBackend;
 var options = new Options();
 var imgEl = null;
 
@@ -114,6 +115,20 @@ $(function() {
     onShortenerChange();
     onShortenerAcctClick();
     onSigningUrlCheck();
+  });
+  options.onsaveChangedOption(function(optionName, oldValue, newValue) {
+    var idx;
+    if((idx = optionName.indexOf('_visible')) != -1) {
+      var templateId = optionName.substring(0, idx);
+      if(newValue) {
+        tweetManager.showTimelineTemplate(templateId, true);
+      } else {
+        tweetManager.hideTimelineTemplate(templateId);
+      }
+    } else if((idx = optionName.indexOf('_include_unified')) != -1) {
+      var templateId = optionName.substring(0, idx);
+      tweetManager.toggleUnified(templateId, newValue);
+    }
   });
   options.onsave(function() {
     if($("#noti_desktop").is(":checked")) {
