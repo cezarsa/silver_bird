@@ -565,14 +565,18 @@ TweetManager.prototype = {
       this.twitterBackend.lists(function(success, data, status) {
         if(success) {
           _this.listsCache = data.lists;
-        }
-      });
-      this.twitterBackend.subs(function(success, data, status) {
-        if(success) {
-          _this.listsCache = _this.listsCache.concat(data.lists);
-        }
-        if(callback) {
-          callback(success, _this.listsCache, status);
+          _this.twitterBackend.subs(function(success, data, status) {
+            if(success) {
+              _this.listsCache = _this.listsCache.concat(data.lists);
+            }
+            if(callback) {
+              callback(success, _this.listsCache, status);
+            }
+          });
+        } else {
+          if(callback) {
+            callback(success, _this.listsCache, status);
+          }
         }
       });
       return;
