@@ -56,7 +56,7 @@ function TweetManager() {
   this.listsCache = null;
   this.listsTabCount = OptionsBackend.get('lists_count');
 
-  this.suspend false;
+  this.suspend = false;
 
   this.selectedListsData = Persistence.selectedLists();
   this.timelineOrderData = Persistence.timelineOrder();
