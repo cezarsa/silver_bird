@@ -1134,6 +1134,12 @@ var ContextMenu = {
       if(tweetManager.getCurrentTimeline().template.id == TimelineTemplate.UNIFIED) {
         prepareAndLoadTimeline();
       }
+    } else if(actionParts[0] == 'notify') {
+      var templateId = actionParts[1];
+      tweetManager.toggleNotify(templateId);
+    } else if(actionParts[0] == 'icon') {
+      var templateId = actionParts[1];
+      tweetManager.toggleChangeIcon(templateId);
     }
   },
 
@@ -1160,6 +1166,19 @@ var ContextMenu = {
           }
           specificMenu.push({action: 'unified-' + template.id, label: template.timelineName, className: className});
         });
+      } else if(timeline.template.id != TimelineTemplate.FAVORITES) {
+        specificMenu.push({label: 'separator'});
+        var className = 'check_unmarked';
+        if(timeline.template.showOnPageNotification) {
+          className = 'check_marked';
+        }
+        specificMenu.push({action: 'notify-' + timeline.template.id, label: 'Notify', className: className});
+
+        className = 'check_unmarked';
+        if(timeline.template.showIconNotification) {
+          className = 'check_marked';
+        }
+        specificMenu.push({action: 'icon-' + timeline.template.id, label: 'Change Icon', className: className});
       }
     }
 

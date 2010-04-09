@@ -193,6 +193,18 @@ TweetManager.prototype = {
     }
   },
 
+  toggleNotify: function(templateId) {
+    var template = TimelineTemplate.getTemplate(templateId);
+    var newState = !template.showOnPageNotification;
+    template.setShowOnPageNotification(newState);
+  },
+
+  toggleChangeIcon: function(templateId) {
+    var template = TimelineTemplate.getTemplate(templateId);
+    var newState = !template.showIconNotification;
+    template.setShowIconNotification(newState);
+  },
+
   setWarning: function(msg) {
     this.warningMessage = msg;
     try {
