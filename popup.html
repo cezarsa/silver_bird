@@ -644,18 +644,19 @@ var Renderer = {
   },
 
   geoImage: function (aElement, lat, long, name) {
-       $(aElement).tipsy({
-         title: function () {
-           lat = lat.toFixed(6).toString().replace(".", "");
-           long = long.toFixed(6).toString().replace(".", "");
-           var url = 'http://maps.google.com/mapdata?cc=JP&min_priority=1&w=160&h=160&latitude_e6=' + lat + '&longitude_e6=' + long + '&zm=2000&Point=b&Point.latitude_e6=' + lat + '&Point.longitude_e6=' + long + '&Point.iconid=33&Point=e';
-           return "<img src=\"" + url+ "\" />";
-        },
-        html: true,
-        showNow: true,
-        opacity: 1.0,
-        gravity: $.fn.tipsy.autoWE
-      });
+    var lat = lat.toFixed(6).toString().replace(".", "");
+    var long = long.toFixed(6).toString().replace(".", "");
+    var url = 'http://maps.google.com/mapdata?cc=JP&min_priority=1&w=160&h=160&latitude_e6=' + lat + '&longitude_e6=' + long + '&zm=2000&Point=b&Point.latitude_e6=' + lat + '&Point.longitude_e6=' + long + '&Point.iconid=33&Point=e';
+    $(aElement).tipsy({
+      title: function() {
+        return '<img src="img/loading.gif" /> Loading map...';
+      },
+      image: url,
+      html: true,
+      showNow: true,
+      opacity: 1.0,
+      gravity: $.fn.tipsy.autoWE
+    });
   },
 
   expandLink: function (aElement, url) {
@@ -664,19 +665,23 @@ var Renderer = {
     }
     var m = url.match(/http:\/\/(www\.)?(twitpic|twitgoo|yfrog|movapic).com\/(.*)/);
     if(m) {
+      var srcUrl = null;
+      if(m[2] == "twitpic" || m[2] == "twitgoo") {
+        srcUrl = "http://" + m[2] + ".com/show/thumb/" + m[3];
+      } else if(m[2] == "yfrog") {
+        srcUrl = "http://yfrog.com/" + m[3] + ".th.jpg";
+      } else if(m[2] == "movapic") {
+        var iid = m[3].split(/\//)[1];
+        srcUrl = "http://image.movapic.com/pic/t_" + iid + ".jpeg";
+      }
+      if(!srcUrl) {
+        return;
+      }
       $(aElement).tipsy({
-        title: function () {
-          if(m[2] == "twitpic" || m[2] == "twitgoo") {
-            return "<img style=\"opacity:1.0\" src=\"http://" + m[2] + ".com/show/thumb/" + m[3] + "\" />";
-          }
-          if(m[2] == "yfrog") {
-            return "<img style=\"opacity:1.0\" src=\"http://yfrog.com/" + m[3] + ".th.jpg\" />";
-          }
-          if(m[2] == "movapic") {
-            var iid = m[3].split(/\//)[1];
-            return "<img style=\"opacity:1.0\" src=\"http://image.movapic.com/pic/t_" + iid + ".jpeg\" />";
-          }
+        title: function() {
+          return '<img src="img/loading.gif" /> Loading image...';
         },
+        image: srcUrl,
         html: true,
         showNow: true,
         opacity: 1.0,
