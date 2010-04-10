@@ -206,6 +206,15 @@ input[type='text'] {
   font-size: 0.8em;
 }
 
+#suspended_notice {
+  display: none;
+  color: white;
+  background-color: #777;
+  text-align: center;
+  padding: 0 5px 0 5px;
+  -webkit-border-radius: 5px;
+}
+
 .tweet {
   width: 100%;
   padding: 2px 22px 0px 4px;
