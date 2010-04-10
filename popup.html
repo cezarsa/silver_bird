@@ -1128,6 +1128,9 @@ var ContextMenu = {
       TimelineTab.removeTab(timelineId);
       ThemeManager.handleWindowResizing();
       ThemeManager.updateTabsOrder();
+      if(tweetManager.getCurrentTimeline().template.id == TimelineTemplate.UNIFIED) {
+        prepareAndLoadTimeline();
+      }
     } else if(actionParts[0] == 'unified') {
       var templateId = actionParts[1];
       tweetManager.toggleUnified(templateId);
