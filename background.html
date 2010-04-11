@@ -99,6 +99,7 @@ function TweetManager() {
   var _this = this;
   this.twitterBackend = new TwitterLib(OptionsBackend.get('request_timeout'),
     function onAuthenticated() {
+      TimelineTemplate.initAfterAuthentication();
       _this.retrieveBlockedUserIds();
       _this.lists();
       _this.eachTimeline(function(timeline) {
@@ -335,14 +336,14 @@ TweetManager.prototype = {
       var timelineId = this;
       var unreadNewIds = timeline.getNewUnreadIds();
       var timelineTemplate = timeline.template;
-      totalUnreadNewIds = totalUnreadNewIds.concat(unreadNewIds);
-      if(unreadNewIds.length > 0) {
-        if(timelineTemplate.showIconNotification) {
+      if(timelineTemplate.showIconNotification) {
+        totalUnreadNewIds = totalUnreadNewIds.concat(unreadNewIds);
+        if(unreadNewIds.length > 0) {
           colors.push(timelineTemplate.iconNotificationColor);
         }
-        if(timelineTemplate.showOnPageNotification) {
-          unreadNewTweets = unreadNewTweets.concat(timeline.getNewUnreadTweets());
-        }
+      }
+      if(timelineTemplate.showOnPageNotification) {
+        unreadNewTweets = unreadNewTweets.concat(timeline.getNewUnreadTweets());
       }
     }, true);
     var totalUnreadNewCount = this.unique(totalUnreadNewIds).length;
@@ -614,19 +615,19 @@ TweetManager.prototype = {
     return timeline.getSearchQuery();
   },
 
-  changeList: function(timelineName, listId) {
-    var timeline = this.timelines[timelineName];
+  changeList: function(timelineId, listId) {
+    var timeline = this.timelines[timelineId];
     if(!timeline) {
       return null;
     }
     timeline.changeList(listId);
   },
 
-  getListId: function(timelineName) {
-    if(!timelineName) {
-      timelineName = this.currentTimelineId;
+  getListId: function(timelineId) {
+    if(!timelineId) {
+      timelineId = this.currentTimelineId;
     }
-    var timeline = this.timelines[timelineName];
+    var timeline = this.timelines[timelineId];
     if(!timeline) {
       return null;
     }
@@ -642,11 +643,11 @@ TweetManager.prototype = {
     return null;
   },
 
-  getList: function(timelineName) {
-    if(!timelineName) {
-      timelineName = this.currentTimeline;
+  getList: function(timelineId) {
+    if(!timelineId) {
+      timelineId = this.currentTimelineId;
     }
-    var timeline = this.timelines[timelineName];
+    var timeline = this.timelines[timelineId];
     if(!timeline) {
       return null;
     }

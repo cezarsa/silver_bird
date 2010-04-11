@@ -1067,8 +1067,8 @@ var Lists = {
               Lists.init(true);
               return true;
             }
-            var timelineName = this.selectEl.id.split('-')[0];
-            tweetManager.changeList(timelineName, value);
+            var timelineId = this.selectEl.id.split('-')[0];
+            tweetManager.changeList(timelineId, value);
             Paginator.firstPage(true);
             prepareAndLoadTimeline();
             return true;
@@ -1128,6 +1128,9 @@ var ContextMenu = {
       TimelineTab.removeTab(timelineId);
       ThemeManager.handleWindowResizing();
       ThemeManager.updateTabsOrder();
+      if(tweetManager.getCurrentTimeline().template.id == TimelineTemplate.UNIFIED) {
+        prepareAndLoadTimeline();
+      }
     } else if(actionParts[0] == 'unified') {
       var templateId = actionParts[1];
       tweetManager.toggleUnified(templateId);
@@ -1338,10 +1341,29 @@ function signout() {
   window.close();
 }
 
-function suspend() {
-  tweetManager.suspend = ! tweetManager.suspend;
-  if (tweetManager.suspend) $("#suspend_toggle").text("Resume");
-  else  $("#suspend_toggle").text("Suspend");
+function suspend(forcedValue) {
+  if(forcedValue !== undefined) {
+    tweetManager.suspend = forcedValue;
+  } else {
+    tweetManager.suspend = !tweetManager.suspend;
+  }
+  if(tweetManager.suspend) {
+    var nextOpacity = 0;
+    function animateLoop() {
+      if(nextOpacity == 1) {
+        nextOpacity = 0.1;
+      } else {
+        nextOpacity = 1;
+      }
+      $("#suspended_notice").animate({opacity: nextOpacity}, 1500, null, animateLoop);
+    }
+    $("#suspended_notice").css({opacity: nextOpacity}).show();
+    animateLoop();
+    $("#suspend_toggle").text("Resume");
+  } else {
+    $("#suspended_notice").stop().hide();
+    $("#suspend_toggle").text("Suspend");
+  }
 }
 
 function newTweetsAvailable(count, unreadCount, timelineId) {
@@ -1457,6 +1479,7 @@ function initializeWorkspace() {
     tweetManager.registerWarningsCallback(function(msg) {
       Renderer.warningsCallback.call(Renderer, msg);
     });
+    suspend(tweetManager.suspend);
   }, 0);
 }
 
@@ -1481,7 +1504,6 @@ $(function() {
       $(window).resize(resizeWindowFunc);
     }
   });
-  if (tweetManager.suspend) $("#suspend_toggle").text("Resume");
 });
 </script>
 </head>
@@ -1521,6 +1543,7 @@ $(function() {
     <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))">Options</a> |
     <a href="javascript:Composer.refreshNew();">Refresh</a> |
     <a id="suspend_toggle" href="javascript:suspend()">Suspend</a>
+    <span id="suspended_notice">Automatic updates suspended</span>
   </span>
   <a class="header_link_right" href="javascript:Renderer.markAllAsRead();">Mark all as read</a>
   <img src="img/loading.gif" id="loading" style="display: none;"/>
