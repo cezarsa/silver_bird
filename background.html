@@ -336,14 +336,14 @@ TweetManager.prototype = {
       var timelineId = this;
       var unreadNewIds = timeline.getNewUnreadIds();
       var timelineTemplate = timeline.template;
-      totalUnreadNewIds = totalUnreadNewIds.concat(unreadNewIds);
-      if(unreadNewIds.length > 0) {
-        if(timelineTemplate.showIconNotification) {
+      if(timelineTemplate.showIconNotification) {
+        totalUnreadNewIds = totalUnreadNewIds.concat(unreadNewIds);
+        if(unreadNewIds.length > 0) {
           colors.push(timelineTemplate.iconNotificationColor);
         }
-        if(timelineTemplate.showOnPageNotification) {
-          unreadNewTweets = unreadNewTweets.concat(timeline.getNewUnreadTweets());
-        }
+      }
+      if(timelineTemplate.showOnPageNotification) {
+        unreadNewTweets = unreadNewTweets.concat(timeline.getNewUnreadTweets());
       }
     }, true);
     var totalUnreadNewCount = this.unique(totalUnreadNewIds).length;
