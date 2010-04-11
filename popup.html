@@ -1067,8 +1067,8 @@ var Lists = {
               Lists.init(true);
               return true;
             }
-            var timelineName = this.selectEl.id.split('-')[0];
-            tweetManager.changeList(timelineName, value);
+            var timelineId = this.selectEl.id.split('-')[0];
+            tweetManager.changeList(timelineId, value);
             Paginator.firstPage(true);
             prepareAndLoadTimeline();
             return true;
