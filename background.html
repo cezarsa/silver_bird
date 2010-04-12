@@ -365,8 +365,10 @@ TweetManager.prototype = {
     }
   },
 
-  safeTweetsNotifications: function(tweetsToNotify) {
-    OptionsBackend.saveOption('tweets_notification_style', 'on_page');
+  safeTweetsNotifications: function(tweetsToNotify, shouldChangeOption) {
+    if(shouldChangeOption) {
+      OptionsBackend.saveOption('tweets_notification_style', 'on_page');
+    }
     this.showTweetsNotifications(tweetsToNotify, true);
   },
 
@@ -397,7 +399,10 @@ TweetManager.prototype = {
         var _this = this;
         setTimeout(function() {
           if(!notificationDisplayed) {
-            _this.safeTweetsNotifications(tweetsToNotify);
+            for(var i = 0; i < tweetsToNotify.length; ++i) {
+              _this.shouldNotReadMap[tweetsToNotify[i].id] = true;
+            }
+            _this.safeTweetsNotifications(tweetsToNotify, false);
           }
         }, 1000);
 
@@ -418,7 +423,7 @@ TweetManager.prototype = {
       } catch(e) {
         console.warn(e);
         // Fallback to 'on page' notifications
-        this.safeTweetsNotifications(tweetsToNotify);
+        this.safeTweetsNotifications(tweetsToNotify, true);
       }
     } else {
       var injectHelper = function(action, file, allFrames, callback) {
