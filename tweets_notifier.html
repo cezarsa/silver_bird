@@ -27,8 +27,13 @@
       if(tweet) {
         Renderer.nameAttribute = response.nameAttribute;
         Renderer.fadeTimeout = response.fadeTimeout;
-        $(document.body).prepend(Renderer.simpleAssemblyTweets([tweet]));
 
+        try {
+          $(document.body).prepend(Renderer.simpleAssemblyTweets([tweet]));
+        } catch(e) {
+          console.log(e);
+          window.close();
+        }
         setTimeout(function() {
           // Delay displaying progress bar
           $('#progress').show().css('bottom', '0px').css('width', '100%')
