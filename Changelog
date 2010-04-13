@@ -1,3 +1,23 @@
+1.8.0 (2010-04-12)
+
+* New right-click context menu in the tabs area, allowing you to:
+  - Dynamically add and remove new tabs;
+  - Include and remove timelines from the unified one;
+  - Enable and disable notifications and icon changes for each timeline;
+* Allowing users to add custom search tabs!
+* Lots of new features by Takuo Kitame: (Thanks a lot dude!)
+  - Suspend and resume timeline updates;
+  - Users' avatar are shown in an awesome new way for RTs;
+  - Showing images thumbnail for some twitter image services;
+  - Showing preview map and link for geotagged tweets;
+  - Showing subscribed lists in lists drop-down menu;
+* Filtering out retweets from blocked users (Thanks Geoffrey Lee!)
+* Marking tweets as read if desktop notifications are manually closed
+* Switching to untiny.me service for expanding urls as longurl.org seems to be dead
+* Fixing an old bug that caused the unified timeline to stop working sometimes
+* Fixing progress bar not showing sometimes in desktop notifications
+* Not always reverting to on page notifications when notifications aren't immediately shown
+
 1.7.0 (2010-03-17)
 
 * Allowing popup window to be dynamically resized
