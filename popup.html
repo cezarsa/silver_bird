@@ -1115,7 +1115,7 @@ var ContextMenu = {
             pos = undefined;
           }
           if(templateId == TimelineTemplate.SEARCH) {
-            SearchTab.addSearchTab(timeline.timelineId, pos);
+            SearchTab.addSearchTab(timeline.timelineId, pos, true);
           } else {
             TimelineTab.addTab(timeline.timelineId, timeline.template.timelineName, pos);
           }
@@ -1206,14 +1206,18 @@ var ContextMenu = {
 };
 
 var SearchTab = {
-  addSearchTab: function(timelineId, pos) {
+  addSearchTab: function(timelineId, pos, setFocus) {
     var inputHtml = '<input type="text" class="search_selector" id="' + timelineId + '-selector"></input>'
     TimelineTab.addTab(timelineId, inputHtml, pos);
     var inputEl = $('input#' + timelineId + '-selector');
     inputEl.val(tweetManager.getSearchQuery(timelineId));
+    if(setFocus) {
+      inputEl.focus();
+    }
 
     inputEl.blur(function(e) {
       SearchTab.updateSearch(e);
+      TimelineTab.select(timelineId);
     });
     inputEl.keyup(function(e) {
       if(e && e.which == 13) { // Enter
