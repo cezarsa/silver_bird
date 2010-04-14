@@ -58,7 +58,6 @@ function TweetManager() {
 
   this.suspend = false;
 
-  this.selectedListsData = Persistence.selectedLists();
   this.timelineOrderData = Persistence.timelineOrder();
   this.oauthTokenData = Persistence.oauthTokenData();
   this.oauthTokenService = Persistence.oauthTokenService();
@@ -94,12 +93,15 @@ function TweetManager() {
   this.apiHitsStates = [];
   this.firstPossibleWarnTime = null;
 
+  this.authenticated = false;
+
   this.initIconAndAlerts();
 
   var _this = this;
   this.twitterBackend = new TwitterLib(OptionsBackend.get('request_timeout'),
     function onAuthenticated() {
       TimelineTemplate.initAfterAuthentication();
+      _this.authenticated = true;
       _this.retrieveBlockedUserIds();
       _this.lists();
       _this.eachTimeline(function(timeline) {
@@ -136,7 +138,7 @@ TweetManager.prototype = {
         timeline.killTimeline();
         toDelete.push(timeline);
       }
-    });
+    }, true);
     for(var i = 0, len = toDelete.length; i < len; ++i) {
       var timeline = toDelete[i];
       delete this.timelines[timeline.timelineId];
@@ -163,7 +165,9 @@ TweetManager.prototype = {
     for(var i in createdTimelines) {
       var timeline = createdTimelines[i];
       this.timelines[timeline.timelineId] = timeline;
-      timeline.init();
+      if(this.authenticated) {
+        timeline.init();
+      }
       shownTimelines.push(timeline);
     }
     return shownTimelines;
@@ -726,7 +730,6 @@ TweetManager.prototype = {
 
   signout: function() {
     this.oauthTokenData.remove();
-    this.selectedListsData.remove();
     this.stopAll();
     TweetManager.instance = new TweetManager();
   },
@@ -803,10 +806,10 @@ function compareVersions(v1, v2) {
   if(!v2) return 1;
   var maxLen = Math.max(v1.length, v2.length);
   for(var i = 0; i < maxLen; ++i) {
-    if(!v1[i]) return -1;
-    if(!v2[i]) return 1;
-    if(v1[i] > v2[i]) return 1;
-    if(v1[i] < v2[i]) return -1;
+    if(v1[i] === undefined) return -1;
+    if(v2[i] === undefined) return 1;
+    if(parseInt(v1[i]) > parseInt(v2[i])) return 1;
+    if(parseInt(v1[i]) < parseInt(v2[i])) return -1;
   }
   return 0;
 }
@@ -818,6 +821,10 @@ function checkVersionChanges(manifest) {
     var storageVersion = storageData.val();
     if(storageVersion) {
       storageVersion = JSON.parse(storageVersion);
+    } else {
+      // No previous version data let's just assume we're running the latest version
+      storageData.save(JSON.stringify(currentVersion));
+      return;
     }
 
     if(compareVersions(currentVersion, storageVersion) != 0) {
@@ -849,8 +856,25 @@ function checkVersionChanges(manifest) {
         }
         OptionsBackend.save(options);
       }
-
-      //TODO: Maybe restart tweetManager
+      if(compareVersions(storageVersion, [1, 7, 0]) <= 0) {
+        var selectedListsData = Persistence.selectedLists();
+        var selectedListsInfo = selectedListsData.val();
+        if(selectedListsInfo) {
+          var selectedObj = JSON.parse(selectedListsInfo);
+          if(selectedObj) {
+            var listsIdList = [];
+            for(var key in selectedObj) {
+              var listId = selectedObj[key];
+              listsIdList.push(listId);
+            }
+            TweetManager.instance.hideTimelineTemplate(TimelineTemplate.LISTS);
+            var listsTemplate = TimelineTemplate.getTemplate(TimelineTemplate.LISTS);
+            listsTemplate.setUserData(listsIdList);
+            TweetManager.instance.showTimelineTemplate(TimelineTemplate.LISTS, true);
+          }
+        }
+        selectedListsData.remove();
+      }
       storageData.save(JSON.stringify(currentVersion));
     }
   } catch(e) {
