@@ -80,6 +80,7 @@ input[type='text'] {
 
 .tweet.unread {
   border: 1px solid #4b8cdc;
+  margin: 2px 2px 5px;
 }
 
 .tweet .user {
