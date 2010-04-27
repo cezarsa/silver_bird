@@ -821,6 +821,9 @@ var Renderer = {
       str += '<img class="profile" src="' + user.profile_image_url + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')"></img>';
     }
     str += '<a href="#" class="user" screen_name="' + user.screen_name + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')" title="' + tweetTitleUserName + '">' + tweetUserName + '</a>';
+    if (user.verified == true) {
+      str += " <img class=\"verified\" src=\"http://a2.twimg.com/a/1272324988/images/verified/verified.png\" alt=\"verified\" />";
+    }
 
     str += '<div class="text">';
     if(tweet.retweeted_status) {
