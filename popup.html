@@ -825,6 +825,10 @@ var Renderer = {
       str += " <img class=\"verified\" src=\"http://a2.twimg.com/a/1272324988/images/verified/verified.png\" alt=\"verified\" />";
     }
 
+    if (user.protected == true) {
+      str += ' <img class="protected" src="http://s.twimg.com/a/1272578449/images/lock_icon_small.png" alt="tweets are protected" />';
+    }
+
     str += '<div class="text">';
     if(tweet.retweeted_status) {
       str += '<img class="retweet" src="img/retweet.png">'

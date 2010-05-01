@@ -280,6 +280,11 @@ input[type='text'] {
   vertical-align: top;
 }
 
+.tweet img.protected {
+  height: 10px;
+  width: 8px;
+}
+
 .tweet img.retweet {
   width: 14px;
   height: 14px;
