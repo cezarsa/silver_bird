@@ -719,9 +719,12 @@ var Renderer = {
   transformTweetText: function(oldText) {
     var transformList = [
       {
-        //create links
-        'expression': /(\b(((https?|ftp|file):\/\/)|www\.)[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig,
-        'replacement': "<a href='javascript:' onclick=\"javascript:openTab('$1')\" onmouseover=\"Renderer.expandLink(this, '$1')\">$1</a>"
+        //create links (based on John Gruber's pattern from
+        //http://daringfireball.net/2009/11/liberal_regex_for_matching_urls
+        //
+        //I wish JavaScript had character classes
+        'expression': /\b(([\w-]+:\/\/?|www[.])[^\s()<>]+((\([\w\d]+\))|([^,.;:'"`~\s]|\/)))/ig,
+        'replacement': "<a href='$1'>$1</a>"
       },
       {
         //create hash search links
