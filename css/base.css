@@ -320,3 +320,8 @@ input[type='text'] {
 .tweet .new_actions img.starred {
   display: inline;
 }
+
+div.popup_footer {
+  float: right;
+  margin-right: 5px;
+}

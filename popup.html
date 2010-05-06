@@ -1373,6 +1373,22 @@ function suspend(forcedValue) {
   }
 }
 
+function showRateLimit() {
+  var resetDateObj = new Date();
+  var nowmin = new Date().getMinutes();
+  if(tweetManager.twitterBackend) {
+    var hitsInfo = tweetManager.twitterBackend.remainingHitsInfo();
+    $("#twitter_hits_left").text("API: "+ hitsInfo[0] + "/" + hitsInfo[2] + ",");
+
+    resetDateObj.setTime(parseInt(hitsInfo[1]) * 1000);
+    var leftMins = resetDateObj.getMinutes() - nowmin;
+    if (leftMins < 0) leftMins = 60 + leftMins;
+    $("#twitter_hits_reset").text(leftMins + " mins to reset");
+
+  }
+  setTimeout(showRateLimit, 60);
+}
+
 function newTweetsAvailable(count, unreadCount, timelineId) {
   if(!window) {
     //Sanity check, popup might be closed.
@@ -1487,6 +1503,7 @@ function initializeWorkspace() {
       Renderer.warningsCallback.call(Renderer, msg);
     });
     suspend(tweetManager.suspend);
+    showRateLimit();
   }, 0);
 }
 
@@ -1577,6 +1594,9 @@ $(function() {
 
 <ul id="tab_context_menu" class="contextMenu">
 </ul>
-
+<div class="popup_footer">
+  <span id="twitter_hits_left"></span>
+  <span id="twitter_hits_reset"></span>
+</div>
 </body>
 </html>
