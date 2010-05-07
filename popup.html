@@ -719,14 +719,17 @@ var Renderer = {
   transformTweetText: function(oldText) {
     var transformList = [
       {
-        //create links
-        'expression': /(\b(((https?|ftp|file):\/\/)|www\.)[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig,
+        //create links (based on John Gruber's pattern from
+        //http://daringfireball.net/2009/11/liberal_regex_for_matching_urls
+        //
+        //I wish JavaScript had character classes
+        'expression': /\b(([\w-]+:\/\/?|www[.])[^\s()<>]+((\([\w\d]+\))|([^,.;:'"`~\s]|\/)))/ig,
         'replacement': "<a href='javascript:' onclick=\"javascript:openTab('$1')\" onmouseover=\"Renderer.expandLink(this, '$1')\">$1</a>"
       },
       {
         //create hash search links
-        'expression': /([^&]#(\w*))((?=([^<])*?<a)|(?!.*?<\/a>))/ig,
-        'replacement': "<a href='javascript:' onclick=\"javascript:openTab('" + TwitterLib.URLS.SEARCH + "%23$2')\">$1</a>"
+        'expression': /([^&\w]|^)(#([\w\u0080-\uffff]*))((?=([^<])*?<a)|(?!.*?<\/a>))/ig,
+        'replacement': "$1<a href='javascript:' onclick=\"javascript:openTab('" + TwitterLib.URLS.SEARCH + "%23$3')\">$2</a>"
       },
       {
         //create users links
@@ -824,7 +827,6 @@ var Renderer = {
     if (user.verified == true) {
       str += " <img class=\"verified\" src=\"http://a2.twimg.com/a/1272324988/images/verified/verified.png\" alt=\"verified\" />";
     }
-
     if (user.protected == true) {
       str += ' <img class="protected" src="http://s.twimg.com/a/1272578449/images/lock_icon_small.png" alt="tweets are protected" />';
     }
@@ -1293,15 +1295,10 @@ var TimelineTab = {
 };
 
 function openTab(tabUrl) {
-  var button = event.button;
-  if(button > 1)
-    return;
-  var selected = true;
-  if(button == 1 || event.ctrlKey) // Middle Button or Ctrl click
-    selected = false;
-  if(tabUrl.match(/^www/i))
+  if(tabUrl.match(/^www/i)) {
     tabUrl = "http://" + tabUrl;
-  chrome.tabs.create({ url: tabUrl, selected: selected });
+  }
+  window.open(tabUrl);
 }
 
 var loadingNewTweets = false;
@@ -1374,6 +1371,26 @@ function suspend(forcedValue) {
   } else {
     $("#suspended_notice").stop().hide();
     $("#suspend_toggle").text("Suspend");
+  }
+}
+
+function showRateLimit() {
+  if(!OptionsBackend.get('show_hits_in_popup')) {
+    return;
+  }
+
+  var resetDateObj = new Date();
+  var nowmin = new Date().getMinutes();
+
+  $("#popup_footer").show();
+  if(tweetManager.twitterBackend) {
+    var hitsInfo = tweetManager.twitterBackend.remainingHitsInfo();
+    $("#twitter_hits_left").text("API: "+ hitsInfo[0] + "/" + hitsInfo[2] + ",");
+
+    resetDateObj.setTime(parseInt(hitsInfo[1]) * 1000);
+    var leftMins = resetDateObj.getMinutes() - nowmin;
+    if (leftMins < 0) leftMins = 60 + leftMins;
+    $("#twitter_hits_reset").text(leftMins + " mins to reset");
   }
 }
 
@@ -1491,6 +1508,7 @@ function initializeWorkspace() {
       Renderer.warningsCallback.call(Renderer, msg);
     });
     suspend(tweetManager.suspend);
+    showRateLimit();
   }, 0);
 }
 
@@ -1581,6 +1599,9 @@ $(function() {
 
 <ul id="tab_context_menu" class="contextMenu">
 </ul>
-
+<div id="popup_footer">
+  <span id="twitter_hits_left"></span>
+  <span id="twitter_hits_reset"></span>
+</div>
 </body>
 </html>

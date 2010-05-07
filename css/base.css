@@ -325,3 +325,12 @@ input[type='text'] {
 .tweet .new_actions img.starred {
   display: inline;
 }
+<<<<<<< HEAD
+=======
+
+div#popup_footer {
+  display: none;
+  float: right;
+  margin-right: 5px;
+}
+>>>>>>> 77ddc0c96adb254973a94c78f5fddf3872c67ee5
