@@ -724,7 +724,7 @@ var Renderer = {
         //
         //I wish JavaScript had character classes
         'expression': /\b(([\w-]+:\/\/?|www[.])[^\s()<>]+((\([\w\d]+\))|([^,.;:'"`~\s]|\/)))/ig,
-        'replacement': "<a href='$1'>$1</a>"
+        'replacement': "<a href='javascript:' onclick=\"javascript:openTab('$1')\" onmouseover=\"Renderer.expandLink(this, '$1')\">$1</a>"
       },
       {
         //create hash search links
