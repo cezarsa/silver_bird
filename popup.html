@@ -1292,15 +1292,10 @@ var TimelineTab = {
 };
 
 function openTab(tabUrl) {
-  var button = event.button;
-  if(button > 1)
-    return;
-  var selected = true;
-  if(button == 1 || event.ctrlKey) // Middle Button or Ctrl click
-    selected = false;
-  if(tabUrl.match(/^www/i))
+  if(tabUrl.match(/^www/i)) {
     tabUrl = "http://" + tabUrl;
-  chrome.tabs.create({ url: tabUrl, selected: selected });
+  }
+  window.open(tabUrl);
 }
 
 var loadingNewTweets = false;
