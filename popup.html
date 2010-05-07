@@ -725,8 +725,8 @@ var Renderer = {
       },
       {
         //create hash search links
-        'expression': /([^&]#([\w\u0080-\uffff]*))((?=([^<])*?<a)|(?!.*?<\/a>))/ig,
-        'replacement': "<a href='javascript:' onclick=\"javascript:openTab('" + TwitterLib.URLS.SEARCH + "%23$2')\">$1</a>"
+        'expression': /([^&\w]|^)(#([\w\u0080-\uffff]*))((?=([^<])*?<a)|(?!.*?<\/a>))/ig,
+        'replacement': "$1<a href='javascript:' onclick=\"javascript:openTab('" + TwitterLib.URLS.SEARCH + "%23$3')\">$2</a>"
       },
       {
         //create users links
