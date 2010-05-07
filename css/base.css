@@ -321,7 +321,8 @@ input[type='text'] {
   display: inline;
 }
 
-div.popup_footer {
+div#popup_footer {
+  display: none;
   float: right;
   margin-right: 5px;
 }
