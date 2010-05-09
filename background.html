@@ -17,7 +17,6 @@
 <script type="text/javascript" src="lib/timeline_template.js"></script>
 
 <script type="text/javascript" src="lib/timelines/timeline.js"></script>
-<script type="text/javascript" src="lib/timelines/mentions_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/favorites_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/unified_timeline.js"></script>
 
@@ -25,7 +24,7 @@
 <script type="text/javascript" src="lib/timelines/lists_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/search_timeline.js"></script>
 
-
+<script type="text/javascript" src="lib/send_queue.js"></script>
 <script>
 urlExpander = new Expander();
 
@@ -119,6 +118,8 @@ function TweetManager() {
     OptionsBackend.get('base_search_url'),
     this.oauthTokenData
   );
+
+  this.sendQueue = new SendQueue(this.twitterBackend);
 }
 
 TweetManager.prototype = {
@@ -505,8 +506,8 @@ TweetManager.prototype = {
     this.updateAlert();
   },
 
-  postTweet: function(callback, msg, replyId) {
-    return this.twitterBackend.tweet(callback, msg, replyId);
+  enqueueTweet: function(msg, replyId) {
+    this.sendQueue.enqueueTweet(msg, replyId);
   },
 
   postRetweet: function(callback, id) {

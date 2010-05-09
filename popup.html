@@ -463,39 +463,56 @@ var Composer = {
   },
 
   sendTweet: function () {
-    $("#loading").show();
-    $("#compose_tweet_area input[type='button']").attr("disabled", "disabled");
-    $("#compose_tweet_area textarea").attr("disabled", "disabled");
-    tweetManager.postTweet(function(success, data, status) {
-      $("#loading").hide();
-      $("#compose_tweet_area input[type='button']").removeAttr("disabled");
-      $("#compose_tweet_area textarea").removeAttr("disabled");
-      if(success) {
-        var textArea = $("#compose_tweet_area textarea");
-        var msg = textArea.val();
-        Composer.replyId = null;
-        Composer.textareaChanged();
-        Composer.showComposeArea();
-        Shortener.clear();
+    var textarea = $("#compose_tweet_area textarea");
+    tweetManager.enqueueTweet(textarea.val(), Composer.replyId);
 
-        if(!msg.match(/^d\s\w*?\s/i)) {
-          loadTimeline(true, "home");
-        }
-        textArea.val("");
-      } else {
-        $("#compose_tweet_area textarea").focus();
-        Renderer.showError('Unexpected error ' + status + ' sending tweet.', 'Composer.sendTweet');
-      }
-    }, $("#compose_tweet_area textarea").val(), Composer.replyId);
+    textarea.val("");
+    Composer.replyId = null;
+    Composer.textareaChanged();
+    Composer.showComposeArea();
+    Shortener.clear();
   },
 
   refreshNew: function() {
+    // FIXME: #loading shouldn't be used for that.
     if($("#loading").is(":visible")) {
       return;
     }
     loadTimeline(true);
   }
 }
+
+var WorkList = {
+  /* Not really a work list yet, but I intend in making it into one
+     and hopefully stop this #loading madness.
+   */
+  init: function() {
+    if(tweetManager.sendQueue.queueSize() != 0) {
+      $("#loading").show();
+    }
+    tweetManager.sendQueue.onQueueEmpty(function() {
+      if(!window) {
+        return;
+      }
+      WorkList.sendQueueEmpty();
+    });
+    tweetManager.sendQueue.onTweetEnqueued(function() {
+      if(!window) {
+        return;
+      }
+      WorkList.tweetEnqueued();
+    });
+  },
+
+  sendQueueEmpty: function() {
+    $("#loading").hide();
+    loadTimeline(true, "home");
+  },
+
+  tweetEnqueued: function() {
+    $("#loading").show();
+  },
+};
 
 var Shortener = {
   SHORTENER_IDLE_STR: 'Type a URL to make it shorter, or, click right here \u2192',
@@ -1506,6 +1523,8 @@ function initializeWorkspace() {
     });
     suspend(tweetManager.suspend);
     showRateLimit();
+
+    WorkList.init();
   }, 0);
 }
 
