@@ -488,7 +488,7 @@ var WorkList = {
    */
   init: function() {
     if(tweetManager.sendQueue.queueSize() != 0) {
-      $("#loading").show();
+      $("#queue_loading").show();
     }
     tweetManager.sendQueue.onQueueEmpty(function() {
       if(!window) {
@@ -502,15 +502,70 @@ var WorkList = {
       }
       WorkList.tweetEnqueued();
     });
+
+    $("#queue_loading").tipsy({
+      title: function() {
+        var html = '<div class="worklist_container"><span class="title">Queued Messages:</span>';
+        html += '<ul class="worklist">';
+        var queueItems = tweetManager.sendQueue.queue;
+        for(var i = 0, len = queueItems.length; i < len; ++i) {
+          var queueItem = queueItems[i];
+          var message = queueItem.message;
+          if(i == 0 && message.length > 15) {
+            message = message.substring(0, 13) + '...';
+          } else if(message.length > 50) {
+            message = message.substring(0, 48) + '...';
+          }
+          html += '<li>';
+          html += message;
+          if(i == 0) {
+            var timeDiff = ((new Date()).getTime() - queueItem.createdAt.getTime()) / 1000;
+            var timeDiffDesc;
+            if(timeDiff < 60) {
+              timeDiffDesc = parseInt(timeDiff) + 's';
+            } else {
+              timeDiffDesc = parseInt(timeDiff / 60) + 'm';
+            }
+            if(queueItem.retryCount == 1) {
+              html += '<span class="title"> trying to send for ' + timeDiffDesc + '</span>';
+            } else {
+              html += '<span class="title"> retried ' + queueItem.retryCount + ' times since ' + timeDiffDesc + ' ago [' + queueItem.lastStatus + ']</span>';
+            }
+            if(queueItem.shouldCancel) {
+              html += ' <span class="title" style="color: #d00;">Canceling...</span>';
+            } else {
+              html += '<img src="img/cancel.png" onclick="WorkList.cancelMessage();" title="Cancel Tweet">';
+            }
+          }
+          html += '</li>';
+        }
+        html += '</ul></div>';
+        return html;
+      },
+      html: true,
+      opacity: 0.9,
+      delayOut: 500,
+      persistOnHover: true,
+      maxWidth: 400,
+      gravity: 'tasks'
+    });
+  },
+
+  cancelMessage: function() {
+    var queueItems = tweetManager.sendQueue.queue;
+    if(queueItems.length > 0) {
+      queueItems[0].cancel();
+    }
+    $("#queue_loading").tipsy({refresh: true});
   },
 
   sendQueueEmpty: function() {
-    $("#loading").hide();
+    $("#queue_loading").hide();
     loadTimeline(true, "home");
   },
 
   tweetEnqueued: function() {
-    $("#loading").show();
+    $("#queue_loading").show();
   },
 };
 
@@ -1592,6 +1647,7 @@ $(function() {
   </span>
   <a class="header_link_right" href="javascript:Renderer.markAllAsRead();">Mark all as read</a>
   <img src="img/loading.gif" id="loading" style="display: none;"/>
+  <img src="img/loading.gif" id="queue_loading" style="display: none;"/>
   <div style="clear: both;"></div>
 
   <div id="update_tweets" onclick="loadNewTweets();"></div>
