@@ -874,6 +874,13 @@ function checkVersionChanges(manifest) {
             TweetManager.instance.showTimelineTemplate(TimelineTemplate.LISTS, true);
           }
         }
+        if(compareVersions(storageVersion, [1, 8, 0]) <= 0) {
+          var requestTimeout = OptionsBackend.get('request_timeout');
+          if(requestTimeout == 6000) {
+            requestTimeout = OptionsBackend.defaultOptions['request_timeout'];
+          }
+          OptionsBackend.saveOption('request_timeout', requestTimeout);
+        }
         selectedListsData.remove();
       }
       storageData.save(JSON.stringify(currentVersion));
