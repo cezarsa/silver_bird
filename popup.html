@@ -1285,7 +1285,7 @@ var ContextMenu = {
 
 var SearchTab = {
   addSearchTab: function(timelineId, pos, setFocus) {
-    var inputHtml = '<input type="text" class="search_selector" id="' + timelineId + '-selector"></input>'
+    var inputHtml = '<input type="text" spellcheck="false" class="search_selector" id="' + timelineId + '-selector"></input>'
     TimelineTab.addTab(timelineId, inputHtml, pos);
     var inputEl = $('input#' + timelineId + '-selector');
     inputEl.val(tweetManager.getSearchQuery(timelineId));
