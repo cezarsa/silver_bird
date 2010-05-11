@@ -97,7 +97,7 @@ input[type='text'] {
   margin-top: 4px;
 }
 
-#loading {
+#loading, #queue_loading {
   float: right;
   margin: 0px;
   padding: 0px;
@@ -273,16 +273,15 @@ input[type='text'] {
 }
 
 .tweet img.verified {
-  width: 14px;
-  height: 14px;
   margin-right: 2px;
   margin-top: 1px;
   vertical-align: top;
 }
 
 .tweet img.protected {
-  height: 10px;
-  width: 8px;
+  margin-right: 2px;
+  margin-top: 3px;
+  vertical-align: top;
 }
 
 .tweet img.retweet {
@@ -330,4 +329,42 @@ div#popup_footer {
   display: none;
   float: right;
   margin-right: 5px;
+}
+
+div.worklist_container {
+  margin: 0px;
+  padding: 0px;
+  text-align: left;
+}
+
+div.worklist_container .title {
+  color: #aaa;
+}
+
+div.worklist_container img {
+  margin-left: 5px;
+  vertical-align: bottom;
+  width: 10px;
+  height: 10px;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+div.worklist_container img:hover {
+  opacity: 1;
+}
+
+ul.worklist {
+  padding: 0px;
+  margin: 0px;
+  padding-left: 5px;
+  text-align: left;
+  list-style-type: none;
+  display: block;
+}
+
+ul.worklist li {
+  padding: 0px;
+  margin: 0px;
+  display: block;
 }

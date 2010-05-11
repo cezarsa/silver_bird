@@ -463,39 +463,111 @@ var Composer = {
   },
 
   sendTweet: function () {
-    $("#loading").show();
-    $("#compose_tweet_area input[type='button']").attr("disabled", "disabled");
-    $("#compose_tweet_area textarea").attr("disabled", "disabled");
-    tweetManager.postTweet(function(success, data, status) {
-      $("#loading").hide();
-      $("#compose_tweet_area input[type='button']").removeAttr("disabled");
-      $("#compose_tweet_area textarea").removeAttr("disabled");
-      if(success) {
-        var textArea = $("#compose_tweet_area textarea");
-        var msg = textArea.val();
-        Composer.replyId = null;
-        Composer.textareaChanged();
-        Composer.showComposeArea();
-        Shortener.clear();
+    var textarea = $("#compose_tweet_area textarea");
+    tweetManager.enqueueTweet(textarea.val(), Composer.replyId);
 
-        if(!msg.match(/^d\s\w*?\s/i)) {
-          loadTimeline(true, "home");
-        }
-        textArea.val("");
-      } else {
-        $("#compose_tweet_area textarea").focus();
-        Renderer.showError('Unexpected error ' + status + ' sending tweet.', 'Composer.sendTweet');
-      }
-    }, $("#compose_tweet_area textarea").val(), Composer.replyId);
+    textarea.val("");
+    Composer.replyId = null;
+    Composer.textareaChanged();
+    Composer.showComposeArea();
+    Shortener.clear();
   },
 
   refreshNew: function() {
+    // FIXME: #loading shouldn't be used for that.
     if($("#loading").is(":visible")) {
       return;
     }
     loadTimeline(true);
   }
 }
+
+var WorkList = {
+  /* Not really a work list yet, but I intend in making it into one
+     and hopefully stop this #loading madness.
+   */
+  init: function() {
+    if(tweetManager.sendQueue.queueSize() != 0) {
+      $("#queue_loading").show();
+    }
+    tweetManager.sendQueue.onQueueEmpty(function() {
+      if(!window) {
+        return;
+      }
+      WorkList.sendQueueEmpty();
+    });
+    tweetManager.sendQueue.onTweetEnqueued(function() {
+      if(!window) {
+        return;
+      }
+      WorkList.tweetEnqueued();
+    });
+
+    $("#queue_loading").tipsy({
+      title: function() {
+        var html = '<div class="worklist_container"><span class="title">Queued Messages:</span>';
+        html += '<ul class="worklist">';
+        var queueItems = tweetManager.sendQueue.queue;
+        for(var i = 0, len = queueItems.length; i < len; ++i) {
+          var queueItem = queueItems[i];
+          var message = queueItem.message;
+          if(i == 0 && message.length > 15) {
+            message = message.substring(0, 13) + '...';
+          } else if(message.length > 50) {
+            message = message.substring(0, 48) + '...';
+          }
+          html += '<li>';
+          html += message;
+          if(i == 0) {
+            var timeDiff = ((new Date()).getTime() - queueItem.createdAt.getTime()) / 1000;
+            var timeDiffDesc;
+            if(timeDiff < 60) {
+              timeDiffDesc = parseInt(timeDiff) + 's';
+            } else {
+              timeDiffDesc = parseInt(timeDiff / 60) + 'm';
+            }
+            if(queueItem.retryCount == 1) {
+              html += '<span class="title"> trying to send for ' + timeDiffDesc + '</span>';
+            } else {
+              html += '<span class="title"> retried ' + queueItem.retryCount + ' times since ' + timeDiffDesc + ' ago [' + queueItem.lastStatus + ']</span>';
+            }
+            if(queueItem.shouldCancel) {
+              html += ' <span class="title" style="color: #d00;">Canceling...</span>';
+            } else {
+              html += '<img src="img/cancel.png" onclick="WorkList.cancelMessage();" title="Cancel Tweet">';
+            }
+          }
+          html += '</li>';
+        }
+        html += '</ul></div>';
+        return html;
+      },
+      html: true,
+      opacity: 0.9,
+      delayOut: 500,
+      persistOnHover: true,
+      maxWidth: 400,
+      gravity: 'tasks'
+    });
+  },
+
+  cancelMessage: function() {
+    var queueItems = tweetManager.sendQueue.queue;
+    if(queueItems.length > 0) {
+      queueItems[0].cancel();
+    }
+    $("#queue_loading").tipsy({refresh: true});
+  },
+
+  sendQueueEmpty: function() {
+    $("#queue_loading").hide();
+    loadTimeline(true, "home");
+  },
+
+  tweetEnqueued: function() {
+    $("#queue_loading").show();
+  },
+};
 
 var Shortener = {
   SHORTENER_IDLE_STR: 'Type a URL to make it shorter, or, click right here \u2192',
@@ -824,8 +896,11 @@ var Renderer = {
       str += '<img class="profile" src="' + user.profile_image_url + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')"></img>';
     }
     str += '<a href="#" class="user" screen_name="' + user.screen_name + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')" title="' + tweetTitleUserName + '">' + tweetUserName + '</a>';
-    if (user.verified == true) {
-      str += " <img class=\"verified\" src=\"http://a2.twimg.com/a/1272324988/images/verified/verified.png\" alt=\"verified\" />";
+    if(user.verified) {
+      str += ' <img class="verified" src="img/verified.png" alt="verified" />';
+    }
+    if(user.protected) {
+      str += ' <img class="protected" src="img/lock.png" alt="protected" />';
     }
     if (user.protected == true) {
       str += ' <img class="protected" src="http://s.twimg.com/a/1272578449/images/lock_icon_small.png" alt="tweets are protected" />';
@@ -880,12 +955,14 @@ var Renderer = {
       if(tweetManager.isRetweet(tweet.id)) {
         //TODO: undo retweet
       } else {
-        if(templateId != TimelineTemplate.DMS) {
+        if(templateId != TimelineTemplate.DMS && !user.protected) {
           str += '<img src="img/rt.png" title="Retweet" onclick="Composer.retweet(this.parentNode.parentNode.parentNode)"></img><br>';
           str += '<div class="rt_confirm">Retweet this message: <a href="javascript:Composer.confirmRT();">Yes</a> <a href="javascript:Composer.denyRT();">No</a></div>';
         }
       }
-      str += '<img src="img/share.png" title="Share (old school RT)" onclick="Composer.share(this.parentNode.parentNode.parentNode)"></img><br>';
+      if(!user.protected) {
+        str += '<img src="img/share.png" title="Share (old school RT)" onclick="Composer.share(this.parentNode.parentNode.parentNode)"></img><br>';
+      }
     }
     str += '</div>';
     str += '<div style="clear: both;"></div>';
@@ -1216,7 +1293,7 @@ var ContextMenu = {
 
 var SearchTab = {
   addSearchTab: function(timelineId, pos, setFocus) {
-    var inputHtml = '<input type="text" class="search_selector" id="' + timelineId + '-selector"></input>'
+    var inputHtml = '<input type="text" spellcheck="false" class="search_selector" id="' + timelineId + '-selector"></input>'
     TimelineTab.addTab(timelineId, inputHtml, pos);
     var inputEl = $('input#' + timelineId + '-selector');
     inputEl.val(tweetManager.getSearchQuery(timelineId));
@@ -1291,6 +1368,47 @@ var TimelineTab = {
 
   select: function(timelineId) {
     $("#tabs").tabs('select', '#timeline-' + timelineId);
+  }
+};
+
+var Autocomplete = {
+  init: function() {
+    $("#compose_tweet_area textarea").autocomplete({
+      source: function(request, response) {
+        response(Autocomplete.autocomplete(request.term));
+      },
+      focus: function() {
+        // prevent value inserted on focus
+        return false;
+      },
+      select: function(event, ui) {
+        this.value = this.value + ui.item.value + ' ';
+        return false;
+      }
+    });
+  },
+
+  autocomplete: function(hintStr) {
+    var usersList = tweetManager.getUsersToComplete();
+    if(usersList == null || usersList.length == 0) {
+      return [];
+    }
+    var lastSpaceIdx = hintStr.lastIndexOf(' ');
+    if(hintStr.substr(lastSpaceIdx + 1, 1) == '@') {
+      hintStr = hintStr.substr(lastSpaceIdx + 2);
+    } else if(lastSpaceIdx == 1 && hintStr.substr(0, 1) == 'd') {
+      hintStr = hintStr.substr(2);
+    } else {
+      return [];
+    }
+    var validScreenNames = [];
+    for(var i = 0, len = usersList.length; i < len; ++i) {
+      var user = usersList[i];
+      if(user.screen_name.match(hintStr)) {
+        validScreenNames.push(user.screen_name);
+      }
+    }
+    return validScreenNames;
   }
 };
 
@@ -1509,6 +1627,9 @@ function initializeWorkspace() {
     });
     suspend(tweetManager.suspend);
     showRateLimit();
+
+    WorkList.init();
+    Autocomplete.init();
   }, 0);
 }
 
@@ -1576,6 +1697,7 @@ $(function() {
   </span>
   <a class="header_link_right" href="javascript:Renderer.markAllAsRead();">Mark all as read</a>
   <img src="img/loading.gif" id="loading" style="display: none;"/>
+  <img src="img/loading.gif" id="queue_loading" style="display: none;"/>
   <div style="clear: both;"></div>
 
   <div id="update_tweets" onclick="loadNewTweets();"></div>

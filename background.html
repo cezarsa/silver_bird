@@ -17,7 +17,6 @@
 <script type="text/javascript" src="lib/timeline_template.js"></script>
 
 <script type="text/javascript" src="lib/timelines/timeline.js"></script>
-<script type="text/javascript" src="lib/timelines/mentions_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/favorites_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/unified_timeline.js"></script>
 
@@ -25,7 +24,7 @@
 <script type="text/javascript" src="lib/timelines/lists_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/search_timeline.js"></script>
 
-
+<script type="text/javascript" src="lib/send_queue.js"></script>
 <script>
 urlExpander = new Expander();
 
@@ -107,6 +106,7 @@ function TweetManager() {
       _this.eachTimeline(function(timeline) {
         timeline.init();
       }, true);
+      _this.retrieveFollowingUsers();
     },
     function(remainingHits, nextHitsReset, hourlyLimit) {
       _this.onHitsUpdated.call(_this, remainingHits, nextHitsReset, hourlyLimit);
@@ -119,6 +119,8 @@ function TweetManager() {
     OptionsBackend.get('base_search_url'),
     this.oauthTokenData
   );
+
+  this.sendQueue = new SendQueue(this.twitterBackend);
 }
 
 TweetManager.prototype = {
@@ -505,8 +507,8 @@ TweetManager.prototype = {
     this.updateAlert();
   },
 
-  postTweet: function(callback, msg, replyId) {
-    return this.twitterBackend.tweet(callback, msg, replyId);
+  enqueueTweet: function(msg, replyId) {
+    this.sendQueue.enqueueTweet(msg, replyId);
   },
 
   postRetweet: function(callback, id) {
@@ -795,6 +797,44 @@ TweetManager.prototype = {
         this.firstPossibleWarnTime = null;
       }
     }
+  },
+
+  retrieveUsersData: function(usersIdList) {
+    var _this = this;
+    this.twitterBackend.lookupUsers(function(success, users) {
+      if(!success) {
+        // Try again in a while...
+        setTimeout(function() {
+          _this.retrieveUsersData(usersIdList);
+        }, 10000);
+        return;
+      }
+      _this.followingUsers = _this.followingUsers.concat(users);
+    }, usersIdList);
+  },
+
+  retrieveFollowingUsers: function() {
+    this.followingUsers = [];
+    var _this = this;
+    this.twitterBackend.friendsIds(function(success, usersData) {
+      if(!success) {
+        // Try again in a while...
+        setTimeout(function() {
+          _this.retrieveUsersForAutocomplete();
+        }, 10000);
+        return;
+      }
+      var idsList = usersData.ids;
+      for(var i = 0, len = Math.ceil(idsList.length / 100.0); i < len; ++i) {
+        var firstIndex = i * 100;
+        var idsListSlice = idsList.slice(firstIndex, firstIndex + 100);
+        _this.retrieveUsersData(idsListSlice);
+      }
+    });
+  },
+
+  getUsersToComplete: function() {
+    return this.followingUsers;
   }
 }
 
@@ -872,6 +912,13 @@ function checkVersionChanges(manifest) {
             listsTemplate.setUserData(listsIdList);
             TweetManager.instance.showTimelineTemplate(TimelineTemplate.LISTS, true);
           }
+        }
+        if(compareVersions(storageVersion, [1, 8, 0]) <= 0) {
+          var requestTimeout = OptionsBackend.get('request_timeout');
+          if(requestTimeout == 6000) {
+            requestTimeout = OptionsBackend.defaultOptions['request_timeout'];
+          }
+          OptionsBackend.saveOption('request_timeout', requestTimeout);
         }
         selectedListsData.remove();
       }
