@@ -106,6 +106,7 @@ function TweetManager() {
       _this.eachTimeline(function(timeline) {
         timeline.init();
       }, true);
+      _this.retrieveFollowingUsers();
     },
     function(remainingHits, nextHitsReset, hourlyLimit) {
       _this.onHitsUpdated.call(_this, remainingHits, nextHitsReset, hourlyLimit);
@@ -796,6 +797,44 @@ TweetManager.prototype = {
         this.firstPossibleWarnTime = null;
       }
     }
+  },
+
+  retrieveUsersData: function(usersIdList) {
+    var _this = this;
+    this.twitterBackend.lookupUsers(function(success, users) {
+      if(!success) {
+        // Try again in a while...
+        setTimeout(function() {
+          _this.retrieveUsersData(usersIdList);
+        }, 10000);
+        return;
+      }
+      _this.followingUsers = _this.followingUsers.concat(users);
+    }, usersIdList);
+  },
+
+  retrieveFollowingUsers: function() {
+    this.followingUsers = [];
+    var _this = this;
+    this.twitterBackend.friendsIds(function(success, usersData) {
+      if(!success) {
+        // Try again in a while...
+        setTimeout(function() {
+          _this.retrieveUsersForAutocomplete();
+        }, 10000);
+        return;
+      }
+      var idsList = usersData.ids;
+      for(var i = 0, len = Math.ceil(idsList.length / 100.0); i < len; ++i) {
+        var firstIndex = i * 100;
+        var idsListSlice = idsList.slice(firstIndex, firstIndex + 100);
+        _this.retrieveUsersData(idsListSlice);
+      }
+    });
+  },
+
+  getUsersToComplete: function() {
+    return this.followingUsers;
   }
 }
 

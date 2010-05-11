@@ -1368,6 +1368,47 @@ var TimelineTab = {
   }
 };
 
+var Autocomplete = {
+  init: function() {
+    $("#compose_tweet_area textarea").autocomplete({
+      source: function(request, response) {
+        response(Autocomplete.autocomplete(request.term));
+      },
+      focus: function() {
+        // prevent value inserted on focus
+        return false;
+      },
+      select: function(event, ui) {
+        this.value = this.value + ui.item.value + ' ';
+        return false;
+      }
+    });
+  },
+
+  autocomplete: function(hintStr) {
+    var usersList = tweetManager.getUsersToComplete();
+    if(usersList == null || usersList.length == 0) {
+      return [];
+    }
+    var lastSpaceIdx = hintStr.lastIndexOf(' ');
+    if(hintStr.substr(lastSpaceIdx + 1, 1) == '@') {
+      hintStr = hintStr.substr(lastSpaceIdx + 2);
+    } else if(lastSpaceIdx == 1 && hintStr.substr(0, 1) == 'd') {
+      hintStr = hintStr.substr(2);
+    } else {
+      return [];
+    }
+    var validScreenNames = [];
+    for(var i = 0, len = usersList.length; i < len; ++i) {
+      var user = usersList[i];
+      if(user.screen_name.match(hintStr)) {
+        validScreenNames.push(user.screen_name);
+      }
+    }
+    return validScreenNames;
+  }
+};
+
 function openTab(tabUrl) {
   if(tabUrl.match(/^www/i)) {
     tabUrl = "http://" + tabUrl;
@@ -1585,6 +1626,7 @@ function initializeWorkspace() {
     showRateLimit();
 
     WorkList.init();
+    Autocomplete.init();
   }, 0);
 }
 
