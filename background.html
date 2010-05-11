@@ -810,6 +810,9 @@ TweetManager.prototype = {
         return;
       }
       _this.followingUsers = _this.followingUsers.concat(users);
+      _this.followingUsers.sort(function(a, b) {
+        return a.screen_name.localeCompare(b.screen_name);
+      });
     }, usersIdList);
   },
 
@@ -820,7 +823,7 @@ TweetManager.prototype = {
       if(!success) {
         // Try again in a while...
         setTimeout(function() {
-          _this.retrieveUsersForAutocomplete();
+          _this.retrieveFollowingUsers();
         }, 10000);
         return;
       }
