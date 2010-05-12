@@ -26,6 +26,13 @@
 
 <script type="text/javascript" src="lib/send_queue.js"></script>
 <script>
+function initializeJQueryOptions() {
+  $.ajaxSetup({
+    timeout: OptionsBackend.get('request_timeout')
+  });
+}
+initializeJQueryOptions();
+
 urlExpander = new Expander();
 
 function ComposerData() {
@@ -97,7 +104,7 @@ function TweetManager() {
   this.initIconAndAlerts();
 
   var _this = this;
-  this.twitterBackend = new TwitterLib(OptionsBackend.get('request_timeout'),
+  this.twitterBackend = new TwitterLib(
     function onAuthenticated() {
       TimelineTemplate.initAfterAuthentication();
       _this.authenticated = true;
@@ -588,9 +595,15 @@ TweetManager.prototype = {
       var _this = this;
       this.twitterBackend.lists(function(success, data, status) {
         if(success) {
+          if(!data.lists) {
+            data.lists = [];
+          }
           _this.listsCache = data.lists;
           _this.twitterBackend.subs(function(success, data, status) {
             if(success) {
+              if(!data.lists) {
+                data.lists = [];
+              }
               _this.listsCache = _this.listsCache.concat(data.lists);
             }
             if(callback) {
@@ -738,6 +751,7 @@ TweetManager.prototype = {
 
   restart: function() {
     this.stopAll();
+    initializeJQueryOptions();
     TweetManager.instance = new TweetManager();
   },
 
@@ -810,6 +824,9 @@ TweetManager.prototype = {
         return;
       }
       _this.followingUsers = _this.followingUsers.concat(users);
+      _this.followingUsers.sort(function(a, b) {
+        return a.screen_name.localeCompare(b.screen_name);
+      });
     }, usersIdList);
   },
 
@@ -820,11 +837,14 @@ TweetManager.prototype = {
       if(!success) {
         // Try again in a while...
         setTimeout(function() {
-          _this.retrieveUsersForAutocomplete();
+          _this.retrieveFollowingUsers();
         }, 10000);
         return;
       }
       var idsList = usersData.ids;
+      if(!idsList) {
+        idsList = [];
+      }
       for(var i = 0, len = Math.ceil(idsList.length / 100.0); i < len; ++i) {
         var firstIndex = i * 100;
         var idsListSlice = idsList.slice(firstIndex, firstIndex + 100);
@@ -917,8 +937,9 @@ function checkVersionChanges(manifest) {
           var requestTimeout = OptionsBackend.get('request_timeout');
           if(requestTimeout == 6000) {
             requestTimeout = OptionsBackend.defaultOptions['request_timeout'];
+            OptionsBackend.saveOption('request_timeout', requestTimeout);
+            initializeJQueryOptions();
           }
-          OptionsBackend.saveOption('request_timeout', requestTimeout);
         }
         selectedListsData.remove();
       }
@@ -949,7 +970,6 @@ $.ajax({
     }
   }
 });
-
 
 function initializeExtension() {
   TweetManager.instance = new TweetManager();
