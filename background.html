@@ -595,9 +595,15 @@ TweetManager.prototype = {
       var _this = this;
       this.twitterBackend.lists(function(success, data, status) {
         if(success) {
+          if(!data.lists) {
+            data.lists = [];
+          }
           _this.listsCache = data.lists;
           _this.twitterBackend.subs(function(success, data, status) {
             if(success) {
+              if(!data.lists) {
+                data.lists = [];
+              }
               _this.listsCache = _this.listsCache.concat(data.lists);
             }
             if(callback) {
@@ -836,6 +842,9 @@ TweetManager.prototype = {
         return;
       }
       var idsList = usersData.ids;
+      if(!idsList) {
+        idsList = [];
+      }
       for(var i = 0, len = Math.ceil(idsList.length / 100.0); i < len; ++i) {
         var firstIndex = i * 100;
         var idsListSlice = idsList.slice(firstIndex, firstIndex + 100);
