@@ -26,6 +26,13 @@
 
 <script type="text/javascript" src="lib/send_queue.js"></script>
 <script>
+function initializeJQueryOptions() {
+  $.ajaxSetup({
+    timeout: OptionsBackend.get('request_timeout')
+  });
+}
+initializeJQueryOptions();
+
 urlExpander = new Expander();
 
 function ComposerData() {
@@ -97,7 +104,7 @@ function TweetManager() {
   this.initIconAndAlerts();
 
   var _this = this;
-  this.twitterBackend = new TwitterLib(OptionsBackend.get('request_timeout'),
+  this.twitterBackend = new TwitterLib(
     function onAuthenticated() {
       TimelineTemplate.initAfterAuthentication();
       _this.authenticated = true;
@@ -738,6 +745,7 @@ TweetManager.prototype = {
 
   restart: function() {
     this.stopAll();
+    initializeJQueryOptions();
     TweetManager.instance = new TweetManager();
   },
 
@@ -920,8 +928,9 @@ function checkVersionChanges(manifest) {
           var requestTimeout = OptionsBackend.get('request_timeout');
           if(requestTimeout == 6000) {
             requestTimeout = OptionsBackend.defaultOptions['request_timeout'];
+            OptionsBackend.saveOption('request_timeout', requestTimeout);
+            initializeJQueryOptions();
           }
-          OptionsBackend.saveOption('request_timeout', requestTimeout);
         }
         selectedListsData.remove();
       }
@@ -952,7 +961,6 @@ $.ajax({
     }
   }
 });
-
 
 function initializeExtension() {
   TweetManager.instance = new TweetManager();

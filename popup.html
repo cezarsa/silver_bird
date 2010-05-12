@@ -49,6 +49,9 @@ if(!twitterBackend.authenticated() && !twitterBackend.tokenRequested()) {
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
 <script type="text/javascript" src="lib/simple_select.js"></script>
 <script>
+$.ajaxSetup({
+  timeout: OptionsBackend.get('request_timeout')
+});
 
 var shortener_acct = OptionsBackend.get('shortener_acct');
 var shortener_login = null;
