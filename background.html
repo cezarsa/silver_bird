@@ -900,7 +900,11 @@ function checkVersionChanges(manifest) {
       if(compareVersions(storageVersion, [1, 5, 1]) <= 0) {
         var timelineOrderData = Persistence.timelineOrder();
         var storedOrder = timelineOrderData.val();
-        storedOrder = JSON.parse(storedOrder);
+        if(storedOrder) {
+          storedOrder = JSON.parse(storedOrder);
+        } else {
+          storedOrder = [];
+        }
         storedOrder.unshift('unified');
         timelineOrderData.save(JSON.stringify(storedOrder));
       }
