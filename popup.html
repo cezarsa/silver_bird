@@ -1375,6 +1375,9 @@ var Autocomplete = {
   startPosition: 0,
 
   init: function() {
+    if(!OptionsBackend.get('show_user_autocomplete')) {
+      return;
+    }
     var autocompleteElement = null;
     $("#compose_tweet_area textarea").autocomplete({
       source: function(request, response) {
