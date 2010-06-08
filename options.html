@@ -57,20 +57,22 @@ $(function() {
 
   var onShortenerChange = function() {
     var shortenerSelect = $("select[name='url_shortener']")[0]
+
     if(shortenerSelect.value=='bitly' || shortenerSelect.value=='jmp') {
-      $("#shortener_opts").show();
-	  $("#yourls_opts").hide();
+      	$("#shortener_opts").show();
+	$("#yourls_opts").hide();
     } 
     else if(shortenerSelect.value=='yourls'){
-	  $("#shortener_opts").hide();  
-	  $("#yourls_opts").show();
-	}
-	else
-	{
-      $("#shortener_opts").hide();
-	  $("#yourls_opts").hide();
+	$("#shortener_opts").hide();  
+	$("#yourls_opts").show();
+    }
+    else
+    {
+	$("#shortener_opts").hide();
+	$("#yourls_opts").hide();
     }
   };
+
   var onShortenerAcctClick = function() {
     if($("input[name='shortener_acct']").attr('checked')) {
       $("input[name='shortener_login']").removeAttr('disabled');
@@ -424,9 +426,9 @@ function updatePredictedHitsCount() {
 	<p id="yourls_opts">
       <label for="shortener_yourls_service">Service URL:</label>
       <input type="text" name="shortener_service_url"> (http://yoursite.com/yourls-api.php)<br>
-      <label for="shortener_key">Signature token:</label>
-      <input type="text" name="shortener_key">
-	</p>
+      <label for="yourls_key">Signature token:</label>
+      <input type="text" name="yourls_key">
+    </p>
     <label for="share_include_title">Include page title (sharing):</label>
     <input type="checkbox" name="share_include_title"><br>
   </fieldset>
