@@ -66,8 +66,6 @@ if (url_shortener == 'yourls'){
   shortener_key = OptionsBackend.get('yourls_key');
 }
 
-console.warn("shortener key: " + shortener_key);
-
 var reply_all = OptionsBackend.get('reply_all');
 var shortener = new Shortener(url_shortener, shortener_acct, 
 			      shortener_login, shortener_key, 
