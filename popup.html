@@ -739,7 +739,7 @@ var Renderer = {
     if(!OptionsBackend.get('show_expanded_urls')) {
       return;
     }
-    var m = url.match(/http:\/\/(www\.)?(twitpic|twitgoo|yfrog|movapic).com\/(.*)/);
+    var m = url.match(/http:\/\/(www\.)?(tweetphoto|twitpic|twitgoo|yfrog|movapic).com\/(.*)/);
     if(m) {
       var srcUrl = null;
       if(m[2] == "twitpic" || m[2] == "twitgoo") {
@@ -749,6 +749,8 @@ var Renderer = {
       } else if(m[2] == "movapic") {
         var iid = m[3].split(/\//)[1];
         srcUrl = "http://image.movapic.com/pic/t_" + iid + ".jpeg";
+      } else if(m[2] == "tweetphoto") {
+        srcUrl = "http://TweetPhotoAPI.com/api/TPAPI.svc/imagefromurl?url=" + url;
       }
       if(!srcUrl) {
         return;
