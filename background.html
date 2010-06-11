@@ -962,6 +962,11 @@ function checkVersionChanges(manifest) {
           TwitterLib.URLS.BASE_SIGNING = baseSigningUrl;
         }
       }
+      if(compareVersions(storageVersion, [1, 8, 5]) <= 0) {
+        // Enabling desktop notifications as the default option,
+        // users may switch back to onpage notifications latter if they wish.
+        OptionsBackend.saveOption('tweets_notification_style', 'desktop');
+      }
       storageData.save(JSON.stringify(currentVersion));
     }
   } catch(e) {
