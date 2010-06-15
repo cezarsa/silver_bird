@@ -900,7 +900,11 @@ function checkVersionChanges(manifest) {
       if(compareVersions(storageVersion, [1, 5, 1]) <= 0) {
         var timelineOrderData = Persistence.timelineOrder();
         var storedOrder = timelineOrderData.val();
-        storedOrder = JSON.parse(storedOrder);
+        if(storedOrder) {
+          storedOrder = JSON.parse(storedOrder);
+        } else {
+          storedOrder = [];
+        }
         storedOrder.unshift('unified');
         timelineOrderData.save(JSON.stringify(storedOrder));
       }
@@ -933,15 +937,35 @@ function checkVersionChanges(manifest) {
             TweetManager.instance.showTimelineTemplate(TimelineTemplate.LISTS, true);
           }
         }
-        if(compareVersions(storageVersion, [1, 8, 0]) <= 0) {
-          var requestTimeout = OptionsBackend.get('request_timeout');
-          if(requestTimeout == 6000) {
-            requestTimeout = OptionsBackend.defaultOptions['request_timeout'];
-            OptionsBackend.saveOption('request_timeout', requestTimeout);
-            initializeJQueryOptions();
-          }
-        }
         selectedListsData.remove();
+      }
+      if(compareVersions(storageVersion, [1, 8, 0]) <= 0) {
+        var requestTimeout = OptionsBackend.get('request_timeout');
+        if(requestTimeout == 6000) {
+          // Twitter itself recomends a bigger timeout value, so
+          // let's update the default value
+          requestTimeout = OptionsBackend.defaultOptions['request_timeout'];
+          OptionsBackend.saveOption('request_timeout', requestTimeout);
+          initializeJQueryOptions();
+        }
+
+        var baseUrl = OptionsBackend.get('base_url');
+        var baseSigningUrl = OptionsBackend.get('base_signing_url');
+        if(baseUrl == baseSigningUrl && baseUrl == 'http://api.twitter.com/1/') {
+          // This days the SSL endpoint seems more reliable, let's make it the
+          // default one unless users have manually changed it.
+          baseUrl = OptionsBackend.defaultOptions['base_url'];
+          baseSigningUrl = OptionsBackend.defaultOptions['base_signing_url'];
+          OptionsBackend.saveOption('base_url', baseUrl);
+          OptionsBackend.saveOption('base_signing_url', baseSigningUrl);
+          TwitterLib.URLS.BASE = baseUrl;
+          TwitterLib.URLS.BASE_SIGNING = baseSigningUrl;
+        }
+      }
+      if(compareVersions(storageVersion, [1, 8, 5]) <= 0) {
+        // Enabling desktop notifications as the default option,
+        // users may switch back to onpage notifications latter if they wish.
+        OptionsBackend.saveOption('tweets_notification_style', 'desktop');
       }
       storageData.save(JSON.stringify(currentVersion));
     }
