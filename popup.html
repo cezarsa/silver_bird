@@ -1723,16 +1723,11 @@ function writeMessage(msg)
   </div>
 
   <span class="header_link_left">
-<<<<<<< HEAD
-    <a href="javascript:signout()"><script>writeMessage("logout");</script></a> |
-    <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))"><script>writeMessage("options");</script></a>
-=======
     <a href="javascript:signout()">Log out</a> |
     <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))">Options</a> |
     <a href="javascript:Composer.refreshNew();">Refresh</a> |
     <a id="suspend_toggle" href="javascript:suspend()">Suspend</a>
     <span id="suspended_notice">Automatic updates suspended</span>
->>>>>>> master
   </span>
   <a class="header_link_right" href="javascript:Renderer.markAllAsRead();"><script>writeMessage("allRead");</script></a>
   <img src="img/loading.gif" id="loading" style="display: none;"/>
