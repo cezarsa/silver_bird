@@ -672,16 +672,16 @@ var Shortener = {
       if(success && shortUrl) {
         var tmpText = textarea.val();
         if(tmpText.length > 0) {
-	  if((textarea[0].selectionStart > 0) &&
-	     (tmpText[textarea[0].selectionStart-1] != ' ')
-	  ) {
+          if((textarea[0].selectionStart > 0) &&
+            (tmpText[textarea[0].selectionStart-1] != ' ')
+          ) {
             shortUrl = ' ' + shortUrl;
-	  }
-	  if((textarea[0].selectionEnd < tmpText.length) &&
-	     (tmpText[textarea[0].selectionEnd+1] != ' ')
-	  ) {
-	    shortUrl += ' ';
-	  }
+          }
+          if((textarea[0].selectionEnd < tmpText.length) &&
+             (tmpText[textarea[0].selectionEnd+1] != ' ')
+          ) {
+             shortUrl += ' ';
+          }
         }
         if(context && context.title && OptionsBackend.get('share_include_title')) {
           shortUrl = context.title + ' - ' + shortUrl;
