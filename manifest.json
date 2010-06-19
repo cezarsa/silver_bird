@@ -1,6 +1,6 @@
 {
   "name": "Chromed Bird",
-  "version": "1.4.9",
+  "version": "1.8.5",
   "description": "Chromed Bird is a Twitter extension that allows you to follow your timelines and interact with your Twitter account.",
   "default_locale": "en",
   "browser_action": {
@@ -10,6 +10,7 @@
   },
   "background_page": "background.html",
   "permissions": [
+    "notifications",
     "tabs",
     "http://*/*",
     "https://*/*"
@@ -23,6 +24,10 @@
     {
       "matches": ["http://twitter.com/oauth/authorize", "https://twitter.com/oauth/authorize"],
       "js": ["lib/3rdparty/jquery.js", "lib/oauth_authorizer.js"]
+    },
+    {
+      "matches": ["http://identi.ca/api/oauth/authorize", "https://identi.ca/api/oauth/authorize"],
+      "js": ["lib/3rdparty/jquery.js", "lib/oauth_identica_authorizer.js"]
     }
   ],
   "options_page": "options.html",

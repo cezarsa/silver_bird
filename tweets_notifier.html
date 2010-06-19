@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
+  <script type="text/javascript" src="lib/tweets_assembler.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="css/injectedTweets.css" />
+  <link rel="stylesheet" type="text/css" href="css/desktopTweets.css" />
+
+  <base target="_blank">
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function onload() {
+    if(document.readyState != "complete") {
+      setTimeout(arguments.callee, 100);
+      return;
+    }
+    initNotifier();
+    document.removeEventListener("DOMContentLoaded", onload, false);
+  }, false);
+
+  function initNotifier() {
+    chrome.extension.sendRequest({
+      cb_requesting_tweets_immediate: true
+    }, function(response) {
+      var tweet = response.tweet;
+      if(tweet) {
+        Renderer.nameAttribute = response.nameAttribute;
+        Renderer.fadeTimeout = response.fadeTimeout;
+
+        try {
+          $(document.body).prepend(Renderer.simpleAssemblyTweets([tweet]));
+        } catch(e) {
+          console.log(e);
+          window.close();
+        }
+        setTimeout(function() {
+          // Delay displaying progress bar
+          $('#progress').show().css('bottom', '0px').css('width', '100%')
+                .animate({width: '0px'}, response.fadeTimeout, 'linear', function() {
+            // Tell background page that this tweet shouldn't be marked as read
+            chrome.extension.sendRequest({
+              cb_tweet_should_not_read: true,
+              tweet_id: tweet.id
+            });
+            window.close();
+          });
+          $(document.body).click(function() {
+            $('#progress').stop().hide();
+          });
+        }, 100);
+      } else {
+        window.close();
+      }
+    });
+  }
+  </script>
+</head>
+<body>
+  <div id="progress">Click to prevent closing.</div>
+</body>
+</html>

@@ -14,7 +14,7 @@
   padding-right: 2px;
 }
 
-.chrome_bird_tweet {
+.chromed_bird_tweet {
   width: 350px;
   padding: 2px 4px 2px 4px;
   text-align: left;
@@ -24,31 +24,31 @@
   font-size: 10pt;
 }
 
-.chrome_bird_tweet a, .chrome_bird_tweet a:visited {
+.chromed_bird_tweet a, .chromed_bird_tweet a:visited {
   color: #665;
   text-decoration: none;
 }
 
-.chrome_bird_tweet a:hover {
+.chromed_bird_tweet a:hover {
   text-decoration: underline;
 }
 
-.chrome_bird_tweet img {
+.chromed_bird_tweet img {
   margin: 0px;
   padding: 0px;
   border: 0;
 }
 
-.chrome_bird_tweet .text {
+.chromed_bird_tweet .text {
   clear: right;
   word-wrap: break-word;
 }
 
-.chrome_bird_tweet .user {
+.chromed_bird_tweet .user {
   font-size: 9pt;
 }
 
-.chrome_bird_tweet .footer {
+.chromed_bird_tweet .footer {
   margin: 0px;
   padding: 0px;
   position: relative;
@@ -56,7 +56,7 @@
   margin-top: 2px;
 }
 
-.chrome_bird_tweet img.profile {
+.chromed_bird_tweet img.profile {
   border: 0;
   margin-right: 4px;
   float: left;
@@ -65,7 +65,7 @@
   width: 48px;
 }
 
-.chrome_bird_tweet img.retweet {
+.chromed_bird_tweet img.retweet {
   width: 14px;
   height: 14px;
   margin-right: 2px;
@@ -75,28 +75,28 @@
 
 /* Theme */
 
-.chrome_bird_tweet {
+.chromed_bird_tweet {
   -webkit-border-radius: 5px;
   background-color: #ffffff;
   border: 3px solid #e5effe;
   margin-bottom: 3px;
 }
 
-.chrome_bird_tweet.unread {
+.chromed_bird_tweet.unread {
   border: 1px solid #4b8cdc;
 }
 
-.chrome_bird_tweet .user {
+.chromed_bird_tweet .user {
   color: #666;
   font-weight: bold;
   text-decoration: none;
 }
 
-.chrome_bird_tweet .footer {
+.chromed_bird_tweet .footer {
   color: #999;
 }
 
-.chrome_bird_tweet img.profile {
+.chromed_bird_tweet img.profile {
   -webkit-border-radius: 5px;
 }
 

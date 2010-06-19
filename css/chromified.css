@@ -67,6 +67,10 @@ input[type='text'] {
   border: 1px solid #c1cddc;
 }
 
+.tweet_overlay {
+  -webkit-border-radius: 2px;
+}
+
 .tweet {
   -webkit-border-radius: 5px;
   background-color: #ffffff;
@@ -76,6 +80,7 @@ input[type='text'] {
 
 .tweet.unread {
   border: 1px solid #4b8cdc;
+  margin: 2px 2px 5px;
 }
 
 .tweet .user {

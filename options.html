@@ -7,139 +7,16 @@
 <link rel="stylesheet" type="text/css" href="css/colorpicker/colorpicker.css" />
 <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
 <script type="text/javascript" src="lib/3rdparty/colorpicker.js"></script>
+<script type="text/javascript" src="lib/math_utils.js"></script>
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
+
+<script type="text/javascript" src="lib/options/options.js"></script>
 <title>Chromed Bird Options</title>
 
 <script type="text/javascript">
-
-var OptionsBackend = chrome.extension.getBackgroundPage().OptionsBackend;
-
-function Options() {
-  this.optionsMap = {};
-
-  this.load = function(forceDefault) {
-    this.optionsMap = OptionsBackend.load(forceDefault);
-    var _this = this;
-    $('input,select,canvas.color_selector').each(function() {
-      var $this = $(this);
-      var name = $this.attr('name');
-      if(name) {
-        if($this.is('[type="checkbox"]')) {
-          $this.attr('checked', _this.optionsMap[name]);
-        } else if($this.is('canvas')) {
-          $this.attr('hexColor', _this.optionsMap[name]);
-          paintIcon($this[0], _this.optionsMap[name]);
-          $this.ColorPickerSetColor(_this.optionsMap[name]);
-        } else {
-          $this.val(_this.optionsMap[name]);
-        }
-      }
-    });
-  };
-
-  this.loadDefaults = function() {
-    this.load(true);
-    this.save();
-  };
-
-  this.save = function() {
-    this.clearErrors();
-    var hasErrors = false;
-    var _this = this;
-    $('input,select').each(function() {
-      var $this = $(this);
-      var validator = $this.attr('validator');
-      if(validator) {
-        var validatorsArray = validator.split(',');
-        for(var i = 0; i < validatorsArray.length; ++i) {
-          var validInfo = Validator[validatorsArray[i]]($this);
-          if(validInfo !== true) {
-            hasErrors = true;
-            _this.addValidationError($this, validInfo);
-            return true;
-          }
-        }
-      }
-    });
-    if(!hasErrors) {
-      $('input,select,canvas.color_selector').each(function() {
-        var $this = $(this);
-        var name = $this.attr('name');
-        if(name) {
-          if($this.is('[type="checkbox"]')) {
-             _this.optionsMap[name] = $this.attr('checked');
-          } else if($this.is('canvas')) {
-            _this.optionsMap[name] = $this.attr('hexColor');
-          } else {
-            var elValue = $this.val();
-            var intValue = parseInt(elValue );
-            if(intValue == elValue) {
-              elValue = intValue;
-            }
-            _this.optionsMap[name] = elValue;
-          }
-        }
-      });
-      OptionsBackend.save(this.optionsMap);
-      $(document).scrollTop(0);
-      $("#saved_notice").stop().show().css('opacity', '1.0').fadeOut(5000);
-    }
-  };
-
-  this.addValidationError = function($el, error) {
-    var errorEl = $("<span>").attr('class', 'error').html(error);
-    $el.after(errorEl);
-  };
-
-  this.clearErrors = function() {
-    $('.error').remove();
-  };
-
-}
-
-/* ---- validation ---- */
-Validator = {
-  global: function() {
-
-  },
-
-  required: function ($el) {
-    var val = $el.val()
-    if(!val)
-      return 'It can\'t be empty.';
-    return true;
-  },
-
-  number: function ($el) {
-    var intVal = parseInt($el.val());
-    if(isNaN(intVal))
-      return 'It should be a number.';
-    return true;
-  },
-
-  positive: function ($el) {
-    if(parseInt($el.val()) <= 0)
-      return 'It should be positive.';
-    return true;
-  },
-
-  minRefresh: function ($el) {
-    if(parseInt($el.val()) < 20000)
-      return 'Minimum interval is 20000ms';
-    return true;
-  },
-
-  url: function ($el) {
-    if($el.val().match(/(\b(https?):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i)) {
-      return true;
-    }
-    return 'It should be a valid URL.';
-  }
-}
-/* ---- end validation ---- */
-
 var IconCreator = chrome.extension.getBackgroundPage().IconCreator;
-var twitterBackend = chrome.extension.getBackgroundPage().TweetManager.instance.twitterBackend;
+var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
+var twitterBackend = tweetManager.twitterBackend;
 var options = new Options();
 var imgEl = null;
 
@@ -159,12 +36,13 @@ function paintIcon(canvas, color) {
 
 var hourlyLimit = 150;
 $(function() {
+  var resetDateObj = new Date();
   if(twitterBackend) {
     var hitsInfo = twitterBackend.remainingHitsInfo();
     $(".twitter_hits_left").text(hitsInfo[0]);
-    var dateObj = new Date();
-    dateObj.setTime(parseInt(hitsInfo[1]) * 1000);
-    $(".twitter_hits_reset").text(dateObj.toLocaleDateString() + " " + dateObj.toLocaleTimeString());
+
+    resetDateObj.setTime(parseInt(hitsInfo[1]) * 1000);
+    $(".twitter_hits_reset").text(resetDateObj.toLocaleDateString() + " " + resetDateObj.toLocaleTimeString());
 
     if(hitsInfo[2]) {
       hourlyLimit = parseInt(hitsInfo[2]);
@@ -176,13 +54,15 @@ $(function() {
     var desc = SHORTENERS_BACKEND[key].desc;
     $("select[name='url_shortener']").append($("<option>").attr('value', key).text(desc));
   }
-  $("select[name='url_shortener']").change(function() {
-    if(this.value=='bitly' || this.value=='jmp') {
+
+  var onShortenerChange = function() {
+    var shortenerSelect = $("select[name='url_shortener']")[0]
+    if(shortenerSelect.value=='bitly' || shortenerSelect.value=='jmp') {
       $("#shortener_opts").show();
     } else {
       $("#shortener_opts").hide();
     }
-  });
+  };
   var onShortenerAcctClick = function() {
     if($("input[name='shortener_acct']").attr('checked')) {
       $("input[name='shortener_login']").removeAttr('disabled');
@@ -192,43 +72,169 @@ $(function() {
       $("input[name='shortener_key']").val('').attr('disabled', 'disabled');
     }
   };
+  $("select[name='url_shortener']").change(onShortenerChange);
   $("input[name='shortener_acct']").click(onShortenerAcctClick);
 
+  var onSigningUrlCheck = function() {
+    var $check = $("input[name='same_signing_urls']");
+    if($check.attr('checked')) {
+      $("input[name='base_signing_url'], input[name='base_oauth_signing_url']").attr('disabled', 'disabled');
+      $("input[name='base_signing_url']").val($("input[name='base_url']").val());
+      $("input[name='base_oauth_signing_url']").val($("input[name='base_oauth_url']").val());
+
+      $("input[name='base_url']").bind('keyup blur', function() {
+        $("input[name='base_signing_url']").val($(this).val());
+      });
+      $("input[name='base_oauth_url']").bind('keyup blur', function() {
+        $("input[name='base_oauth_signing_url']").val($(this).val());
+      });
+    } else {
+      $("input[name='base_signing_url'], input[name='base_oauth_signing_url']").removeAttr('disabled');
+
+      $("input[name='base_url']").unbind('keyup blur');
+      $("input[name='base_oauth_url']").unbind('keyup blur');
+    }
+  };
+  $("input[name='same_signing_urls']").click(onSigningUrlCheck);
+
   $('canvas.color_selector').ColorPicker({
-    onChange: function (hsb, hex, rgb) {
+    onChange: function (hsb, hex, rgb, rgbaStr) {
       var canvas = this.data('colorpicker').el;
-      $(canvas).attr('hexColor', '#' + hex);
+      $(canvas).attr('strColor', rgbaStr);
       paintIcon(canvas, rgb);
     }
   });
+  $('div.color_selector').ColorPicker({
+    onChange: function (hsb, hex, rgb, rgbaStr) {
+      var div = this.data('colorpicker').el;
+      $(div).attr('strColor', rgbaStr);
+      $(div).css('backgroundColor', rgbaStr);
+    }
+  });
+  options.onload(function() {
+    onShortenerChange();
+    onShortenerAcctClick();
+    onSigningUrlCheck();
+  });
+  options.onsaveChangedOption(function(optionName, oldValue, newValue) {
+    var idx;
+    if((idx = optionName.indexOf('_visible')) != -1) {
+      var templateId = optionName.substring(0, idx);
+      if(newValue) {
+        tweetManager.showTimelineTemplate(templateId, true);
+      } else {
+        tweetManager.hideTimelineTemplate(templateId);
+      }
+    } else if((idx = optionName.indexOf('_include_unified')) != -1) {
+      var templateId = optionName.substring(0, idx);
+      tweetManager.toggleUnified(templateId, newValue);
+    }
+  });
+  options.onsave(function() {
+    if($("#noti_desktop").is(":checked")) {
+      try {
+        var notificationCenter = window.notifications || window.webkitNotifications;
+        if(!notificationCenter) {
+          throw 'out';
+        }
+        var authStatus = notificationCenter.checkPermission();
+        if(authStatus == 1 || authStatus == 2) { // Not allowed or Denied
+          notificationCenter.requestPermission(function() {
+            var authStatus = notificationCenter.checkPermission();
+            if(authStatus != 0) { // Permission denied
+              $("#noti_on_page").click();
+              options.save();
+            }
+          });
+        }
+      } catch(boom) {
+        $("#noti_on_page").click();
+        options.save();
+      }
+    }
+  });
   options.load();
-  onShortenerAcctClick();
 
   updatePredictedHitsCount();
-  var timelines = ['home', 'mentions', 'dms', 'lists', 'favorites'];
-  for(var i = 0; i < timelines.length; ++i) {
-    $('table.timelines input, table.timelines select')
-      .keyup(updatePredictedHitsCount)
-      .blur(updatePredictedHitsCount)
-      .click(updatePredictedHitsCount)
-      .change(updatePredictedHitsCount);
-  }
+  $('table.timelines input, table.timelines select')
+    .keyup(updatePredictedHitsCount)
+    .blur(updatePredictedHitsCount)
+    .click(updatePredictedHitsCount)
+    .change(updatePredictedHitsCount);
+
+  $("input[name='microblogging_service'],label[for='service_twitter'],label[for='service_identica']").mousedown(function(e) {
+    var el = $(e.target);
+    if(el.is('label')) {
+      el = $('#' + el.attr('for'));
+    }
+    if(!el.is(':checked')) {
+      var proceed = confirm("This will reset any custom API URL configuration. Proceed?");
+      if(proceed) {
+        el.click();
+        var sameSigningEl = $("input[name='same_signing_urls']");
+        var baseUrlEl = $("input[name='base_url']");
+        var baseOauthUrlEl = $("input[name='base_oauth_url']");
+
+        if(el.val() == 'twitter') {
+          baseUrlEl.val('http://api.twitter.com/1/');
+          baseOauthUrlEl.val('https://twitter.com/oauth/');
+        } else if(el.val() == 'identica') {
+          baseUrlEl.val('http://identi.ca/api/');
+          baseOauthUrlEl.val('https://identi.ca/api/oauth/');
+        }
+        baseUrlEl.blur();
+        baseOauthUrlEl.blur();
+        if(!sameSigningEl.is(':checked')) {
+          sameSigningEl.attr('checked', true).click().attr('checked', true);
+        }
+      }
+    }
+    return true;
+  });
+
+  $("#nerds_link").click(function() {
+    var $canvas = $("#nerds");
+    $canvas.toggle();
+    if($canvas.is(":visible")) {
+      var points = chrome.extension.getBackgroundPage().TweetManager.instance.apiHitsStates;
+      Math.generateTendencyGraph($canvas[0], points, resetDateObj.getTime());
+    }
+  });
 });
 
 function updatePredictedHitsCount() {
-  var timelines = ['home', 'mentions', 'dms', 'lists', 'favorites'];
   var totalHits = 0;
-  for(var i = 0; i < timelines.length; ++i) {
-    var inputVisibleEl = $('input[name="' +  timelines[i] + '_visible"]');
-    if(!inputVisibleEl.is(':checked')) {
-      continue;
+  var unifiedVisible = $('input[name="unified_visible"]').is(':checked');
+
+  TimelineTemplate.eachTimelineTemplate(function(template) {
+    if(template.id == TimelineTemplate.UNIFIED) {
+      return true;
     }
-    var inputEl = $('input[name="' +  timelines[i] + '_refresh_interval"]');
-    var intVal = parseInt(inputEl.val());
-    var timelineHits = (60 * 60 * 1000) / intVal;
-    var timelineCount = $('select[name="' +  timelines[i] + '_count"]').val() || 1;
+    var inputUnifiedEl = $('input[name="' +  template.id + '_include_unified"]');
+    if(!unifiedVisible) {
+      inputUnifiedEl.attr('disabled', 'disabled');
+    } else {
+      inputUnifiedEl.removeAttr('disabled');
+    }
+    if(template.id == TimelineTemplate.SEARCH) {
+      return true;
+    }
+    var inputVisibleEl = $('input[name="' +  template.id + '_visible"]');
+    if(!inputVisibleEl.is(':checked') && !(unifiedVisible && inputUnifiedEl.is(':checked'))) {
+      return true;
+    }
+
+    var inputRefreshEl = $('input[name="' +  template.id + '_refresh_interval"]');
+    var intVal = parseInt(inputRefreshEl.val());
+    var timelineHits = (60 * 60) / intVal;
+    var timelineCount = 1;
+    var userData = template.getUserData();
+    if(userData && userData.length > 0) {
+      timelineCount = userData.length;
+    }
     totalHits += timelineHits * timelineCount;
-  }
+  });
+  totalHits += (60 * 60) / parseInt($('input[name="blockedusers_refresh_interval"]').val());
   totalHits = parseInt(totalHits);
   $('#predicted_hits_count').text(totalHits);
   if(totalHits >= hourlyLimit) {
@@ -240,7 +246,6 @@ function updatePredictedHitsCount() {
   }
   return totalHits;
 }
-
 </script>
 
 </head>
@@ -248,17 +253,24 @@ function updatePredictedHitsCount() {
 
 <h1>Chromed Bird Options</h1>
 
-<div id="saved_notice">Your configuration has been successfully saved!</div>
+<div id="saved_notice">
+  Your configuration has been successfully saved!
+  <div id="restart_notice">
+    However, some of your changes require the extension to be restarted. Would you like to do it now?<br>
+    (This will reset your unread tweets count.)
+    <br>
+    <input type="button" onclick="options.confirmRestart();" value="Yes">
+    <input type="button" onclick="options.denyRestart();" value="No">
+  </div>
+</div>
 <div id="main_area">
-  <p class="notice">
-    Please notice that options denoted with asterisk "*" will only take effect if you restart the extension. (Disabling and enabling it again)
-  </p>
   <p>
     Remaining Twitter API Hits: <span class="twitter_hits_left"></span><br>
     Rate Limit Reset: <span class="twitter_hits_reset"></span>
+    <a id="nerds_link" href="#">API Hits stats (for nerds)</a>
+    <canvas id="nerds" width="650" height="500" style="display: none;"></canvas>
   </p>
-
-   <fieldset>
+  <fieldset>
     <legend>UI</legend>
     <label for="name_attribute">Name in tweets:</label>
     <select name="name_attribute">
@@ -271,15 +283,76 @@ function updatePredictedHitsCount() {
       <option value="top">Top</option>
       <option value="bottom">Bottom</option>
     </select><br>
+
     <label for="theme">UI Theme:</label>
     <select name="theme">
       <option value="css/chromified.css,css/chromified-theme/jquery-ui-1.7.2.custom.css">Chromified</option>
       <option value="css/whisper.css,css/whisper-theme/jquery-ui-1.7.2.custom.css">Whispers</option>
+      <option value="css/darkness-theme/jquery-ui-1.7.2.custom.css,css/darkness.css">Darkness</option>
     </select><br>
+    <label for="font_size">Font Size:</label>
+    <select name="font_size">
+      <option value="0.8em">Small</option>
+      <option value="1.0em">Normal</option>
+      <option value="1.2em">Large</option>
+      <option value="1.4em">Extra Large</option>
+    </select><br>
+    <label for="font_family">Font Family:</label>
+    <input type="text" style="width: 20em"; name="font_family" validator="required"><br>
     <label for="hover_timeout">Hover to read time (ms):</label>
     <input type="text" name="hover_timeout" validator="required,number,positive"><br>
-    <label>*Icon color:</label>
-    <canvas name="idle_color" width="19" height="19" class="color_selector"></canvas>
+    <label for="show_expanded_urls">Expand shortened URLs:</label>
+    <input type="checkbox" id="show_expanded_urls" name="show_expanded_urls" /><br>
+    <label for="reply_all">Reply to all mentioned:</label>
+    <input type="checkbox" id="reply_all" name="reply_all" /><br/>
+    <label for="show_hits_in_popup">Show API hits count:</label>
+    <input type="checkbox" id="show_hits_in_popup" name="show_hits_in_popup" /><br/>
+    <label for="show_user_autocomplete">Autocomplete usernames:</label>
+    <input type="checkbox" style="margin-bottom: 7px;" id="show_user_autocomplete" name="show_user_autocomplete" /><br/>
+
+    <label>Icon color:</label>
+    <canvas name="idle_color" width="19" height="19" class="color_selector" must_restart></canvas><br/>
+
+    <label for="tweets_color_only_unified">Colors only in unified:</label>
+    <input type="checkbox" name="tweets_color_only_unified" /><br/>
+    <table class="tweet_color">
+      <tr>
+        <th></th>
+        <th>Home</th>
+        <th>Mentions</th>
+        <th>DMs</th>
+        <th>Lists</th>
+        <th>Favorites</th>
+        <th>Search</th>
+      <tr>
+        <td class="label">Tweet color:</td>
+        <td>
+          <div class="color_selector checkerboard"></div>
+          <div name="home_tweets_color" class="color_selector"></div>
+        </td>
+        <td>
+          <div class="color_selector checkerboard"></div>
+          <div name="mentions_tweets_color" class="color_selector"></div>
+        </td>
+        <td>
+          <div class="color_selector checkerboard"></div>
+          <div name="dms_tweets_color" class="color_selector"></div>
+        </td>
+        <td>
+          <div class="color_selector checkerboard"></div>
+          <div name="lists_tweets_color" class="color_selector"></div>
+        </td>
+        <td>
+          <div class="color_selector checkerboard"></div>
+          <div name="favorites_tweets_color" class="color_selector"></div>
+        </td>
+        <td>
+          <div class="color_selector checkerboard"></div>
+          <div name="search_tweets_color" class="color_selector"></div>
+        </td>
+      </tr>
+    </table><br>
+    <input type="button" value="Reset Popup Size" onclick="Persistence.popupSize().remove();">
   </fieldset>
 
   <fieldset>
@@ -287,7 +360,7 @@ function updatePredictedHitsCount() {
     <table class="notifications">
       <tr>
         <th></th>
-        <th>Show on Page</th>
+        <th>Tweet Notification</th>
         <th>Change Icon</th>
         <th>Icon Color</th>
       <tr>
@@ -314,9 +387,18 @@ function updatePredictedHitsCount() {
         <td><input type="checkbox" name="lists_icon"></td>
         <td><canvas name="lists_color" width="19" height="19" class="color_selector"></canvas></td>
       </tr>
+      <tr>
+        <td class="label">Search:</td>
+        <td><input type="checkbox" name="search_on_page"></td>
+        <td><input type="checkbox" name="search_icon"></td>
+        <td><canvas name="search_color" width="19" height="19" class="color_selector"></canvas></td>
+      </tr>
     </table><br>
-    <label for="notification_fade_timeout">On Page Fade Timeout:</label>
-    <input type="text" name="notification_fade_timeout" validator="required,number,positive"><br>
+    <label for="tweets_notification_style">Notification Style:</label>
+    <input type="radio" name="tweets_notification_style" value="on_page" id="noti_on_page"> <label for="noti_on_page" class="radio_opt">Notify on Page</label>
+    <input type="radio" name="tweets_notification_style" value="desktop" id="noti_desktop"> <label for="noti_desktop" class="radio_opt">Desktop Notifications</label><br>
+    <label for="notification_fade_timeout">Notification Timeout (s):</label>
+    <input type="text" name="notification_fade_timeout" validator="required,number,positive" converter="RefreshInterval"><br>
   </fieldset>
 
   <fieldset>
@@ -331,6 +413,8 @@ function updatePredictedHitsCount() {
       <label for="shortener_key">API Key:</label>
       <input type="text" name="shortener_key">
     </p>
+    <label for="share_include_title">Include page title (sharing):</label>
+    <input type="checkbox" name="share_include_title"><br>
   </fieldset>
 
   <fieldset>
@@ -345,74 +429,114 @@ function updatePredictedHitsCount() {
     <table class="timelines">
       <tr>
         <th></th>
-        <th>*Visible</th>
-        <th>*Refresh Interval (ms)</th>
-        <th>*Tabs Count</th>
+        <th>Visible</th>
+        <th>Refresh Interval (s)</th>
+        <th>Include in unified timeline</th>
+        <th>Tabs Count</th>
+      <tr>
+        <td class="label">Unified Timeline:</td>
+        <td><input type="checkbox" name="unified_visible" validator="unifiedValidator"></td>
+        <td>-</td>
+        <td>-</td>
+        <td>1</td>
+      </tr>
       <tr>
         <td class="label">Home:</td>
         <td><input type="checkbox" name="home_visible"></td>
-        <td><input type="text" name="home_refresh_interval" validator="required,number,minRefresh"></td>
+        <td><input type="text" name="home_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="home_include_unified"></td>
         <td>1</td>
       </tr>
       <tr>
         <td class="label">Mentions:</td>
         <td><input type="checkbox" name="mentions_visible"></td>
-        <td><input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh"></td>
+        <td><input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="mentions_include_unified"></td>
         <td>1</td>
       </tr>
       <tr>
         <td class="label">DM:</td>
         <td><input type="checkbox" name="dms_visible"></td>
-        <td><input type="text" name="dms_refresh_interval" validator="required,number,minRefresh"></td>
+        <td><input type="text" name="dms_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="dms_include_unified"></td>
         <td>1</td>
       </tr>
       <tr>
         <td class="label">Lists:</td>
         <td><input type="checkbox" name="lists_visible"></td>
-        <td><input type="text" name="lists_refresh_interval" validator="required,number,minRefresh"></td>
-        <td>
-          <select name="lists_count" style="width: 40px;">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-        </td>
+        <td><input type="text" name="lists_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="lists_include_unified"></td>
+        <td><script>document.write(TimelineTemplate.getTemplate(TimelineTemplate.LISTS).getUserData().length);</script></td>
+      </tr>
+      <tr>
+        <td class="label">Search:</td>
+        <td><input type="checkbox" name="search_visible"></td>
+        <td><input type="text" name="search_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="search_include_unified"></td>
+        <td><script>document.write(TimelineTemplate.getTemplate(TimelineTemplate.SEARCH).getUserData().length);</script></td>
       </tr>
       <tr>
         <td class="label">Favorites:</td>
         <td><input type="checkbox" name="favorites_visible"></td>
-        <td><input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh"></td>
+        <td><input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td><input type="checkbox" name="favorites_include_unified"></td>
         <td>1</td>
       </tr>
+      <tr>
+        <td class="label">Blocked Users:</td>
+        <td>-</td>
+        <td><input type="text" name="blockedusers_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
+        <td>-</td>
+        <td>-</td>
+      </tr>
     </table>
+    <p class="notice" style="color: black;">
+      * Hey, now you can use the right-click context menu to change most of this settings directly into the popup window. Just get
+      out of here! :)
+    </p>
   </fieldset>
 
   <fieldset>
     <legend>Timelines</legend>
-    <label for="tweets_per_page">*Tweets per Page:</label>
-    <input type="text" name="tweets_per_page" validator="required,number,positive"><br>
-    <label for="max_cached_tweets">*Max Shown Tweets:</label>
-    <input type="text" name="max_cached_tweets" validator="required,number,positive"><br>
+    <label for="tweets_per_page">Tweets per Page:</label>
+    <input type="text" name="tweets_per_page" validator="required,number,positive" must_restart><br>
+    <label for="max_cached_tweets">Max Shown Tweets:</label>
+    <input type="text" name="max_cached_tweets" validator="required,number,positive" must_restart><br>
+  </fieldset>
+
+  <fieldset>
+    <legend>Microblogging Service</legend>
+    <input type="radio" name="microblogging_service" value="twitter" id="service_twitter" must_restart> <label for="service_twitter" class="radio_opt">Twitter</label>
+    <input type="radio" name="microblogging_service" value="identica" id="service_identica" must_restart> <label for="service_identica" class="radio_opt">identi.ca</label>
   </fieldset>
 
   <fieldset>
     <legend>Advanced</legend>
-    <label for="request_timeout">*Request Timeout (ms):</label>
-    <input type="text" name="request_timeout" validator="required,number,positive"><br>
-    <label for="base_url">*Twitter's API URL:</label>
-    <input type="text" name="base_url" style="width: 300px;" validator="required,url"><br>
-    <label for="base_signing_url">*OAuth Signature URL:</label>
-    <input type="text" name="base_signing_url" style="width: 300px;" validator="required,url"><br>
-    <label for="base_authorize_url">*OAuth Authorize URL:</label>
-    <input type="text" name="base_authorize_url" style="width: 300px;" validator="required,url"><br>
+    <label for="request_timeout">Request Timeout (ms):</label>
+    <input type="text" name="request_timeout" validator="required,number,positive" must_restart><br>
+    <label for="base_url">Twitter's API URL:</label>
+    <input type="text" name="base_url" style="width: 300px;" validator="required,url" must_restart><br>
+    <label for="base_oauth_url">OAuth URL:</label>
+    <input type="text" name="base_oauth_url" style="width: 300px;" validator="required,url" must_restart><br>
+
+    <label for="same_signing_urls">Same signing URLs:</label>
+    <input type="checkbox" name="same_signing_urls"><br>
+
+    <label for="base_signing_url">API Signing URL:</label>
+    <input type="text" name="base_signing_url" style="width: 300px;" validator="required,url" must_restart><br>
+    <label for="base_oauth_signing_url">OAuth Signing URL:</label>
+    <input type="text" name="base_oauth_signing_url" style="width: 300px;" validator="required,url" must_restart><br>
+
+    <label for="base_search_url">Search API URL:</label>
+    <input type="text" name="base_search_url" style="width: 300px;" validator="required,url" must_restart><br>
   </fieldset>
 
   <br>
-  <input type="button" value="Save" onclick="options.save();">
-  <input type="button" value="Reset" onclick="options.load();">
-  <input type="button" value="Reset to default" onclick="options.loadDefaults();">
+  <div id="buttons_area">
+    <input type="button" value="Save" onclick="options.save();">
+    <input type="button" value="Reset" onclick="options.load();">
+    <input type="button" value="Reset to default" onclick="options.loadDefaults();">
+  </div>
 </div>
 
 </body>
