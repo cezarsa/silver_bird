@@ -201,7 +201,7 @@ var ThemeManager = {
         ThemeManager.popupSizeData.save($this.width() + 'x' + $this.height());
       }
     });
-    $(".ui-resizable-handle").attr('title', 'Double click to reset size');
+    $(".ui-resizable-handle").attr('title', chrome.i18n.getMessage("resetSize"));
     $(".ui-resizable-handle").dblclick(function(e) {
       ThemeManager.popupSizeData.remove();
       ThemeManager.setPopupSize(null, null, true);

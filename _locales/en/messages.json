@@ -1,4 +1,11 @@
 {
+	"extDescription": {
+		"message": "Chromed Bird is a Twitter extension that allows you to follow your timelines and interact with your Twitter account.",
+		"description": "Extension description"
+	},
+	"resetSize": {
+		"message": "Double click to reset size"
+	},
 	"composeTweet": {
 		"message": "Compose tweet",
 		"description": "Text for composing new tweet"
@@ -36,7 +43,7 @@
 		"message": "The following error occurred trying to authenticate: $errorMessage$. Please, <a href=\"javascript:OAuth.requestNewToken();\">click here to restart the authentication process</a>",
 		"placeholders": {
 			"errorMessage":{
-				"content": "$1"			
+				"content": "$1"
 			}
 		}
 	},
