@@ -1150,11 +1150,11 @@ var Lists = {
           $listSelect = $("select#" + timeline.timelineId + "-selector");
         }
         $listSelect.html('');
-        $listSelect.append($("<option>").attr('value', _this.selector_value).text('- Select a list -'));
+        $listSelect.append($("<option>").attr('value', _this.selector_value).text(chrome.i18n.getMessage("selectList")));
         for(var j = 0; j < lists.length; ++j) {
           $listSelect.append($("<option>").attr('value', lists[j].uri).text(lists[j].name));
         }
-        $listSelect.append($("<option>").attr('value', _this.update_value).text('Update lists...'));
+        $listSelect.append($("<option>").attr('value', _this.update_value).text(chrome.i18n.getMessage("updateLists")));
         var selectedListId = tweetManager.getListId(timeline.timelineId);
         if(selectedListId) {
           $listSelect.val(selectedListId);
@@ -1252,9 +1252,9 @@ var ContextMenu = {
     var timeline = null;
     if(el.is('.timeline_tab')) {
       timeline = tweetManager.getTimeline(el[0].id.split('-')[1]);
-      var label = 'Remove';
+      var label = chrome.i18n.getMessage("remove");
       if(timeline.template.includeInUnified && !timeline.template.multipleTimelines) {
-        label = 'Hide';
+        label = chrome.i18n.getMessage("hide");
       }
       specificMenu.push({action: 'remove-' + timeline.timelineId, label: label + ' Tab'});
 
@@ -1289,9 +1289,9 @@ var ContextMenu = {
     var generalMenu = [];
     TimelineTemplate.eachTimelineTemplate(function(template) {
       if(!template.visible || template.multipleTimelines) {
-        var label = 'Show ';
+        var label = chrome.i18n.getMessage("show");
         if(template.multipleTimelines) {
-          label = 'Add ';
+          label = chrome.i18n.getMessage("add");
         }
         generalMenu.push({action: 'show-' + template.id, label: label + template.timelineName + ' Tab'});
       }
@@ -1518,10 +1518,10 @@ function suspend(forcedValue) {
     }
     $("#suspended_notice").css({opacity: nextOpacity}).show();
     animateLoop();
-    $("#suspend_toggle").text("Resume");
+    $("#suspend_toggle").text(chrome.i18n.getMessage("resume"));
   } else {
     $("#suspended_notice").stop().hide();
-    $("#suspend_toggle").text("Suspend");
+    $("#suspend_toggle").text(chrome.i18n.getMessage("suspend"));
   }
 }
 
@@ -1727,11 +1727,11 @@ function writeMessage(msg)
   </div>
 
   <span class="header_link_left">
-    <a href="javascript:signout()">Log out</a> |
-    <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))">Options</a> |
-    <a href="javascript:Composer.refreshNew();">Refresh</a> |
-    <a id="suspend_toggle" href="javascript:suspend()">Suspend</a>
-    <span id="suspended_notice">Automatic updates suspended</span>
+    <a href="javascript:signout()"><script>writeMessage("logout");</script></a> |
+    <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))"><script>writeMessage("options");</script></a> |
+    <a href="javascript:Composer.refreshNew();"><script>writeMessage("refresh");</script></a> |
+    <a id="suspend_toggle" href="javascript:suspend()"><script>writeMessage("suspend");</script></a>
+    <span id="suspended_notice"><script>writeMessage("autoUpdatesSuspended");</script></span>
   </span>
   <a class="header_link_right" href="javascript:Renderer.markAllAsRead();"><script>writeMessage("allRead");</script></a>
   <img src="img/loading.gif" id="loading" style="display: none;"/>

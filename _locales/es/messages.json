@@ -1,84 +1,84 @@
 {
 	"extDescription": {
-		"message": "Chromed Bird is a Twitter extension that allows you to follow your timelines and interact with your Twitter account.",
+		"message": "Chromed Bird es una extensión para Twitter que te permite seguir tus líneas de tiempo e interactuar con tu cuenta de Twitter.",
 		"description": "Extension description"
 	},
 	"resetSize": {
-		"message": "Double click to reset size"
+		"message": "Doble clic para resetar el tamaño"
 	},
 	"composeTweet": {
-		"message": "Compose tweet",
+		"message": "Publicar un tweet",
 		"description": "Text for composing new tweet"
 	},
 	"logout": {
-		"message": "Log out",
+		"message": "Cerrar sesión",
 		"description": "The text for the logout link"
 	},
 	"options": {
-		"message": "Options",
+		"message": "Opciones",
 		"description": "Options link"
 	},
 	"refresh": {
-		"message": "Refresh",
+		"message": "Refrescar",
 		"description": "Refresh link"
 	},
 	"suspend": {
-		"message": "Suspend",
+		"message": "Suspender",
 		"description": "Suspend link"
 	},
 	"autoUpdatesSuspended": {
-		"message": "Automatic updates suspended"
+		"message": "Actualizaciones automáticas suspendidas"
 	},
 	"resume": {
 		"message": "Resume"
 	},
 	"remove": {
-		"message": "Remove"
+		"message": "Eliminar"
 	},
 	"hide": {
-		"message": "Hide"
+		"message": "Ocultar"
 	},
 	"show": {
-		"message": "Show"
+		"message": "Mostrar"
 	},
 	"add": {
-		"message": "Add"
+		"message": "Añadir"
 	},
 	"selectList": {
-		"message": "- Select a list -"
+		"message": "- Selecciona una lista -"
 	},
-	"updateList": {
-		"message": "Update lists..."
+	"updateLists": {
+		"message": "Actualizar Listas..."
 	},
 	"tlUnified": {
-		"message": "Unified"
+		"message": "Unificada"
 	},
 	"tlHome": {
-		"message": "Home"
+		"message": "Inicio"
 	},
 	"tlDM": {
-		"message": "DM"
+		"message": "MD"
 	},
 	"tlFavorites": {
-		"message": "Favorites"
+		"message": "Favoritos"
 	},
 	"tlLists": {
-		"message": "Lists"
+		"message": "Listas"
 	},
 	"tlSearch": {
-		"message": "Search"
+		"message": "Búsqueda"
 	},
 	"allRead": {
-		"message": "Mark all as read"
+		"message": "Marcar todo como leído"
 	},
 	"newToken": {
-		"message": "Request another token"
+		"message": "Pedir otro token"
 	},
 	"shortenerIdleString": {
-		"message": "Type a URL to make it shorter, or, click right here \u2192"
+		"message": "Escribe una URL para acortarla o haz clic justo aquí \u2192"
 	},
 	"timelineHome": {
-		"message": "Home",
+		"message": "Inicio",
 		"description": "The home time line tab"
 	},
 	"timelineDM": {
@@ -86,11 +86,11 @@
 		"description": "The direct message time line tab"
 	},
 	"timelineFavorites": {
-		"message": "Favorites",
+		"message": "Favoritos",
 		"description": "The home time line tab"
 	},
 	"oAuthError": {
-		"message": "The following error occurred trying to authenticate: $errorMessage$. Please, <a href=\"javascript:OAuth.requestNewToken();\">click here to restart the authentication process</a>",
+		"message": "Mientras te autentificabas, ocurrió el siguiente error: $errorMessage$. Por favor, <a href=\"javascript:OAuth.requestNewToken();\">haz clic aquí para reiniciar el proceso de autenticación</a>",
 		"placeholders": {
 			"errorMessage":{
 				"content": "$1"
@@ -98,13 +98,13 @@
 		}
 	},
 	"justNow": {
-		"message": "just now"
+		"message": "ahora mismo"
 	},
 	"minuteAgo": {
-		"message": "a minute ago"
+		"message": "hace un minuto"
 	},
 	"minutes": {
-		"message": "$nr_of_minutes$ $minutes$ ago",
+		"message": "hace $nr_of_minutes$ $minutes$",
 		"placeholders": {
 			"nr_of_minutes":{
 				"content": "$1"
@@ -116,13 +116,13 @@
 		}
 	},
 	"minute_singular": {
-		"message": "minute"
+		"message": "minuto"
 	},
 	"minute_plural": {
-		"message": "minutes"
+		"message": "minutos"
 	},
 	"timeAgo": {
-		"message": "about $time$ $time_string$ ago",
+		"message": "hace alrededor de $time$ $time_string$",
 		"placeholders": {
 			"time": {
 				"content": "$1"
@@ -133,24 +133,24 @@
 		}
 	},
 	"hour_singular": {
-		"message": "hour"
+		"message": "hora"
 	},
 	"hour_plural": {
-		"message": "hours"
+		"message": "horas"
 	},
 	"day_singular": {
-		"message": "day"
+		"message": "día"
 	},
 	"day_plurar": {
-		"message": "days"
+		"message": "días"
 	},
 	"month_singular": {
-		"message": "month"
+		"message": "mes"
 	},
 	"month_plural": {
-		"message": "months"
+		"message": "meses"
 	},
 	"yearsAgo": {
-		"message": "yearsAgo"
+		"message": "hace años"
 	}
 }
