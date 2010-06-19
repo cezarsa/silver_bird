@@ -45,6 +45,7 @@ if(!twitterBackend.authenticated() && !twitterBackend.tokenRequested()) {
 <script type="text/javascript" src="lib/3rdparty/jquery.autocomplete.mod.js"></script>
 <script type='text/javascript' src='lib/3rdparty/jquery.tipsy.js'></script>
 <script type="text/javascript" src="lib/3rdparty/jquery.contextMenu.js"></script>
+<script type="text/javascript" src="lib/3rdparty/jquery.insertatcaret.min.js"></script>
 
 <!--script type="text/javascript" src="lib/debug.js"></script-->
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
@@ -669,15 +670,23 @@ var Shortener = {
       _this.clear();
       var textarea = $("#compose_tweet_area textarea");
       if(success && shortUrl) {
-        var newText = textarea.val();
-        if(newText.length > 0 && newText[newText.length - 1] != ' ') {
-          newText += ' ';
+        var tmpText = textarea.val();
+        if(tmpText.length > 0) {
+	  if((textarea[0].selectionStart > 0) &&
+	     (tmpText[textarea[0].selectionStart-1] != ' ')
+	  ) {
+            shortUrl = ' ' + shortUrl;
+	  }
+	  if((textarea[0].selectionEnd < tmpText.length) &&
+	     (tmpText[textarea[0].selectionEnd+1] != ' ')
+	  ) {
+	    shortUrl += ' ';
+	  }
         }
         if(context && context.title && OptionsBackend.get('share_include_title')) {
           shortUrl = context.title + ' - ' + shortUrl;
         }
-        newText += shortUrl;
-        textarea.val(newText);
+        textarea.insertAtCaret(shortUrl);
         Composer.textareaChanged();
       } else if(!success) {
         Renderer.showError(shortUrl);
