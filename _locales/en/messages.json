@@ -68,6 +68,48 @@
 	"tlSearch": {
 		"message": "Search"
 	},
+	"fromApp": {
+		"message": "from"
+	},
+	"inReply": {
+		"message": "in reply to"
+	},
+	"retweetedBy": {
+		"message": "retweeted by"
+	},
+	"retweetedByMe": {
+		"message": "retweeted by me"
+	},
+	"unmarkFavorite": {
+		"message": "Unmark as favorite"
+	},
+	"markFavorite": {
+		"message": "Mark as favorite"
+	},
+	"Delete": {
+		"message": "Delete"
+	},
+	"deleteConfirm": {
+		"message": "Delete this message: "
+	},
+	"Yes": {
+		"message": "Yes"
+	},
+	"No": {
+		"message": "No"
+	},
+	"Reply": {
+		"message": "Reply"
+	},
+	"Retweet": {
+		"message": "Retweet"
+	},
+	"retweetConfirm": {
+		"message": "Retweet this message: "
+	},
+	"oldRT": {
+		"message": "Share (old school RT)"
+	},
 	"allRead": {
 		"message": "Mark all as read"
 	},
@@ -89,6 +131,23 @@
 		"message": "Favorites",
 		"description": "The home time line tab"
 	},
+	"tweet_singular": {
+		"message": "tweet"
+	},
+	"tweet_plural": {
+		"message": "tweets"
+	},
+	"newTweetsAvailable": {
+		"message": "$count$ more $tweets$ available. Update now.",
+		"placeholders": {
+			"count": {
+				"content": "$1"
+			},
+			"tweets": {
+				"content": "$2"
+			}
+		}
+	},
 	"oAuthError": {
 		"message": "The following error occurred trying to authenticate: $errorMessage$. Please, <a href=\"javascript:OAuth.requestNewToken();\">click here to restart the authentication process</a>",
 		"placeholders": {
@@ -101,7 +160,7 @@
 		"message": "just now"
 	},
 	"minuteAgo": {
-		"message": "a minute ago"
+		"message": "less than 1 minute ago"
 	},
 	"minutes": {
 		"message": "$nr_of_minutes$ $minutes$ ago",
@@ -141,7 +200,7 @@
 	"day_singular": {
 		"message": "day"
 	},
-	"day_plurar": {
+	"day_plural": {
 		"message": "days"
 	},
 	"month_singular": {

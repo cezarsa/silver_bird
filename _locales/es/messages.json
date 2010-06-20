@@ -68,6 +68,48 @@
 	"tlSearch": {
 		"message": "Búsqueda"
 	},
+	"fromApp": {
+		"message": "via"
+	},
+	"inReply": {
+		"message": "en respuesta a"
+	},
+	"retweetedBy": {
+		"message": "retweet de"
+	},
+	"retweetedByMe": {
+		"message": "retweet mío"
+	},
+	"unmarkFavorite": {
+		"message": "Desmarcar como favorito"
+	},
+	"markFavorite": {
+		"message": "Marcar como favorito"
+	},
+	"Delete": {
+		"message": "Borrar"
+	},
+	"deleteConfirm": {
+		"message": "Borrar este tweet: "
+	},
+	"Yes": {
+		"message": "Sí"
+	},
+	"No": {
+		"message": "No"
+	},
+	"Reply": {
+		"message": "Responder"
+	},
+	"Retweet": {
+		"message": "Retwittear"
+	},
+	"retweetConfirm": {
+		"message": "Retwittear este tweet: "
+	},
+	"oldRT": {
+		"message": "Compartir (antiguo RT)"
+	},
 	"allRead": {
 		"message": "Marcar todo como leído"
 	},
@@ -88,6 +130,23 @@
 	"timelineFavorites": {
 		"message": "Favoritos",
 		"description": "The home time line tab"
+	},
+	"tweet_singular": {
+		"message": "tweet"
+	},
+	"tweet_plural": {
+		"message": "tweets"
+	},
+	"newTweetsAvailable": {
+		"message": "$count$ $tweets$ más disponibles. Actualizar ahora.",
+		"placeholders": {
+			"count": {
+				"content": "$1"
+			},
+			"tweets": {
+				"content": "$2"
+			}
+		}
 	},
 	"oAuthError": {
 		"message": "Mientras te autentificabas, ocurrió el siguiente error: $errorMessage$. Por favor, <a href=\"javascript:OAuth.requestNewToken();\">haz clic aquí para reiniciar el proceso de autenticación</a>",
@@ -141,7 +200,7 @@
 	"day_singular": {
 		"message": "día"
 	},
-	"day_plurar": {
+	"day_plural": {
 		"message": "días"
 	},
 	"month_singular": {

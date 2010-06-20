@@ -703,9 +703,9 @@ var Renderer = {
 
     var diff = (nowTimestamp - inputTimestamp) / 1000;
     if(diff < 15) {
-      return "just now";
+      return chrome.i18n.getMessage("justNow");
     } else if(diff < 60) {
-      return "less than 1 minute ago";
+      return chrome.i18n.getMessage("minuteAgo");
     } else if(diff < 60 * 60) {
       var minutes = parseInt(diff / 60);
       var minute_string = minutes > 1 ? "minute_plural" : "minute_singular";
@@ -883,7 +883,7 @@ var Renderer = {
     var inReply = null;
     if(tweet.in_reply_to_status_id) {
       var linkDst = TwitterLib.URLS.BASE + tweet.in_reply_to_screen_name + '/status/' + tweet.in_reply_to_status_id;
-      inReply = '<a href="#" onclick="openTab(\'' + linkDst + '\')">in reply to ' + tweet.in_reply_to_screen_name + '</a> ';
+      inReply = '<a href="#" onclick="openTab(\'' + linkDst + '\')">' + chrome.i18n.getMessage("inReply") + ' ' + tweet.in_reply_to_screen_name + '</a> ';
     }
 
     var nameAttribute = OptionsBackend.get('name_attribute');
@@ -933,13 +933,13 @@ var Renderer = {
     if(inReply) {
       str += inReply;
     } else if(tweet.retweeted_status) {
-      str += 'retweeted by <a href="#" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\');">' + tweet.user.screen_name + '</a> ';
+      str += chrome.i18n.getMessage("retweetedBy") + ' <a href="#" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\');">' + tweet.user.screen_name + '</a> ';
     }
     if(tweetManager.isRetweet(tweet.id)) {
-      str += 'retweeted by me ';
+      str += chrome.i18n.getMessage("retweetedByMe") + ' ';
     }
     if(from) {
-      str += '<span class="from_app">from ' + from + '</span>';
+      str += '<span class="from_app">' + chrome.i18n.getMessage("fromApp") + ' ' + from + '</span>';
     }
     if (geo) {
       str += '<span class="geo_tag">' + geo + '</span>';
@@ -956,27 +956,51 @@ var Renderer = {
     str += '<div class="new_actions">';
     if(templateId != TimelineTemplate.DMS) {
       if(tweet.favorited) {
-        str += '<img src="img/star_hover.png" title="Unmark as favorite" class="starred" onclick="Composer.unFavorite(this.parentNode.parentNode.parentNode);"></img><br>';
+        str += '<img src="img/star_hover.png" title="' +
+               chrome.i18n.getMessage("unmarkFavorite") +
+               '" class="starred" onclick="Composer.unFavorite(this.parentNode.parentNode.parentNode);"></img><br>';
       } else {
-        str += '<img src="img/star.png" title="Mark as favorite" class="unstarred" onclick="Composer.favorite(this.parentNode.parentNode.parentNode);"></img><br>';
+        str += '<img src="img/star.png" title="' +
+               chrome.i18n.getMessage("markFavorite") +
+               '" class="unstarred" onclick="Composer.favorite(this.parentNode.parentNode.parentNode);"></img><br>';
       }
     }
 
     if(tweet.user.screen_name == tweetManager.twitterBackend.username()) {
-      str += '<img src="img/delete.png" title="Delete" onclick="Composer.destroy(this.parentNode.parentNode.parentNode)"></img><br>';
-      str += '<div class="rt_confirm destroy">Delete this message: <a href="javascript:Composer.confirmDestroy();">Yes</a> <a href="javascript:Composer.denyDestroy();">No</a></div>';
+      str += '<img src="img/delete.png" title="' +
+             chrome.i18n.getMessage("Delete") +
+             '" onclick="Composer.destroy(this.parentNode.parentNode.parentNode)"></img><br>';
+      str += '<div class="rt_confirm destroy">' +
+             chrome.i18n.getMessage("deleteConfirm") +
+             '<a href="javascript:Composer.confirmDestroy();">' +
+             chrome.i18n.getMessage("Yes") +
+             '</a> <a href="javascript:Composer.denyDestroy();">' +
+             chrome.i18n.getMessage("No") +
+             '</a></div>';
     } else {
-      str += '<img src="img/reply.png" title="Reply" onclick="Composer.reply(this.parentNode.parentNode.parentNode)"></img><br>';
+      str += '<img src="img/reply.png" title="' +
+             chrome.i18n.getMessage("Reply") +
+             '" onclick="Composer.reply(this.parentNode.parentNode.parentNode)"></img><br>';
       if(tweetManager.isRetweet(tweet.id)) {
         //TODO: undo retweet
       } else {
         if(templateId != TimelineTemplate.DMS && !user.protected) {
-          str += '<img src="img/rt.png" title="Retweet" onclick="Composer.retweet(this.parentNode.parentNode.parentNode)"></img><br>';
-          str += '<div class="rt_confirm">Retweet this message: <a href="javascript:Composer.confirmRT();">Yes</a> <a href="javascript:Composer.denyRT();">No</a></div>';
+          str += '<img src="img/rt.png" title="' +
+          chrome.i18n.getMessage("Retweet") +
+          '" onclick="Composer.retweet(this.parentNode.parentNode.parentNode)"></img><br>';
+          str += '<div class="rt_confirm">' +
+          chrome.i18n.getMessage("retweetConfirm") +
+          '<a href="javascript:Composer.confirmRT();">' +
+          chrome.i18n.getMessage("Yes") +
+          '</a> <a href="javascript:Composer.denyRT();">' +
+          chrome.i18n.getMessage("No") +
+          '</a></div>';
         }
       }
       if(!user.protected) {
-        str += '<img src="img/share.png" title="Share (old school RT)" onclick="Composer.share(this.parentNode.parentNode.parentNode)"></img><br>';
+        str += '<img src="img/share.png" title="' +
+        chrome.i18n.getMessage("oldRT") +
+        '" onclick="Composer.share(this.parentNode.parentNode.parentNode)"></img><br>';
       }
     }
     str += '</div>';
@@ -1567,11 +1591,8 @@ function newTweetsAvailable(count, unreadCount, timelineId) {
   }
   if(count == 0)
     return;
-  var text = count + " more tweet";
-  if(count > 1)
-    text += "s";
-  text += " available. Update now.";
-  $("#update_tweets").text(text);
+  var tweets_string = count > 1 ? "tweet_plural" : "tweet_singular";
+  $("#update_tweets").text(chrome.i18n.getMessage("newTweetsAvailable", [count, chrome.i18n.getMessage(tweets_string)]));
   $("#update_tweets").fadeIn();
 }
 
