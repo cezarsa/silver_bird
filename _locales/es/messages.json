@@ -148,6 +148,9 @@
 			}
 		}
 	},
+	"preventClosing": {
+		"message": "Clic para evitar que se cierre."
+	},
 	"oAuthError": {
 		"message": "Mientras te autentificabas, ocurrió el siguiente error: $errorMessage$. Por favor, <a href=\"javascript:OAuth.requestNewToken();\">haz clic aquí para reiniciar el proceso de autenticación</a>",
 		"placeholders": {

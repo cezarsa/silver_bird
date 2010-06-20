@@ -148,6 +148,9 @@
 			}
 		}
 	},
+	"preventClosing": {
+		"message": "Click to prevent closing."
+	},
 	"oAuthError": {
 		"message": "The following error occurred trying to authenticate: $errorMessage$. Please, <a href=\"javascript:OAuth.requestNewToken();\">click here to restart the authentication process</a>",
 		"placeholders": {
