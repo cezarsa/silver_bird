@@ -112,8 +112,7 @@ var OAuth = {
         initializeWorkspace();
       } else {
         var errMsg = twitterBackend.oauthLib.error;
-        $("#error_pin").show().html('The following error occurred trying to authenticate: ' + errMsg + '. ' +
-          'Please, <a href="javascript:OAuth.requestNewToken();">click here to restart the authentication process</a>');
+        $("#error_pin").show().html(chrome.i18n.getMessage("oAuthError", errMsg));
       }
     });
   },
@@ -738,7 +737,7 @@ var Renderer = {
     var url = 'http://maps.google.com/mapdata?cc=EN&min_priority=1&w=160&h=160&latitude_e6=' + lat + '&longitude_e6=' + long + '&zm=2000&Point=b&Point.latitude_e6=' + lat + '&Point.longitude_e6=' + long + '&Point.iconid=33&Point=e';
     $(aElement).tipsy({
       title: function() {
-        return '<img src="img/loading.gif" /> Loading map...';
+        return '<img src="img/loading.gif" /> ' + chrome.i18n.getMessage("loadingMap");
       },
       image: url,
       html: true,
@@ -770,7 +769,7 @@ var Renderer = {
       }
       $(aElement).tipsy({
         title: function() {
-          return '<img src="img/loading.gif" /> Loading image...';
+          return '<img src="img/loading.gif" /> ' + chrome.i18n.getMessage("loadingImage");
         },
         image: srcUrl,
         html: true,
@@ -782,7 +781,7 @@ var Renderer = {
     }
     $(aElement).tipsy({
       title: function() {
-        return '<img src="img/loading.gif" /> Loading long url...';
+        return '<img src="img/loading.gif" /> ' + chrome.i18n.getMessage("loadingLongUrl");
       },
       html: true,
       showNow: true,
@@ -797,7 +796,7 @@ var Renderer = {
         $(aElement).tipsy({
           title: function() {
             if(!success) {
-              return "Sorry, something went wrong, please try again.";
+              return chrome.i18n.getMessage("errorExpandingUrl");
             }
             return longUrl;
           },

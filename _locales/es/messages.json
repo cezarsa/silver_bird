@@ -151,6 +151,44 @@
 	"preventClosing": {
 		"message": "Clic para evitar que se cierre."
 	},
+	"changeNotificationSettings": {
+		"message": "Puedes cambiar la configuración de las notificaciones en la página de Opciones"
+	},
+	"loadingMap": {
+		"message": "Cargando mapa..."
+	},
+	"loadingImage": {
+		"message": "Cargando imagen..."
+	},
+	"loadingLongUrl": {
+		"message": "Cargando url larga..."
+	},
+	"errorExpandingUrl": {
+		"message": "Lo siento, algo fue mal. Por favor, inténtalo de nuevo."
+	},
+	"ajaxFailed": {
+		"message": "La petición AJAX falló (¿problemas de conexión?)"
+	},
+	"successAuth": {
+		"message": "Felicidades, te has autentificado satisfactoriamente. ¡Disfruta Chromed Bird!"
+	},
+	"cbAuthorized": {
+		"message": "Chromed Bird autorizado!"
+	},
+	"cbNotAuthorized": {
+		"message": "Oops... Algo fue mal. Por favor, inténtalo de nuevo haciendo clic en el icono de Chromed Bird."
+	},
+	"authorizing": {
+		"message": "Autorizando Chromed Bird, por favor, espera..."
+	},
+	"yourPIN": {
+		"message": "Tu número PIN es: $pin$",
+		"placeholders": {
+			"pin":{
+				"content": "$1"
+			}
+		}
+	},
 	"oAuthError": {
 		"message": "Mientras te autentificabas, ocurrió el siguiente error: $errorMessage$. Por favor, <a href=\"javascript:OAuth.requestNewToken();\">haz clic aquí para reiniciar el proceso de autenticación</a>",
 		"placeholders": {
