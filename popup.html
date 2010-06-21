@@ -1694,6 +1694,14 @@ $(function() {
     return;
   }
 
+  $("input.i18n").each(function() {
+    $(this).val(chrome.i18n.getMessage(this.id));
+  });
+
+  $("span.i18n").each(function() {
+    $(this).html(chrome.i18n.getMessage(this.id));
+  });
+
   initializeWorkspace();
 
   chrome.tabs.getAllInWindow(null, function(tabs) {
@@ -1708,11 +1716,6 @@ $(function() {
     }
   });
 });
-
-function writeMessage(msg)
-{
-  document.write(chrome.i18n.getMessage(msg));
-}
 </script>
 </head>
 <body>
@@ -1736,24 +1739,22 @@ function writeMessage(msg)
       <div id="shortener_button" onclick="Shortener.shortenIt();"><div>Shorten it!</div></div>
     </div>
     <div class="footer">
-      <input type="button" value="Tweet it!" onclick="Composer.sendTweet();"/>
+      <input id="tweetit" class="i18n" type="button" onclick="Composer.sendTweet();"/>
       <span class="chars_left"></span>
     </div>
   </div>
   <div id="compose_tweet" onclick="Composer.showComposeArea()">
-    <img class="left" src="img/arrow_down.gif"/>
-    <script>writeMessage("composeTweet");</script>
-    <img class="right" src="img/arrow_down.gif"/>
+    <img class="left" src="img/arrow_down.gif"/><span id="composeTweet" class="i18n"></span><img class="right" src="img/arrow_down.gif"/>
   </div>
 
   <span class="header_link_left">
-    <a href="javascript:signout()"><script>writeMessage("logout");</script></a> |
-    <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))"><script>writeMessage("options");</script></a> |
-    <a href="javascript:Composer.refreshNew();"><script>writeMessage("refresh");</script></a> |
-    <a id="suspend_toggle" href="javascript:suspend()"><script>writeMessage("suspend");</script></a>
-    <span id="suspended_notice"><script>writeMessage("autoUpdatesSuspended");</script></span>
+    <a href="javascript:signout()"><span id="logout" class="i18n"></span></a> |
+    <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))"><span id="options" class="i18n"></span></a> |
+    <a href="javascript:Composer.refreshNew();"><span id="refresh" class="i18n"></span></a> |
+    <a id="suspend_toggle" href="javascript:suspend()"><span id="suspend" class="i18n"></span></a>
+    <span id="suspended_notice"><span id="autoUpdatesSuspended" class="i18n"></span></span>
   </span>
-  <a class="header_link_right" href="javascript:Renderer.markAllAsRead();"><script>writeMessage("allRead");</script></a>
+  <a class="header_link_right" href="javascript:Renderer.markAllAsRead();"><span id="markAllRead" class="i18n"></span></a>
   <img src="img/loading.gif" id="loading" style="display: none;"/>
   <img src="img/loading.gif" id="queue_loading" style="display: none;"/>
   <div style="clear: both;"></div>
@@ -1772,7 +1773,7 @@ function writeMessage(msg)
   <input type="text" name="pin"><br>
   <input type="button" onclick="OAuth.registerPin();" value="Authorize!">
   <br><br>
-  <a href="javascript:OAuth.requestNewToken();"><script>writeMessage("newToken");</script></a>
+  <a href="javascript:OAuth.requestNewToken();"><span id="newToken" class="i18n"></span></a>
 </div>
 <div id="error_pin" style="display: none;">
 </div>

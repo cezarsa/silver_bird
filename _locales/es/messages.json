@@ -10,6 +10,9 @@
 		"message": "Publicar un tweet",
 		"description": "Text for composing new tweet"
 	},
+	"tweetit": {
+		"message": "¡Publicar!"
+	},
 	"logout": {
 		"message": "Cerrar sesión",
 		"description": "The text for the logout link"
@@ -110,7 +113,7 @@
 	"oldRT": {
 		"message": "Compartir (antiguo RT)"
 	},
-	"allRead": {
+	"markAllRead": {
 		"message": "Marcar todo como leído"
 	},
 	"newToken": {
