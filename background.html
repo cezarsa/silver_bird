@@ -365,9 +365,8 @@ TweetManager.prototype = {
       chrome.browserAction.setIcon({imageData: IconCreator.paintIcon(this.iconImg, OptionsBackend.get('idle_color'))});
       chrome.browserAction.setBadgeText({text: ''});
     } else {
-      var title = totalUnreadNewCount + " new tweet";
-      if(totalUnreadNewCount > 1)
-        title += "s";
+      var tweet_string = totalUnreadNewCount > 1 ? 'newtweets_plural' : 'newtweets_singular';
+      var title = chrome.i18n.getMessage("newTweets", [totalUnreadNewCount, chrome.i18n.getMessage(tweet_string)]);
       chrome.browserAction.setTitle({title: title});
       chrome.browserAction.setIcon({imageData: IconCreator.paintIcon(this.iconImg, colors)});
       chrome.browserAction.setBadgeBackgroundColor({color: [255, 0, 0, 0]});
@@ -767,9 +766,7 @@ TweetManager.prototype = {
     nextResetDate.setTime(parseInt(nextHitsReset) * 1000);
     if(remainingHits == 0) {
       this.autoClearWarning = true;
-      this.setWarning("You've exceeded API hits limit. " +
-                       "Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"" + chrome.extension.getURL('options.html') + "\"})'>options page</a>. " +
-                       "Chromed Bird won't update until " + nextResetDate.toLocaleDateString() + " " + nextResetDate.toLocaleTimeString() + ".");
+      this.setWarning(chrome.i18n.getMessage("exceededAPIHits", [chrome.extension.getURL('options.html'), nextResetDate.toLocaleDateString(), nextResetDate.toLocaleTimeString()]));
       return;
     }
     if(this.autoClearWarning) {
@@ -798,10 +795,7 @@ TweetManager.prototype = {
           if(timeDiff > 3 * 60 * 1000) {
             // We've been keeping this tendency for 5 minutes, so we'll probably
             // exceed the limit if we keep this same rate, let's warn users.
-            this.setWarning("Hey! Your remaining API hits are ending too fast.<br>" +
-                            "Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"" + chrome.extension.getURL('options.html') + "\"})'>options page</a>. " +
-                            "Take special care if you're running multiple Twitter clients, as they all share the same limit.<br>" +
-                            "Available hits left: " + remainingHits + " - Next hits reset: " + nextResetDate.toLocaleDateString() + " " + nextResetDate.toLocaleTimeString());
+            this.setWarning(chrome.i18n.getMessage("warmingAPIHits", [chrome.extension.getURL('options.html'), remainingHits, nextResetDate.toLocaleDateString(), nextResetDate.toLocaleTimeString()]));
             this.firstPossibleWarnTime = null;
           }
         } else {

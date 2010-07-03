@@ -192,6 +192,142 @@
 			}
 		}
 	},
+	"tryAgain": {
+		"message": "Vuelve a intentarlo"
+	},
+	"canceling": {
+		"message": "Cancelando..."
+	},
+	"cancelTweet": {
+		"message": "Cancelar Tweet"
+	},
+	"queued_messages": {
+		"message": "Mensajes encolados:"
+	},
+	"queue_trying": {
+		"message": "intentando enviarlo en $timediff$",
+		"placeholders": {
+			"timediff": {
+				"content": "$1"
+			}
+		}
+	},
+	"queue_retried": {
+		"message": "reintentado $retries$ veces desde $timediff$ $laststatus$",
+		"placeholders": {
+			"retries": {
+				"content": "$1"
+			},
+			"timediff": {
+				"content": "$2"
+			},
+			"laststatus": {
+				"content": "$3"
+			}
+		}
+	},
+	"ue_fetchingLists": {
+		"message": "Error inesperado $status$ actualizando listas.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_updatingTweets": {
+		"message": "Error inesperado $baseError$ actualizando tweets.",
+		"placeholders": {
+			"baseError": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_updatingTweets2": {
+		"message": " Si este error (timeout) se repite muy a menudo, por favor, intenta cerrando la sesión y volviendo a conectar."
+	},
+	"ue_deletingTweet": {
+		"message": "Error inesperado $status$ borrando tweet.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_retweeting": {
+		"message": "Error inesperado $status$ retweeteando.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_markFavorite": {
+		"message": "Error inesperado $status$ marcando como favorito.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_unmarkFavorite": {
+		"message": "Error inesperado $status$ desmarcando como favorito.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"newTweets": {
+		"message": "$count$ $newtweets$",
+		"placeholders": {
+			"count": {
+				"content": "$1"
+			},
+			"newtweets": {
+				"content": "$2"
+			}
+		}
+	},
+	"newtweets_singular": {
+		"message": "nuevo tweet"
+	},
+	"newtweets_plural": {
+		"message": "nuevos tweets"
+	},
+	"btnAuthorize": {
+		"message": "¡Autorizar!"
+	},
+	"exceededAPIHits": {
+		"message": "Has superado el límite de peticiones al API. Por favor, revisa los intervalos de actualización en la <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>página de opciones</a>. Chromed Bird no actualizará hasta $nextResetDate $nextResetTime$.",
+		"placeholders": {
+			"options_url": {
+				"content": "$1"
+			},
+			"nextResetDate": {
+				"content": "$2"
+			},
+			"nextResetTime": {
+				"content": "$3"
+			}
+		}
+	},
+	"warningAPIHits": {
+		"message": "Hey! Te estás quedando sin llamadas disponibles al API demasiado rápido.<br>Por favor, revisa los intervalos de actualización en la <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>página de opciones</a>. Presta especial atención si estás usando más de un cliente de Twitter, ya que todos ellos comparten el mismo límite.<br>Llamadas disponibles: $remainingHits$ - Próximo reseteo de llamadas: $nextResetDate$ $nextResetTime$",
+		"placeholders": {
+			"options_url": {
+				"content": "$1"
+			},
+			"remainingHits": {
+				"content": "$2"
+			},
+			"nextResetDate": {
+				"content": "$3"
+			},
+			"nextResetTime": {
+				"content": "$4"
+			}
+		}
+	},
 	"oAuthError": {
 		"message": "Mientras te autentificabas, ocurrió el siguiente error: $errorMessage$. Por favor, <a href=\"javascript:OAuth.requestNewToken();\">haz clic aquí para reiniciar el proceso de autenticación</a>",
 		"placeholders": {

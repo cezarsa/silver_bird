@@ -36,6 +36,14 @@ function paintIcon(canvas, color) {
 
 var hourlyLimit = 150;
 $(function() {
+  $("input.i18n").each(function() {
+    $(this).val(chrome.i18n.getMessage(this.id));
+  });
+
+  $("span.i18n").each(function() {
+    $(this).html(chrome.i18n.getMessage(this.id));
+  });
+
   var resetDateObj = new Date();
   if(twitterBackend) {
     var hitsInfo = twitterBackend.remainingHitsInfo();

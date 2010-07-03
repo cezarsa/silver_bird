@@ -192,10 +192,146 @@
 			}
 		}
 	},
+	"tryAgain": {
+		"message": "Try again"
+	},
+	"canceling": {
+		"message": "Canceling..."
+	},
+	"cancelTweet": {
+		"message": "Cancel Tweet"
+	},
+	"queued_messages": {
+		"message": "Queued Messages:"
+	},
+	"queue_trying": {
+		"message": "trying to send for $timediff$",
+		"placeholders": {
+			"timediff": {
+				"content": "$1"
+			}
+		}
+	},
+	"queue_retried": {
+		"message": "retried $retries$ times since $timediff$ ago [$laststatus$]",
+		"placeholders": {
+			"retries": {
+				"content": "$1"
+			},
+			"timediff": {
+				"content": "$2"
+			},
+			"laststatus": {
+				"content": "$3"
+			}
+		}
+	},
+	"ue_fetchingLists": {
+		"message": "Unexpected error $status$ fetching lists.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_updatingTweets": {
+		"message": "Unexpected error $baseError$ updating tweets.",
+		"placeholders": {
+			"baseError": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_updatingTweets2": {
+		"message": " If this timeout error is being shown repeatedly, please try logging out and logging in again."
+	},
+	"ue_deletingTweet": {
+		"message": "Unexpected error $status$ deleting tweet.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_retweeting": {
+		"message": "Unexpected error $status$ retweeting.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_markFavorite": {
+		"message": "Unexpected error $status$ marking as favorite.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_unmarkFavorite": {
+		"message": "Unexpected error $status$ unmarking as favorite.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"newTweets": {
+		"message": "$count$ $newtweets$",
+		"placeholders": {
+			"count": {
+				"content": "$1"
+			},
+			"newtweets": {
+				"content": "$2"
+			}
+		}
+	},
+	"newtweets_singular": {
+		"message": "new tweet"
+	},
+	"newtweets_plural": {
+		"message": "new tweets"
+	},
+	"btnAuthorize": {
+		"message": "Authorize!"
+	},
+	"exceededAPIHits": {
+		"message": "You've exceeded API hits limit. Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>options page</a>. Chromed Bird won't update until $nextResetDate $nextResetTime$.",
+		"placeholders": {
+			"options_url": {
+				"content": "$1"
+			},
+			"nextResetDate": {
+				"content": "$2"
+			},
+			"nextResetTime": {
+				"content": "$3"
+			}
+		}
+	},
+	"warningAPIHits": {
+		"message": "Hey! Your remaining API hits are ending too fast.<br>Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>options page</a>. Take special care if you're running multiple Twitter clients, as they all share the same limit.<br>Available hits left: $remainingHits$ - Next hits reset: $nextResetDate$ $nextResetTime$",
+		"placeholders": {
+			"options_url": {
+				"content": "$1"
+			},
+			"remainingHits": {
+				"content": "$2"
+			},
+			"nextResetDate": {
+				"content": "$3"
+			},
+			"nextResetTime": {
+				"content": "$4"
+			}
+		}
+	},
 	"oAuthError": {
 		"message": "The following error occurred trying to authenticate: $errorMessage$. Please, <a href=\"javascript:OAuth.requestNewToken();\">click here to restart the authentication process</a>",
 		"placeholders": {
-			"errorMessage":{
+			"errorMessage": {
 				"content": "$1"
 			}
 		}

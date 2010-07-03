@@ -287,7 +287,7 @@ var Composer = {
           Paginator.nextPage();
         }
       } else {
-        Renderer.showError('Unexpected error ' + status + ' deleting tweet.', 'Composer.confirmDestroy');
+        Renderer.showError(chrome.i18n.getMessage("ue_deletingTweet", status), 'Composer.confirmDestroy');
       }
     }, this.destroyTimelineId, this.destroyId);
   },
@@ -312,7 +312,7 @@ var Composer = {
       if(success) {
         loadTimeline(true, "home");
       } else {
-        Renderer.showError('Unexpected error ' + status + ' retweeting.', 'Composer.confirmRT');
+        Renderer.showError(chrome.i18n.getMessage("ue_retweeting", status), 'Composer.confirmRT');
       }
     }, _this.rtId);
   },
@@ -338,7 +338,7 @@ var Composer = {
          Paginator.needsMore = false;
          loadTimeline();
       } else {
-        Renderer.showError('Unexpected error ' + status + ' marking as favorite.', 'Composer.favorite');
+        Renderer.showError(chrome.i18n.getMessage("ue_markFavorite", status), 'Composer.favorite');
       }
     }, this.favoriteId);
   },
@@ -354,7 +354,7 @@ var Composer = {
          Paginator.needsMore = false;
          loadTimeline();
       } else {
-        Renderer.showError('Unexpected error ' + status + ' unmarking as favorite.', 'Composer.unFavorite');
+        Renderer.showError(chrome.i18n.getMessage("ue_unmarkFavorite", status), 'Composer.unFavorite');
       }
     }, this.favoriteId);
   },
@@ -509,7 +509,9 @@ var WorkList = {
 
     $("#queue_loading").tipsy({
       title: function() {
-        var html = '<div class="worklist_container"><span class="title">Queued Messages:</span>';
+        var html = '<div class="worklist_container"><span class="title">' +
+                   chrome.i18n.getMessage("queued_messages") +
+                   '</span>';
         html += '<ul class="worklist">';
         var queueItems = tweetManager.sendQueue.queue;
         for(var i = 0, len = queueItems.length; i < len; ++i) {
@@ -531,14 +533,21 @@ var WorkList = {
               timeDiffDesc = parseInt(timeDiff / 60) + 'm';
             }
             if(queueItem.retryCount == 1) {
-              html += '<span class="title"> trying to send for ' + timeDiffDesc + '</span>';
+              html += '<span class="title"> ' +
+                      chrome.i18n.getMessage("queue_trying", timeDiffDesc) +
+                      '</span>';
             } else {
-              html += '<span class="title"> retried ' + queueItem.retryCount + ' times since ' + timeDiffDesc + ' ago [' + queueItem.lastStatus + ']</span>';
+              html += '<span class="title"> ' +
+                      chrome.i18n.getMessage("queue_retried", [queueItem.retryCount, timeDiffDesc, queueItem.lastStatus]) +
+                      '</span>';
             }
             if(queueItem.shouldCancel) {
-              html += ' <span class="title" style="color: #d00;">Canceling...</span>';
+              html += ' <span class="title" style="color: #d00;">' +
+                      chrome.i18n.getMessage("canceling") +
+                      '</span>';
             } else {
-              html += '<img src="img/cancel.png" onclick="WorkList.cancelMessage();" title="Cancel Tweet">';
+              html += '<img src="img/cancel.png" onclick="WorkList.cancelMessage();" title="' +
+                      chrome.i18n.getMessage("cancelTweet") + '">';
             }
           }
           html += '</li>';
@@ -1124,7 +1133,7 @@ var Renderer = {
       if(!params) {
         params = '';
       }
-      msg += ' <a href="#" onclick="' + tryAgainFunction + '(' + params + '); Renderer.hideMessage();">Try again</a>';
+      msg += ' <a href="#" onclick="' + tryAgainFunction + '(' + params + '); Renderer.hideMessage();">' + chrome.i18n.getMessage("tryAgain") + '</a>';
     }
     Renderer.showMessage(msg);
   },
@@ -1152,7 +1161,7 @@ var Lists = {
     tweetManager.lists(force, function(success, lists, status) {
       if(!success) {
         if(force) {
-          Renderer.showError('Unexpected error ' + status + ' fetching lists.', 'Lists.init', 'true');
+          Renderer.showError(chrome.i18n.getMessage("ue_fetchingLists", status), 'Lists.init', 'true');
           return;
         }
       }
@@ -1491,9 +1500,9 @@ function onTimelineRetrieved(tweets, timelineId) {
     Renderer.assemblyTweets(tweets, timelineId);
   } else {
     var baseErrorMsg = tweetManager.currentError();
-    var errorMsg = 'Unexpected error ' + baseErrorMsg + ' updating tweets.';
+    var errorMsg = chrome.i18n.getMessage("ue_updatingTweets", baseErrorMsg);
     if(baseErrorMsg == '(timeout)') {
-      errorMsg += ' If this timeout error is being shown repeatedly, please try logging out and logging in again.';
+      errorMsg += chrome.i18n.getMessage("ue_updatingTweets2");
     }
     Renderer.showError(errorMsg, 'loadTimeline');
   }
@@ -1771,7 +1780,7 @@ $(function() {
   <img src="img/loading.gif" id="loading_oauth" style="display: none;"/>
   <label for="pin">Twitter's OAuth Pin:</label>
   <input type="text" name="pin"><br>
-  <input type="button" onclick="OAuth.registerPin();" value="Authorize!">
+  <input type="button" onclick="OAuth.registerPin();" class="i18n" id="btnAuthorize" value="Authorize!">
   <br><br>
   <a href="javascript:OAuth.requestNewToken();"><span id="newToken" class="i18n"></span></a>
 </div>
