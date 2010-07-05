@@ -438,7 +438,7 @@
 		"message": "Tema de IU:"
 	},
 	"l_font_size": {
-		"message": "Tamaño de fuente:"
+		"message": "Tamaño de Fuente:"
 	},
 	"o_small": {
 		"message": "Pequeña"
@@ -510,7 +510,7 @@
 		"message": "Listas:"
 	},
 	"notif_search": {
-		"message": "Búsquda:"
+		"message": "Búsqueda:"
 	},
 	"l_tweets_notification_style": {
 		"message": "Estilo de notificación:"
@@ -546,7 +546,7 @@
 		"message": "Líneas de tiempo"
 	},
 	"notice_api_hits": {
-		"message": "¡Deberías mantener las peticiones al API <span style=\"color: red;\">por debajo de <span class=\"__hourly_limit\"></span></span>! Si no, Chromed Bird dejará de funcionar adecuadamente y las líneas de tiempo no se actualizarán más.<br><span style=\"color: red;\">Recuerda</span> qee si estás usando más de un cliente de Twitter entonces necesitarás mantener el número de peticiones al API todavía más bajo."
+		"message": "¡Deberías mantener las peticiones al API <span style=\"color: red;\">por debajo de <span class=\"__hourly_limit\"></span></span>! Si no, Chromed Bird dejará de funcionar adecuadamente y las líneas de tiempo no se actualizarán más.<br><span style=\"color: red;\">Recuerda</span> que si estás usando más de un cliente de Twitter entonces necesitarás mantener el número de peticiones al API todavía más bajo."
 	},
 	"l_hits_notice": {
 		"message": "Llamadas al API por hora: "
