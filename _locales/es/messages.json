@@ -53,22 +53,22 @@
 	"updateLists": {
 		"message": "Actualizar Listas..."
 	},
-	"tlUnified": {
+	"w_Unified": {
 		"message": "Unificada"
 	},
-	"tlHome": {
+	"w_Home": {
 		"message": "Inicio"
 	},
-	"tlDM": {
+	"w_DM": {
 		"message": "MD"
 	},
-	"tlFavorites": {
+	"w_Favorites": {
 		"message": "Favoritos"
 	},
-	"tlLists": {
+	"w_Lists": {
 		"message": "Listas"
 	},
-	"tlSearch": {
+	"w_Search": {
 		"message": "Búsqueda"
 	},
 	"fromApp": {
@@ -391,5 +391,230 @@
 	},
 	"yearsAgo": {
 		"message": "hace años"
+	},
+	"options_title": {
+		"message": "Opciones de Chromed Bird"
+	},
+	"conf_saved": {
+		"message": "¡Tu configuración se ha guardado satisfactoriamente!"
+	},
+	"changes_restart": {
+		"message": "Sin embargo, algunos de tus cambios requieren que la extensión se reinicie. ¿Te gustaría hacerlo ahora?<br>(Esto reiniciará tu contador de tweets leídos.)"
+	},
+	"remaining_api_hits": {
+		"message": "Llamadas al API de Twitter disponibles: "
+	},
+	"rate_limit_reset": {
+		"message": "Reinicio del límite: "
+	},
+	"nerds_link": {
+		"message": "Estadísticas de llamadas al API (para gafapastas)"
+	},
+	"g_ui": {
+		"message": "Interfaz de Usuario"
+	},
+	"l_name_attribute": {
+		"message": "Nombre en los tweets:"
+	},
+	"o_screen_name": {
+		"message": "Nombre en pantalla (nickname)"
+	},
+	"o_name": {
+		"message": "Nombre real"
+	},
+	"o_both": {
+		"message": "Los dos nombres"
+	},
+	"l_compose_position": {
+		"message": "Posición del área de escritura:"
+	},
+	"o_top": {
+		"message": "Arriba"
+	},
+	"o_bottom": {
+		"message": "Abajo"
+	},
+	"l_theme": {
+		"message": "Tema de IU:"
+	},
+	"l_font_size": {
+		"message": "Tamaño de fuente:"
+	},
+	"o_small": {
+		"message": "Pequeña"
+	},
+	"o_normal": {
+		"message": "Normal"
+	},
+	"o_large": {
+		"message": "Grande"
+	},
+	"o_extra_large": {
+		"message": "Extra Grande"
+	},
+	"l_font_family": {
+		"message": "Familia de Fuente:"
+	},
+	"l_hover_timeout": {
+		"message": "Marcar como leído en (ms):"
+	},
+	"l_show_expanded_urls": {
+		"message": "Expandir URLs acortadas:"
+	},
+	"l_reply_all": {
+		"message": "Resp. a todos los mencion.:"
+	},
+	"l_show_hits_in_popup": {
+		"message": "Mostrar cont. de llam. al API:"
+	},
+	"l_show_user_autocomplete": {
+		"message": "Autocomp. nom. de usuario:"
+	},
+	"l_icon_color": {
+		"message": "Color de Icono:"
+	},
+	"l_tweets_color_only_unified": {
+		"message": "Colores sólo en unificado:"
+	},
+	"l_tweet_color": {
+		"message": "Color de Tweet:"
+	},
+	"w_Mentions": {
+		"message": "Menciones"
+	},
+	"btn_reset_popup_size": {
+		"message": "Reiniciar tamaño del Popup"
+	},
+	"g_notifications": {
+		"message": "Notificaciones"
+	},
+	"l_tweet_notification": {
+		"message": "Notificaciones de Tweets"
+	},
+	"l_change_icon": {
+		"message": "Cambiar icono"
+	},
+	"l_icon_color": {
+		"message": "Color de Icono"
+	},
+	"notif_home": {
+		"message": "Inicio:"
+	},
+	"notif_mentions": {
+		"message": "Menciones:"
+	},
+	"notif_dms": {
+		"message": "MDs:"
+	},
+	"notif_lists": {
+		"message": "Listas:"
+	},
+	"notif_search": {
+		"message": "Búsquda:"
+	},
+	"l_tweets_notification_style": {
+		"message": "Estilo de notificación:"
+	},
+	"l_noti_on_page": {
+		"message": "Notificar en la página"
+	},
+	"l_noti_desktop": {
+		"message": "Notificaciones de Escritorio"
+	},
+	"l_notification_fade_timeout": {
+		"message": "Timeout de Notificaciones (s):"
+	},
+	"g_shortener": {
+		"message": "Acortador"
+	},
+	"l_url_shortener": {
+		"message": "Acortador de URLs:"
+	},
+	"l_shortener_acct": {
+		"message": "¿Usar cuenta personal?"
+	},
+	"l_shortener_login": {
+		"message": "Login para API:"
+	},
+	"l_shortener_key": {
+		"message": "Key para el API:"
+	},
+	"l_share_include_title": {
+		"message": "Incluir título de página (compartir):"
+	},
+	"g_timelines": {
+		"message": "Líneas de tiempo"
+	},
+	"notice_api_hits": {
+		"message": "¡Deberías mantener las peticiones al API <span style=\"color: red;\">por debajo de <span class=\"__hourly_limit\"></span></span>! Si no, Chromed Bird dejará de funcionar adecuadamente y las líneas de tiempo no se actualizarán más.<br><span style=\"color: red;\">Recuerda</span> qee si estás usando más de un cliente de Twitter entonces necesitarás mantener el número de peticiones al API todavía más bajo."
+	},
+	"l_hits_notice": {
+		"message": "Llamadas al API por hora: "
+	},
+	"l_visible": {
+		"message": "Visible"
+	},
+	"l_refresh_interval": {
+		"message": "Intervalo de refresco (s)"
+	},
+	"l_include_in_unified": {
+		"message": "Incluir en la línea de tiempo Unificada"
+	},
+	"l_tabs_count": {
+		"message": "Contador de pestañas"
+	},
+	"l_unified_timeline": {
+		"message": "Línea de tiempo Unificada:"
+	},
+	"tml_favorites": {
+		"message": "Favoritos:"
+	},
+	"l_blocked_users": {
+		"message": "Usuarios bloqueados:"
+	},
+	"notice_right_click_change": {
+		"message": "* Hey, ahora puedes usar el menú contextual que aparece con clic-derecho para cambiar la mayoría de estos ajustes directamente desde la ventana emergente. ¡Sal de aquí anda! :)"
+	},
+	"l_tweets_per_page": {
+		"message": "Tweets por página:"
+	},
+	"l_max_cached_tweets": {
+		"message": "Máx. número de tweets mostrados:"
+	},
+	"g_microblogging_service": {
+		"message": "Servicio de Microblogging"
+	},
+	"g_advanced": {
+		"message": "Avanzado"
+	},
+	"l_request_timeout": {
+		"message": "Timeout para las peticiones (ms):"
+	},
+	"l_base_url": {
+		"message": "URL del API de Twitter:"
+	},
+	"l_base_oauth_url": {
+		"message": "URL de OAuth:"
+	},
+	"l_same_signing_urls": {
+		"message": "Same signing URLs:"
+	},
+	"l_base_signing_url": {
+		"message": "API Signing URL:"
+	},
+	"l_base_oauth_signing_url": {
+		"message": "OAuth Signing URL:"
+	},
+	"l_base_search_url": {
+		"message": "URL del API de búsquedas:"
+	},
+	"btn_save": {
+		"message": "Guardar"
+	},
+	"btn_reset": {
+		"message": "Reiniciar"
+	},
+	"btn_default": {
+		"message": "Reiniciar a por defecto"
 	}
 }

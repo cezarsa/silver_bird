@@ -40,7 +40,7 @@ $(function() {
     $(this).val(chrome.i18n.getMessage(this.id));
   });
 
-  $("span.i18n").each(function() {
+  $(".i18n").not("input").each(function() {
     $(this).html(chrome.i18n.getMessage(this.id));
   });
 
@@ -259,81 +259,83 @@ function updatePredictedHitsCount() {
 </head>
 <body>
 
-<h1>Chromed Bird Options</h1>
+<h1 class="i18n" id="options_title">Chromed Bird Options</h1>
 
 <div id="saved_notice">
-  Your configuration has been successfully saved!
+  <span class="i18n" id="conf_saved">Your configuration has been successfully saved!</span>
   <div id="restart_notice">
+    <span class="i18n" id="changes_restart">
     However, some of your changes require the extension to be restarted. Would you like to do it now?<br>
     (This will reset your unread tweets count.)
+    </span>
     <br>
-    <input type="button" onclick="options.confirmRestart();" value="Yes">
-    <input type="button" onclick="options.denyRestart();" value="No">
+    <input type="button" onclick="options.confirmRestart();" class="i18n" id="Yes" value="Yes">
+    <input type="button" onclick="options.denyRestart();" class="i18n" id="No" value="No">
   </div>
 </div>
 <div id="main_area">
   <p>
-    Remaining Twitter API Hits: <span class="twitter_hits_left"></span><br>
-    Rate Limit Reset: <span class="twitter_hits_reset"></span>
-    <a id="nerds_link" href="#">API Hits stats (for nerds)</a>
+    <span class="i18n" id="remaining_api_hits">Remaining Twitter API Hits: </span><span class="twitter_hits_left"></span><br>
+    <span class="i18n" id="rate_limit_reset">Rate Limit Reset: </span><span class="twitter_hits_reset"></span>
+    <a id="nerds_link" href="#" class="i18n">API Hits stats (for nerds)</a>
     <canvas id="nerds" width="650" height="500" style="display: none;"></canvas>
   </p>
   <fieldset>
-    <legend>UI</legend>
-    <label for="name_attribute">Name in tweets:</label>
+    <legend id="g_ui" class="i18n">UI</legend>
+    <label for="name_attribute" id="l_name_attribute" class="i18n">Name in tweets:</label>
     <select name="name_attribute">
-      <option value="screen_name">Screen name (nickname)</option>
-      <option value="name">Real name</option>
-      <option value="both">Both names</option>
+      <option value="screen_name" id="o_screen_name" class="i18n">Screen name (nickname)</option>
+      <option value="name" id="o_name" class="i18n">Real name</option>
+      <option value="both" id="o_both" class="i18n">Both names</option>
     </select><br>
-    <label for="compose_position">Compose area position:</label>
+    <label for="compose_position" id="l_compose_position" class="i18n">Compose area position:</label>
     <select name="compose_position">
-      <option value="top">Top</option>
-      <option value="bottom">Bottom</option>
+      <option value="top" id="o_top" class="i18n">Top</option>
+      <option value="bottom" id="o_bottom" class="i18n">Bottom</option>
     </select><br>
 
-    <label for="theme">UI Theme:</label>
+    <label for="theme" id="l_theme" class="i18n">UI Theme:</label>
     <select name="theme">
       <option value="css/chromified.css,css/chromified-theme/jquery-ui-1.7.2.custom.css">Chromified</option>
       <option value="css/whisper.css,css/whisper-theme/jquery-ui-1.7.2.custom.css">Whispers</option>
       <option value="css/darkness-theme/jquery-ui-1.7.2.custom.css,css/darkness.css">Darkness</option>
     </select><br>
-    <label for="font_size">Font Size:</label>
+    <label for="font_size" id="l_font_size" class="i18n">Font Size:</label>
     <select name="font_size">
-      <option value="0.8em">Small</option>
-      <option value="1.0em">Normal</option>
-      <option value="1.2em">Large</option>
-      <option value="1.4em">Extra Large</option>
+      <option value="0.8em" id="o_small" class="i18n">Small</option>
+      <option value="1.0em" id="o_normal" class="i18n">Normal</option>
+      <option value="1.2em" id="o_large" class="i18n">Large</option>
+      <option value="1.4em" id="o_extra_large" class="i18n">Extra Large</option>
     </select><br>
-    <label for="font_family">Font Family:</label>
+    <label for="font_family" id="l_font_family" class="i18n">Font Family:</label>
     <input type="text" style="width: 20em"; name="font_family" validator="required"><br>
-    <label for="hover_timeout">Hover to read time (ms):</label>
+    <label for="hover_timeout" class="i18n" id="l_hover_timeout">Hover to read time (ms):</label>
     <input type="text" name="hover_timeout" validator="required,number,positive"><br>
-    <label for="show_expanded_urls">Expand shortened URLs:</label>
+    <label for="show_expanded_urls" class="i18n" id="l_show_expanded_urls">Expand shortened URLs:</label>
     <input type="checkbox" id="show_expanded_urls" name="show_expanded_urls" /><br>
-    <label for="reply_all">Reply to all mentioned:</label>
+    <label for="reply_all" class="i18n" id="l_reply_all">Reply to all mentioned:</label>
     <input type="checkbox" id="reply_all" name="reply_all" /><br/>
-    <label for="show_hits_in_popup">Show API hits count:</label>
+    <label for="show_hits_in_popup" class="i18n" id="l_show_hits_in_popup">Show API hits count:</label>
     <input type="checkbox" id="show_hits_in_popup" name="show_hits_in_popup" /><br/>
-    <label for="show_user_autocomplete">Autocomplete usernames:</label>
+    <label for="show_user_autocomplete" class="i18n" id="l_show_user_autocomplete">Autocomplete usernames:</label>
     <input type="checkbox" style="margin-bottom: 7px;" id="show_user_autocomplete" name="show_user_autocomplete" /><br/>
 
-    <label>Icon color:</label>
+    <label id="l_icon_color" class="i18n">Icon color:</label>
     <canvas name="idle_color" width="19" height="19" class="color_selector" must_restart></canvas><br/>
 
-    <label for="tweets_color_only_unified">Colors only in unified:</label>
+    <label for="tweets_color_only_unified" id="l_tweets_color_only_unified" class="i18n">Colors only in unified:</label>
     <input type="checkbox" name="tweets_color_only_unified" /><br/>
     <table class="tweet_color">
       <tr>
         <th></th>
-        <th>Home</th>
-        <th>Mentions</th>
-        <th>DMs</th>
-        <th>Lists</th>
-        <th>Favorites</th>
-        <th>Search</th>
+        <th class="i18n" id="w_Home">Home</th>
+        <th class="i18n" id="w_Mentions">Mentions</th>
+        <th class="i18n" id="w_DM">DMs</th>
+        <th class="i18n" id="w_Lists">Lists</th>
+        <th class="i18n" id="w_Favorites">Favorites</th>
+        <th class="i18n" id="w_Search">Search</th>
       <tr>
-        <td class="label">Tweet color:</td>
+        <td class="label i18n" id="l_tweet_color">Tweet color:</td>
         <td>
           <div class="color_selector checkerboard"></div>
           <div name="home_tweets_color" class="color_selector"></div>
@@ -360,190 +362,190 @@ function updatePredictedHitsCount() {
         </td>
       </tr>
     </table><br>
-    <input type="button" value="Reset Popup Size" onclick="Persistence.popupSize().remove();">
+    <input type="button" value="Reset Popup Size" class="i18n" id="btn_reset_popup_size" onclick="Persistence.popupSize().remove();">
   </fieldset>
 
   <fieldset>
-    <legend>Notifications</legend>
+    <legend class="i18n" id="g_notifications">Notifications</legend>
     <table class="notifications">
       <tr>
         <th></th>
-        <th>Tweet Notification</th>
-        <th>Change Icon</th>
-        <th>Icon Color</th>
+        <th class="i18n" id="l_tweet_notificacion">Tweet Notification</th>
+        <th class="i18n" id="l_change_icon">Change Icon</th>
+        <th class="i18n" id="l_icon_color">Icon Color</th>
       <tr>
-        <td class="label">Home:</td>
+        <td class="label i18n" id="notif_home">Home:</td>
         <td><input type="checkbox" name="home_on_page"></td>
         <td><input type="checkbox" name="home_icon"></td>
         <td><canvas name="home_color" width="19" height="19" class="color_selector"></canvas></td>
       </tr>
       <tr>
-        <td class="label">Mentions:</td>
+        <td class="label i18n" id="notif_mentions">Mentions:</td>
         <td><input type="checkbox" name="mentions_on_page"></td>
         <td><input type="checkbox" name="mentions_icon"></td>
         <td><canvas name="mentions_color" width="19" height="19" class="color_selector"></canvas></td>
       </tr>
       <tr>
-        <td class="label">DMs:</td>
+        <td class="label i18n" id="notif_dms">DMs:</td>
         <td><input type="checkbox" name="dms_on_page"></td>
         <td><input type="checkbox" name="dms_icon"></td>
         <td><canvas name="dms_color" width="19" height="19" class="color_selector"></canvas></td>
       </tr>
       <tr>
-        <td class="label">Lists:</td>
+        <td class="label i18n" id="notif_lists">Lists:</td>
         <td><input type="checkbox" name="lists_on_page"></td>
         <td><input type="checkbox" name="lists_icon"></td>
         <td><canvas name="lists_color" width="19" height="19" class="color_selector"></canvas></td>
       </tr>
       <tr>
-        <td class="label">Search:</td>
+        <td class="label i18n" id="notif_search">Search:</td>
         <td><input type="checkbox" name="search_on_page"></td>
         <td><input type="checkbox" name="search_icon"></td>
         <td><canvas name="search_color" width="19" height="19" class="color_selector"></canvas></td>
       </tr>
     </table><br>
-    <label for="tweets_notification_style">Notification Style:</label>
-    <input type="radio" name="tweets_notification_style" value="on_page" id="noti_on_page"> <label for="noti_on_page" class="radio_opt">Notify on Page</label>
-    <input type="radio" name="tweets_notification_style" value="desktop" id="noti_desktop"> <label for="noti_desktop" class="radio_opt">Desktop Notifications</label><br>
-    <label for="notification_fade_timeout">Notification Timeout (s):</label>
+    <label for="tweets_notification_style" class="i18n" id="l_tweets_notification_style">Notification Style:</label>
+    <input type="radio" name="tweets_notification_style" value="on_page" id="noti_on_page"> <label for="noti_on_page" class="radio_opt i18n" id="l_noti_on_page">Notify on Page</label>
+    <input type="radio" name="tweets_notification_style" value="desktop" id="noti_desktop"> <label for="noti_desktop" class="radio_opt i18n" id="l_noti_desktop">Desktop Notifications</label><br>
+    <label for="notification_fade_timeout" class="i18n" id="l_notification_fade_timeout">Notification Timeout (s):</label>
     <input type="text" name="notification_fade_timeout" validator="required,number,positive" converter="RefreshInterval"><br>
   </fieldset>
 
   <fieldset>
-    <legend>Shortener</legend>
-    <label for="url_shortener">URL Shortener:</label>
+    <legend class="i18n" id="g_shortener">Shortener</legend>
+    <label for="url_shortener" class="i18n" id="l_url_shortener">URL Shortener:</label>
     <select name="url_shortener"></select><br>
     <p id="shortener_opts">
-      <label for="shortener_acct">Use Personal Account?</label>
+      <label for="shortener_acct" class="i18n" id="l_shortener_acct">Use Personal Account?</label>
       <input type="checkbox" name="shortener_acct"><br>
-      <label for="shortener_login">API Login:</label>
+      <label for="shortener_login" class="i18n" id="l_shortener_login">API Login:</label>
       <input type="text" name="shortener_login"><br>
-      <label for="shortener_key">API Key:</label>
+      <label for="shortener_key" class="i18n" id="l_shortener_key">API Key:</label>
       <input type="text" name="shortener_key">
     </p>
-    <label for="share_include_title">Include page title (sharing):</label>
+    <label for="share_include_title" class="i18n" id="l_share_include_title">Include page title (sharing):</label>
     <input type="checkbox" name="share_include_title"><br>
   </fieldset>
 
   <fieldset>
-    <legend>Timelines</legend>
-    <p class="notice" style="text-align: center; color: black;">
+    <legend class="i18n" id="g_timelines">Timelines</legend>
+    <p class="notice i18n" style="text-align: center; color: black;" id="notice_api_hits">
       You should keep API hits <span style="color: red;">below <span class="__hourly_limit"></span></span>! Otherwise Chromed Bird will stop working properly and timelines won't update anymore.<br>
       <span style="color: red;">Remember</span> that if you're using multiple Twitter clients you'll need to keep your API hits even lower.
     </p>
     <p class="hits_notice">
-      API hits per hour: <span id="predicted_hits_count"></span> / <span class="__hourly_limit">
+      <span class="i18n" id="l_hits_notice">API hits per hour: </span><span id="predicted_hits_count"></span> / <span class="__hourly_limit">
     </p>
     <table class="timelines">
       <tr>
         <th></th>
-        <th>Visible</th>
-        <th>Refresh Interval (s)</th>
-        <th>Include in unified timeline</th>
-        <th>Tabs Count</th>
+        <th id="l_visible" class="i18n">Visible</th>
+        <th id="l_refresh_interval" class="i18n">Refresh Interval (s)</th>
+        <th id="l_include_in_unified" class="i18n">Include in unified timeline</th>
+        <th id="l_tabs_count" class="i18n">Tabs Count</th>
       <tr>
-        <td class="label">Unified Timeline:</td>
+        <td class="label i18n" id="l_unified_timeline">Unified Timeline:</td>
         <td><input type="checkbox" name="unified_visible" validator="unifiedValidator"></td>
         <td>-</td>
         <td>-</td>
         <td>1</td>
       </tr>
       <tr>
-        <td class="label">Home:</td>
+        <td class="label i18n" id="notif_home">Home:</td>
         <td><input type="checkbox" name="home_visible"></td>
         <td><input type="text" name="home_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td><input type="checkbox" name="home_include_unified"></td>
         <td>1</td>
       </tr>
       <tr>
-        <td class="label">Mentions:</td>
+        <td class="label i18n" id="notif_mentions">Mentions:</td>
         <td><input type="checkbox" name="mentions_visible"></td>
         <td><input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td><input type="checkbox" name="mentions_include_unified"></td>
         <td>1</td>
       </tr>
       <tr>
-        <td class="label">DM:</td>
+        <td class="label i18n" id="notif_dms">DM:</td>
         <td><input type="checkbox" name="dms_visible"></td>
         <td><input type="text" name="dms_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td><input type="checkbox" name="dms_include_unified"></td>
         <td>1</td>
       </tr>
       <tr>
-        <td class="label">Lists:</td>
+        <td class="label i18n" id="notif_lists">Lists:</td>
         <td><input type="checkbox" name="lists_visible"></td>
         <td><input type="text" name="lists_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td><input type="checkbox" name="lists_include_unified"></td>
         <td><script>document.write(TimelineTemplate.getTemplate(TimelineTemplate.LISTS).getUserData().length);</script></td>
       </tr>
       <tr>
-        <td class="label">Search:</td>
+        <td class="label i18n" id="notif_search">Search:</td>
         <td><input type="checkbox" name="search_visible"></td>
         <td><input type="text" name="search_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td><input type="checkbox" name="search_include_unified"></td>
         <td><script>document.write(TimelineTemplate.getTemplate(TimelineTemplate.SEARCH).getUserData().length);</script></td>
       </tr>
       <tr>
-        <td class="label">Favorites:</td>
+        <td class="label i18n" id="tml_favorites">Favorites:</td>
         <td><input type="checkbox" name="favorites_visible"></td>
         <td><input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td><input type="checkbox" name="favorites_include_unified"></td>
         <td>1</td>
       </tr>
       <tr>
-        <td class="label">Blocked Users:</td>
+        <td class="label i18n" id="l_blocked_users">Blocked Users:</td>
         <td>-</td>
         <td><input type="text" name="blockedusers_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td>-</td>
         <td>-</td>
       </tr>
     </table>
-    <p class="notice" style="color: black;">
+    <p id="notice_right_click_change" class="notice i18n" style="color: black;">
       * Hey, now you can use the right-click context menu to change most of this settings directly into the popup window. Just get
       out of here! :)
     </p>
   </fieldset>
 
   <fieldset>
-    <legend>Timelines</legend>
-    <label for="tweets_per_page">Tweets per Page:</label>
+    <legend class="i18n" id="g_timelines">Timelines</legend>
+    <label for="tweets_per_page" class="i18n" id="l_tweets_per_page">Tweets per Page:</label>
     <input type="text" name="tweets_per_page" validator="required,number,positive" must_restart><br>
-    <label for="max_cached_tweets">Max Shown Tweets:</label>
+    <label for="max_cached_tweets" class="i18n" id="l_max_cached_tweets">Max Shown Tweets:</label>
     <input type="text" name="max_cached_tweets" validator="required,number,positive" must_restart><br>
   </fieldset>
 
   <fieldset>
-    <legend>Microblogging Service</legend>
+    <legend class="i18n" id="g_microblogging_service">Microblogging Service</legend>
     <input type="radio" name="microblogging_service" value="twitter" id="service_twitter" must_restart> <label for="service_twitter" class="radio_opt">Twitter</label>
     <input type="radio" name="microblogging_service" value="identica" id="service_identica" must_restart> <label for="service_identica" class="radio_opt">identi.ca</label>
   </fieldset>
 
   <fieldset>
-    <legend>Advanced</legend>
-    <label for="request_timeout">Request Timeout (ms):</label>
+    <legend class="i18n" id="g_advanced">Advanced</legend>
+    <label for="request_timeout" class="i18n" id="l_request_timeout">Request Timeout (ms):</label>
     <input type="text" name="request_timeout" validator="required,number,positive" must_restart><br>
-    <label for="base_url">Twitter's API URL:</label>
+    <label for="base_url" class="i18n" id="l_base_url">Twitter's API URL:</label>
     <input type="text" name="base_url" style="width: 300px;" validator="required,url" must_restart><br>
-    <label for="base_oauth_url">OAuth URL:</label>
+    <label for="base_oauth_url" class="i18n" id="l_base_oauth_url">OAuth URL:</label>
     <input type="text" name="base_oauth_url" style="width: 300px;" validator="required,url" must_restart><br>
 
-    <label for="same_signing_urls">Same signing URLs:</label>
+    <label for="same_signing_urls" class="i18n" id="l_same_signing_urls">Same signing URLs:</label>
     <input type="checkbox" name="same_signing_urls"><br>
 
-    <label for="base_signing_url">API Signing URL:</label>
+    <label for="base_signing_url" class="i18n" id="l_base_signing_url">API Signing URL:</label>
     <input type="text" name="base_signing_url" style="width: 300px;" validator="required,url" must_restart><br>
-    <label for="base_oauth_signing_url">OAuth Signing URL:</label>
+    <label for="base_oauth_signing_url" class="i18n" id="l_base_oauth_signing_url">OAuth Signing URL:</label>
     <input type="text" name="base_oauth_signing_url" style="width: 300px;" validator="required,url" must_restart><br>
 
-    <label for="base_search_url">Search API URL:</label>
+    <label for="base_search_url" class="i18n" id="l_base_search_url">Search API URL:</label>
     <input type="text" name="base_search_url" style="width: 300px;" validator="required,url" must_restart><br>
   </fieldset>
 
   <br>
   <div id="buttons_area">
-    <input type="button" value="Save" onclick="options.save();">
-    <input type="button" value="Reset" onclick="options.load();">
-    <input type="button" value="Reset to default" onclick="options.loadDefaults();">
+    <input type="button" class="i18n" value="Save" id="btn_save" onclick="options.save();">
+    <input type="button" class="i18n" value="Reset" id="btn_reset" onclick="options.load();">
+    <input type="button" class="i18n" value="Reset to default" id="btn_default" onclick="options.loadDefaults();">
   </div>
 </div>
 
