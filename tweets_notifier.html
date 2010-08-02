@@ -28,12 +28,15 @@
         Renderer.nameAttribute = response.nameAttribute;
         Renderer.fadeTimeout = response.fadeTimeout;
 
+        $("#progress").text(chrome.i18n.getMessage("preventClosing"));
+
         try {
           $(document.body).prepend(Renderer.simpleAssemblyTweets([tweet]));
         } catch(e) {
           console.log(e);
           window.close();
         }
+
         setTimeout(function() {
           // Delay displaying progress bar
           $('#progress').show().css('bottom', '0px').css('width', '100%')
@@ -57,6 +60,6 @@
   </script>
 </head>
 <body>
-  <div id="progress">Click to prevent closing.</div>
+  <div id="progress"></div>
 </body>
 </html>

@@ -45,6 +45,7 @@ if(!twitterBackend.authenticated() && !twitterBackend.tokenRequested()) {
 <script type="text/javascript" src="lib/3rdparty/jquery.autocomplete.mod.js"></script>
 <script type='text/javascript' src='lib/3rdparty/jquery.tipsy.js'></script>
 <script type="text/javascript" src="lib/3rdparty/jquery.contextMenu.js"></script>
+<script type="text/javascript" src="lib/3rdparty/jquery.insertatcaret.min.js"></script>
 
 <!--script type="text/javascript" src="lib/debug.js"></script-->
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
@@ -118,8 +119,7 @@ var OAuth = {
         initializeWorkspace();
       } else {
         var errMsg = twitterBackend.oauthLib.error;
-        $("#error_pin").show().html('The following error occurred trying to authenticate: ' + errMsg + '. ' +
-          'Please, <a href="javascript:OAuth.requestNewToken();">click here to restart the authentication process</a>');
+        $("#error_pin").show().html(chrome.i18n.getMessage("oAuthError", errMsg));
       }
     });
   },
@@ -207,7 +207,7 @@ var ThemeManager = {
         ThemeManager.popupSizeData.save($this.width() + 'x' + $this.height());
       }
     });
-    $(".ui-resizable-handle").attr('title', 'Double click to reset size');
+    $(".ui-resizable-handle").attr('title', chrome.i18n.getMessage("resetSize"));
     $(".ui-resizable-handle").dblclick(function(e) {
       ThemeManager.popupSizeData.remove();
       ThemeManager.setPopupSize(null, null, true);
@@ -294,7 +294,7 @@ var Composer = {
           Paginator.nextPage();
         }
       } else {
-        Renderer.showError('Unexpected error ' + status + ' deleting tweet.', 'Composer.confirmDestroy');
+        Renderer.showError(chrome.i18n.getMessage("ue_deletingTweet", status), 'Composer.confirmDestroy');
       }
     }, this.destroyTimelineId, this.destroyId);
   },
@@ -319,7 +319,7 @@ var Composer = {
       if(success) {
         loadTimeline(true, "home");
       } else {
-        Renderer.showError('Unexpected error ' + status + ' retweeting.', 'Composer.confirmRT');
+        Renderer.showError(chrome.i18n.getMessage("ue_retweeting", status), 'Composer.confirmRT');
       }
     }, _this.rtId);
   },
@@ -345,7 +345,7 @@ var Composer = {
          Paginator.needsMore = false;
          loadTimeline();
       } else {
-        Renderer.showError('Unexpected error ' + status + ' marking as favorite.', 'Composer.favorite');
+        Renderer.showError(chrome.i18n.getMessage("ue_markFavorite", status), 'Composer.favorite');
       }
     }, this.favoriteId);
   },
@@ -361,7 +361,7 @@ var Composer = {
          Paginator.needsMore = false;
          loadTimeline();
       } else {
-        Renderer.showError('Unexpected error ' + status + ' unmarking as favorite.', 'Composer.unFavorite');
+        Renderer.showError(chrome.i18n.getMessage("ue_unmarkFavorite", status), 'Composer.unFavorite');
       }
     }, this.favoriteId);
   },
@@ -516,7 +516,9 @@ var WorkList = {
 
     $("#queue_loading").tipsy({
       title: function() {
-        var html = '<div class="worklist_container"><span class="title">Queued Messages:</span>';
+        var html = '<div class="worklist_container"><span class="title">' +
+                   chrome.i18n.getMessage("queued_messages") +
+                   '</span>';
         html += '<ul class="worklist">';
         var queueItems = tweetManager.sendQueue.queue;
         for(var i = 0, len = queueItems.length; i < len; ++i) {
@@ -538,14 +540,21 @@ var WorkList = {
               timeDiffDesc = parseInt(timeDiff / 60) + 'm';
             }
             if(queueItem.retryCount == 1) {
-              html += '<span class="title"> trying to send for ' + timeDiffDesc + '</span>';
+              html += '<span class="title"> ' +
+                      chrome.i18n.getMessage("queue_trying", timeDiffDesc) +
+                      '</span>';
             } else {
-              html += '<span class="title"> retried ' + queueItem.retryCount + ' times since ' + timeDiffDesc + ' ago [' + queueItem.lastStatus + ']</span>';
+              html += '<span class="title"> ' +
+                      chrome.i18n.getMessage("queue_retried", [queueItem.retryCount, timeDiffDesc, queueItem.lastStatus]) +
+                      '</span>';
             }
             if(queueItem.shouldCancel) {
-              html += ' <span class="title" style="color: #d00;">Canceling...</span>';
+              html += ' <span class="title" style="color: #d00;">' +
+                      chrome.i18n.getMessage("canceling") +
+                      '</span>';
             } else {
-              html += '<img src="img/cancel.png" onclick="WorkList.cancelMessage();" title="Cancel Tweet">';
+              html += '<img src="img/cancel.png" onclick="WorkList.cancelMessage();" title="' +
+                      chrome.i18n.getMessage("cancelTweet") + '">';
             }
           }
           html += '</li>';
@@ -581,7 +590,7 @@ var WorkList = {
 };
 
 var Shortener = {
-  SHORTENER_IDLE_STR: 'Type a URL to make it shorter, or, click right here \u2192',
+  SHORTENER_IDLE_STR: chrome.i18n.getMessage("shortenerIdleString"),
 
   init: function() {
     var savedUrl = tweetManager.composerData.urlShortener;
@@ -676,15 +685,23 @@ var Shortener = {
       _this.clear();
       var textarea = $("#compose_tweet_area textarea");
       if(success && shortUrl) {
-        var newText = textarea.val();
-        if(newText.length > 0 && newText[newText.length - 1] != ' ') {
-          newText += ' ';
+        var tmpText = textarea.val();
+        if(tmpText.length > 0) {
+          if((textarea[0].selectionStart > 0) &&
+            (tmpText[textarea[0].selectionStart-1] != ' ')
+          ) {
+            shortUrl = ' ' + shortUrl;
+          }
+          if((textarea[0].selectionEnd < tmpText.length) &&
+             (tmpText[textarea[0].selectionEnd+1] != ' ')
+          ) {
+             shortUrl += ' ';
+          }
         }
         if(context && context.title && OptionsBackend.get('share_include_title')) {
           shortUrl = context.title + ' - ' + shortUrl;
         }
-        newText += shortUrl;
-        textarea.val(newText);
+        textarea.insertAtCaret(shortUrl);
         Composer.textareaChanged();
       } else if(!success) {
         Renderer.showError(shortUrl);
@@ -701,23 +718,27 @@ var Renderer = {
 
     var diff = (nowTimestamp - inputTimestamp) / 1000;
     if(diff < 15) {
-      return "just now";
+      return chrome.i18n.getMessage("justNow");
     } else if(diff < 60) {
-      return "less than 1 minute ago";
+      return chrome.i18n.getMessage("minuteAgo");
     } else if(diff < 60 * 60) {
       var minutes = parseInt(diff / 60);
-      return minutes + " minute" + ((minutes > 1) ? "s" : "") + " ago";
+      var minute_string = minutes > 1 ? "minute_plural" : "minute_singular";
+      return chrome.i18n.getMessage('minutes', [minutes, chrome.i18n.getMessage(minute_string)]);
     } else if(diff < 60 * 60 * 24) {
       var hours = parseInt(diff / (60 * 60));
-      return "about " + hours + " hour" + ((hours > 1) ? "s" : "") + " ago";
+      var hour_string = hours > 1 ? "hour_plural" : "hour_singular";
+      return chrome.i18n.getMessage("timeAgo", [hours, chrome.i18n.getMessage(hour_string)]);
     } else if(diff < 60 * 60 * 24 * 30) {
       var days = parseInt(diff / (60 * 60 * 24));
-      return "about " + days + " day" + ((days > 1) ? "s" : "") + " ago";
+      var day_string = days > 1 ? "day_plural" : "day_singular";
+      return chrome.i18n.getMessage("timeAgo", [days, chrome.i18n.getMessage(day_string)]);
     } else if(diff < 60 * 60 * 24 * 30 * 12) {
       var months = parseInt(diff / (60 * 60 * 24 * 30));
-      return "about " + months + " month" + ((months > 1) ? "s" : "") + " ago";
+      var month_string = months > 1 ? "month_plural" : "month_singular";
+      return chrome.i18n.getMessage("timeAgo", [months, chrome.i18n.getMessage(month_string)]);
     } else {
-      return "years ago";
+      return chrome.i18n.getMessage("yearsAgo");
     }
   },
 
@@ -732,7 +753,7 @@ var Renderer = {
     var url = 'http://maps.google.com/mapdata?cc=EN&min_priority=1&w=160&h=160&latitude_e6=' + lat + '&longitude_e6=' + long + '&zm=2000&Point=b&Point.latitude_e6=' + lat + '&Point.longitude_e6=' + long + '&Point.iconid=33&Point=e';
     $(aElement).tipsy({
       title: function() {
-        return '<img src="img/loading.gif" /> Loading map...';
+        return '<img src="img/loading.gif" /> ' + chrome.i18n.getMessage("loadingMap");
       },
       image: url,
       html: true,
@@ -746,7 +767,7 @@ var Renderer = {
     if(!OptionsBackend.get('show_expanded_urls')) {
       return;
     }
-    var m = url.match(/http:\/\/(www\.)?(twitpic|twitgoo|yfrog|movapic).com\/(.*)/);
+    var m = url.match(/http:\/\/(www\.)?(tweetphoto|twitpic|twitgoo|yfrog|movapic).com\/(.*)/);
     if(m) {
       var srcUrl = null;
       if(m[2] == "twitpic" || m[2] == "twitgoo") {
@@ -756,13 +777,15 @@ var Renderer = {
       } else if(m[2] == "movapic") {
         var iid = m[3].split(/\//)[1];
         srcUrl = "http://image.movapic.com/pic/t_" + iid + ".jpeg";
+      } else if(m[2] == "tweetphoto") {
+        srcUrl = "http://TweetPhotoAPI.com/api/TPAPI.svc/imagefromurl?url=" + url;
       }
       if(!srcUrl) {
         return;
       }
       $(aElement).tipsy({
         title: function() {
-          return '<img src="img/loading.gif" /> Loading image...';
+          return '<img src="img/loading.gif" /> ' + chrome.i18n.getMessage("loadingImage");
         },
         image: srcUrl,
         html: true,
@@ -774,7 +797,7 @@ var Renderer = {
     }
     $(aElement).tipsy({
       title: function() {
-        return '<img src="img/loading.gif" /> Loading long url...';
+        return '<img src="img/loading.gif" /> ' + chrome.i18n.getMessage("loadingLongUrl");
       },
       html: true,
       showNow: true,
@@ -789,7 +812,7 @@ var Renderer = {
         $(aElement).tipsy({
           title: function() {
             if(!success) {
-              return "Sorry, something went wrong, please try again.";
+              return chrome.i18n.getMessage("errorExpandingUrl");
             }
             return longUrl;
           },
@@ -875,7 +898,7 @@ var Renderer = {
     var inReply = null;
     if(tweet.in_reply_to_status_id) {
       var linkDst = TwitterLib.URLS.BASE + tweet.in_reply_to_screen_name + '/status/' + tweet.in_reply_to_status_id;
-      inReply = '<a href="#" onclick="openTab(\'' + linkDst + '\')">in reply to ' + tweet.in_reply_to_screen_name + '</a> ';
+      inReply = '<a href="#" onclick="openTab(\'' + linkDst + '\')">' + chrome.i18n.getMessage("inReply") + ' ' + tweet.in_reply_to_screen_name + '</a> ';
     }
 
     var nameAttribute = OptionsBackend.get('name_attribute');
@@ -913,7 +936,6 @@ var Renderer = {
     if(user.protected) {
       str += ' <img class="protected" src="img/lock.png" alt="protected" />';
     }
-
     str += '<div class="text">';
     if(tweet.retweeted_status) {
       str += '<img class="retweet" src="img/retweet.png">'
@@ -926,13 +948,13 @@ var Renderer = {
     if(inReply) {
       str += inReply;
     } else if(tweet.retweeted_status) {
-      str += 'retweeted by <a href="#" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\');">' + tweet.user.screen_name + '</a> ';
+      str += chrome.i18n.getMessage("retweetedBy") + ' <a href="#" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\');">' + tweet.user.screen_name + '</a> ';
     }
     if(tweetManager.isRetweet(tweet.id)) {
-      str += 'retweeted by me ';
+      str += chrome.i18n.getMessage("retweetedByMe") + ' ';
     }
     if(from) {
-      str += '<span class="from_app">from ' + from + '</span>';
+      str += '<span class="from_app">' + chrome.i18n.getMessage("fromApp") + ' ' + from + '</span>';
     }
     if (geo) {
       str += '<span class="geo_tag">' + geo + '</span>';
@@ -949,27 +971,51 @@ var Renderer = {
     str += '<div class="new_actions">';
     if(templateId != TimelineTemplate.DMS) {
       if(tweet.favorited) {
-        str += '<img src="img/star_hover.png" title="Unmark as favorite" class="starred" onclick="Composer.unFavorite(this.parentNode.parentNode.parentNode);"></img><br>';
+        str += '<img src="img/star_hover.png" title="' +
+               chrome.i18n.getMessage("unmarkFavorite") +
+               '" class="starred" onclick="Composer.unFavorite(this.parentNode.parentNode.parentNode);"></img><br>';
       } else {
-        str += '<img src="img/star.png" title="Mark as favorite" class="unstarred" onclick="Composer.favorite(this.parentNode.parentNode.parentNode);"></img><br>';
+        str += '<img src="img/star.png" title="' +
+               chrome.i18n.getMessage("markFavorite") +
+               '" class="unstarred" onclick="Composer.favorite(this.parentNode.parentNode.parentNode);"></img><br>';
       }
     }
 
     if(tweet.user.screen_name == tweetManager.twitterBackend.username()) {
-      str += '<img src="img/delete.png" title="Delete" onclick="Composer.destroy(this.parentNode.parentNode.parentNode)"></img><br>';
-      str += '<div class="rt_confirm destroy">Delete this message: <a href="javascript:Composer.confirmDestroy();">Yes</a> <a href="javascript:Composer.denyDestroy();">No</a></div>';
+      str += '<img src="img/delete.png" title="' +
+             chrome.i18n.getMessage("Delete") +
+             '" onclick="Composer.destroy(this.parentNode.parentNode.parentNode)"></img><br>';
+      str += '<div class="rt_confirm destroy">' +
+             chrome.i18n.getMessage("deleteConfirm") +
+             '<a href="javascript:Composer.confirmDestroy();">' +
+             chrome.i18n.getMessage("Yes") +
+             '</a> <a href="javascript:Composer.denyDestroy();">' +
+             chrome.i18n.getMessage("No") +
+             '</a></div>';
     } else {
-      str += '<img src="img/reply.png" title="Reply" onclick="Composer.reply(this.parentNode.parentNode.parentNode)"></img><br>';
+      str += '<img src="img/reply.png" title="' +
+             chrome.i18n.getMessage("Reply") +
+             '" onclick="Composer.reply(this.parentNode.parentNode.parentNode)"></img><br>';
       if(tweetManager.isRetweet(tweet.id)) {
         //TODO: undo retweet
       } else {
         if(templateId != TimelineTemplate.DMS && !user.protected) {
-          str += '<img src="img/rt.png" title="Retweet" onclick="Composer.retweet(this.parentNode.parentNode.parentNode)"></img><br>';
-          str += '<div class="rt_confirm">Retweet this message: <a href="javascript:Composer.confirmRT();">Yes</a> <a href="javascript:Composer.denyRT();">No</a></div>';
+          str += '<img src="img/rt.png" title="' +
+          chrome.i18n.getMessage("Retweet") +
+          '" onclick="Composer.retweet(this.parentNode.parentNode.parentNode)"></img><br>';
+          str += '<div class="rt_confirm">' +
+          chrome.i18n.getMessage("retweetConfirm") +
+          '<a href="javascript:Composer.confirmRT();">' +
+          chrome.i18n.getMessage("Yes") +
+          '</a> <a href="javascript:Composer.denyRT();">' +
+          chrome.i18n.getMessage("No") +
+          '</a></div>';
         }
       }
       if(!user.protected) {
-        str += '<img src="img/share.png" title="Share (old school RT)" onclick="Composer.share(this.parentNode.parentNode.parentNode)"></img><br>';
+        str += '<img src="img/share.png" title="' +
+        chrome.i18n.getMessage("oldRT") +
+        '" onclick="Composer.share(this.parentNode.parentNode.parentNode)"></img><br>';
       }
     }
     str += '</div>';
@@ -1094,7 +1140,7 @@ var Renderer = {
       if(!params) {
         params = '';
       }
-      msg += ' <a href="#" onclick="' + tryAgainFunction + '(' + params + '); Renderer.hideMessage();">Try again</a>';
+      msg += ' <a href="#" onclick="' + tryAgainFunction + '(' + params + '); Renderer.hideMessage();">' + chrome.i18n.getMessage("tryAgain") + '</a>';
     }
     Renderer.showMessage(msg);
   },
@@ -1122,7 +1168,7 @@ var Lists = {
     tweetManager.lists(force, function(success, lists, status) {
       if(!success) {
         if(force) {
-          Renderer.showError('Unexpected error ' + status + ' fetching lists.', 'Lists.init', 'true');
+          Renderer.showError(chrome.i18n.getMessage("ue_fetchingLists", status), 'Lists.init', 'true');
           return;
         }
       }
@@ -1143,11 +1189,11 @@ var Lists = {
           $listSelect = $("select#" + timeline.timelineId + "-selector");
         }
         $listSelect.html('');
-        $listSelect.append($("<option>").attr('value', _this.selector_value).text('- Select a list -'));
+        $listSelect.append($("<option>").attr('value', _this.selector_value).text(chrome.i18n.getMessage("selectList")));
         for(var j = 0; j < lists.length; ++j) {
           $listSelect.append($("<option>").attr('value', lists[j].uri).text(lists[j].name));
         }
-        $listSelect.append($("<option>").attr('value', _this.update_value).text('Update lists...'));
+        $listSelect.append($("<option>").attr('value', _this.update_value).text(chrome.i18n.getMessage("updateLists")));
         var selectedListId = tweetManager.getListId(timeline.timelineId);
         if(selectedListId) {
           $listSelect.val(selectedListId);
@@ -1245,9 +1291,9 @@ var ContextMenu = {
     var timeline = null;
     if(el.is('.timeline_tab')) {
       timeline = tweetManager.getTimeline(el[0].id.split('-')[1]);
-      var label = 'Remove';
+      var label = chrome.i18n.getMessage("remove");
       if(timeline.template.includeInUnified && !timeline.template.multipleTimelines) {
-        label = 'Hide';
+        label = chrome.i18n.getMessage("hide");
       }
       specificMenu.push({action: 'remove-' + timeline.timelineId, label: label + ' Tab'});
 
@@ -1282,9 +1328,9 @@ var ContextMenu = {
     var generalMenu = [];
     TimelineTemplate.eachTimelineTemplate(function(template) {
       if(!template.visible || template.multipleTimelines) {
-        var label = 'Show ';
+        var label = chrome.i18n.getMessage("show");
         if(template.multipleTimelines) {
-          label = 'Add ';
+          label = chrome.i18n.getMessage("add");
         }
         generalMenu.push({action: 'show-' + template.id, label: label + template.timelineName + ' Tab'});
       }
@@ -1461,9 +1507,9 @@ function onTimelineRetrieved(tweets, timelineId) {
     Renderer.assemblyTweets(tweets, timelineId);
   } else {
     var baseErrorMsg = tweetManager.currentError();
-    var errorMsg = 'Unexpected error ' + baseErrorMsg + ' updating tweets.';
+    var errorMsg = chrome.i18n.getMessage("ue_updatingTweets", baseErrorMsg);
     if(baseErrorMsg == '(timeout)') {
-      errorMsg += ' If this timeout error is being shown repeatedly, please try logging out and logging in again.';
+      errorMsg += chrome.i18n.getMessage("ue_updatingTweets2");
     }
     Renderer.showError(errorMsg, 'loadTimeline');
   }
@@ -1511,10 +1557,10 @@ function suspend(forcedValue) {
     }
     $("#suspended_notice").css({opacity: nextOpacity}).show();
     animateLoop();
-    $("#suspend_toggle").text("Resume");
+    $("#suspend_toggle").text(chrome.i18n.getMessage("resume"));
   } else {
     $("#suspended_notice").stop().hide();
-    $("#suspend_toggle").text("Suspend");
+    $("#suspend_toggle").text(chrome.i18n.getMessage("suspend"));
   }
 }
 
@@ -1560,11 +1606,8 @@ function newTweetsAvailable(count, unreadCount, timelineId) {
   }
   if(count == 0)
     return;
-  var text = count + " more tweet";
-  if(count > 1)
-    text += "s";
-  text += " available. Update now.";
-  $("#update_tweets").text(text);
+  var tweets_string = count > 1 ? "tweet_plural" : "tweet_singular";
+  $("#update_tweets").text(chrome.i18n.getMessage("newTweetsAvailable", [count, chrome.i18n.getMessage(tweets_string)]));
   $("#update_tweets").fadeIn();
 }
 
@@ -1667,6 +1710,14 @@ $(function() {
     return;
   }
 
+  $("input.i18n").each(function() {
+    $(this).val(chrome.i18n.getMessage(this.id));
+  });
+
+  $("span.i18n").each(function() {
+    $(this).html(chrome.i18n.getMessage(this.id));
+  });
+
   initializeWorkspace();
 
   chrome.tabs.getAllInWindow(null, function(tabs) {
@@ -1704,24 +1755,22 @@ $(function() {
       <div id="shortener_button" onclick="Shortener.shortenIt();"><div>Shorten it!</div></div>
     </div>
     <div class="footer">
-      <input type="button" value="Tweet it!" onclick="Composer.sendTweet();"/>
+      <input id="tweetit" class="i18n" type="button" onclick="Composer.sendTweet();"/>
       <span class="chars_left"></span>
     </div>
   </div>
   <div id="compose_tweet" onclick="Composer.showComposeArea()">
-    <img class="left" src="img/arrow_down.gif"/>
-    Compose Tweet
-    <img class="right" src="img/arrow_down.gif"/>
+    <img class="left" src="img/arrow_down.gif"/><span id="composeTweet" class="i18n"></span><img class="right" src="img/arrow_down.gif"/>
   </div>
 
   <span class="header_link_left">
-    <a href="javascript:signout()">Log out</a> |
-    <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))">Options</a> |
-    <a href="javascript:Composer.refreshNew();">Refresh</a> |
-    <a id="suspend_toggle" href="javascript:suspend()">Suspend</a>
-    <span id="suspended_notice">Automatic updates suspended</span>
+    <a href="javascript:signout()"><span id="logout" class="i18n"></span></a> |
+    <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))"><span id="options" class="i18n"></span></a> |
+    <a href="javascript:Composer.refreshNew();"><span id="refresh" class="i18n"></span></a> |
+    <a id="suspend_toggle" href="javascript:suspend()"><span id="suspend" class="i18n"></span></a>
+    <span id="suspended_notice"><span id="autoUpdatesSuspended" class="i18n"></span></span>
   </span>
-  <a class="header_link_right" href="javascript:Renderer.markAllAsRead();">Mark all as read</a>
+  <a class="header_link_right" href="javascript:Renderer.markAllAsRead();"><span id="markAllRead" class="i18n"></span></a>
   <img src="img/loading.gif" id="loading" style="display: none;"/>
   <img src="img/loading.gif" id="queue_loading" style="display: none;"/>
   <div style="clear: both;"></div>
@@ -1738,9 +1787,9 @@ $(function() {
   <img src="img/loading.gif" id="loading_oauth" style="display: none;"/>
   <label for="pin">Twitter's OAuth Pin:</label>
   <input type="text" name="pin"><br>
-  <input type="button" onclick="OAuth.registerPin();" value="Authorize!">
+  <input type="button" onclick="OAuth.registerPin();" class="i18n" id="btnAuthorize" value="Authorize!">
   <br><br>
-  <a href="javascript:OAuth.requestNewToken();">Request another token</a>
+  <a href="javascript:OAuth.requestNewToken();"><span id="newToken" class="i18n"></span></a>
 </div>
 <div id="error_pin" style="display: none;">
 </div>
