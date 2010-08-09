@@ -1,0 +1,620 @@
+{
+	"extDescription": {
+		"message": "Chromed Bird это Twitter расширение, которое позволяет читать ленту и взаимодействовать с вашим twitter аккаунтом.",
+		"description": "Extension description"
+	},
+	"resetSize": {
+		"message": "Двойной клик для сброса размера"
+	},
+	"composeTweet": {
+		"message": "Написать твит",
+		"description": "Text for composing new tweet"
+	},
+	"tweetit": {
+		"message": "Затвитить!"
+	},
+	"logout": {
+		"message": "Выйти",
+		"description": "The text for the logout link"
+	},
+	"options": {
+		"message": "Настройки",
+		"description": "Options link"
+	},
+	"refresh": {
+		"message": "Обновить",
+		"description": "Refresh link"
+	},
+	"suspend": {
+		"message": "Приостановить",
+		"description": "Suspend link"
+	},
+	"autoUpdatesSuspended": {
+		"message": "Автоматическое обновление приостановлено"
+	},
+	"resume": {
+		"message": "Продолжить"
+	},
+	"remove": {
+		"message": "Удалить "
+	},
+	"hide": {
+		"message": "Скрыть "
+	},
+	"show": {
+		"message": "Показать "
+	},
+	"add": {
+		"message": "Добавить" 
+	},
+	"selectList": {
+		"message": "- Выбрать список -"
+	},
+	"updateList": {
+		"message": "Обновляю списки..."
+	},
+	"w_Unified": {
+		"message": "Общая"
+	},
+	"w_Home": {
+		"message": "Home"
+	},
+	"w_DM": {
+		"message": "DMs"
+	},
+	"w_Favorites": {
+		"message": "Favorites"
+	},
+	"w_Lists": {
+		"message": "Списки"
+	},
+	"w_Search": {
+		"message": "Поиск"
+	},
+	"fromApp": {
+		"message": "через"
+	},
+	"inReply": {
+		"message": "в ответ на"
+	},
+	"retweetedBy": {
+		"message": "ретвит от"
+	},
+	"retweetedByMe": {
+		"message": "мой ретвит"
+	},
+	"unmarkFavorite": {
+		"message": "Убрать из избранного"
+	},
+	"markFavorite": {
+		"message": "Пометить как избранное"
+	},
+	"Delete": {
+		"message": "Удалить"
+	},
+	"deleteConfirm": {
+		"message": "Удалить это сообщение: "
+	},
+	"Yes": {
+		"message": "Да"
+	},
+	"No": {
+		"message": "Нет"
+	},
+	"Reply": {
+		"message": "Ответить"
+	},
+	"Retweet": {
+		"message": "Ретвит"
+	},
+	"retweetConfirm": {
+		"message": "Ретвит этого сообщения: "
+	},
+	"oldRT": {
+		"message": "Поделиться (старый RT)"
+	},
+	"markAllRead": {
+		"message": "Пометить все как прочитанное"
+	},
+	"newToken": {
+		"message": "Запросить другой ключ"
+	},
+	"shortenerIdleString": {
+		"message": "Наберите ссылку для сокращения, или нажмите сюда \u2192"
+	},
+	"timelineHome": {
+		"message": "Home",
+		"description": "The home time line tab"
+	},
+	"timelineDM": {
+		"message": "DM",
+		"description": "The direct message time line tab"
+	},
+	"timelineFavorites": {
+		"message": "Избранное",
+		"description": "The home time line tab"
+	},
+	"tweet_singular": {
+		"message": "твит"
+	},
+	"tweet_plural": {
+		"message": "твиты"
+	},
+	"newTweetsAvailable": {
+		"message": " доступно еще $count$ твит. Обновить сейчас.",
+		"placeholders": {
+			"count": {
+				"content": "$1"
+			},
+			"tweets": {
+				"content": "$2"
+			}
+		}
+	},
+	"preventClosing": {
+		"message": "Нажмите правой для предотвращения закрытия."
+	},
+	"changeNotificationSettings": {
+		"message": "Вы можете изменить настройки оповещений на странице настроек"
+	},
+	"loadingMap": {
+		"message": "Загрузка карты..."
+	},
+	"loadingImage": {
+		"message": "Загрузка изображения..."
+	},
+	"loadingLongUrl": {
+		"message": "Загрузка длинной ссылки..."
+	},
+	"errorExpandingUrl": {
+		"message": "Извените, что то пошло не так, попробуйте еще раз."
+	},
+	"ajaxFailed": {
+		"message": "Сбой запрос AJAX (плохое содинение?)"
+	},
+	"successAuth": {
+		"message": "Поздравляем, вы успешно вошли в систему. Наслаждайтесь Enjoy Chromed Bird!"
+	},
+	"cbAuthorized": {
+		"message": "Chromed Bird авторизован!"
+	},
+	"cbNotAuthorized": {
+		"message": "Уупс... Что то пошло не так. Попробуйте нажать на иконку Chromed Bird снова."
+	},
+	"authorizing": {
+		"message": "Пожалуйста подождите, авторизуем Chromed Bird..."
+	},
+	"yourPIN": {
+		"message": "Ваш PIN: $pin$",
+		"placeholders": {
+			"pin":{
+				"content": "$1"
+			}
+		}
+	},
+	"tryAgain": {
+		"message": "Попробовать снова"
+	},
+	"canceling": {
+		"message": "Отмена..."
+	},
+	"cancelTweet": {
+		"message": "Отменить твит"
+	},
+	"queued_messages": {
+		"message": "Сообщения в очереди:"
+	},
+	"queue_trying": {
+		"message": "пытаюсь отправить уже $timediff$",
+		"placeholders": {
+			"timediff": {
+				"content": "$1"
+			}
+		}
+	},
+	"queue_retried": {
+		"message": "$retries$ повторов за $timediff$ [$laststatus$]",
+		"placeholders": {
+			"retries": {
+				"content": "$1"
+			},
+			"timediff": {
+				"content": "$2"
+			},
+			"laststatus": {
+				"content": "$3"
+			}
+		}
+	},
+	"ue_fetchingLists": {
+		"message": "Неожиданная ошибка $status$  при получении списка.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_updatingTweets": {
+		"message": "Неожиданная ошибка $baseError$ при обновлении твита.",
+		"placeholders": {
+			"baseError": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_updatingTweets2": {
+		"message": " Если эта ошибка повторяется, попробуйте выйыти и зайти снова."
+	},
+	"ue_deletingTweet": {
+		"message": "Неожиданная ошибка $status$ удаления твита.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_retweeting": {
+		"message": "Неожиданная ошибка $status$ ретвита.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_markFavorite": {
+		"message": "Неожиданная ошибка $status$ при добавлении в избранное.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_unmarkFavorite": {
+		"message": "Неожиданная ошибка $status$ при удалении из избранное.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"newTweets": {
+		"message": "$count$ $newtweets$",
+		"placeholders": {
+			"count": {
+				"content": "$1"
+			},
+			"newtweets": {
+				"content": "$2"
+			}
+		}
+	},
+	"newtweets_singular": {
+		"message": "новый твит"
+	},
+	"newtweets_plural": {
+		"message": "новых твитов"
+	},
+	"btnAuthorize": {
+		"message": "Авторизуйся!"
+	},
+	"exceededAPIHits": {
+		"message": "Вы превысили лимит API. Пожалуйста, пересмотрите настройки интервалов обновления в <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>настройках</a>. Chromed Bird не будет обновлять до $nextResetDate $nextResetTime$.",
+		"placeholders": {
+			"options_url": {
+				"content": "$1"
+			},
+			"nextResetDate": {
+				"content": "$2"
+			},
+			"nextResetTime": {
+				"content": "$3"
+			}
+		}
+	},
+	"warningAPIHits": {
+		"message": "Эй! Лимит обращений к API наступает слишком быстро.<br>Пожалуйста, пересмотрите настройки интервалов обновления в <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>настройках</a>. Обратите внимание, что если вы используете несколько Twitter клиентов они имеют общий лимит.<br>Осталось обращений: $remainingHits$ - Следующий сброс: $nextResetDate$ $nextResetTime$",
+		"placeholders": {
+			"options_url": {
+				"content": "$1"
+			},
+			"remainingHits": {
+				"content": "$2"
+			},
+			"nextResetDate": {
+				"content": "$3"
+			},
+			"nextResetTime": {
+				"content": "$4"
+			}
+		}
+	},
+	"oAuthError": {
+		"message": "Во время проверки подлинности возникла ошибка: $errorMessage$. Пожалуйста, <a href=\"javascript:OAuth.requestNewToken();\">нажмите что бы повторить процесс</a>",
+		"placeholders": {
+			"errorMessage": {
+				"content": "$1"
+			}
+		}
+	},
+	"justNow": {
+		"message": "только что"
+	},
+	"minuteAgo": {
+		"message": "меньше минуты назад"
+	},
+	"minutes": {
+		"message": "$nr_of_minutes$ $minutes$ назад",
+		"placeholders": {
+			"nr_of_minutes":{
+				"content": "$1"
+			},
+			"minutes": {
+				"content": "$2",
+				"example": "minute or minutes (singular / plural)"
+			}
+		}
+	},
+	"minute_singular": {
+		"message": "минуты"
+	},
+	"minute_plural": {
+		"message": "минут"
+	},
+	"timeAgo": {
+		"message": "около $time$ $time_string$ назад",
+		"placeholders": {
+			"time": {
+				"content": "$1"
+			},
+			"time_string": {
+				"content": "$2"
+			}
+		}
+	},
+	"hour_singular": {
+		"message": "часа"
+	},
+	"hour_plural": {
+		"message": "часов"
+	},
+	"day_singular": {
+		"message": "день"
+	},
+	"day_plural": {
+		"message": "дней"
+	},
+	"month_singular": {
+		"message": "месяц"
+	},
+	"month_plural": {
+		"message": "месяцев"
+	},
+	"yearsAgo": {
+		"message": "лет назад"
+	},
+	"options_title": {
+		"message": "Настройки Chromed Bird"
+	},
+	"conf_saved": {
+		"message": "Ваши настройки успешно сохранены!"
+	},
+	"changes_restart": {
+		"message": "Однако, некоторые изменения требуют перезапуска расширения. Сделать это сейчас?<br>    (Это сбросит счетчик непрочитанных твитов.)"
+	},
+	"remaining_api_hits": {
+		"message": "Оставшиеся обращения к Twitter API: "
+	},
+	"rate_limit_reset": {
+		"message": "Сброс лимитов: "
+	},
+	"nerds_link": {
+		"message": "Статистика обращений к API (для ботанов)"
+	},
+	"g_ui": {
+		"message": "Интерфейс"
+	},
+	"l_name_attribute": {
+		"message": "Имя в твитах:"
+	},
+	"o_screen_name": {
+		"message": "Имя пользователя (nickname)"
+	},
+	"o_name": {
+		"message": "Настоящее имя"
+	},
+	"o_both": {
+		"message": "Оба имени"
+	},
+	"l_compose_position": {
+		"message": "Положение поля ввода:"
+	},
+	"o_top": {
+		"message": "Сверху"
+	},
+	"o_bottom": {
+		"message": "Снизу"
+	},
+	"l_theme": {
+		"message": "Тема:"
+	},
+	"l_font_size": {
+		"message": "Размер шрифта:"
+	},
+	"o_small": {
+		"message": "Маленький"
+	},
+	"o_normal": {
+		"message": "Нормальный"
+	},
+	"o_large": {
+		"message": "Большой"
+	},
+	"o_extra_large": {
+		"message": "Очень большой"
+	},
+	"l_font_family": {
+		"message": "Шрифт:"
+	},
+	"l_hover_timeout": {
+		"message": "Время чтения (мс):"
+	},
+	"l_show_expanded_urls": {
+		"message": "Разворачивать короткие ссылки:"
+	},
+	"l_reply_all": {
+		"message": "Отвечать всем упомянутым:"
+	},
+	"l_show_hits_in_popup": {
+		"message": "Показывать количество обращений к API:"
+	},
+	"l_show_user_autocomplete": {
+		"message": "Автодополнять имена пользователей:"
+	},
+	"l_icon_color": {
+		"message": "Цвет иконки:"
+	},
+	"l_tweets_color_only_unified": {
+		"message": "Цвета только в объединенной ленте:"
+	},
+	"l_tweet_color": {
+		"message": "Цвет твита:"
+	},
+	"w_Mentions": {
+		"message": "Упоминания"
+	},
+	"btn_reset_popup_size": {
+		"message": "Сбросить размер окна"
+	},
+	"g_notifications": {
+		"message": "Оповещения"
+	},
+	"l_tweet_notification": {
+		"message": "Оповещения о твитах"
+	},
+	"l_change_icon": {
+		"message": "Изменить иконку"
+	},
+	"l_icon_color": {
+		"message": "Цвет иконки"
+	},
+	"notif_home": {
+		"message": "Главная:"
+	},
+	"notif_mentions": {
+		"message": "Упоминания:"
+	},
+	"notif_dms": {
+		"message": "Личные:"
+	},
+	"notif_lists": {
+		"message": "Списки:"
+	},
+	"notif_search": {
+		"message": "Поиск:"
+	},
+	"l_tweets_notification_style": {
+		"message": "Стиль оповещений:"
+	},
+	"l_noti_on_page": {
+		"message": "Оповещения на странице"
+	},
+	"l_noti_desktop": {
+		"message": "Оповещения на рабочем столе"
+	},
+	"l_notification_fade_timeout": {
+		"message": "Таймаут оповещения (с):"
+	},
+	"g_shortener": {
+		"message": "Сокращатель"
+	},
+	"l_url_shortener": {
+		"message": "Сокращатель ссылок:"
+	},
+	"l_shortener_acct": {
+		"message": "Использовать личный аккаунт?"
+	},
+	"l_shortener_login": {
+		"message": "API Login:"
+	},
+	"l_shortener_key": {
+		"message": "API Key:"
+	},
+	"l_share_include_title": {
+		"message": "Включать название страницы (поделиться):"
+	},
+	"g_timelines": {
+		"message": "Ленты"
+	},
+	"notice_api_hits": {
+		"message": "Вы должны держать число доступов к API<span style=\"color: red;\">ниже <span class=\"__hourly_limit\"></span></span>! Иначе Chromed Bird перестанет правильно работать и ленты не будут обновляться.<br><span style=\"color: red;\">Помните</span>, что если вы используете несколько Twitter клиентов, вы должны держать число доступов еще ниже."
+	},
+	"l_hits_notice": {
+		"message": "Доступов к API в час: "
+	},
+	"l_visible": {
+		"message": "Показывать"
+	},
+	"l_refresh_interval": {
+		"message": "Интервал обновления (с)"
+	},
+	"l_include_in_unified": {
+		"message": "Включать в объединенную ленту"
+	},
+	"l_tabs_count": {
+		"message": "Число закладок"
+	},
+	"l_unified_timeline": {
+		"message": "Объединенная лента:"
+	},
+	"tml_favorites": {
+		"message": "Избранное:"
+	},
+	"l_blocked_users": {
+		"message": "Заблокированые пользователи:"
+	},
+	"notice_right_click_change": {
+		"message": "* Эй, теперь вы можете нажать правой кнопкой, что бы изменить большинство этих значений прямо из всплывающего окна. Просто убирайтесь отсюда! :)"
+	},
+	"l_tweets_per_page": {
+		"message": "Твитов на странице:"
+	},
+	"l_max_cached_tweets": {
+		"message": "Максимум показанных твитов:"
+	},
+	"g_microblogging_service": {
+		"message": "Служба микроблогов"
+	},
+	"g_advanced": {
+		"message": "Продвинутые"
+	},
+	"l_request_timeout": {
+		"message": "Таймаут запроса (мс):"
+	},
+	"l_base_url": {
+		"message": "Twitter's API URL:"
+	},
+	"l_base_oauth_url": {
+		"message": "OAuth URL:"
+	},
+	"l_same_signing_urls": {
+		"message": "Same signing URLs:"
+	},
+	"l_base_signing_url": {
+		"message": "API Signing URL:"
+	},
+	"l_base_oauth_signing_url": {
+		"message": "OAuth Signing URL:"
+	},
+	"l_base_search_url": {
+		"message": "Search API URL:"
+	},
+	"btn_save": {
+		"message": "Сохранить"
+	},
+	"btn_reset": {
+		"message": "Сбросить"
+	},
+	"btn_default": {
+		"message": "По-умолчанию"
+	}
+}
