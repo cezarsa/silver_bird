@@ -7,14 +7,14 @@
 		"message": "Двойной клик для сброса размера"
 	},
 	"composeTweet": {
-		"message": "Написать твит",
+		"message": "Написать Твит",
 		"description": "Text for composing new tweet"
 	},
 	"tweetit": {
 		"message": "Затвитить!"
 	},
 	"logout": {
-		"message": "Выйти",
+		"message": "Выход",
 		"description": "The text for the logout link"
 	},
 	"options": {
@@ -48,7 +48,7 @@
 		"message": "Добавить" 
 	},
 	"selectList": {
-		"message": "- Выбрать список -"
+		"message": "- списки -"
 	},
 	"updateList": {
 		"message": "Обновляю списки..."
@@ -63,7 +63,7 @@
 		"message": "DMs"
 	},
 	"w_Favorites": {
-		"message": "Favorites"
+		"message": "Избранные"
 	},
 	"w_Lists": {
 		"message": "Списки"
@@ -465,16 +465,16 @@
 		"message": "Отвечать всем упомянутым:"
 	},
 	"l_show_hits_in_popup": {
-		"message": "Показывать количество обращений к API:"
+		"message": "Показывать число обращений к API:"
 	},
 	"l_show_user_autocomplete": {
-		"message": "Автодополнять имена пользователей:"
+		"message": "Автодополнять имена:"
 	},
 	"l_icon_color": {
 		"message": "Цвет иконки:"
 	},
 	"l_tweets_color_only_unified": {
-		"message": "Цвета только в объединенной ленте:"
+		"message": "Цвета только в общей ленте:"
 	},
 	"l_tweet_color": {
 		"message": "Цвет твита:"
@@ -519,7 +519,7 @@
 		"message": "Оповещения на странице"
 	},
 	"l_noti_desktop": {
-		"message": "Оповещения на рабочем столе"
+		"message": "На рабочем столе"
 	},
 	"l_notification_fade_timeout": {
 		"message": "Таймаут оповещения (с):"
@@ -546,10 +546,10 @@
 		"message": "Ленты"
 	},
 	"notice_api_hits": {
-		"message": "Вы должны держать число доступов к API<span style=\"color: red;\">ниже <span class=\"__hourly_limit\"></span></span>! Иначе Chromed Bird перестанет правильно работать и ленты не будут обновляться.<br><span style=\"color: red;\">Помните</span>, что если вы используете несколько Twitter клиентов, вы должны держать число доступов еще ниже."
+		"message": "Вы должны держать число обращений к API <span style=\"color: red;\">ниже <span class=\"__hourly_limit\"></span></span>! Иначе Chromed Bird перестанет работать и ленты не будут обновляться.<br><span style=\"color: red;\">Помните</span>, если вы используете несколько Twitter клиентов, вы должны держать число обращений еще ниже."
 	},
 	"l_hits_notice": {
-		"message": "Доступов к API в час: "
+		"message": "Обращений к API в час: "
 	},
 	"l_visible": {
 		"message": "Показывать"
@@ -558,13 +558,13 @@
 		"message": "Интервал обновления (с)"
 	},
 	"l_include_in_unified": {
-		"message": "Включать в объединенную ленту"
+		"message": "Включать в общую ленту"
 	},
 	"l_tabs_count": {
 		"message": "Число закладок"
 	},
 	"l_unified_timeline": {
-		"message": "Объединенная лента:"
+		"message": "Общая лента:"
 	},
 	"tml_favorites": {
 		"message": "Избранное:"
@@ -615,6 +615,6 @@
 		"message": "Сбросить"
 	},
 	"btn_default": {
-		"message": "По-умолчанию"
+		"message": "По умолчанию"
 	}
 }
