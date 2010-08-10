@@ -619,5 +619,8 @@
 	},
 	"shortenIt": {
 		"message": "Shorten it!"
+	},
+	"shorten_current": {
+		"message": "Share current page"
 	}
 }

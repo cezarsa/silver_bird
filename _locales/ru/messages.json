@@ -619,6 +619,9 @@
 	},
 	"shortenIt": {
 		"message": "Сократить!"
+	},
+	"shorten_current": {
+		"message": "Поделиться текущей страницей"
 	}
 	
 }
