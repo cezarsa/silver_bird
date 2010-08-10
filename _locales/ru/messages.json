@@ -616,5 +616,9 @@
 	},
 	"btn_default": {
 		"message": "По умолчанию"
+	},
+	"shortenIt": {
+		"message": "Сократить!"
 	}
+	
 }

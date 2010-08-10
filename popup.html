@@ -1745,7 +1745,7 @@ $(function() {
     <div id="shortener_area">
       <input type="text" name="shortener_text" onfocus="Shortener.focus();" onkeyup="Shortener.changed(event);" onblur="Shortener.blur();">
       <div id="shorten_current" title="Share current page" onclick="Shortener.shortenCurrentPage();"></div>
-      <div id="shortener_button" onclick="Shortener.shortenIt();"><div>Shorten it!</div></div>
+      <div id="shortener_button" onclick="Shortener.shortenIt();"><div><span id="shortenIt" class="i18n"></span></div></div>
     </div>
     <div class="footer">
       <input id="tweetit" class="i18n" type="button" onclick="Composer.sendTweet();"/>
