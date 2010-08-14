@@ -616,5 +616,11 @@
 	},
 	"btn_default": {
 		"message": "Reiniciar a por defecto"
+	},
+	"shortenIt": {
+		"message": "Acortarla!"
+	},
+	"shorten_current": {
+		"message": "Compartir página actual"
 	}
 }
