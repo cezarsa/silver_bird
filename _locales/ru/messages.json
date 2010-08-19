@@ -141,7 +141,7 @@
 		"message": "твиты"
 	},
 	"newTweetsAvailable": {
-		"message": " доступно еще $count$ твит. Обновить сейчас.",
+		"message": " Новых твитов: $count$. Обновить сейчас.",
 		"placeholders": {
 			"count": {
 				"content": "$1"
@@ -278,7 +278,7 @@
 		}
 	},
 	"newTweets": {
-		"message": "$count$ $newtweets$",
+		"message": "$newtweets$: $count$",
 		"placeholders": {
 			"count": {
 				"content": "$1"
@@ -289,10 +289,10 @@
 		}
 	},
 	"newtweets_singular": {
-		"message": "новый твит"
+		"message": "Новых твитов"
 	},
 	"newtweets_plural": {
-		"message": "новых твитов"
+		"message": "Новых твитов"
 	},
 	"btnAuthorize": {
 		"message": "Авторизуйся!"
