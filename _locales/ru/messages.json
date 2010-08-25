@@ -173,13 +173,13 @@
 		"message": "Сбой запрос AJAX (плохое содинение?)"
 	},
 	"successAuth": {
-		"message": "Поздравляем, вы успешно вошли в систему. Наслаждайтесь Enjoy Chromed Bird!"
+		"message": "Поздравляем, вы успешно вошли в систему. Наслаждайтесь Chromed Bird!"
 	},
 	"cbAuthorized": {
 		"message": "Chromed Bird авторизован!"
 	},
 	"cbNotAuthorized": {
-		"message": "Уупс... Что то пошло не так. Попробуйте нажать на иконку Chromed Bird снова."
+		"message": "Упс... Что то пошло не так. Попробуйте нажать на иконку Chromed Bird снова."
 	},
 	"authorizing": {
 		"message": "Пожалуйста подождите, авторизуем Chromed Bird..."
