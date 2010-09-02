@@ -1325,7 +1325,7 @@ var ContextMenu = {
         if(template.multipleTimelines) {
           label = chrome.i18n.getMessage("add");
         }
-        generalMenu.push({action: 'show-' + template.id, label: label + template.timelineName + ' Tab'});
+        generalMenu.push({action: 'show-' + template.id, label: label + " " + template.timelineName + ' Tab'});
       }
     });
 
@@ -1696,12 +1696,6 @@ function initializeWorkspace() {
 }
 
 $(function() {
-  if(!twitterBackend.authenticated()) {
-    if(twitterBackend.tokenRequested()) {
-      $("#enter_pin").show();
-    }
-    return;
-  }
 
   $("input.i18n").each(function() {
     $(this).val(chrome.i18n.getMessage(this.id));
@@ -1710,6 +1704,13 @@ $(function() {
   $("span.i18n").each(function() {
     $(this).html(chrome.i18n.getMessage(this.id));
   });
+
+  if(!twitterBackend.authenticated()) {
+    if(twitterBackend.tokenRequested()) {
+      $("#enter_pin").show();
+    }
+    return;
+  }
 
   initializeWorkspace();
 
