@@ -1,0 +1,620 @@
+{
+	"extDescription": {
+		"message": "Chromed Bird ist eine Erweiterung für Twitter, die es erlaubt, der Timeline zu folgen und mit Twitter zu interagieren.",
+		"description": "Beschreibung der Erweiterung"
+	},
+	"resetSize": {
+		"message": "Doppelklicken, um die Größe zurück zu setzen"
+	},
+	"composeTweet": {
+		"message": "Tweet schreiben",
+		"description": "Text zum Schreiben eines neuen Tweets"
+	},
+	"tweetit": {
+		"message": "Tweet!"
+	},
+	"logout": {
+		"message": "Abmelden",
+		"description": "Text für den Logout-Link"
+	},
+	"options": {
+		"message": "Optionen",
+		"description": "Verknüpfung zu den Optionen"
+	},
+	"refresh": {
+		"message": "Aktualisieren",
+		"description": "Verknüpfung zum Aktualisieren"
+	},
+	"suspend": {
+		"message": "Pausieren",
+		"description": "Verknüpfung zum Pausieren"
+	},
+	"autoUpdatesSuspended": {
+		"message": "Automatische Updates pausiert."
+	},
+	"resume": {
+		"message": "Fortsetzen"
+	},
+	"remove": {
+		"message": "Entfernen"
+	},
+	"hide": {
+		"message": "Verstecken"
+	},
+	"show": {
+		"message": "Zeigen"
+	},
+	"add": {
+		"message": "Hinzufügen"
+	},
+	"selectList": {
+		"message": "- Wähle eine Liste aus -"
+	},
+	"updateList": {
+		"message": "Listen aktualisieren..."
+	},
+	"w_Unified": {
+		"message": "Übersicht"
+	},
+	"w_Home": {
+		"message": "Startseite"
+	},
+	"w_DM": {
+		"message": "Direktnachrichten"
+	},
+	"w_Favorites": {
+		"message": "Favoriten"
+	},
+	"w_Lists": {
+		"message": "Listen"
+	},
+	"w_Search": {
+		"message": "Suchen"
+	},
+	"fromApp": {
+		"message": "von"
+	},
+	"inReply": {
+		"message": "antwortet auf"
+	},
+	"retweetedBy": {
+		"message": "retweeted von"
+	},
+	"retweetedByMe": {
+		"message": "von mir retweeted"
+	},
+	"unmarkFavorite": {
+		"message": "Als Favorit abwählen"
+	},
+	"markFavorite": {
+		"message": "Als Favorit markieren"
+	},
+	"Delete": {
+		"message": "Löschen"
+	},
+	"deleteConfirm": {
+		"message": "Nachricht löschen: "
+	},
+	"Yes": {
+		"message": "Ja"
+	},
+	"No": {
+		"message": "Nein"
+	},
+	"Reply": {
+		"message": "Antworten"
+	},
+	"Retweet": {
+		"message": "Retweet"
+	},
+	"retweetConfirm": {
+		"message": "Diese Nachricht retweeten: "
+	},
+	"oldRT": {
+		"message": "Teilen (altes RT)"
+	},
+	"markAllRead": {
+		"message": "Alles als gelesen markieren"
+	},
+	"newToken": {
+		"message": "Neues Token anfordern"
+	},
+	"shortenerIdleString": {
+		"message": "URL zum Kürzen eintippen, oder gleich hier klicken \u2192"
+	},
+	"timelineHome": {
+		"message": "Startseite",
+		"description": "Die Timeline der Startseite"
+	},
+	"timelineDM": {
+		"message": "DN",
+		"description": "Direkte Nachrichten"
+	},
+	"timelineFavorites": {
+		"message": "Favoriten",
+		"description": "Die Favoriten-Timeline"
+	},
+	"tweet_singular": {
+		"message": "Tweet"
+	},
+	"tweet_plural": {
+		"message": "Tweets"
+	},
+	"newTweetsAvailable": {
+		"message": "$count$ weitere $tweets$ verfügbar. Jetzt aktualisieren.",
+		"placeholders": {
+			"count": {
+				"content": "$1"
+			},
+			"tweets": {
+				"content": "$2"
+			}
+		}
+	},
+	"preventClosing": {
+		"message": "Klicken, um Schließen zu verhindern."
+	},
+	"changeNotificationSettings": {
+		"message": "Benachrichtigungseinstellungen können in den Optionen geändert werden."
+	},
+	"loadingMap": {
+		"message": "Lade Karte ..."
+	},
+	"loadingImage": {
+		"message": "Lade Bild ..."
+	},
+	"loadingLongUrl": {
+		"message": "Lade lange URL..."
+	},
+	"errorExpandingUrl": {
+		"message": "Fehler beim Erweitern der URL."
+	},
+	"ajaxFailed": {
+		"message": "AJAX Anfrage fehlgeschlagen. (Schlechte Verbindung?)"
+	},
+	"successAuth": {
+		"message": "Glückwunsch, Du wurdest erfolgreich authentifiziert. Viel Spaß mit Chromed Bird!"
+	},
+	"cbAuthorized": {
+		"message": "Chromed Bird authorisiert!"
+	},
+	"cbNotAuthorized": {
+		"message": "Ups... Irgendwas ist schief gegangen. Bitte klick noch mal auf das Chromed Bird Icon."
+	},
+	"authorizing": {
+		"message": "Bitte warten, Chromed Bird wird authorisiert..."
+	},
+	"yourPIN": {
+		"message": "Deine PIN ist: $pin$",
+		"placeholders": {
+			"pin":{
+				"content": "$1"
+			}
+		}
+	},
+	"tryAgain": {
+		"message": "Wiederholen"
+	},
+	"canceling": {
+		"message": "Abbrechen..."
+	},
+	"cancelTweet": {
+		"message": "Tweet abbrechen"
+	},
+	"queued_messages": {
+		"message": "Nachrichten in der Warteschlange:"
+	},
+	"queue_trying": {
+		"message": "Versuche seit $timediff$ zu senden.",
+		"placeholders": {
+			"timediff": {
+				"content": "$1"
+			}
+		}
+	},
+	"queue_retried": {
+		"message": "$retries$ Versuche seit $timediff$ [$laststatus$]",
+		"placeholders": {
+			"retries": {
+				"content": "$1"
+			},
+			"timediff": {
+				"content": "$2"
+			},
+			"laststatus": {
+				"content": "$3"
+			}
+		}
+	},
+	"ue_fetchingLists": {
+		"message": "Unerwarteter Fehler $status$ beim Laden der Listen.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_updatingTweets": {
+		"message": "Unerwarteter Fehler $baseError$ beim Aktualisieren der Tweets.",
+		"placeholders": {
+			"baseError": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_updatingTweets2": {
+		"message": " Wenn dieser Timeout-Fehler wiederholt auftritt, versuch's mit Aus- und wieder Einloggen."
+	},
+	"ue_deletingTweet": {
+		"message": "Unerwartete Fehler $status$ beim Löschen eines Tweets.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_retweeting": {
+		"message": "Unerwartete Fehler $status$ beim Retweeten.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_markFavorite": {
+		"message": "Unerwartete Fehler $status$ beim Markieren als Favorit.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_unmarkFavorite": {
+		"message": "Unerwartete Fehler $status$ beim Löschen eines Favoriten.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"newTweets": {
+		"message": "$count$ $newtweets$",
+		"placeholders": {
+			"count": {
+				"content": "$1"
+			},
+			"newtweets": {
+				"content": "$2"
+			}
+		}
+	},
+	"newtweets_singular": {
+		"message": "neuer Tweet"
+	},
+	"newtweets_plural": {
+		"message": "neue Tweets"
+	},
+	"btnAuthorize": {
+		"message": "Authorisieren!"
+	},
+	"exceededAPIHits": {
+		"message": "Du hast die API-Aufrufgrenze überschritten. Bitte überprüfe Deine Aktualisierungseinstellungen in den <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>Optionen</a>. Chromed Bird wird bis $nextResetDate $nextResetTime$ nicht mehr aktualisiert.",
+		"placeholders": {
+			"options_url": {
+				"content": "$1"
+			},
+			"nextResetDate": {
+				"content": "$2"
+			},
+			"nextResetTime": {
+				"content": "$3"
+			}
+		}
+	},
+	"warningAPIHits": {
+		"message": "Hey! Die verbleibende API-Aufrufe werden zu schnell weniger.<br>Bitte überprüfe Deine Aktualisierungseinstellungen in den <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>Optionen</a>. Sei besonders vorsichtig, wenn Du mehrere Twitter-Programme verwendest; sie teilen sich die API-Aufrufe!<br>Verbleibende Aufrufe: $remainingHits$ - Nächster Reset: $nextResetDate$ $nextResetTime$",
+		"placeholders": {
+			"options_url": {
+				"content": "$1"
+			},
+			"remainingHits": {
+				"content": "$2"
+			},
+			"nextResetDate": {
+				"content": "$3"
+			},
+			"nextResetTime": {
+				"content": "$4"
+			}
+		}
+	},
+	"oAuthError": {
+		"message": "Der folgende Fehler trat während der Authentifizierung auf:: $errorMessage$. Bitte <a href=\"javascript:OAuth.requestNewToken();\">hier klicken zum Neustarten der Authentifizierung</a>.",
+		"placeholders": {
+			"errorMessage": {
+				"content": "$1"
+			}
+		}
+	},
+	"justNow": {
+		"message": "gerade eben"
+	},
+	"minuteAgo": {
+		"message": "vor weniger als einer Minuten"
+	},
+	"minutes": {
+		"message": "$nr_of_minutes$ $minutes$ her",
+		"placeholders": {
+			"nr_of_minutes":{
+				"content": "$1"
+			},
+			"minutes": {
+				"content": "$2",
+				"example": "Minute oder Minuten (Singular / Plural)"
+			}
+		}
+	},
+	"minute_singular": {
+		"message": "Minute"
+	},
+	"minute_plural": {
+		"message": "Minuten"
+	},
+	"timeAgo": {
+		"message": "Etwa vor $time$ $time_string$",
+		"placeholders": {
+			"time": {
+				"content": "$1"
+			},
+			"time_string": {
+				"content": "$2"
+			}
+		}
+	},
+	"hour_singular": {
+		"message": "Stunde"
+	},
+	"hour_plural": {
+		"message": "Stunden"
+	},
+	"day_singular": {
+		"message": "Tag"
+	},
+	"day_plural": {
+		"message": "Tage"
+	},
+	"month_singular": {
+		"message": "Monat"
+	},
+	"month_plural": {
+		"message": "Monate"
+	},
+	"yearsAgo": {
+		"message": "Vor Jahren"
+	},
+	"options_title": {
+		"message": "Chromed Bird Optionen"
+	},
+	"conf_saved": {
+		"message": "Die Konfiguration wurde erfolgreich gespeichert!"
+	},
+	"changes_restart": {
+		"message": "Einige der Änderungen erfordern, dass Chromed Bird neu gestartet werden muss. Jetz neu starten?<br>    (Das wird Deinen Ungelesene Tweets-Zähler zurücksetzen.)"
+	},
+	"remaining_api_hits": {
+		"message": "Verbleibende Twitter-API-Aufrufe: "
+	},
+	"rate_limit_reset": {
+		"message": "Aufrufsgrenze wird zurückgesetzt in: "
+	},
+	"nerds_link": {
+		"message": "API-Statistiken (für Nerds)"
+	},
+	"g_ui": {
+		"message": "UI"
+	},
+	"l_name_attribute": {
+		"message": "Namen in Tweets:"
+	},
+	"o_screen_name": {
+		"message": "Twitter-Name"
+	},
+	"o_name": {
+		"message": "Real-Name"
+	},
+	"o_both": {
+		"message": "Beide Namen"
+	},
+	"l_compose_position": {
+		"message": "Position des Eingabefelds:"
+	},
+	"o_top": {
+		"message": "Oben"
+	},
+	"o_bottom": {
+		"message": "Unten"
+	},
+	"l_theme": {
+		"message": "UI Theme:"
+	},
+	"l_font_size": {
+		"message": "Schriftgröße:"
+	},
+	"o_small": {
+		"message": "Klein"
+	},
+	"o_normal": {
+		"message": "Normal"
+	},
+	"o_large": {
+		"message": "Groß"
+	},
+	"o_extra_large": {
+		"message": "Extragroß"
+	},
+	"l_font_family": {
+		"message": "Schriftfamilie:"
+	},
+	"l_hover_timeout": {
+		"message": "Als Gelesen markieren nach (ms):"
+	},
+	"l_show_expanded_urls": {
+		"message": "Verkürzte URLs auflösen:"
+	},
+	"l_reply_all": {
+		"message": "An alle antworten:"
+	},
+	"l_show_hits_in_popup": {
+		"message": "API-Aufrufzahl anzeigen:"
+	},
+	"l_show_user_autocomplete": {
+		"message": "Benutzernamen vervollständigen:"
+	},
+	"l_icon_color": {
+		"message": "Icon-Farbe:"
+	},
+	"l_tweets_color_only_unified": {
+		"message": "Farben nur in der Übersicht:"
+	},
+	"l_tweet_color": {
+		"message": "Tweet-Farbe:"
+	},
+	"w_Mentions": {
+		"message": "Erwähnungen"
+	},
+	"btn_reset_popup_size": {
+		"message": "Popup-Größe zurücksetzen"
+	},
+	"g_notifications": {
+		"message": "Benachrichtigungen"
+	},
+	"l_tweet_notification": {
+		"message": "Tweet-Benachrichtigung"
+	},
+	"l_change_icon": {
+		"message": "Icon ändern"
+	},
+	"l_icon_color": {
+		"message": "Icon-Farbe"
+	},
+	"notif_home": {
+		"message": "Startseite:"
+	},
+	"notif_mentions": {
+		"message": "Erwähnungen:"
+	},
+	"notif_dms": {
+		"message": "DN:"
+	},
+	"notif_lists": {
+		"message": "Listen:"
+	},
+	"notif_search": {
+		"message": "Suche:"
+	},
+	"l_tweets_notification_style": {
+		"message": "Benachrichtigungsstil:"
+	},
+	"l_noti_on_page": {
+		"message": "Auf der Seite benachrichtigen"
+	},
+	"l_noti_desktop": {
+		"message": "Desktop-Benachrichtigungen"
+	},
+	"l_notification_fade_timeout": {
+		"message": "Benachrichtigungs-Timeout (s):"
+	},
+	"g_shortener": {
+		"message": "Verkürzer"
+	},
+	"l_url_shortener": {
+		"message": "URL-Verkürzer:"
+	},
+	"l_shortener_acct": {
+		"message": "Privates Konto nutzen?"
+	},
+	"l_shortener_login": {
+		"message": "API Login:"
+	},
+	"l_shortener_key": {
+		"message": "API Key:"
+	},
+	"l_share_include_title": {
+		"message": "Seiten-Titel mit angeben (beim Teilen):"
+	},
+	"g_timelines": {
+		"message": "Timelines"
+	},
+	"notice_api_hits": {
+		"message": "Die API-Aufrufe pro Stunde sollten <span style=\"color: red;\">unter <span class=\"__hourly_limit\"></span></span> bleiben! Sonst wird Chromed Bird nicht mehr richtig arbeiten und Timelines werden nicht mehr aktualisiert.<br><span style=\"color: red;\">Bedenke</span>, dass die API-Aufrufe noch niedriger liegen müssen, wenn Du mehrere Twitter-Programme einsetzt!"
+	},
+	"l_hits_notice": {
+		"message": "API-Aufrufe pro Stunde: "
+	},
+	"l_visible": {
+		"message": "Sichtbar"
+	},
+	"l_refresh_interval": {
+		"message": "Aktualisierungs-Intervall (s)"
+	},
+	"l_include_in_unified": {
+		"message": "In Übersichts-Timeline anzeigen"
+	},
+	"l_tabs_count": {
+		"message": "Anzahl Tabs"
+	},
+	"l_unified_timeline": {
+		"message": "Überischts-Timeline:"
+	},
+	"tml_favorites": {
+		"message": "Favoriten:"
+	},
+	"l_blocked_users": {
+		"message": "Gesperrte Nutzer:"
+	},
+	"notice_right_click_change": {
+		"message": "* Hey, jetzt kannst Du mit dem Kontextmenü (Rechts-Klick) die meisten Einstellungen direkt im Popup-Fenster erledigen. Raus hier! :)"
+	},
+	"l_tweets_per_page": {
+		"message": "Tweets pro Setie:"
+	},
+	"l_max_cached_tweets": {
+		"message": "Maximale Zahl angezeigter Tweets:"
+	},
+	"g_microblogging_service": {
+		"message": "Mikroblogging-Dienst"
+	},
+	"g_advanced": {
+		"message": "Erweitert"
+	},
+	"l_request_timeout": {
+		"message": "Abfrage-Timeout (ms):"
+	},
+	"l_base_url": {
+		"message": "Twitter's API URL:"
+	},
+	"l_base_oauth_url": {
+		"message": "OAuth URL:"
+	},
+	"l_same_signing_urls": {
+		"message": "Gleiche Signatur-URLs:"
+	},
+	"l_base_signing_url": {
+		"message": "API-Signatur-URL:"
+	},
+	"l_base_oauth_signing_url": {
+		"message": "OAuth-Signatur-URL:"
+	},
+	"l_base_search_url": {
+		"message": "Such-API-URL:"
+	},
+	"btn_save": {
+		"message": "Speicheren"
+	},
+	"btn_reset": {
+		"message": "Zurücksetzen"
+	},
+	"btn_default": {
+		"message": "Auf Standards zurücksetzen"
+	}
+}
