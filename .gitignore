@@ -3,3 +3,4 @@
 *.pem
 .DS_Store
 *.tmproj
+*~
