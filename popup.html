@@ -1332,7 +1332,7 @@ var ContextMenu = {
         if(template.multipleTimelines) {
           label = chrome.i18n.getMessage("add");
         }
-        generalMenu.push({action: 'show-' + template.id, label: label + template.timelineName + ' Tab'});
+        generalMenu.push({action: 'show-' + template.id, label: label + " " + template.timelineName + ' Tab'});
       }
     });
 
@@ -1699,16 +1699,11 @@ function initializeWorkspace() {
 
     WorkList.init();
     Autocomplete.init();
+    $("#shorten_current").attr("title",chrome.i18n.getMessage("shorten_current"));
   }, 0);
 }
 
 $(function() {
-  if(!twitterBackend.authenticated()) {
-    if(twitterBackend.tokenRequested()) {
-      $("#enter_pin").show();
-    }
-    return;
-  }
 
   $("input.i18n").each(function() {
     $(this).val(chrome.i18n.getMessage(this.id));
@@ -1717,6 +1712,13 @@ $(function() {
   $("span.i18n").each(function() {
     $(this).html(chrome.i18n.getMessage(this.id));
   });
+
+  if(!twitterBackend.authenticated()) {
+    if(twitterBackend.tokenRequested()) {
+      $("#enter_pin").show();
+    }
+    return;
+  }
 
   initializeWorkspace();
 
@@ -1752,7 +1754,7 @@ $(function() {
     <div id="shortener_area">
       <input type="text" name="shortener_text" onfocus="Shortener.focus();" onkeyup="Shortener.changed(event);" onblur="Shortener.blur();">
       <div id="shorten_current" title="Share current page" onclick="Shortener.shortenCurrentPage();"></div>
-      <div id="shortener_button" onclick="Shortener.shortenIt();"><div>Shorten it!</div></div>
+      <div id="shortener_button" onclick="Shortener.shortenIt();"><div><span id="shortenIt" class="i18n"></span></div></div>
     </div>
     <div class="footer">
       <input id="tweetit" class="i18n" type="button" onclick="Composer.sendTweet();"/>

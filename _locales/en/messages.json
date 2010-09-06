@@ -616,5 +616,11 @@
 	},
 	"btn_default": {
 		"message": "Reset to default"
+	},
+	"shortenIt": {
+		"message": "Shorten it!"
+	},
+	"shorten_current": {
+		"message": "Share current page"
 	}
 }
