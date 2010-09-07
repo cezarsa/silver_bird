@@ -468,8 +468,20 @@ var Composer = {
 
   sendTweet: function () {
     var textarea = $("#compose_tweet_area textarea");
-    tweetManager.enqueueTweet(textarea.val(), Composer.replyId);
-
+    // if automatic url shortening is active, parse the textarea and shorten URLs
+    if (OptionsBackend.get('auto_shorten_urls')) {
+      var ttext = textarea.val()
+      var regexp_url = /(?:https?:\/\/(?:(?:(?:(?:(?:[a-zA-Z\d](?:(?:[a-zA-Z\d]|-)*[a-zA-Z\d])?)\.)*(?:[a-zA-Z](?:(?:[a-zA-Z\d]|-)*[a-zA-Z\d])?))|(?:(?:\d+)(?:\.(?:\d+)){3}))(?::(?:\d+))?)(?:\/(?:(?:(?:(?:[a-zA-Z\d$\-_.+!*'(),]|(?:%[a-fA-F\d]{2}))|[;:@&=])*)(?:\/(?:(?:(?:[a-zA-Z\d$\-_.+!*'(),]|(?:%[a-fA-F\d]{2}))|[;:@&=])*))*)(?:\?(?:(?:(?:[a-zA-Z\d$\-_.+!*'(),]|(?:%[a-fA-F\d]{2}))|[;:@&=])*))?)?)/g;
+      url_matches = ttext.match(regexp_url);
+      if (url_matches) {
+	for (var i = 0; i < url_matches.length; ++i)
+	  ttext = ttext.replace(url_matches[i], this.shortenPage(url_matches[i], context);)
+      }
+      tweetManager.enqueueTweet(ttext, Composer.replyId);
+    } else {
+      tweetManager.enqueueTweet(textarea.val(), Composer.replyId);
+    }
+    
     textarea.val("");
     Composer.replyId = null;
     Composer.textareaChanged();
@@ -694,8 +706,13 @@ var Shortener = {
         if(context && context.title && OptionsBackend.get('share_include_title')) {
           shortUrl = context.title + ' - ' + shortUrl;
         }
-        textarea.insertAtCaret(shortUrl);
-        Composer.textareaChanged();
+	// if auto-shortening is activated, we don't paste the url back, just return it
+	if (OptionsBackend.get('auto_shorten_urls')) {
+	  return shortUrl;
+	} else {
+	  textarea.insertAtCaret(shortUrl);
+	  Composer.textareaChanged();
+	}
       } else if(!success) {
         Renderer.showError(shortUrl);
       }
