@@ -918,7 +918,7 @@ var Renderer = {
     str += '<div class="first_container">';
     if(tweet.retweeted_status) {
       str += '<img class="profile retweet_source" src="' + user.profile_image_url + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')" />';
-      str += '<img class="profile retweet_retweeter" src="'+ tweet.user.profile_image_url +'"/>'
+      str += '<img class="profile retweet_retweeter" src="'+ tweet.user.profile_image_url +' " onclick="window.open(\''+TwitterLib.URLS.BASE+tweet.user.screen_name+'\')"/>';
     } else {
       str += '<img class="profile" src="' + user.profile_image_url + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')"></img>';
     }
