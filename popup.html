@@ -1469,7 +1469,7 @@ var Autocomplete = {
     var validScreenNames = [];
     for(var i = 0, len = usersList.length; i < len; ++i) {
       var user = usersList[i];
-      if(user.screen_name.indexOf(hintStr) == 0) {
+      if(user.screen_name.toUpperCase().indexOf(hintStr.toUpperCase()) == 0) {
         validScreenNames.push(user.screen_name);
       }
     }
