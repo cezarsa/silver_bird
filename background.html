@@ -819,7 +819,7 @@ TweetManager.prototype = {
       }
       _this.followingUsers = _this.followingUsers.concat(users);
       _this.followingUsers.sort(function(a, b) {
-        return a.screen_name.localeCompare(b.screen_name);
+        return a.screen_name.toUpperCase().localeCompare(b.screen_name.toUpperCase());
       });
     }, usersIdList);
   },
