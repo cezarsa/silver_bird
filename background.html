@@ -388,7 +388,7 @@ TweetManager.prototype = {
     if(!tweetsToNotify || tweetsToNotify.length == 0) {
       return;
     }
-    var maxTweetsNotifications = Options.get('notification_max_popups');
+    var maxTweetsNotifications = OptionsBackend.get('notification_max_popups');
     if(maxTweetsNotifications != -1 && tweetsToNotify.length > maxTweetsNotifications) {
       tweetsToNotify.splice(maxTweetsNotifications, tweetsToNotify.length - maxTweetsNotifications);
     }
