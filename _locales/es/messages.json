@@ -524,6 +524,9 @@
 	"l_notification_fade_timeout": {
 		"message": "Timeout de Notificaciones (s):"
 	},
+	"l_notification_max_popups": {
+		"message": "Notificaciones a la vez (-1: todas):"
+	},
 	"g_shortener": {
 		"message": "Acortador"
 	},
@@ -618,7 +621,7 @@
 		"message": "Reiniciar a por defecto"
 	},
 	"shortenIt": {
-		"message": "Acortarla!"
+		"message": "¡Acortar!"
 	},
 	"shorten_current": {
 		"message": "Compartir página actual"
