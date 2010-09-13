@@ -157,11 +157,12 @@ input[type='text'] {
 }
 
 #shorten_current {
-  width: 16px;
-  height: 16px;
+  background-size: 14px 14px;
+  width: 14px;
+  height: 14px;
   position: absolute;
   right: 4px;
-  margin-top: -18px;
+  margin-top: -16px;
   cursor: pointer;
 }
 

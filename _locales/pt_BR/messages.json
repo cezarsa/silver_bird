@@ -519,6 +519,9 @@
 	"l_notification_fade_timeout": {
 		"message": "Duração das notificações (s):"
 	},
+	"l_notification_max_popups": {
+		"message": "Notificações ao mesmo tempo (-1: todas):"
+	},
 	"g_shortener": {
 		"message": "Encurtador"
 	},
