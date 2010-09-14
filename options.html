@@ -419,6 +419,9 @@ function updatePredictedHitsCount() {
     <input type="radio" name="tweets_notification_style" value="desktop" id="noti_desktop"> <label for="noti_desktop" class="radio_opt i18n" id="l_noti_desktop">Desktop Notifications</label><br>
     <label for="notification_fade_timeout" class="i18n" id="l_notification_fade_timeout">Notification Timeout (s):</label>
     <input type="text" name="notification_fade_timeout" validator="required,number,positive" converter="RefreshInterval"><br>
+
+    <label for="notification_max_popups" class="i18n" id="l_notification_max_popups">Notifications at once (-1: all):</label>
+    <input type="text" name="notification_max_popups" validator="required,number,positive"><br>
   </fieldset>
 
   <fieldset>
