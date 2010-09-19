@@ -1,0 +1,629 @@
+{
+	"extDescription": {
+		"message": "Chromed Bird, Twitter hesabınızı Google Chrome üzerinden takip etmenizi ve yönetmenizi sağlayan bir eklentidir.",
+		"description": "Extension description"
+	},
+	"resetSize": {
+		"message": "Varsayılan boyuta dönüş için çift tıklayın"
+	},
+	"composeTweet": {
+		"message": "Yeni tweet",
+		"description": "Text for composing new tweet"
+	},
+	"tweetit": {
+		"message": "Tweet"
+	},
+	"logout": {
+		"message": "Çıkış",
+		"description": "The text for the logout link"
+	},
+	"options": {
+		"message": "Seçenekler",
+		"description": "Options link"
+	},
+	"refresh": {
+		"message": "Yenile",
+		"description": "Refresh link"
+	},
+	"suspend": {
+		"message": "İptal",
+		"description": "Suspend link"
+	},
+	"autoUpdatesSuspended": {
+		"message": "Otomatik güncellemeler iptal edildi"
+	},
+	"resume": {
+		"message": "Devam"
+	},
+	"remove": {
+		"message": "Kaldır"
+	},
+	"hide": {
+		"message": "Gizle"
+	},
+	"show": {
+		"message": "Göster"
+	},
+	"add": {
+		"message": "Ekle"
+	},
+	"selectList": {
+		"message": "- Bir liste seç -"
+	},
+	"updateList": {
+		"message": "Listeler güncelleniyor..."
+	},
+	"w_Unified": {
+		"message": "Unified"
+	},
+	"w_Home": {
+		"message": "Home"
+	},
+	"w_DM": {
+		"message": "DMs"
+	},
+	"w_Favorites": {
+		"message": "Favoriler"
+	},
+	"w_Lists": {
+		"message": "Listeler"
+	},
+	"w_Search": {
+		"message": "Ara"
+	},
+	"fromApp": {
+		"message": "from"
+	},
+	"inReply": {
+		"message": "in reply to"
+	},
+	"retweetedBy": {
+		"message": "retweeted by"
+	},
+	"retweetedByMe": {
+		"message": "retweeted by me"
+	},
+	"unmarkFavorite": {
+		"message": "Favorilerden kaldır"
+	},
+	"markFavorite": {
+		"message": "Favorilere ekle"
+	},
+	"Delete": {
+		"message": "Sil"
+	},
+	"deleteConfirm": {
+		"message": "Bu iletiyi sil: "
+	},
+	"Yes": {
+		"message": "Evet"
+	},
+	"No": {
+		"message": "Hayır"
+	},
+	"Reply": {
+		"message": "Cevapla"
+	},
+	"Retweet": {
+		"message": "Yeniden tweetle"
+	},
+	"retweetConfirm": {
+		"message": "Bu iletiyi yeniden tweetle: "
+	},
+	"oldRT": {
+		"message": "Paylaş"
+	},
+	"markAllRead": {
+		"message": "Tümünü okundu olarak işaretle"
+	},
+	"newToken": {
+		"message": "Request another token"
+	},
+	"shortenerIdleString": {
+		"message": "Kısaltmak için bir URL yapıştırın. Aktif sayfayı kısaltmak için sağdaki ikona tıklayın"
+	},
+	"timelineHome": {
+		"message": "Home",
+		"description": "The home time line tab"
+	},
+	"timelineDM": {
+		"message": "DM",
+		"description": "The direct message time line tab"
+	},
+	"timelineFavorites": {
+		"message": "Favoriler",
+		"description": "The home time line tab"
+	},
+	"tweet_singular": {
+		"message": "tweet"
+	},
+	"tweet_plural": {
+		"message": "tweet"
+	},
+	"newTweetsAvailable": {
+		"message": "Yeni $count$ tweet var. Okumak için tıklayın.",
+		"placeholders": {
+			"count": {
+				"content": "$1"
+			},
+			"tweets": {
+				"content": "$2"
+			}
+		}
+	},
+	"preventClosing": {
+		"message": "Click to prevent closing."
+	},
+	"changeNotificationSettings": {
+		"message": "Bildirim seçeneklerini ayarlar sayfasından değiştirebilirsiniz."
+	},
+	"loadingMap": {
+		"message": "Harita yükleniyor..."
+	},
+	"loadingImage": {
+		"message": "Görsel yükleniyor..."
+	},
+	"loadingLongUrl": {
+		"message": "URL yükleniyor..."
+	},
+	"errorExpandingUrl": {
+		"message": "Bir hata oluştu. Lütfen tekrar deneyin."
+	},
+	"ajaxFailed": {
+		"message": "AJAX request failed (bad connection?)"
+	},
+	"successAuth": {
+		"message": "Tebrikler, kimliğiniz doğrulandı. Chromed Bird'ün tadını çıkarın!"
+	},
+	"cbAuthorized": {
+		"message": "Chromed Bird authorized!"
+	},
+	"cbNotAuthorized": {
+		"message": "Bir hata oluştu. Lütfen Chromed Bird ikonuna tekrar tıklayın."
+	},
+	"authorizing": {
+		"message": "Lütfen bekleyin..."
+	},
+	"yourPIN": {
+		"message": "PIN numaranız: $pin$",
+		"placeholders": {
+			"pin":{
+				"content": "$1"
+			}
+		}
+	},
+	"tryAgain": {
+		"message": "Tekrar deneyin"
+	},
+	"canceling": {
+		"message": "İptal ediliyor..."
+	},
+	"cancelTweet": {
+		"message": "İptal"
+	},
+	"queued_messages": {
+		"message": "Kuyruktaki mesajlar:"
+	},
+	"queue_trying": {
+		"message": "trying to send for $timediff$",
+		"placeholders": {
+			"timediff": {
+				"content": "$1"
+			}
+		}
+	},
+	"queue_retried": {
+		"message": "retried $retries$ times since $timediff$ ago [$laststatus$]",
+		"placeholders": {
+			"retries": {
+				"content": "$1"
+			},
+			"timediff": {
+				"content": "$2"
+			},
+			"laststatus": {
+				"content": "$3"
+			}
+		}
+	},
+	"ue_fetchingLists": {
+		"message": "Unexpected error $status$ fetching lists.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_updatingTweets": {
+		"message": "Unexpected error $baseError$ updating tweets.",
+		"placeholders": {
+			"baseError": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_updatingTweets2": {
+		"message": " If this timeout error is being shown repeatedly, please try logging out and logging in again."
+	},
+	"ue_deletingTweet": {
+		"message": "Unexpected error $status$ deleting tweet.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_retweeting": {
+		"message": "Unexpected error $status$ retweeting.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_markFavorite": {
+		"message": "Unexpected error $status$ marking as favorite.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_unmarkFavorite": {
+		"message": "Unexpected error $status$ unmarking as favorite.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"newTweets": {
+		"message": "$count$ $newtweets$",
+		"placeholders": {
+			"count": {
+				"content": "$1"
+			},
+			"newtweets": {
+				"content": "$2"
+			}
+		}
+	},
+	"newtweets_singular": {
+		"message": "new tweet"
+	},
+	"newtweets_plural": {
+		"message": "new tweets"
+	},
+	"btnAuthorize": {
+		"message": "Authorize!"
+	},
+	"exceededAPIHits": {
+		"message": "Günlük API kullanım limitini aştınız. Lütfen <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>ayarlar sayfasından</a> yenileme aralığını kontrol edin. Chromed Bird $nextResetDate $nextResetTime$ tarihine kadar güncellenmeyecek.",
+		"placeholders": {
+			"options_url": {
+				"content": "$1"
+			},
+			"nextResetDate": {
+				"content": "$2"
+			},
+			"nextResetTime": {
+				"content": "$3"
+			}
+		}
+	},
+	"warningAPIHits": {
+		"message": "API limitinizi çok hızlı dolduruyorsunuz.<br>Lütfen <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>ayarlar sayfasından</a> yenileme aralığını kontrol edin.<br>Kalan hak: $remainingHits$ - Bir sonraki sıfırlama tarihi: $nextResetDate$ $nextResetTime$",
+		"placeholders": {
+			"options_url": {
+				"content": "$1"
+			},
+			"remainingHits": {
+				"content": "$2"
+			},
+			"nextResetDate": {
+				"content": "$3"
+			},
+			"nextResetTime": {
+				"content": "$4"
+			}
+		}
+	},
+	"oAuthError": {
+		"message": "Bir hata oluştu: $errorMessage$. Lütfen <a href=\"javascript:OAuth.requestNewToken();\">yetkilendirme işlemini tekrar başlatın</a>.",
+		"placeholders": {
+			"errorMessage": {
+				"content": "$1"
+			}
+		}
+	},
+	"justNow": {
+		"message": "Hemen şimdi"
+	},
+	"minuteAgo": {
+		"message": "1 dakikadan az"
+	},
+	"minutes": {
+		"message": "$nr_of_minutes$ $minutes$ önce",
+		"placeholders": {
+			"nr_of_minutes":{
+				"content": "$1"
+			},
+			"minutes": {
+				"content": "$2",
+				"example": "minute or minutes (singular / plural)"
+			}
+		}
+	},
+	"minute_singular": {
+		"message": "dakika"
+	},
+	"minute_plural": {
+		"message": "dakika"
+	},
+	"timeAgo": {
+		"message": "$time$ $time_string$ önce",
+		"placeholders": {
+			"time": {
+				"content": "$1"
+			},
+			"time_string": {
+				"content": "$2"
+			}
+		}
+	},
+	"hour_singular": {
+		"message": "saat"
+	},
+	"hour_plural": {
+		"message": "saat"
+	},
+	"day_singular": {
+		"message": "gün"
+	},
+	"day_plural": {
+		"message": "gün"
+	},
+	"month_singular": {
+		"message": "ay"
+	},
+	"month_plural": {
+		"message": "ay"
+	},
+	"yearsAgo": {
+		"message": "yıl önce"
+	},
+	"options_title": {
+		"message": "Chromed Bird Seçenekleri"
+	},
+	"conf_saved": {
+		"message": "Ayarlarınız başarıyla kaydedildi."
+	},
+	"changes_restart": {
+		"message": "Bazı ayarların aktif olması için eklentinin yeniden başlatılması gerek. Bunu şimdi yapmak ister misiniz?<br>    (Okunmamış tweet sayınız sıfırlanacak)"
+	},
+	"remaining_api_hits": {
+		"message": "Remaining Twitter API Hits: "
+	},
+	"rate_limit_reset": {
+		"message": "Bir sonraki Twitter API sıfırlama tarihi: "
+	},
+	"nerds_link": {
+		"message": "API Hits stats (for nerds)"
+	},
+	"g_ui": {
+		"message": "UI"
+	},
+	"l_name_attribute": {
+		"message": "Tweetlerdeki isimler nasıl görünsün?:"
+	},
+	"o_screen_name": {
+		"message": "Kullanıcı adı"
+	},
+	"o_name": {
+		"message": "Gerçek ad"
+	},
+	"o_both": {
+		"message": "İkisi de"
+	},
+	"l_compose_position": {
+		"message": "Yeni tweet konumu:"
+	},
+	"o_top": {
+		"message": "Üst"
+	},
+	"o_bottom": {
+		"message": "Alt"
+	},
+	"l_theme": {
+		"message": "Tema:"
+	},
+	"l_font_size": {
+		"message": "Font boyutu:"
+	},
+	"o_small": {
+		"message": "Küçük"
+	},
+	"o_normal": {
+		"message": "Normal"
+	},
+	"o_large": {
+		"message": "Büyük"
+	},
+	"o_extra_large": {
+		"message": "Çok büyük"
+	},
+	"l_font_family": {
+		"message": "Font tipi:"
+	},
+	"l_hover_timeout": {
+		"message": "Hover to read time (ms):"
+	},
+	"l_show_expanded_urls": {
+		"message": "Kısaltılmış adresleri genişlet:"
+	},
+	"l_reply_all": {
+		"message": "Reply to all mentioned:"
+	},
+	"l_show_hits_in_popup": {
+		"message": "Show API hits count:"
+	},
+	"l_show_user_autocomplete": {
+		"message": "Kullanıcı adlarını otomatik tamamla:"
+	},
+	"l_icon_color": {
+		"message": "İkon rengi:"
+	},
+	"l_tweets_color_only_unified": {
+		"message": "Colors only in unified:"
+	},
+	"l_tweet_color": {
+		"message": "Tweet rengi:"
+	},
+	"w_Mentions": {
+		"message": "Mentions"
+	},
+	"btn_reset_popup_size": {
+		"message": "Reset Popup Size"
+	},
+	"g_notifications": {
+		"message": "Bildirimler"
+	},
+	"l_tweet_notification": {
+		"message": "Tweet bildirimi"
+	},
+	"l_change_icon": {
+		"message": "İkonu değiştir"
+	},
+	"l_icon_color": {
+		"message": "Ikon rengi"
+	},
+	"notif_home": {
+		"message": "Home:"
+	},
+	"notif_mentions": {
+		"message": "Mentions:"
+	},
+	"notif_dms": {
+		"message": "Direkt iletiler:"
+	},
+	"notif_lists": {
+		"message": "Listeler:"
+	},
+	"notif_search": {
+		"message": "Ara:"
+	},
+	"l_tweets_notification_style": {
+		"message": "Bildirim stili:"
+	},
+	"l_noti_on_page": {
+		"message": "Notify on Page"
+	},
+	"l_noti_desktop": {
+		"message": "Masaüstü bildirimleri"
+	},
+	"l_notification_fade_timeout": {
+		"message": "Bildirim zaman aşımı(s):"
+	},
+	"l_notification_max_popups": {
+		"message": "Notifications at once (-1: all):"
+	},
+	"g_shortener": {
+		"message": "Kısaltıcı"
+	},
+	"l_url_shortener": {
+		"message": "URL kısaltıcı:"
+	},
+	"l_shortener_acct": {
+		"message": "Kişisel hesap kullan?"
+	},
+	"l_shortener_login": {
+		"message": "API Login:"
+	},
+	"l_shortener_key": {
+		"message": "API Key:"
+	},
+	"l_share_include_title": {
+		"message": "Sayfa başlığını dahil et:"
+	},
+	"g_timelines": {
+		"message": "Timelines"
+	},
+	"notice_api_hits": {
+		"message": "Saatlik API limiti en fazla <span style=\"color: red;\"><span class=\"__hourly_limit\"></span></span> olmalıdır!<br>Eğer birden fazla Twitter istemcisi kullanıyorsanız aşağıdaki değerleri daha da azaltmalısınız."
+	},
+	"l_hits_notice": {
+		"message": "Saatlik API limiti: "
+	},
+	"l_visible": {
+		"message": "Görünsün"
+	},
+	"l_refresh_interval": {
+		"message": "Yenileme aralığı(s)"
+	},
+	"l_include_in_unified": {
+		"message": "Include in unified timeline"
+	},
+	"l_tabs_count": {
+		"message": "Sekme sayısı"
+	},
+	"l_unified_timeline": {
+		"message": "Unified Timeline:"
+	},
+	"tml_favorites": {
+		"message": "Favoriler:"
+	},
+	"l_blocked_users": {
+		"message": "Engellenen kullanıcılar:"
+	},
+	"notice_right_click_change": {
+		"message": "* Hey, now you can use the right-click context menu to change most of this settings directly into the popup window. Just get out of here! :)"
+	},
+	"l_tweets_per_page": {
+		"message": "Sayfa başı gösterilecek tweet sayısı:"
+	},
+	"l_max_cached_tweets": {
+		"message": "Gösterilecek maksimum tweet:"
+	},
+	"g_microblogging_service": {
+		"message": "Mikroblog servisi"
+	},
+	"g_advanced": {
+		"message": "Gelişmiş"
+	},
+	"l_request_timeout": {
+		"message": "İstek zamanaşımı(ms):"
+	},
+	"l_base_url": {
+		"message": "Twitter API URL:"
+	},
+	"l_base_oauth_url": {
+		"message": "OAuth URL:"
+	},
+	"l_same_signing_urls": {
+		"message": "Same signing URLs:"
+	},
+	"l_base_signing_url": {
+		"message": "API Signing URL:"
+	},
+	"l_base_oauth_signing_url": {
+		"message": "OAuth Signing URL:"
+	},
+	"l_base_search_url": {
+		"message": "Search API URL:"
+	},
+	"btn_save": {
+		"message": "Kaydet"
+	},
+	"btn_reset": {
+		"message": "Sıfırla"
+	},
+	"btn_default": {
+		"message": "Varsayılan ayarlara geri dön"
+	},
+	"shortenIt": {
+		"message": "Kısalt"
+	},
+	"shorten_current": {
+		"message": "Aktif sayfayı paylaş"
+	}
+}
