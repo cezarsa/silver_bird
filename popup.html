@@ -55,6 +55,7 @@ $.ajaxSetup({
   timeout: OptionsBackend.get('request_timeout')
 });
 
+var url_shortener = OptionsBackend.get('url_shortener');
 var shortener_acct = OptionsBackend.get('shortener_acct');
 var shortener_login = null;
 var shortener_key = null;
@@ -62,9 +63,15 @@ if(shortener_acct) {
   shortener_login = OptionsBackend.get('shortener_login');
   shortener_key = OptionsBackend.get('shortener_key');
 }
+
+if (url_shortener == 'yourls'){
+  shortener_key = OptionsBackend.get('yourls_key');
+}
+
 var reply_all = OptionsBackend.get('reply_all');
-var shortener = new Shortener(OptionsBackend.get('url_shortener'),
-  shortener_acct, shortener_login, shortener_key);
+var shortener = new Shortener(url_shortener, shortener_acct, 
+			      shortener_login, shortener_key, 
+			      OptionsBackend.get('shortener_service_url'));
 
 $.extend($.ui.tabs.prototype, {
   refreshPositions: function() {
@@ -918,7 +925,7 @@ var Renderer = {
     str += '<div class="first_container">';
     if(tweet.retweeted_status) {
       str += '<img class="profile retweet_source" src="' + user.profile_image_url + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')" />';
-      str += '<img class="profile retweet_retweeter" src="'+ tweet.user.profile_image_url +'"/>'
+      str += '<img class="profile retweet_retweeter" src="'+ tweet.user.profile_image_url +' " onclick="window.open(\''+TwitterLib.URLS.BASE+tweet.user.screen_name+'\')"/>';
     } else {
       str += '<img class="profile" src="' + user.profile_image_url + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')"></img>';
     }
@@ -1469,7 +1476,7 @@ var Autocomplete = {
     var validScreenNames = [];
     for(var i = 0, len = usersList.length; i < len; ++i) {
       var user = usersList[i];
-      if(user.screen_name.indexOf(hintStr) == 0) {
+      if(user.screen_name.toLowerCase().indexOf(hintStr.toLowerCase()) == 0) {
         validScreenNames.push(user.screen_name);
       }
     }

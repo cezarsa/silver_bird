@@ -818,12 +818,12 @@ TweetManager.prototype = {
         // Try again in a while...
         setTimeout(function() {
           _this.retrieveUsersData(usersIdList);
-        }, 10000);
+        }, 120000);
         return;
       }
       _this.followingUsers = _this.followingUsers.concat(users);
       _this.followingUsers.sort(function(a, b) {
-        return a.screen_name.localeCompare(b.screen_name);
+        return a.screen_name.toUpperCase().localeCompare(b.screen_name.toUpperCase());
       });
     }, usersIdList);
   },
@@ -836,7 +836,7 @@ TweetManager.prototype = {
         // Try again in a while...
         setTimeout(function() {
           _this.retrieveFollowingUsers();
-        }, 10000);
+        }, 120000);
         return;
       }
       var idsList = usersData.ids;
