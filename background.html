@@ -818,7 +818,7 @@ TweetManager.prototype = {
         // Try again in a while...
         setTimeout(function() {
           _this.retrieveUsersData(usersIdList);
-        }, 10000);
+        }, 120000);
         return;
       }
       _this.followingUsers = _this.followingUsers.concat(users);
@@ -836,7 +836,7 @@ TweetManager.prototype = {
         // Try again in a while...
         setTimeout(function() {
           _this.retrieveFollowingUsers();
-        }, 10000);
+        }, 120000);
         return;
       }
       var idsList = usersData.ids;
