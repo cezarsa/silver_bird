@@ -50,6 +50,7 @@ if(!twitterBackend.authenticated() && !twitterBackend.tokenRequested()) {
 <!--script type="text/javascript" src="lib/debug.js"></script-->
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
 <script type="text/javascript" src="lib/simple_select.js"></script>
+<script type="text/javascript" src="lib/tweet_transforms.js"></script>
 <script>
 $.ajaxSetup({
   timeout: OptionsBackend.get('request_timeout')
@@ -822,39 +823,96 @@ var Renderer = {
     );
   },
 
-  transformTweetText: function(oldText) {
-    var transformList = [
+  transformTweetText: Transforms.transformFactory([
       {
         //create links (based on John Gruber's pattern from
         //http://daringfireball.net/2009/11/liberal_regex_for_matching_urls
         //
         //I wish JavaScript had character classes
-        'expression': /\b(([\w-]+:\/\/?|www[.])[^\s()<>]+((\([\w\d]+\))|([^,.;:'"`~\s]|\/)))/ig,
-        'replacement': "<a href='javascript:' onclick=\"javascript:openTab('$1')\" onmouseover=\"Renderer.expandLink(this, '$1')\">$1</a>"
+        'expression': /\b((([\w-]+):\/\/?|www[.])[^\s()<>]+((\([\w\d]+\))|([^,.;:'"`~\s]|\/)))/ig,
+        'replacement': function() {
+          var url = RegExp.$1;
+          var scheme = RegExp.$3;
+
+          if (scheme != null && !/^(https?|ftp)$/i.exec(scheme)) {
+            // possibly dangerous scheme, suppress it
+            return document.createTextNode(url);
+          }
+
+          var hrefObj = document.createElement("a");
+          hrefObj.setAttribute("href", url);
+          hrefObj.appendChild(document.createTextNode(url));
+
+          hrefObj.onclick = function() { openTab(url); };
+          hrefObj.onmouseover = function() { Renderer.expandLink(this, url); };
+          if (hrefObj.captureEvents) {
+            hrefObj.captureEvents(CLICK);
+            hrefObj.captureEvents(MOUSEOVER);
+          }
+
+          return hrefObj;
+        }
       },
       {
         //create hash search links
         'expression': /([^&\w]|^)(#([\w\u0080-\uffff]*))((?=([^<])*?<a)|(?!.*?<\/a>))/ig,
-        'replacement': "$1<a href='javascript:' onclick=\"javascript:openTab('" + TwitterLib.URLS.SEARCH + "%23$3')\">$2</a>"
+        'replacement': function() {
+          var header = RegExp.$1;
+          var label  = RegExp.$2;
+          var term   = RegExp.$3;
+          var link = Renderer.makeElem("a", {href:"#"});
+          link.appendChild(Renderer.makeText(label));
+          link.onclick = function() { openTab(TwitterLib.URLS.SEARCH + "%23" + term); };
+
+          var span = Renderer.makeElem("span", {});
+          span.appendChild(Renderer.makeText(header));
+          span.appendChild(link);
+
+          return span;
+        }
       },
       {
         //create users links
         'expression': /(@(\w*))((?=([^<])*?<a)|(?!.*?<\/a>))/ig,
-        'replacement': "@<a href='javascript:' onclick=\"javascript:openTab('" + TwitterLib.URLS.BASE + "$2')\">$2</a>"
+        'replacement':
+        function() {
+          var username = RegExp.$2;
+          var span = Renderer.makeElem("span", {});
+          var link = Renderer.makeElem("a", {href:'#'});
+          link.onclick = function() {openTab(TwitterLib.URLS.BASE + username);};
+          link.appendChild(Renderer.makeText(username));
+          span.appendChild(Renderer.makeText("@"));
+          span.appendChild(link);
+
+          return span;
+        }
       },
       {
         //line breaks
         'expression': /\r?\n/g,
-        'replacement': "<br />"
+        'replacement': function() { return document.createElement("br"); }
       }
-    ];
+    ]),
 
-    var newText = oldText;
-    for(var i = 0; i < transformList.length; ++i) {
-      newText = newText.replace(transformList[i]['expression'], transformList[i]['replacement']);
-    }
-    return newText;
+  makeText: function (content) {
+    return document.createTextNode(content);
   },
+
+  makeSpan: function (content) {
+    var span = document.createElement("span");
+    span.innerHTML = content;
+    return span;
+  },
+
+  makeElem: function(elem, attrs) {
+    var div = document.createElement(elem);
+    for (var attrName in attrs) {
+      div.setAttribute(attrName, attrs[attrName]);
+    }
+    return div;
+  },
+
+  makeDiv: function(attrs) { return Renderer.makeElem("div", attrs); },
 
   renderTweet: function (tweet, useColors) {
     var user = tweet.user;
@@ -865,7 +923,7 @@ var Renderer = {
       text = tweet.retweeted_status.text
       tweetId = tweet.retweeted_status.id;
     }
-    text = this.transformTweetText(text);
+    var content = this.transformTweetText(text);
 
     var tweetTimeline = tweet.timelineId || tweetManager.currentTimelineId;
     var templateId = tweetTimeline.replace(/_.*$/, '');
@@ -885,6 +943,11 @@ var Renderer = {
         tweetSource = htmlNode.textContent;
       }
       from = tweetSource.replace(/(href=(['"])(.*?)\2)/i, "href='#' onclick=\"openTab('$3')\"");
+
+      var fromSpan = Renderer.makeElem("span", {});
+      fromSpan.innerHTML = from;
+
+      from = fromSpan;
     }
     if(tweet.geo) {
       geo = " <a href=\"#\" onclick=\"openTab('";
@@ -893,12 +956,17 @@ var Renderer = {
       geo += "')\"";
       geo += "onmouseover=\"Renderer.geoImage(this, " + tweet.geo.coordinates[0] + "," +  tweet.geo.coordinates[1] +  ")\">";
       geo += "<img src=\"data:image/gif;base64, R0lGODlhCgAKAMZZAKRFP7NDN5s5RphLU6dUTLdpVbVZbopycK1vZKNxZqxyZ79oe8hSRMVST8xdTNJaWcRlU8FlWtNzXdVpZsh5atN6aKqEe7yFfsaGa8uVe9GUf791hN55h4yGiI6FipuRkKqHhbasrbi2t8KZg8Cal8mRmuObjMehls+nn/2njvewnMO+u8m6v/ykoPCusubFvsG6wv+/yM3Ex//Lz+7Qxe/Ryf/J2f/lzf/l4f/m5//j7//t7P/47f3z8f/19f/39f/88P/59P/49v/59//69v/69/L6/Pb6/fr4+fj6+f/7+fr8+f79+//9+/z5///4//z7//37///6/v/6//n//fn+//v+//39/f/9/f///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////yH5BAEAAH8ALAAAAAAKAAoAAAdJgH+CfyUbBgs2g38gMzMcAgMugjQXLRMPDQAEgi8KEAEMDhUFgwkUEBIpGBmDFggmKhojgywHJCgkijAeIYqCMh0ivoIfK8OCgQA7\" alt=\"[GEO]\"/></a>";
+
+      geo = Renderer.makeSpan(geo);
     }
 
     var inReply = null;
     if(tweet.in_reply_to_status_id) {
       var linkDst = TwitterLib.URLS.BASE + tweet.in_reply_to_screen_name + '/status/' + tweet.in_reply_to_status_id;
-      inReply = '<a href="#" onclick="openTab(\'' + linkDst + '\')">' + chrome.i18n.getMessage("inReply") + ' ' + tweet.in_reply_to_screen_name + '</a> ';
+      inReply = document.createElement("a");
+      inReply.setAttribute("href", "#");
+      inReply.appendChild(Renderer.makeText(chrome.i18n.getMessage("inReply") + ' ' + tweet.in_reply_to_screen_name));
+      inReply.onclick = function() { openTab(linkDst); };
     }
 
     var nameAttribute = OptionsBackend.get('name_attribute');
@@ -915,60 +983,116 @@ var Renderer = {
       tweetTitleUserName = '';
     }
 
-    var str = '<div timelineid="' + tweetTimeline + '" tweetid="' + tweet.id + '" class="' + tweetClass + '">';
+    var container = Renderer.makeDiv({timelineid: tweetTimeline, tweetid: tweet.id, class: tweetClass});
 
     var overlayStyle = '';
     if(useColors) {
       overlayStyle = 'background-color: ' + OptionsBackend.get(templateId + '_tweets_color') + ';';
     }
-    str += '<div class="tweet_overlay" style="' + overlayStyle + '">';
-    str += '<div class="first_container">';
+    var overlay = Renderer.makeDiv({class: "tweet_overlay", style: overlayStyle});
+    container.appendChild(overlay);
+    // Now in container -> overlay
+
+    var first_container = Renderer.makeDiv({class:"first_container"});
+    overlay.appendChild(first_container);
+
+    var openUserProfile = function() {
+        Renderer.handleUserClick(user.screen_name, TwitterLib.URLS.BASE + user.screen_name);
+    };
+
+    // now in container -> overlay -> first_container
     if(tweet.retweeted_status) {
-      str += '<img class="profile retweet_source" src="' + user.profile_image_url + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')" />';
-      str += '<img class="profile retweet_retweeter" src="'+ tweet.user.profile_image_url +' " onclick="window.open(\''+TwitterLib.URLS.BASE+tweet.user.screen_name+'\')"/>';
+      var img1 = Renderer.makeElem("img", {class:"profile retweet_source", src: user.profile_image_url});
+      img1.onclick = openUserProfile;
+      var img2 = Renderer.makeElem('img', {class:'profile retweet_retweeter', src: tweet.user.profile_image_url});
+      img2.onclick = function() {
+        window.open(TwitterLib.URLS.BASE + tweet.user.screen_name);
+      };
+      first_container.appendChild(img1);
+      first_container.appendChild(img1);
     } else {
-      str += '<img class="profile" src="' + user.profile_image_url + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')"></img>';
+      var img = Renderer.makeElem("img", {class:'profile', src:user.profile_image_url});
+      img.onclick = openUserProfile;
+      first_container.appendChild(img);
     }
-    str += '<a href="#" class="user" screen_name="' + user.screen_name + '" onclick="Renderer.handleUserClick(\'' + user.screen_name + '\', \'' + TwitterLib.URLS.BASE + user.screen_name + '\')" title="' + tweetTitleUserName + '">' + tweetUserName + '</a>';
+    var userName = Renderer.makeElem("a", {href:"#", class:"user", screen_name: user.screen_name, title: tweetTitleUserName});
+    userName.onclick = openUserProfile;
+    userName.appendChild(Renderer.makeText(tweetUserName));
+    first_container.appendChild(userName);
+
     if(user.verified) {
-      str += ' <img class="verified" src="img/verified.png" alt="verified" />';
+      first_container.appendChild(Renderer.makeElem("img", {class:'verified', src:'img/verified.png', alt:'verified'}));
     }
     if(user.protected) {
-      str += ' <img class="protected" src="img/lock.png" alt="protected" />';
+      first_container.appendChild(Renderer.makeElem("img", {class:'protected', src:'img/lock.png', alt:'protected'}));
     }
-    str += '<div class="text">';
-    if(tweet.retweeted_status) {
-      str += '<img class="retweet" src="img/retweet.png">'
-    }
-    str += text + '</div>';
 
-    str += '<div class="footer">';
+    var textDiv = Renderer.makeDiv({class:'text'});
+    first_container.appendChild(textDiv);
+    // now in: container -> overlay -> first_container -> textDiv
+    if(tweet.retweeted_status) {
+      textDiv.appendChild(Renderer.makeElem("img", {class:"retweet", src:'img/retweet.png'}));
+    }
+
+    textDiv.appendChild(content);
+    // exiting textDiv, now container -> overlay -> first_container
+
+    var footer = Renderer.makeDiv({class:'footer'});
+    first_container.appendChild(footer);
+    // now in container -> overlay -> footer
+
     var statusLinkDst = TwitterLib.URLS.BASE + user.screen_name + '/status/' + tweetId;
-    str += '<a href="#" onclick="openTab(\'' + statusLinkDst + '\')"><span class="timestamp" title="' + Renderer.getTimestampAltText(tweet.created_at) + '">' + Renderer.getTimestampText(tweet.created_at) + '</span></a> ';
+    var statusLinkSpan = Renderer.makeElem("span", {class:'timestamp', title: Renderer.getTimestampAltText(tweet.created_at)});
+    statusLinkSpan.appendChild(Renderer.makeText(Renderer.getTimestampText(tweet.created_at)));
+    var statusLink = Renderer.makeElem("a", {href:'#'});
+    statusLink.appendChild(statusLinkSpan);
+    statusLink.onClick = function() {openTab(statusLinkDst);};
+
+    footer.appendChild(statusLink);
+    footer.appendChild(Renderer.makeText(" "));
+
     if(inReply) {
-      str += inReply;
+      footer.appendChild(inReply);
     } else if(tweet.retweeted_status) {
-      str += chrome.i18n.getMessage("retweetedBy") + ' <a href="#" onclick="openTab(\'' + TwitterLib.URLS.BASE + tweet.user.screen_name + '\');">' + tweet.user.screen_name + '</a> ';
+      footer.appendChild(Renderer.makeText(chrome.i18n.getMessage("retweetedBy") + ' '));
+      var rtLink = Renderer.makeElem("a", {href:"#"});
+      rtLink.appendChild(Renderer.makeText(tweet.user.screen_name));
+      rtLink.onclick = function() { opentab(TwitterLib.URLS.BASE + tweet.user.screen_name); };
+      footer.appendChild(rtLink);
+      footer.appendChild(Renderer.makeText(" "));
     }
     if(tweetManager.isRetweet(tweet.id)) {
-      str += chrome.i18n.getMessage("retweetedByMe") + ' ';
+      footer.appendChild(chrome.i18n.getMessage("retweetedByMe") + ' ');
     }
     if(from) {
-      str += '<span class="from_app">' + chrome.i18n.getMessage("fromApp") + ' ' + from + '</span>';
+      var span = Renderer.makeElem("span", {class:"from_app"});
+      span.appendChild(Renderer.makeText(chrome.i18n.getMessage("fromApp") + ' '));
+      span.appendChild(from);
+      footer.appendChild(span);
     }
     if (geo) {
-      str += '<span class="geo_tag">' + geo + '</span>';
+      var span = Renderer.makeElem("span", {class:"geo_tag"});
+      span.appendChild(geo);
+      footer.appendChild(span);
     }
     if(templateId == TimelineTemplate.LISTS && tweetManager.currentTimelineId != tweetTimeline) {
       var list = tweetManager.getList(tweetTimeline);
       if(list != null) {
-        var path = list.uri.substr(1);
-        str += ' (List: <a href="#" onclick="openTab(\''+TwitterLib.URLS.BASE + path + '\');" title="@' + path + '">' + list.name + '</a>)';
+        var path_ = list.uri.substr(1);
+        (function(path) {
+          footer.appendChild(Renderer.makeText(" (List: "));
+          var link = Renderer.makeElem("a", {href:'#', title:"@"+path});
+          link.onclick = function() {openTab(TwitterLib.URLS.BASE + path);};
+          link.appendChild(Renderer.makeText(list.name));
+          footer.appendChild(link);
+          footer.appendChild(Renderer.makeText(")"));
+        })(path_);
       }
     }
-    str += '</div></div>';
+    // exit footer, first_container, now in container -> overlay
 
-    str += '<div class="new_actions">';
+    var actions = Renderer.makeDiv({class:"new_actions"});
+    var str = "";
     if(templateId != TimelineTemplate.DMS) {
       if(tweet.favorited) {
         str += '<img src="img/star_hover.png" title="' +
@@ -1018,11 +1142,12 @@ var Renderer = {
         '" onclick="Composer.share(this.parentNode.parentNode.parentNode)"></img><br>';
       }
     }
-    str += '</div>';
-    str += '<div style="clear: both;"></div>';
+    actions.innerHTML = str;
+    overlay.appendChild(actions);
 
-    str += '</div></div>'
-    return str;
+    overlay.appendChild(Renderer.makeDiv({style:"clear:both;"}));
+
+    return container;
   },
 
   handleUserClick: function (user, url) {
@@ -1051,11 +1176,10 @@ var Renderer = {
     }
 
     var destinationDom = destination[0];
-    var tweetsArray = [];
+    destinationDom.innerHTML = "";
     for(var i = 0; i < tweets.length; ++i) {
-      tweetsArray[i] = Renderer.renderTweet(tweets[i], useColors);
+      destinationDom.appendChild(Renderer.renderTweet(tweets[i], useColors));
     }
-    destinationDom.innerHTML = tweetsArray.join('');
 
     $(".tweet").hover(
     function() {
