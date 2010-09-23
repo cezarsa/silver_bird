@@ -1046,7 +1046,7 @@ var Renderer = {
     statusLinkSpan.appendChild(Renderer.makeText(Renderer.getTimestampText(tweet.created_at)));
     var statusLink = Renderer.makeElem("a", {href:'#'});
     statusLink.appendChild(statusLinkSpan);
-    statusLink.onClick = function() {openTab(statusLinkDst);};
+    statusLink.onclick = function() {openTab(statusLinkDst);};
 
     footer.appendChild(statusLink);
     footer.appendChild(Renderer.makeText(" "));
