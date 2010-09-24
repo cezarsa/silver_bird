@@ -1062,7 +1062,7 @@ var Renderer = {
       footer.appendChild(Renderer.makeText(" "));
     }
     if(tweetManager.isRetweet(tweet.id)) {
-      footer.appendChild(chrome.i18n.getMessage("retweetedByMe") + ' ');
+      footer.appendChild(Renderer.makeText(chrome.i18n.getMessage("retweetedByMe") + ' '));
     }
     if(from) {
       var span = Renderer.makeElem("span", {class:"from_app"});
