@@ -11,53 +11,37 @@
   <base target="_blank">
 
   <script>
-  document.addEventListener("DOMContentLoaded", function onload() {
-    if(document.readyState != "complete") {
-      setTimeout(arguments.callee, 100);
-      return;
+  var OptionsBackend = chrome.extension.getBackgroundPage().OptionsBackend;
+  var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
+
+  $(function() {
+    Renderer.nameAttribute = OptionsBackend.get('name_attribute');
+    Renderer.fadeTimeout = OptionsBackend.get('notification_fade_timeout');
+
+    var tweet = tweetManager.injectTweets.shift();
+
+    try {
+      $(document.body).prepend(Renderer.simpleAssemblyTweets([tweet]));
+    } catch(e) {
+      console.log(e);
+      window.close();
     }
-    initNotifier();
-    document.removeEventListener("DOMContentLoaded", onload, false);
-  }, false);
 
-  function initNotifier() {
-    chrome.extension.sendRequest({
-      cb_requesting_tweets_immediate: true
-    }, function(response) {
-      var tweet = response.tweet;
-      if(tweet) {
-        Renderer.nameAttribute = response.nameAttribute;
-        Renderer.fadeTimeout = response.fadeTimeout;
-
-        $("#progress").text(chrome.i18n.getMessage("preventClosing"));
-
-        try {
-          $(document.body).prepend(Renderer.simpleAssemblyTweets([tweet]));
-        } catch(e) {
-          console.log(e);
-          window.close();
-        }
-
-        setTimeout(function() {
-          // Delay displaying progress bar
-          $('#progress').show().css('bottom', '0px').css('width', '100%')
-                .animate({width: '0px'}, response.fadeTimeout, 'linear', function() {
-            // Tell background page that this tweet shouldn't be marked as read
-            chrome.extension.sendRequest({
-              cb_tweet_should_not_read: true,
-              tweet_id: tweet.id
-            });
-            window.close();
-          });
-          $(document.body).click(function() {
-            $('#progress').stop().hide();
-          });
-        }, 100);
-      } else {
+    setTimeout(function() {
+      $("#progress").text(chrome.i18n.getMessage("preventClosing"));
+      $('#progress').show().css('bottom', '0px').css('width', '100%')
+            .animate({width: '0px'}, Renderer.fadeTimeout, 'linear', function() {
+        // Tell manager that this tweet shouldn't be marked as read
+        tweetManager.shouldNotReadMap[tweet.id] = true;
         window.close();
-      }
-    });
-  }
+      });
+
+      $(document.body).click(function() {
+        $('#progress').stop().hide();
+      });
+    }, 100);
+
+  });
   </script>
 </head>
 <body>
