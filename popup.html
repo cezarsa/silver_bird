@@ -997,7 +997,7 @@ var Renderer = {
     overlay.appendChild(first_container);
 
     var openUserProfile = function() {
-        Renderer.handleUserClick(user.screen_name, TwitterLib.URLS.BASE + user.screen_name);
+      Renderer.handleUserClick(user.screen_name, TwitterLib.URLS.BASE + user.screen_name);
     };
 
     // now in container -> overlay -> first_container
@@ -1009,7 +1009,7 @@ var Renderer = {
         window.open(TwitterLib.URLS.BASE + tweet.user.screen_name);
       };
       first_container.appendChild(img1);
-      first_container.appendChild(img1);
+      first_container.appendChild(img2);
     } else {
       var img = Renderer.makeElem("img", {class:'profile', src:user.profile_image_url});
       img.onclick = openUserProfile;
