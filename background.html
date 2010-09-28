@@ -474,7 +474,11 @@ TweetManager.prototype = {
       };
       injectHelper('script', 'lib/3rdparty/jquery.js', true, function() {
         injectHelper('css', 'css/injectedTweets.css', true, function() {
-          injectHelper('script', 'lib/tweets_assembler.js', true);
+          injectHelper('script', 'lib/tweet_transforms.js', true, function() {
+            injectHelper('script', 'lib/timeline_template.js', true, function() {
+              injectHelper('script', 'lib/tweets_assembler.js', true);
+            });
+          });
         });
       });
     }
@@ -1000,25 +1004,6 @@ function initializeExtension() {
   var selectedResponse = null;
   var biggestArea = -1;
   chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-    if(request.cb_tweet_should_not_read) {
-      TweetManager.instance.shouldNotReadMap[request.tweet_id] = true;
-      return;
-    }
-    if(request.cb_requesting_tweets_immediate) {
-      var tweetToSend = null;
-      if(TweetManager.instance.injectTweets) {
-        tweetToSend = TweetManager.instance.injectTweets.shift();
-        if(TweetManager.instance.injectTweets.length == 0) {
-          TweetManager.instance.injectTweets = null;
-        }
-      }
-      sendResponse({
-        tweet: tweetToSend,
-        nameAttribute: OptionsBackend.get('name_attribute'),
-        fadeTimeout: OptionsBackend.get('notification_fade_timeout')
-      });
-      return;
-    }
     if(request.cb_requesting_tweets) {
       if(waitingFirstRequest) {
         waitingFirstRequest = false;

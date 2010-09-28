@@ -1,6 +1,52 @@
+1.9.0 (2010-09-28)
+
+It's awesome to have such a big list of contributors. Thanks a lot guys!!!
+* By Takuo Kitame:
+  - Previewing tweetphoto pictures;
+* By Kevin Daudt:
+  - Initial I18N support and Dutch localization.
+* By Antonio Pérez:
+  - Inserting shortened urls at caret position;
+  - Full I18N support and Spanish localization. (That was a HUGE!)
+* By Dirk Raeder:
+  - German localization.
+* By Vladimir Yakovlev:
+  - Russian localization.
+* By Yuki:
+  - Opening retweeter page when clicking on it;
+  - Case insensitive username autocomplete.
+* By Manuel Aguete:
+  - Added Karmacracy.com url shortener.
+* By Stewart Allen:
+  - Added support for the yourls self hosted url shortener.
+* By Berker Peksag:
+  - Turkish localization.
+* By Bryan Donlan:
+  - LOTS of work on important XSS security issues. Thanks a lot!
+* Brazilian Portuguese localization
+* Fixed up and down keys not working properly;
+* Enabling desktop notifications by default, users will have to manually switch back to on page if they prefer them;
+* New option to limit the number of notifications shown at the same time;
+* Ability to load balance between two different url expander services (untiny.me and long-shore.com)
+* Lots of cleanup and improvements in the way desktop notifications are rendered;
+* Fixing geo tagged tweets maps;
+* Other bugs fixes and minor stuff.
+
 1.8.5 (2010-05-13)
- * Mostly bugfixes, I'll finish writing a proper changelog latter today.
-   Meanwhile you can check the GitHub commit page.
+
+Thanks a lot to every contributor! That's why I love FOSS.
+* By Takuo Kitame:
+  - Showing verified account badge;
+  - Allowing the remaining API hits being shown inside the popup window.
+* By Vargas:
+  - Added Goo.gl url shortener;
+  - Improved hash-tag regex.
+* By James Brown:
+  - Improved url matching regex.
+* Better code to deal with status updates to avoid posting duplicated tweets;
+* Disabling retweets for users with protected messages;
+* Username autocompletion just begin typing @ or 'd ';
+* Many small bug fixes and better timeout values when talking with Twitter's API;
 
 1.8.0 (2010-04-12)
 
