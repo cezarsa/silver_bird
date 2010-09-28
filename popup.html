@@ -1160,13 +1160,6 @@ var Autocomplete = {
   }
 };
 
-function openTab(tabUrl) {
-  if(tabUrl.match(/^www/i)) {
-    tabUrl = "http://" + tabUrl;
-  }
-  window.open(tabUrl);
-}
-
 var loadingNewTweets = false;
 
 function onTimelineRetrieved(tweets, timelineId) {
