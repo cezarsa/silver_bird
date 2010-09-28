@@ -73,6 +73,22 @@
   vertical-align: top;
 }
 
+.chromed_bird_tweet img.profile.retweet_source {
+  margin-right: 0px;
+  width: 40px;
+  height: 40px;
+}
+
+.chromed_bird_tweet img.profile.retweet_retweeter {
+  margin-bottom: 20px;
+  margin-right: -12px;
+  position: relative;
+  top: 24px;
+  left: -16px;
+  width: 24px;
+  height: 24px;
+}
+
 /* Theme */
 
 .chromed_bird_tweet {
