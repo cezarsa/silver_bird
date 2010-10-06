@@ -11,7 +11,7 @@
 		"description": "Text for composing new tweet"
 	},
 	"tweetit": {
-		"message": "Tweet"
+		"message": "Gönder"
 	},
 	"logout": {
 		"message": "Çıkış",
@@ -54,13 +54,13 @@
 		"message": "Listeler güncelleniyor..."
 	},
 	"w_Unified": {
-		"message": "Unified"
+		"message": "Tümü"
 	},
 	"w_Home": {
-		"message": "Home"
+		"message": "Anasayfa"
 	},
 	"w_DM": {
-		"message": "DMs"
+		"message": "Mesajlar"
 	},
 	"w_Favorites": {
 		"message": "Favoriler"
@@ -72,16 +72,16 @@
 		"message": "Ara"
 	},
 	"fromApp": {
-		"message": "from"
+		"message": "istemci:"
 	},
 	"inReply": {
-		"message": "in reply to"
+		"message": "cevap olarak:"
 	},
 	"retweetedBy": {
-		"message": "retweeted by"
+		"message": "tekrar tweetleyen:"
 	},
 	"retweetedByMe": {
-		"message": "retweeted by me"
+		"message": "siz tarafından tekrar tweetlendi"
 	},
 	"unmarkFavorite": {
 		"message": "Favorilerden kaldır"
@@ -117,17 +117,17 @@
 		"message": "Tümünü okundu olarak işaretle"
 	},
 	"newToken": {
-		"message": "Request another token"
+		"message": "Başka bir işaretçi iste"
 	},
 	"shortenerIdleString": {
-		"message": "Kısaltmak için bir URL yapıştırın. Aktif sayfayı kısaltmak için sağdaki ikona tıklayın"
+		"message": "Buraya kısaltılacak adresi yazın. Açık sayfayı sağdaki simgeden kısaltın."
 	},
 	"timelineHome": {
-		"message": "Home",
+		"message": "Ana Sayfa",
 		"description": "The home time line tab"
 	},
 	"timelineDM": {
-		"message": "DM",
+		"message": "Mesajlar",
 		"description": "The direct message time line tab"
 	},
 	"timelineFavorites": {
@@ -152,7 +152,7 @@
 		}
 	},
 	"preventClosing": {
-		"message": "Click to prevent closing."
+		"message": "Kapanmaması için tıklayın."
 	},
 	"changeNotificationSettings": {
 		"message": "Bildirim seçeneklerini ayarlar sayfasından değiştirebilirsiniz."
@@ -170,13 +170,13 @@
 		"message": "Bir hata oluştu. Lütfen tekrar deneyin."
 	},
 	"ajaxFailed": {
-		"message": "AJAX request failed (bad connection?)"
+		"message": "AJAX isteği başarısız (kötü bağlantı?)"
 	},
 	"successAuth": {
 		"message": "Tebrikler, kimliğiniz doğrulandı. Chromed Bird'ün tadını çıkarın!"
 	},
 	"cbAuthorized": {
-		"message": "Chromed Bird authorized!"
+		"message": "Chromed Bird yetkili!"
 	},
 	"cbNotAuthorized": {
 		"message": "Bir hata oluştu. Lütfen Chromed Bird ikonuna tekrar tıklayın."
@@ -205,7 +205,7 @@
 		"message": "Kuyruktaki mesajlar:"
 	},
 	"queue_trying": {
-		"message": "trying to send for $timediff$",
+		"message": "$timediff$ tarihinden beri gönderilmeyi bekliyor",
 		"placeholders": {
 			"timediff": {
 				"content": "$1"
@@ -213,7 +213,7 @@
 		}
 	},
 	"queue_retried": {
-		"message": "retried $retries$ times since $timediff$ ago [$laststatus$]",
+		"message": "$timediff$ tarihinden beri $retries$ defa gönderilmeye çalıştı [$laststatus$]",
 		"placeholders": {
 			"retries": {
 				"content": "$1"
@@ -227,7 +227,7 @@
 		}
 	},
 	"ue_fetchingLists": {
-		"message": "Unexpected error $status$ fetching lists.",
+		"message": "Listeler alınırken $status$ hatası oluştu.",
 		"placeholders": {
 			"status": {
 				"content": "$1"
@@ -235,7 +235,7 @@
 		}
 	},
 	"ue_updatingTweets": {
-		"message": "Unexpected error $baseError$ updating tweets.",
+		"message": "Tweetler güncellenirken $baseError$ hatası oluştu.",
 		"placeholders": {
 			"baseError": {
 				"content": "$1"
@@ -243,10 +243,10 @@
 		}
 	},
 	"ue_updatingTweets2": {
-		"message": " If this timeout error is being shown repeatedly, please try logging out and logging in again."
+		"message": " Eğer bu hata ile çok sık karşılaşıyorsanız çıkış yapıp tekrar girmeyi deneyin."
 	},
 	"ue_deletingTweet": {
-		"message": "Unexpected error $status$ deleting tweet.",
+		"message": "Tweet silinirken $status$ hatası oluştu.",
 		"placeholders": {
 			"status": {
 				"content": "$1"
@@ -254,7 +254,7 @@
 		}
 	},
 	"ue_retweeting": {
-		"message": "Unexpected error $status$ retweeting.",
+		"message": "Tekrar tweetlerken $status$ hatası oluştu.",
 		"placeholders": {
 			"status": {
 				"content": "$1"
@@ -262,7 +262,7 @@
 		}
 	},
 	"ue_markFavorite": {
-		"message": "Unexpected error $status$ marking as favorite.",
+		"message": "Favorilere eklerken $status$ hatası oluştu.",
 		"placeholders": {
 			"status": {
 				"content": "$1"
@@ -270,7 +270,7 @@
 		}
 	},
 	"ue_unmarkFavorite": {
-		"message": "Unexpected error $status$ unmarking as favorite.",
+		"message": "Favoriden kaldırırken $status$ hatası oluştu.",
 		"placeholders": {
 			"status": {
 				"content": "$1"
@@ -289,13 +289,13 @@
 		}
 	},
 	"newtweets_singular": {
-		"message": "new tweet"
+		"message": "yeni tweet"
 	},
 	"newtweets_plural": {
-		"message": "new tweets"
+		"message": "yeni tweet"
 	},
 	"btnAuthorize": {
-		"message": "Authorize!"
+		"message": "Yetkilendir!"
 	},
 	"exceededAPIHits": {
 		"message": "Günlük API kullanım limitini aştınız. Lütfen <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>ayarlar sayfasından</a> yenileme aralığını kontrol edin. Chromed Bird $nextResetDate $nextResetTime$ tarihine kadar güncellenmeyecek.",
@@ -337,10 +337,10 @@
 		}
 	},
 	"justNow": {
-		"message": "Hemen şimdi"
+		"message": "Az önce"
 	},
 	"minuteAgo": {
-		"message": "1 dakikadan az"
+		"message": "Saniyeler"
 	},
 	"minutes": {
 		"message": "$nr_of_minutes$ $minutes$ önce",
@@ -402,16 +402,16 @@
 		"message": "Bazı ayarların aktif olması için eklentinin yeniden başlatılması gerek. Bunu şimdi yapmak ister misiniz?<br>    (Okunmamış tweet sayınız sıfırlanacak)"
 	},
 	"remaining_api_hits": {
-		"message": "Remaining Twitter API Hits: "
+		"message": "Kalan Twitter API Kullanım Sayısı: "
 	},
 	"rate_limit_reset": {
 		"message": "Bir sonraki Twitter API sıfırlama tarihi: "
 	},
 	"nerds_link": {
-		"message": "API Hits stats (for nerds)"
+		"message": "API kullanım istatistikleri"
 	},
 	"g_ui": {
-		"message": "UI"
+		"message": "Arayüz"
 	},
 	"l_name_attribute": {
 		"message": "Tweetlerdeki isimler nasıl görünsün?:"
@@ -438,7 +438,7 @@
 		"message": "Tema:"
 	},
 	"l_font_size": {
-		"message": "Font boyutu:"
+		"message": "Yazı boyutu:"
 	},
 	"o_small": {
 		"message": "Küçük"
@@ -453,37 +453,37 @@
 		"message": "Çok büyük"
 	},
 	"l_font_family": {
-		"message": "Font tipi:"
+		"message": "Yazıtipi:"
 	},
 	"l_hover_timeout": {
-		"message": "Hover to read time (ms):"
+		"message": "Okumak için üzerinde bekleme süresi (ms):"
 	},
 	"l_show_expanded_urls": {
 		"message": "Kısaltılmış adresleri genişlet:"
 	},
 	"l_reply_all": {
-		"message": "Reply to all mentioned:"
+		"message": "Tüm bahsedilenleri cevapla:"
 	},
 	"l_show_hits_in_popup": {
-		"message": "Show API hits count:"
+		"message": "API kullanım sayısını göster:"
 	},
 	"l_show_user_autocomplete": {
 		"message": "Kullanıcı adlarını otomatik tamamla:"
 	},
 	"l_icon_color": {
-		"message": "İkon rengi:"
+		"message": "Simge rengi:"
 	},
 	"l_tweets_color_only_unified": {
-		"message": "Colors only in unified:"
+		"message": "Sadece birleşik akışta renkler:"
 	},
 	"l_tweet_color": {
 		"message": "Tweet rengi:"
 	},
 	"w_Mentions": {
-		"message": "Mentions"
+		"message": "Bahsetmeler"
 	},
 	"btn_reset_popup_size": {
-		"message": "Reset Popup Size"
+		"message": "Pencere Boyutunu Sıfırla"
 	},
 	"g_notifications": {
 		"message": "Bildirimler"
@@ -492,16 +492,16 @@
 		"message": "Tweet bildirimi"
 	},
 	"l_change_icon": {
-		"message": "İkonu değiştir"
+		"message": "Simgeyi değiştir"
 	},
 	"l_icon_color": {
-		"message": "Ikon rengi"
+		"message": "Simge rengi"
 	},
 	"notif_home": {
-		"message": "Home:"
+		"message": "Ana Sayfa:"
 	},
 	"notif_mentions": {
-		"message": "Mentions:"
+		"message": "Bahsetmeler:"
 	},
 	"notif_dms": {
 		"message": "Direkt iletiler:"
@@ -516,7 +516,7 @@
 		"message": "Bildirim stili:"
 	},
 	"l_noti_on_page": {
-		"message": "Notify on Page"
+		"message": "Tarayıcı bildirimleri"
 	},
 	"l_noti_desktop": {
 		"message": "Masaüstü bildirimleri"
@@ -525,7 +525,7 @@
 		"message": "Bildirim zaman aşımı(s):"
 	},
 	"l_notification_max_popups": {
-		"message": "Notifications at once (-1: all):"
+		"message": "Maksimum bildirim sayısı (-1: hepsi):"
 	},
 	"g_shortener": {
 		"message": "Kısaltıcı"
@@ -537,19 +537,19 @@
 		"message": "Kişisel hesap kullan?"
 	},
 	"l_shortener_login": {
-		"message": "API Login:"
+		"message": "API Giriş:"
 	},
 	"l_shortener_key": {
-		"message": "API Key:"
+		"message": "API Anahtarı:"
 	},
 	"l_share_include_title": {
 		"message": "Sayfa başlığını dahil et:"
 	},
 	"g_timelines": {
-		"message": "Timelines"
+		"message": "Akışlar"
 	},
 	"notice_api_hits": {
-		"message": "Saatlik API limiti en fazla <span style=\"color: red;\"><span class=\"__hourly_limit\"></span></span> olmalıdır!<br>Eğer birden fazla Twitter istemcisi kullanıyorsanız aşağıdaki değerleri daha da azaltmalısınız."
+		"message": "Saatlik API limiti en fazla <span style=\"color: red;\"><span class=\"__hourly_limit\"></span></span> olabilir!<br>Eğer birden fazla Twitter istemcisi kullanıyorsanız aşağıdaki değerleri daha da azaltmalısınız."
 	},
 	"l_hits_notice": {
 		"message": "Saatlik API limiti: "
@@ -561,13 +561,13 @@
 		"message": "Yenileme aralığı(s)"
 	},
 	"l_include_in_unified": {
-		"message": "Include in unified timeline"
+		"message": "Birleşik akışa dahil et"
 	},
 	"l_tabs_count": {
 		"message": "Sekme sayısı"
 	},
 	"l_unified_timeline": {
-		"message": "Unified Timeline:"
+		"message": "Birleşik Akış:"
 	},
 	"tml_favorites": {
 		"message": "Favoriler:"
@@ -576,7 +576,7 @@
 		"message": "Engellenen kullanıcılar:"
 	},
 	"notice_right_click_change": {
-		"message": "* Hey, now you can use the right-click context menu to change most of this settings directly into the popup window. Just get out of here! :)"
+		"message": "* Artık pencerede sağ tıklayarak buradaki ayarların çoğunu pencere üzerinden değiştirebilirsiniz."
 	},
 	"l_tweets_per_page": {
 		"message": "Sayfa başı gösterilecek tweet sayısı:"
@@ -594,22 +594,22 @@
 		"message": "İstek zamanaşımı(ms):"
 	},
 	"l_base_url": {
-		"message": "Twitter API URL:"
+		"message": "Twitter API Adresi:"
 	},
 	"l_base_oauth_url": {
-		"message": "OAuth URL:"
+		"message": "OAuth Adresi:"
 	},
 	"l_same_signing_urls": {
-		"message": "Same signing URLs:"
+		"message": "Aynı Giriş Adresleri:"
 	},
 	"l_base_signing_url": {
-		"message": "API Signing URL:"
+		"message": "API Giriş Adresi:"
 	},
 	"l_base_oauth_signing_url": {
-		"message": "OAuth Signing URL:"
+		"message": "OAuth Giriş Adresi:"
 	},
 	"l_base_search_url": {
-		"message": "Search API URL:"
+		"message": "Arama API Adresi:"
 	},
 	"btn_save": {
 		"message": "Kaydet"
