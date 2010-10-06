@@ -36,7 +36,7 @@
 		"message": "The following error occurred trying to authenticate: $errorMessage$. Please, <a href=\"javascript:OAuth.requestNewToken();\">click here to restart the authentication process</a>",
 		"placeholders": {
 			"errorMessage":{
-				"content": "$1"			
+				"content": "$1"
 			}
 		}
 	},
