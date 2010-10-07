@@ -1,10 +1,10 @@
 {
 	"extDescription": {
-		"message": "Chromed Bird ist eine Erweiterung für Twitter, die es erlaubt, der Timeline zu folgen und mit Twitter zu interagieren.",
+		"message": "Chromed Bird ist eine Erweiterung fÃ¼r Twitter, die es erlaubt, der Timeline zu folgen und mit Twitter zu interagieren.",
 		"description": "Beschreibung der Erweiterung"
 	},
 	"resetSize": {
-		"message": "Doppelklicken, um die Größe zurück zu setzen"
+		"message": "Doppelklicken, um die GrÃ¶ÃŸe zurÃ¼ck zu setzen"
 	},
 	"composeTweet": {
 		"message": "Tweet schreiben",
@@ -15,19 +15,19 @@
 	},
 	"logout": {
 		"message": "Abmelden",
-		"description": "Text für den Logout-Link"
+		"description": "Text fÃ¼r den Logout-Link"
 	},
 	"options": {
 		"message": "Optionen",
-		"description": "Verknüpfung zu den Optionen"
+		"description": "VerknÃ¼pfung zu den Optionen"
 	},
 	"refresh": {
 		"message": "Aktualisieren",
-		"description": "Verknüpfung zum Aktualisieren"
+		"description": "VerknÃ¼pfung zum Aktualisieren"
 	},
 	"suspend": {
 		"message": "Pausieren",
-		"description": "Verknüpfung zum Pausieren"
+		"description": "VerknÃ¼pfung zum Pausieren"
 	},
 	"autoUpdatesSuspended": {
 		"message": "Automatische Updates pausiert."
@@ -45,16 +45,16 @@
 		"message": "Zeigen"
 	},
 	"add": {
-		"message": "Hinzufügen"
+		"message": "HinzufÃ¼gen"
 	},
 	"selectList": {
-		"message": "- Wähle eine Liste aus -"
+		"message": "- WÃ¤hle eine Liste aus -"
 	},
 	"updateList": {
 		"message": "Listen aktualisieren..."
 	},
 	"w_Unified": {
-		"message": "Übersicht"
+		"message": "Ãœbersicht"
 	},
 	"w_Home": {
 		"message": "Startseite"
@@ -84,16 +84,16 @@
 		"message": "von mir retweeted"
 	},
 	"unmarkFavorite": {
-		"message": "Als Favorit abwählen"
+		"message": "Als Favorit abwÃ¤hlen"
 	},
 	"markFavorite": {
 		"message": "Als Favorit markieren"
 	},
 	"Delete": {
-		"message": "Löschen"
+		"message": "LÃ¶schen"
 	},
 	"deleteConfirm": {
-		"message": "Nachricht löschen: "
+		"message": "Nachricht lÃ¶schen: "
 	},
 	"Yes": {
 		"message": "Ja"
@@ -120,7 +120,7 @@
 		"message": "Neues Token anfordern"
 	},
 	"shortenerIdleString": {
-		"message": "URL zum Kürzen eintippen, oder gleich hier klicken \u2192"
+		"message": "URL zum KÃ¼rzen eintippen, oder gleich hier klicken \u2192"
 	},
 	"timelineHome": {
 		"message": "Startseite",
@@ -141,7 +141,7 @@
 		"message": "Tweets"
 	},
 	"newTweetsAvailable": {
-		"message": "$count$ weitere $tweets$ verfügbar. Jetzt aktualisieren.",
+		"message": "$count$ weitere $tweets$ verfÃ¼gbar. Jetzt aktualisieren.",
 		"placeholders": {
 			"count": {
 				"content": "$1"
@@ -152,10 +152,10 @@
 		}
 	},
 	"preventClosing": {
-		"message": "Klicken, um Schließen zu verhindern."
+		"message": "Klicken, um SchlieÃŸen zu verhindern."
 	},
 	"changeNotificationSettings": {
-		"message": "Benachrichtigungseinstellungen können in den Optionen geändert werden."
+		"message": "Benachrichtigungseinstellungen kÃ¶nnen in den Optionen geÃ¤ndert werden."
 	},
 	"loadingMap": {
 		"message": "Lade Karte ..."
@@ -173,7 +173,7 @@
 		"message": "AJAX Anfrage fehlgeschlagen. (Schlechte Verbindung?)"
 	},
 	"successAuth": {
-		"message": "Glückwunsch, Du wurdest erfolgreich authentifiziert. Viel Spaß mit Chromed Bird!"
+		"message": "GlÃ¼ckwunsch, Du wurdest erfolgreich authentifiziert. Viel SpaÃŸ mit Chromed Bird!"
 	},
 	"cbAuthorized": {
 		"message": "Chromed Bird authorisiert!"
@@ -246,7 +246,7 @@
 		"message": " Wenn dieser Timeout-Fehler wiederholt auftritt, versuch's mit Aus- und wieder Einloggen."
 	},
 	"ue_deletingTweet": {
-		"message": "Unerwartete Fehler $status$ beim Löschen eines Tweets.",
+		"message": "Unerwartete Fehler $status$ beim LÃ¶schen eines Tweets.",
 		"placeholders": {
 			"status": {
 				"content": "$1"
@@ -270,7 +270,7 @@
 		}
 	},
 	"ue_unmarkFavorite": {
-		"message": "Unerwartete Fehler $status$ beim Löschen eines Favoriten.",
+		"message": "Unerwartete Fehler $status$ beim LÃ¶schen eines Favoriten.",
 		"placeholders": {
 			"status": {
 				"content": "$1"
@@ -298,7 +298,7 @@
 		"message": "Authorisieren!"
 	},
 	"exceededAPIHits": {
-		"message": "Du hast die API-Aufrufgrenze überschritten. Bitte überprüfe Deine Aktualisierungseinstellungen in den <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>Optionen</a>. Chromed Bird wird bis $nextResetDate $nextResetTime$ nicht mehr aktualisiert.",
+		"message": "Du hast die API-Aufrufgrenze Ã¼berschritten. Bitte Ã¼berprÃ¼fe Deine Aktualisierungseinstellungen in den <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>Optionen</a>. Chromed Bird wird bis $nextResetDate $nextResetTime$ nicht mehr aktualisiert.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -312,7 +312,7 @@
 		}
 	},
 	"warningAPIHits": {
-		"message": "Hey! Die verbleibende API-Aufrufe werden zu schnell weniger.<br>Bitte überprüfe Deine Aktualisierungseinstellungen in den <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>Optionen</a>. Sei besonders vorsichtig, wenn Du mehrere Twitter-Programme verwendest; sie teilen sich die API-Aufrufe!<br>Verbleibende Aufrufe: $remainingHits$ - Nächster Reset: $nextResetDate$ $nextResetTime$",
+		"message": "Hey! Die verbleibende API-Aufrufe werden zu schnell weniger.<br>Bitte Ã¼berprÃ¼fe Deine Aktualisierungseinstellungen in den <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>Optionen</a>. Sei besonders vorsichtig, wenn Du mehrere Twitter-Programme verwendest; sie teilen sich die API-Aufrufe!<br>Verbleibende Aufrufe: $remainingHits$ - NÃ¤chster Reset: $nextResetDate$ $nextResetTime$",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -329,7 +329,7 @@
 		}
 	},
 	"oAuthError": {
-		"message": "Der folgende Fehler trat während der Authentifizierung auf:: $errorMessage$. Bitte <a href=\"javascript:OAuth.requestNewToken();\">hier klicken zum Neustarten der Authentifizierung</a>.",
+		"message": "Der folgende Fehler trat wÃ¤hrend der Authentifizierung auf:: $errorMessage$. Bitte <a href=\"javascript:OAuth.requestNewToken();\">hier klicken zum Neustarten der Authentifizierung</a>.",
 		"placeholders": {
 			"errorMessage": {
 				"content": "$1"
@@ -399,16 +399,16 @@
 		"message": "Die Konfiguration wurde erfolgreich gespeichert!"
 	},
 	"changes_restart": {
-		"message": "Einige der Änderungen erfordern, dass Chromed Bird neu gestartet werden muss. Jetz neu starten?<br>    (Das wird Deinen Ungelesene Tweets-Zähler zurücksetzen.)"
+		"message": "Einige der Ã„nderungen erfordern, dass Chromed Bird neu gestartet werden muss. Jetz neu starten?<br>    (Das wird Deinen Ungelesene Tweets-ZÃ¤hler zurÃ¼cksetzen.)"
 	},
 	"remaining_api_hits": {
 		"message": "Verbleibende Twitter-API-Aufrufe: "
 	},
 	"rate_limit_reset": {
-		"message": "Aufrufsgrenze wird zurückgesetzt in: "
+		"message": "Aufrufsgrenze wird zurÃ¼ckgesetzt in: "
 	},
 	"nerds_link": {
-		"message": "API-Statistiken (für Nerds)"
+		"message": "API-Statistiken (fÃ¼r Nerds)"
 	},
 	"g_ui": {
 		"message": "UI"
@@ -438,7 +438,7 @@
 		"message": "UI Theme:"
 	},
 	"l_font_size": {
-		"message": "Schriftgröße:"
+		"message": "SchriftgrÃ¶ÃŸe:"
 	},
 	"o_small": {
 		"message": "Klein"
@@ -447,10 +447,10 @@
 		"message": "Normal"
 	},
 	"o_large": {
-		"message": "Groß"
+		"message": "GroÃŸ"
 	},
 	"o_extra_large": {
-		"message": "Extragroß"
+		"message": "ExtragroÃŸ"
 	},
 	"l_font_family": {
 		"message": "Schriftfamilie:"
@@ -459,7 +459,7 @@
 		"message": "Als Gelesen markieren nach (ms):"
 	},
 	"l_show_expanded_urls": {
-		"message": "Verkürzte URLs auflösen:"
+		"message": "VerkÃ¼rzte URLs auflÃ¶sen:"
 	},
 	"l_reply_all": {
 		"message": "An alle antworten:"
@@ -468,22 +468,22 @@
 		"message": "API-Aufrufzahl anzeigen:"
 	},
 	"l_show_user_autocomplete": {
-		"message": "Benutzernamen vervollständigen:"
+		"message": "Benutzernamen vervollstÃ¤ndigen:"
 	},
 	"l_icon_color": {
 		"message": "Icon-Farbe:"
 	},
 	"l_tweets_color_only_unified": {
-		"message": "Farben nur in der Übersicht:"
+		"message": "Farben nur in der Ãœbersicht:"
 	},
 	"l_tweet_color": {
 		"message": "Tweet-Farbe:"
 	},
 	"w_Mentions": {
-		"message": "Erwähnungen"
+		"message": "ErwÃ¤hnungen"
 	},
 	"btn_reset_popup_size": {
-		"message": "Popup-Größe zurücksetzen"
+		"message": "Popup-GrÃ¶ÃŸe zurÃ¼cksetzen"
 	},
 	"g_notifications": {
 		"message": "Benachrichtigungen"
@@ -492,7 +492,7 @@
 		"message": "Tweet-Benachrichtigung"
 	},
 	"l_change_icon": {
-		"message": "Icon ändern"
+		"message": "Icon Ã¤ndern"
 	},
 	"l_icon_color": {
 		"message": "Icon-Farbe"
@@ -501,7 +501,7 @@
 		"message": "Startseite:"
 	},
 	"notif_mentions": {
-		"message": "Erwähnungen:"
+		"message": "ErwÃ¤hnungen:"
 	},
 	"notif_dms": {
 		"message": "DN:"
@@ -525,10 +525,10 @@
 		"message": "Benachrichtigungs-Timeout (s):"
 	},
 	"g_shortener": {
-		"message": "Verkürzer"
+		"message": "VerkÃ¼rzer"
 	},
 	"l_url_shortener": {
-		"message": "URL-Verkürzer:"
+		"message": "URL-VerkÃ¼rzer:"
 	},
 	"l_shortener_acct": {
 		"message": "Privates Konto nutzen?"
@@ -546,7 +546,7 @@
 		"message": "Timelines"
 	},
 	"notice_api_hits": {
-		"message": "Die API-Aufrufe pro Stunde sollten <span style=\"color: red;\">unter <span class=\"__hourly_limit\"></span></span> bleiben! Sonst wird Chromed Bird nicht mehr richtig arbeiten und Timelines werden nicht mehr aktualisiert.<br><span style=\"color: red;\">Bedenke</span>, dass die API-Aufrufe noch niedriger liegen müssen, wenn Du mehrere Twitter-Programme einsetzt!"
+		"message": "Die API-Aufrufe pro Stunde sollten <span style=\"color: red;\">unter <span class=\"__hourly_limit\"></span></span> bleiben! Sonst wird Chromed Bird nicht mehr richtig arbeiten und Timelines werden nicht mehr aktualisiert.<br><span style=\"color: red;\">Bedenke</span>, dass die API-Aufrufe noch niedriger liegen mÃ¼ssen, wenn Du mehrere Twitter-Programme einsetzt!"
 	},
 	"l_hits_notice": {
 		"message": "API-Aufrufe pro Stunde: "
@@ -558,13 +558,13 @@
 		"message": "Aktualisierungs-Intervall (s)"
 	},
 	"l_include_in_unified": {
-		"message": "In Übersichts-Timeline anzeigen"
+		"message": "In Ãœbersichts-Timeline anzeigen"
 	},
 	"l_tabs_count": {
 		"message": "Anzahl Tabs"
 	},
 	"l_unified_timeline": {
-		"message": "Überischts-Timeline:"
+		"message": "Ãœberischts-Timeline:"
 	},
 	"tml_favorites": {
 		"message": "Favoriten:"
@@ -573,7 +573,7 @@
 		"message": "Gesperrte Nutzer:"
 	},
 	"notice_right_click_change": {
-		"message": "* Hey, jetzt kannst Du mit dem Kontextmenü (Rechts-Klick) die meisten Einstellungen direkt im Popup-Fenster erledigen. Raus hier! :)"
+		"message": "* Hey, jetzt kannst Du mit dem KontextmenÃ¼ (Rechts-Klick) die meisten Einstellungen direkt im Popup-Fenster erledigen. Raus hier! :)"
 	},
 	"l_tweets_per_page": {
 		"message": "Tweets pro Setie:"
@@ -612,9 +612,9 @@
 		"message": "Speicheren"
 	},
 	"btn_reset": {
-		"message": "Zurücksetzen"
+		"message": "ZurÃ¼cksetzen"
 	},
 	"btn_default": {
-		"message": "Auf Standards zurücksetzen"
+		"message": "Auf Standards zurÃ¼cksetzen"
 	}
 }
