@@ -264,11 +264,17 @@ var Composer = {
 
   init: function() {
     if(tweetManager.composerData.isComposing) {
-      Composer.replyId = tweetManager.composerData.replyId;
-      Composer.replyUser = tweetManager.composerData.replyUser;
-      $("#compose_tweet_area textarea").val(tweetManager.composerData.saveMessage || '');
-      Composer.showComposeArea(true, true);
+      Composer.initMessage(tweetManager.composerData.saveMessage, tweetManager.composerData.replyId,
+          tweetManager.composerData.replyUser, false);
     }
+    Composer.textareaChanged();
+  },
+
+  initMessage: function(message, replyId, replyUser, shouldAnimate) {
+    Composer.replyId = replyId;
+    Composer.replyUser = replyUser;
+    $("#compose_tweet_area textarea").val(message || '');
+    Composer.showComposeArea(true, !shouldAnimate);
     Composer.textareaChanged();
   },
 
@@ -477,7 +483,7 @@ var Composer = {
 
   sendTweet: function () {
     var textarea = $("#compose_tweet_area textarea");
-    tweetManager.enqueueTweet(textarea.val(), Composer.replyId);
+    tweetManager.enqueueTweet(textarea.val(), Composer.replyId, Composer.replyUser);
 
     textarea.val("");
     Composer.replyId = null;
@@ -492,6 +498,13 @@ var Composer = {
       return;
     }
     loadTimeline(true);
+  },
+
+  isVisible: function() {
+    var composeArea = $("#compose_tweet_area");
+    var textarea = $("textarea", composeArea);
+    var visible = composeArea.is(':visible');
+    return visible && textarea.val().length > 0;
   }
 }
 
@@ -515,6 +528,14 @@ var WorkList = {
       }
       WorkList.tweetEnqueued();
     });
+    tweetManager.sendQueue.onSendFailed(function() {
+      if(!window) {
+        return;
+      }
+      WorkList.sendFailed();
+    });
+    // Just checking
+    WorkList.sendFailed();
 
     $("#queue_loading").tipsy({
       title: function() {
@@ -589,6 +610,20 @@ var WorkList = {
   tweetEnqueued: function() {
     $("#queue_loading").show();
   },
+
+  sendFailed: function() {
+    var abortedQueue = tweetManager.sendQueue.abortedStatus();
+    if(!abortedQueue || abortedQueue.length == 0) {
+      return;
+    }
+    // If we're here that's because something went wrong
+    if(!Composer.isVisible()) {
+      // For now let's just show the first enqueued message
+      var topMessage = abortedQueue[0];
+      Composer.initMessage(topMessage.message, topMessage.replyId, topMessage.replyUser, true);
+    }
+    Renderer.showError(chrome.i18n.getMessage("tweet_send_error"));
+  }
 };
 
 var Shortener = {
