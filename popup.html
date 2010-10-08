@@ -166,9 +166,13 @@ var ThemeManager = {
         }
       }
     }
+
+    ThemeManager.isPopup = location.search == '?popup';
   },
+
   setPopupSize: function(width, height, autoFitWidth) {
     width = width || 490;
+    height = height || 400;
     if(autoFitWidth) {
       setTimeout(function() {
         var tabsBarWidth = 0;
@@ -181,21 +185,26 @@ var ThemeManager = {
         }
       }, 300);
     }
-    $(".timeline").width(width + 'px');
-    if(height) {
+
+    if(ThemeManager.isPopup) {
+      $(".timeline").width(width + 'px');
       $(".inner_timeline,.timeline").height(height + 'px');
     } else {
-      $(".inner_timeline,.timeline").height('400px');
+      var resizeWindowFunc = function() {
+        var timelineHeight = window.innerHeight - 79;
+        $('.inner_timeline,.timeline').css('maxHeight', timelineHeight + 'px');
+      }
+      resizeWindowFunc();
+      $(window).resize(resizeWindowFunc);
     }
   },
+
   popupSizeData: Persistence.popupSize(),
-  handleWindowResizing: function () {
-    var sizeArray = ThemeManager.popupSizeData.val();
-    if(sizeArray) {
-      sizeArray = sizeArray.split('x');
-      ThemeManager.setPopupSize(sizeArray[0], sizeArray[1], true);
-    } else {
-      ThemeManager.setPopupSize(null, null, true);
+
+  initWindowResizing: function() {
+    ThemeManager.handleWindowResizing();
+    if(!ThemeManager.isPopup) {
+      return;
     }
     $(".timeline").resizable({
       handles: 'e, s, se',
@@ -214,6 +223,16 @@ var ThemeManager = {
       ThemeManager.popupSizeData.remove();
       ThemeManager.setPopupSize(null, null, true);
     });
+  },
+
+  handleWindowResizing: function() {
+    var sizeArray = ThemeManager.popupSizeData.val();
+    if(sizeArray) {
+      sizeArray = sizeArray.split('x');
+      ThemeManager.setPopupSize(sizeArray[0], sizeArray[1], true);
+    } else {
+      ThemeManager.setPopupSize(null, null, true);
+    }
   },
 
   sortableEl: null,
@@ -1385,7 +1404,7 @@ function initializeWorkspace() {
 
   //Delay loading, improving responsiveness
   setTimeout(function() {
-    ThemeManager.handleWindowResizing();
+    ThemeManager.initWindowResizing();
     Lists.init();
     ContextMenu.init();
 
@@ -1427,18 +1446,6 @@ $(function() {
   }
 
   initializeWorkspace();
-
-  chrome.tabs.getAllInWindow(null, function(tabs) {
-    //Let's make it fullscreen if we're running it in an exclusive window.
-    if(tabs.length == 1 && tabs[0].url == chrome.extension.getURL('popup.html')) {
-      var resizeWindowFunc = function() {
-        var timelineHeight = window.innerHeight - 79;
-        $('.timeline').css('maxHeight', timelineHeight + 'px');
-      }
-      resizeWindowFunc();
-      $(window).resize(resizeWindowFunc);
-    }
-  });
 });
 </script>
 </head>
