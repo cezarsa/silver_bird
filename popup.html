@@ -1433,6 +1433,10 @@ function initializeWorkspace() {
     WorkList.init();
     Autocomplete.init();
     $("#shorten_current").attr("title",chrome.i18n.getMessage("shorten_current"));
+
+    ClickEmulator.handleClick($("#options_page_link")[0], function() {
+      openTab(chrome.extension.getURL('options.html'));
+    });
   }, 0);
 }
 
@@ -1488,7 +1492,7 @@ $(function() {
 
   <span class="header_link_left">
     <a href="javascript:signout()"><span id="logout" class="i18n"></span></a> |
-    <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))"><span id="options" class="i18n"></span></a> |
+    <a href="#" id="options_page_link"><span id="options" class="i18n"></span></a> |
     <a href="javascript:Composer.refreshNew();"><span id="refresh" class="i18n"></span></a> |
     <a id="suspend_toggle" href="javascript:suspend()"><span id="suspend" class="i18n"></span></a>
     <span id="suspended_notice"><span id="autoUpdatesSuspended" class="i18n"></span></span>
