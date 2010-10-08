@@ -168,6 +168,9 @@ var ThemeManager = {
     }
 
     ThemeManager.isPopup = location.search == '?popup';
+    if(!ThemeManager.isPopup) {
+      $('<base target="_blank">').appendTo(document.head);
+    }
   },
 
   setPopupSize: function(width, height, autoFitWidth) {
@@ -1380,11 +1383,16 @@ function initializeWorkspace() {
       tweetManager.registerNewTweetsCallback(null);
     }
   });
-  Renderer.setContext('popup');
 
   tweetManager.registerNewTweetsCallback(newTweetsAvailable);
   $("#workspace").show();
   ThemeManager.init();
+
+  if(ThemeManager.isPopup) {
+    Renderer.setContext('popup');
+  } else {
+    Renderer.setContext('standalone');
+  }
 
   TimelineTab.init();
   tweetManager.orderedEachTimeline(function(timeline) {
