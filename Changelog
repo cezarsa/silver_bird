@@ -1,3 +1,11 @@
+1.9.1 (2010-10-07)
+
+* Updated translations (Thanks to Antonio Perez, Onur Baykaş, Vladimir Yakovlev and Dima Mikhailov);
+* Better status updates error handling;
+* Fixing middle-click behavior for recent Chrome versions;
+* Fixing encoding for German translation (Failing installation);
+* Fixing small bug in url expanding.
+
 1.9.0 (2010-09-28)
 
 It's awesome to have such a big list of contributors. Thanks a lot guys!!!
