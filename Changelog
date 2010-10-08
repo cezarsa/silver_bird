@@ -1,3 +1,7 @@
+1.9.2 (2010-10-08)
+
+* Arghh, invalid locale name (de_DE) was still causing installation errors.
+
 1.9.1 (2010-10-07)
 
 * Updated translations (Thanks to Antonio Perez, Onur Baykaş, Vladimir Yakovlev and Dima Mikhailov);
