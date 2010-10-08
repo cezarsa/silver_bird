@@ -9,6 +9,11 @@
     "popup": "popup.html?popup"
   },
   "background_page": "background.html",
+  "app": {
+    "launch": {
+      "local_path": "popup.html"
+    }
+  },
   "permissions": [
     "notifications",
     "tabs",
@@ -16,6 +21,7 @@
     "https://*/*"
   ],
   "icons": {
+    "16": "img/icon19.png",
     "19": "img/icon19.png",
     "32": "img/icon32.png",
     "48": "img/icon48.png"
