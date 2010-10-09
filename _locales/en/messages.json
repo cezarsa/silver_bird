@@ -628,5 +628,8 @@
 	},
 	"tweet_send_error": {
 		"message": "An error occurred while trying to send your tweet. Maybe Twitter is acting weird? You can try it again but please double check your account to prevent duplicated messages."
+	},
+	"detach_window": {
+	  "message": "Detach Window"
 	}
 }

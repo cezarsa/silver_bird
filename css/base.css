@@ -97,6 +97,11 @@ input[type='text'] {
   margin-top: 4px;
 }
 
+.header_link_right #detach_img {
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
 #loading, #queue_loading {
   float: right;
   margin: 0px;

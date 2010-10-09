@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="css/simple_select.css" />
 <link rel="stylesheet" type="text/css" href="css/tipsy.css" />
 <link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.css" />
-
+<title>Chromed Bird</title>
 <script>
 var MAX_TWEET_SIZE = 140;
 var Persistence = chrome.extension.getBackgroundPage().Persistence;
@@ -168,8 +168,39 @@ var ThemeManager = {
     }
 
     ThemeManager.isPopup = location.search == '?popup';
+    ThemeManager.isDetached = location.search == '?detached';
+
     if(!ThemeManager.isPopup) {
       $('<base target="_blank">').appendTo(document.head);
+    }
+
+    var persistedPosition = Persistence.windowPosition();
+    ThemeManager.detachedPos = persistedPosition.val();
+    if(!ThemeManager.detachedPos) {
+      // Setting default values
+      ThemeManager.detachedPos = {
+        left: 100,
+        top: 100,
+        height: null,
+        width: null
+      };
+      persistedPosition.save(ThemeManager.detachedPos);
+    }
+    if(ThemeManager.isDetached) {
+      $("#detach_img").hide();
+      // Listening to resize and move events
+      $(window).resize(function() {
+        ThemeManager.detachedPos.height = window.innerHeight;
+        ThemeManager.detachedPos.width = window.innerWidth;
+        persistedPosition.save(ThemeManager.detachedPos);
+      });
+      setInterval(function() {
+        if(ThemeManager.detachedPos.left != window.screenLeft || ThemeManager.detachedPos.top != window.screenTop) {
+          ThemeManager.detachedPos.left = window.screenLeft;
+          ThemeManager.detachedPos.top = window.screenTop;
+          persistedPosition.save(ThemeManager.detachedPos);
+        }
+      }, 1000);
     }
   },
 
@@ -889,6 +920,18 @@ $.extend(Renderer, {
       tweetManager.clearWarning();
     }
     $("#absolute_container").slideUp('slow');
+  },
+
+  detach: function() {
+    if(!ThemeManager.detachedPos.width || !ThemeManager.detachedPos.height) {
+      ThemeManager.detachedPos.width = window.innerWidth;
+      ThemeManager.detachedPos.height = window.innerHeight;
+    }
+    window.open(chrome.extension.getURL('popup.html?detached'), 'cb_popup_window',
+      'left=' + ThemeManager.detachedPos.left + ',top=' + (ThemeManager.detachedPos.top - 22) + // Magic 22...
+      ',width=' + ThemeManager.detachedPos.width + ',height=' + ThemeManager.detachedPos.height +
+      'location=no,menubar=no,resizable=yes,status=no,titlebar=yes,toolbar=no');
+    window.close();
   }
 });
 
@@ -1432,7 +1475,8 @@ function initializeWorkspace() {
 
     WorkList.init();
     Autocomplete.init();
-    $("#shorten_current").attr("title",chrome.i18n.getMessage("shorten_current"));
+    $("#shorten_current").attr("title", chrome.i18n.getMessage("shorten_current"));
+    $("#detach_img").attr("title", chrome.i18n.getMessage("detach_window"));
 
     ClickEmulator.handleClick($("#options_page_link")[0], function() {
       openTab(chrome.extension.getURL('options.html'));
@@ -1497,7 +1541,10 @@ $(function() {
     <a id="suspend_toggle" href="javascript:suspend()"><span id="suspend" class="i18n"></span></a>
     <span id="suspended_notice"><span id="autoUpdatesSuspended" class="i18n"></span></span>
   </span>
-  <a class="header_link_right" href="javascript:Renderer.markAllAsRead();"><span id="markAllRead" class="i18n"></span></a>
+  <span class="header_link_right">
+    <a href="javascript:Renderer.markAllAsRead();"><span id="markAllRead" class="i18n"></span></a>
+    <a href="javascript:Renderer.detach();"><img id="detach_img" src="img/up_detach.png"/></a>
+  </span>
   <img src="img/loading.gif" id="loading" style="display: none;"/>
   <img src="img/loading.gif" id="queue_loading" style="display: none;"/>
   <div style="clear: both;"></div>
