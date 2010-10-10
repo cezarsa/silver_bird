@@ -49,11 +49,11 @@ $(function() {
     var hitsInfo = twitterBackend.remainingHitsInfo();
     $(".twitter_hits_left").text(hitsInfo[0]);
 
-    resetDateObj.setTime(parseInt(hitsInfo[1]) * 1000);
+    resetDateObj.setTime(parseInt(hitsInfo[1], 10) * 1000);
     $(".twitter_hits_reset").text(resetDateObj.toLocaleDateString() + " " + resetDateObj.toLocaleTimeString());
 
     if(hitsInfo[2]) {
-      hourlyLimit = parseInt(hitsInfo[2]);
+      hourlyLimit = parseInt(hitsInfo[2], 10);
     }
   }
   $(".__hourly_limit").text(hourlyLimit);
@@ -64,7 +64,7 @@ $(function() {
   }
 
   var onShortenerChange = function() {
-    var shortenerSelect = $("select[name='url_shortener']")[0]
+    var shortenerSelect = $("select[name='url_shortener']")[0];
     if(shortenerSelect.value == 'bitly' || shortenerSelect.value == 'jmp' || shortenerSelect.value == 'karmacracy') {
       $("#shortener_opts").show();
       $("#yourls_opts").hide();
@@ -131,16 +131,16 @@ $(function() {
     onSigningUrlCheck();
   });
   options.onsaveChangedOption(function(optionName, oldValue, newValue) {
-    var idx;
+    var idx, templateId;
     if((idx = optionName.indexOf('_visible')) != -1) {
-      var templateId = optionName.substring(0, idx);
+      templateId = optionName.substring(0, idx);
       if(newValue) {
         tweetManager.showTimelineTemplate(templateId, true);
       } else {
         tweetManager.hideTimelineTemplate(templateId);
       }
     } else if((idx = optionName.indexOf('_include_unified')) != -1) {
-      var templateId = optionName.substring(0, idx);
+      templateId = optionName.substring(0, idx);
       tweetManager.toggleUnified(templateId, newValue);
     }
   });
@@ -155,7 +155,7 @@ $(function() {
         if(authStatus == 1 || authStatus == 2) { // Not allowed or Denied
           notificationCenter.requestPermission(function() {
             var authStatus = notificationCenter.checkPermission();
-            if(authStatus != 0) { // Permission denied
+            if(authStatus !== 0) { // Permission denied
               $("#noti_on_page").click();
               options.save();
             }
@@ -170,11 +170,11 @@ $(function() {
   options.load();
 
   updatePredictedHitsCount();
-  $('table.timelines input, table.timelines select')
-    .keyup(updatePredictedHitsCount)
-    .blur(updatePredictedHitsCount)
-    .click(updatePredictedHitsCount)
-    .change(updatePredictedHitsCount);
+  $('table.timelines input, table.timelines select').
+    keyup(updatePredictedHitsCount).
+    blur(updatePredictedHitsCount).
+    click(updatePredictedHitsCount).
+    change(updatePredictedHitsCount);
 
   $("input[name='microblogging_service'],label[for='service_twitter'],label[for='service_identica']").mousedown(function(e) {
     var el = $(e.target);
@@ -239,7 +239,7 @@ function updatePredictedHitsCount() {
     }
 
     var inputRefreshEl = $('input[name="' +  template.id + '_refresh_interval"]');
-    var intVal = parseInt(inputRefreshEl.val());
+    var intVal = parseInt(inputRefreshEl.val(), 10);
     var timelineHits = (60 * 60) / intVal;
     var timelineCount = 1;
     var userData = template.getUserData();
@@ -247,9 +247,10 @@ function updatePredictedHitsCount() {
       timelineCount = userData.length;
     }
     totalHits += timelineHits * timelineCount;
+    return true;
   });
-  totalHits += (60 * 60) / parseInt($('input[name="blockedusers_refresh_interval"]').val());
-  totalHits = parseInt(totalHits);
+  totalHits += (60 * 60) / parseInt($('input[name="blockedusers_refresh_interval"]').val(), 10);
+  totalHits = parseInt(totalHits, 10);
   $('#predicted_hits_count').text(totalHits);
   if(totalHits >= hourlyLimit) {
     $('#predicted_hits_count').css('backgroundColor', 'red');
