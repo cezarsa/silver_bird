@@ -535,6 +535,15 @@ TweetManager.prototype = {
     }, id);
   },
 
+  getTweet: function(callback, id) {
+    var _this = this;
+    return this.twitterBackend.showTweet(function(success, data, status) {
+      if(success) {
+      }
+      callback(success, data, status);
+    }, id);
+  },
+
   destroy: function(callback, tweetTimelineId, id) {
     var _this = this;
     var firstCallback = function(success, data, status) {
