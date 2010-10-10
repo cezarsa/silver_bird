@@ -1248,11 +1248,11 @@ var Autocomplete = {
     } else {
       return [];
     }
-    hintStr = hintStr.substr(this.startPosition);
+    hintStr = hintStr.substr(this.startPosition).toLowerCase();
     var validScreenNames = [];
     for(var i = 0, len = usersList.length; i < len; ++i) {
       var user = usersList[i];
-      if(user.screen_name.toLowerCase().indexOf(hintStr.toLowerCase()) == 0) {
+      if(user.screen_name.toLowerCase().indexOf(hintStr) == 0) {
         validScreenNames.push(user.screen_name);
       }
     }
