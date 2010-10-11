@@ -349,7 +349,7 @@ var Composer = {
       $("#loading").hide();
       var notFound = status && status.match(/Not Found/);
       if(success || notFound) {
-        $(".tweet[tweetid='" + _this.destroyId + "']").hide('blind', { direction: "vertical" });
+        $(".tweet[tweetid='" + _this.destroyId + "']").parents('.tweet_space').first().hide('blind', { direction: "vertical" });
         var currentCount = tweetManager.getCurrentTimeline().getTweetsCache().length;
         if(currentCount < OptionsBackend.get('tweets_per_page')) {
           Paginator.nextPage();
@@ -821,26 +821,32 @@ $.extend(Renderer, {
       destinationDom.appendChild(Renderer.renderTweet(tweets[i], useColors, nameAttribute));
     }
 
-    $(".tweet").hover(
-    function() {
-      $(".new_actions img:not(.starred)", this).show();
-    },
-    function() {
-      $(".new_actions img:not(.starred)", this).hide();
+    $(".tweet").live('mouseover mouseout', function(event) {
+      if(event.type == 'mouseover') {
+        $(".new_actions img:not(.starred)", this).show();
+      } else {
+        $(".new_actions img:not(.starred)", this).hide();
+      }
     });
 
-    var hoverFunc = function() {
+    var hoverFunc = function(event) {
       var $this = $(this);
       var old_src = $this.attr('src');
-      var new_src;
-      if(old_src.match(/hover/)) {
-        new_src = old_src.replace(/_hover/, '');
+      var new_src = old_src;
+      var isStarred = $this.is('.starred');
+      var isHoverImage = old_src.match(/hover/);
+      if((!isStarred && event.type == 'mouseover') || (isStarred && event.type == 'mouseout')) {
+        if(!isHoverImage) {
+          new_src = old_src.replace(/\.png/, '_hover.png');
+        }
       } else {
-        new_src = old_src.replace(/\.png/, '_hover.png');
+        if(isHoverImage) {
+          new_src = old_src.replace(/_hover/, '');
+        }
       }
       $this.attr('src', new_src);
     }
-    $(".new_actions img").hover(hoverFunc, hoverFunc);
+    $(".new_actions img").live('mouseover mouseout', hoverFunc);
 
     $(".tweet.unread").click(function() {
       tweetManager.readTweet($(this).attr('tweetid'));

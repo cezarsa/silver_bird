@@ -532,11 +532,18 @@ TweetManager.prototype = {
     }, id);
   },
 
-  getTweet: function(callback, id) {
+  getInReplyToTweet: function(callback, tweet) {
+    if(tweet.inReplyToTweet) {
+      callback(true, tweet.inReplyToTweet);
+      return;
+    }
     var _this = this;
-    return this.twitterBackend.showTweet(function(success, data, status) {
+    this.twitterBackend.showTweet(function(success, data, status) {
+      if(success) {
+        tweet.inReplyToTweet = data;
+      }
       callback(success, data, status);
-    }, id);
+    }, tweet.in_reply_to_status_id);
   },
 
   destroy: function(callback, tweetTimelineId, id) {
