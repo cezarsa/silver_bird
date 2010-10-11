@@ -143,7 +143,7 @@ var Paginator = {
     this.needsMore = true;
     loadTimeline();
   }
-}
+};
 
 var ThemeManager = {
   init: function () {
@@ -227,7 +227,7 @@ var ThemeManager = {
       var resizeWindowFunc = function() {
         var timelineHeight = window.innerHeight - 79;
         $('.inner_timeline,.timeline').css('maxHeight', timelineHeight + 'px');
-      }
+      };
       resizeWindowFunc();
       $(window).resize(resizeWindowFunc);
     }
@@ -305,7 +305,7 @@ var ThemeManager = {
     this.reOrderPanels(sortedTimelines);
     this.uiTabs.tabs('refreshPositions');
   }
-}
+};
 
 var Composer = {
   replyId: null,
@@ -430,7 +430,7 @@ var Composer = {
   addUser: function (user, replies) {
     var textArea = $("#compose_tweet_area textarea");
     var currentVal = textArea.val();
-    var replies =  replies || [];
+    replies =  replies || [];
     if(currentVal.length > 0 && currentVal[currentVal.length - 1] != ' ') {
       currentVal += ' ';
     }
@@ -457,7 +457,7 @@ var Composer = {
     if (reply_all) {
       $(".text a", node).each(function(){
         var t = $(this).text();
-        if (t !== ownName && /^[A-Z0-9_-]{1,15}$/i.test(t)) {
+        if (t !== ownName && (/^[A-Z0-9_-]{1,15}$/i).test(t)) {
           replies.push('@'+t+' ');
         }
       });
@@ -559,14 +559,14 @@ var Composer = {
     var visible = composeArea.is(':visible');
     return visible && textarea.val().length > 0;
   }
-}
+};
 
 var WorkList = {
   /* Not really a work list yet, but I intend in making it into one
      and hopefully stop this #loading madness.
    */
   init: function() {
-    if(tweetManager.sendQueue.queueSize() != 0) {
+    if(tweetManager.sendQueue.queueSize() !== 0) {
       $("#queue_loading").show();
     }
     tweetManager.sendQueue.onQueueEmpty(function() {
@@ -600,20 +600,20 @@ var WorkList = {
         for(var i = 0, len = queueItems.length; i < len; ++i) {
           var queueItem = queueItems[i];
           var message = queueItem.message;
-          if(i == 0 && message.length > 15) {
+          if(i === 0 && message.length > 15) {
             message = message.substring(0, 13) + '...';
           } else if(message.length > 50) {
             message = message.substring(0, 48) + '...';
           }
           html += '<li>';
           html += message;
-          if(i == 0) {
+          if(i === 0) {
             var timeDiff = ((new Date()).getTime() - queueItem.createdAt.getTime()) / 1000;
             var timeDiffDesc;
             if(timeDiff < 60) {
-              timeDiffDesc = parseInt(timeDiff) + 's';
+              timeDiffDesc = parseInt(timeDiff, 10) + 's';
             } else {
-              timeDiffDesc = parseInt(timeDiff / 60) + 'm';
+              timeDiffDesc = parseInt(timeDiff / 60, 10) + 'm';
             }
             if(queueItem.retryCount == 1) {
               html += '<span class="title"> ' +
@@ -666,7 +666,7 @@ var WorkList = {
 
   sendFailed: function() {
     var abortedQueue = tweetManager.sendQueue.abortedStatus();
-    if(!abortedQueue || abortedQueue.length == 0) {
+    if(!abortedQueue || abortedQueue.length === 0) {
       return;
     }
     // If we're here that's because something went wrong
@@ -684,7 +684,7 @@ var Shortener = {
 
   init: function() {
     var savedUrl = tweetManager.composerData.urlShortener;
-    if(savedUrl != '') {
+    if(savedUrl !== '') {
       $("#shortener_area input").val(savedUrl);
     }
     this.blur();
@@ -723,7 +723,7 @@ var Shortener = {
   blur: function() {
     var shortener = $("#shortener_area input");
     var val = shortener.val();
-    if($.trim(val) == '' || val == this.SHORTENER_IDLE_STR) {
+    if($.trim(val) === '' || val == this.SHORTENER_IDLE_STR) {
       shortener.val(this.SHORTENER_IDLE_STR);
       shortener.attr('style', 'color: #aaa;');
       this.hideButton();
@@ -736,7 +736,7 @@ var Shortener = {
     var shortener = $("#shortener_area input");
     var val = shortener.val();
     tweetManager.composerData.urlShortener = val;
-    if($.trim(val) != '') {
+    if($.trim(val) !== '') {
       if(e.which == 13) { //Enter key
         this.shortenIt();
       } else {
@@ -778,13 +778,11 @@ var Shortener = {
         var tmpText = textarea.val();
         if(tmpText.length > 0) {
           if((textarea[0].selectionStart > 0) &&
-            (tmpText[textarea[0].selectionStart-1] != ' ')
-          ) {
+            (tmpText[textarea[0].selectionStart-1] != ' ')) {
             shortUrl = ' ' + shortUrl;
           }
           if((textarea[0].selectionEnd < tmpText.length) &&
-             (tmpText[textarea[0].selectionEnd+1] != ' ')
-          ) {
+             (tmpText[textarea[0].selectionEnd+1] != ' ')) {
              shortUrl += ' ';
           }
         }
@@ -799,12 +797,12 @@ var Shortener = {
       Composer.showComposeArea(true);
     });
   }
-}
+};
 
 $.extend(Renderer, {
   assemblyTweets: function (tweets, timelineId) {
     var destination = $("#timeline-" + timelineId + " .inner_timeline");
-    if(destination.length == 0)
+    if(destination.length === 0)
       return;
 
     var useColors = true;
@@ -845,7 +843,7 @@ $.extend(Renderer, {
         }
       }
       $this.attr('src', new_src);
-    }
+    };
     $(".new_actions img").live('mouseover mouseout', hoverFunc);
 
     $(".tweet.unread").click(function() {
@@ -865,7 +863,7 @@ $.extend(Renderer, {
       },
       function() {
         //Starting countdown to read
-        var testEl = $("<div class='tweet' style='display:none'></div>")
+        var testEl = $("<div class='tweet' style='display:none'></div>");
         $(document.body).append(testEl);
         var transformation = {};
         jQuery.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopColor', 'outlineColor'], function(i, attr) {
@@ -962,7 +960,7 @@ var Lists = {
           return true;
         }
         var $listSelect = $("select#" + timeline.timelineId + "-selector");
-        if($listSelect.length == 0) {
+        if($listSelect.length === 0) {
           var pos = tweetManager.getTimelinePosition(timeline.timelineId);
           if(pos == -1) {
             pos = undefined;
@@ -996,6 +994,7 @@ var Lists = {
             return true;
           }
         });
+        return true;
       });
       ThemeManager.handleWindowResizing();
     });
@@ -1024,15 +1023,15 @@ var ContextMenu = {
 
   runMenuAction: function(action, el, pos) {
     var actionParts = action.split('-');
+    var templateId = actionParts[1];
     if(actionParts[0] == 'show') {
-      var templateId = actionParts[1];
       var createdTimelines = tweetManager.showTimelineTemplate(templateId);
       if(templateId == TimelineTemplate.LISTS) {
         Lists.init();
       } else {
         for(var i = 0, len = createdTimelines.length; i < len; ++i) {
           var timeline = createdTimelines[i];
-          var pos = tweetManager.getTimelinePosition(timeline.timelineId);
+          pos = tweetManager.getTimelinePosition(timeline.timelineId);
           if(pos == -1) {
             pos = undefined;
           }
@@ -1046,7 +1045,6 @@ var ContextMenu = {
       }
       ThemeManager.updateTabsOrder();
     } else if(actionParts[0] == 'remove') {
-      var timelineId = actionParts[1];
       TimelineTab.removeTab(timelineId);
       ThemeManager.handleWindowResizing();
       ThemeManager.updateTabsOrder();
@@ -1054,16 +1052,13 @@ var ContextMenu = {
         prepareAndLoadTimeline();
       }
     } else if(actionParts[0] == 'unified') {
-      var templateId = actionParts[1];
       tweetManager.toggleUnified(templateId);
       if(tweetManager.getCurrentTimeline().template.id == TimelineTemplate.UNIFIED) {
         prepareAndLoadTimeline();
       }
     } else if(actionParts[0] == 'notify') {
-      var templateId = actionParts[1];
       tweetManager.toggleNotify(templateId);
     } else if(actionParts[0] == 'icon') {
-      var templateId = actionParts[1];
       tweetManager.toggleChangeIcon(templateId);
     }
   },
@@ -1090,6 +1085,7 @@ var ContextMenu = {
             className = 'check_marked';
           }
           specificMenu.push({action: 'unified-' + template.id, label: template.timelineName, className: className});
+          return true;
         });
       } else if(timeline.template.id != TimelineTemplate.FAVORITES) {
         specificMenu.push({label: 'separator'});
@@ -1129,7 +1125,7 @@ var ContextMenu = {
 
 var SearchTab = {
   addSearchTab: function(timelineId, pos, setFocus) {
-    var inputHtml = '<input type="text" spellcheck="false" class="search_selector" id="' + timelineId + '-selector"></input>'
+    var inputHtml = '<input type="text" spellcheck="false" class="search_selector" id="' + timelineId + '-selector"></input>';
     TimelineTab.addTab(timelineId, inputHtml, pos);
     var inputEl = $('input#' + timelineId + '-selector');
     inputEl.val(tweetManager.getSearchQuery(timelineId));
@@ -1243,7 +1239,7 @@ var Autocomplete = {
 
   autocomplete: function(hintStr) {
     var usersList = tweetManager.getUsersToComplete();
-    if(usersList == null || usersList.length == 0) {
+    if(usersList === null || usersList.length === 0) {
       return [];
     }
     var lastSpaceIdx = hintStr.lastIndexOf(' ');
@@ -1258,7 +1254,7 @@ var Autocomplete = {
     var validScreenNames = [];
     for(var i = 0, len = usersList.length; i < len; ++i) {
       var user = usersList[i];
-      if(user.screen_name.toLowerCase().indexOf(hintStr) == 0) {
+      if(user.screen_name.toLowerCase().indexOf(hintStr) === 0) {
         validScreenNames.push(user.screen_name);
       }
     }
@@ -1352,7 +1348,7 @@ function showRateLimit() {
     var hitsInfo = tweetManager.twitterBackend.remainingHitsInfo();
     $("#twitter_hits_left").text("API: "+ hitsInfo[0] + "/" + hitsInfo[2] + ",");
 
-    resetDateObj.setTime(parseInt(hitsInfo[1]) * 1000);
+    resetDateObj.setTime(parseInt(hitsInfo[1], 10) * 1000);
     var leftMins = resetDateObj.getMinutes() - nowmin;
     if (leftMins < 0) leftMins = 60 + leftMins;
     $("#twitter_hits_reset").text(leftMins + " mins to reset");
@@ -1366,20 +1362,19 @@ function newTweetsAvailable(count, unreadCount, timelineId) {
   }
   var currentTimeline = tweetManager.currentTimelineId;
   if(timelineId != currentTimeline) {
-    if(unreadCount == 0) {
+    if(unreadCount === 0) {
       $("#tab_modifier_" + timelineId).remove();
       return;
     }
     $("#tab_modifier_" + timelineId).remove();
     var timelineTabLink = $("a[href='#timeline-" + timelineId + "']");
-    var divEl = $("<div class='tab_modifier'></div>")
-      .attr('id', "tab_modifier_" + timelineId);
+    var divEl = $("<div class='tab_modifier'></div>").attr('id', "tab_modifier_" + timelineId);
     timelineTabLink.before(divEl);
-    var modWidth = parseInt(timelineTabLink.parent().width()) - 12;
+    var modWidth = parseInt(timelineTabLink.parent().width(), 10) - 12;
     divEl.css({width: modWidth + 'px'});
     return;
   }
-  if(count == 0)
+  if(count === 0)
     return;
   var tweets_string = count > 1 ? "tweet_plural" : "tweet_singular";
   $("#update_tweets").text(chrome.i18n.getMessage("newTweetsAvailable", [count, chrome.i18n.getMessage(tweets_string)]));
@@ -1391,7 +1386,7 @@ function updateNotificationFunc(timeline) {
   var newTweetsInfo = tweetManager.newTweetsCount(timelineId);
   var newTweetsCount = newTweetsInfo[0];
 
-  if(timeline.timelineId == tweetManager.currentTimelineId && timeline.currentScroll == 0) {
+  if(timeline.timelineId == tweetManager.currentTimelineId && timeline.currentScroll === 0) {
     if(newTweetsCount > 0) {
       tweetManager.updateNewTweets();
       $("#tab_modifier_" + timelineId).remove();
