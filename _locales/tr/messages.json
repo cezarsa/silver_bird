@@ -340,7 +340,7 @@
 		"message": "Az önce"
 	},
 	"minuteAgo": {
-		"message": "Saniyeler"
+		"message": "Saniyeler önce"
 	},
 	"minutes": {
 		"message": "$nr_of_minutes$ $minutes$ önce",
