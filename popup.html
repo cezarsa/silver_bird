@@ -1025,26 +1025,9 @@ var ContextMenu = {
     var actionParts = action.split('-');
     var templateId = actionParts[1];
     if(actionParts[0] == 'show') {
-      var createdTimelines = tweetManager.showTimelineTemplate(templateId);
-      if(templateId == TimelineTemplate.LISTS) {
-        Lists.init();
-      } else {
-        for(var i = 0, len = createdTimelines.length; i < len; ++i) {
-          var timeline = createdTimelines[i];
-          pos = tweetManager.getTimelinePosition(timeline.timelineId);
-          if(pos == -1) {
-            pos = undefined;
-          }
-          if(templateId == TimelineTemplate.SEARCH) {
-            SearchTab.addSearchTab(timeline.timelineId, pos, true);
-          } else {
-            TimelineTab.addTab(timeline.timelineId, timeline.template.timelineName, pos);
-          }
-        }
-        ThemeManager.handleWindowResizing();
-      }
-      ThemeManager.updateTabsOrder();
+      TimelineTab.addNewTab(templateId);
     } else if(actionParts[0] == 'remove') {
+      var timelineId = actionParts[1];
       TimelineTab.removeTab(timelineId);
       ThemeManager.handleWindowResizing();
       ThemeManager.updateTabsOrder();
@@ -1134,8 +1117,7 @@ var SearchTab = {
     }
 
     inputEl.blur(function(e) {
-      SearchTab.updateSearch(e);
-      TimelineTab.select(timelineId);
+      SearchTab.updateSearchEvent(e);
     });
     inputEl.keyup(function(e) {
       if(e && e.which == 13) { // Enter
@@ -1144,11 +1126,22 @@ var SearchTab = {
     });
   },
 
-  updateSearch: function(e) {
+  updateSearchEvent: function(e) {
     var timelineId = e.target.id.split('-')[0];
-    if(tweetManager.changeSearch(timelineId, $(e.target).val())) {
-      Paginator.firstPage(true);
-      prepareAndLoadTimeline();
+    var searchQuery = $(e.target).val();
+    SearchTab.updateSearch(timelineId, searchQuery, false);
+  },
+
+  updateSearch: function(timelineId, searchQuery, isBackground) {
+    if(!isBackground) {
+      TimelineTab.select(timelineId);
+    }
+    $('#' + timelineId + '-selector').val(searchQuery);
+    if(tweetManager.changeSearch(timelineId, searchQuery)) {
+      if(!isBackground) {
+        Paginator.firstPage(true);
+        prepareAndLoadTimeline();
+      }
     }
   }
 };
@@ -1167,6 +1160,46 @@ var TimelineTab = {
         $('.inner_timeline', ui.panel).scrollTop(tweetManager.getCurrentTimeline().currentScroll);
       }
     });
+  },
+
+  addNewTab: function(templateId, automaticallyAdded) {
+    var createdTimelines = tweetManager.showTimelineTemplate(templateId);
+    if(templateId == TimelineTemplate.LISTS) {
+      Lists.init();
+    } else {
+      for(var i = 0, len = createdTimelines.length; i < len; ++i) {
+        var timeline = createdTimelines[i];
+        pos = tweetManager.getTimelinePosition(timeline.timelineId);
+        if(pos == -1) {
+          pos = undefined;
+        }
+        if(templateId == TimelineTemplate.SEARCH) {
+          SearchTab.addSearchTab(timeline.timelineId, pos, !automaticallyAdded);
+        } else {
+          TimelineTab.addTab(timeline.timelineId, timeline.template.timelineName, pos);
+        }
+      }
+      ThemeManager.handleWindowResizing();
+    }
+    ThemeManager.updateTabsOrder();
+    return createdTimelines;
+  },
+
+  addNewSearchTab: function(searchQuery, isBackground) {
+    var searchTimeline;
+    tweetManager.eachTimeline(function(timeline) {
+      if(timeline.template.id == TimelineTemplate.SEARCH && timeline.getSearchQuery() == searchQuery) {
+        searchTimeline = timeline;
+        return false;
+      }
+      return true;
+    });
+    if(!searchTimeline) {
+      searchTimeline = TimelineTab.addNewTab(TimelineTemplate.SEARCH, true)[0];
+    }
+    if(searchQuery) {
+      SearchTab.updateSearch(searchTimeline.timelineId, searchQuery, isBackground);
+    }
   },
 
   addTab: function(timelineId, tabName, pos) {

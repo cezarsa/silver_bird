@@ -262,7 +262,9 @@ TweetManager.prototype = {
       if(!includeHidden && !timeline.template.visible) {
         continue;
       }
-      callback.call(tId, this.timelines[tId]);
+      if(callback.call(tId, timeline) === false) {
+        break;
+      }
     }
   },
 
