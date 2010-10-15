@@ -124,6 +124,7 @@ input[type='text'] {
   padding-right: 35px;
   overflow: auto;
   overflow-x: hidden;
+  position: relative;
 }
 
 #update_tweets {

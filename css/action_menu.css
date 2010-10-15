@@ -1,0 +1,40 @@
+div.action_menu {
+  position: absolute;
+  display: -webkit-box;
+  background-color: #229;
+  -webkit-border-radius: 5px;
+  z-index: 999999;
+}
+
+div.action_menu.up {
+  margin-top: -3px;
+}
+
+div.action_menu.down {
+  margin-top: 3px;
+}
+
+div.action_menu.right {
+  margin-left: 3px;
+}
+
+div.action_menu.left {
+  margin-left: -3px;
+}
+
+div.action_menu.horizontal {
+  -webkit-box-orient: horizontal;
+}
+
+div.action_menu.vertical {
+  -webkit-box-orient: vertical;
+}
+
+div.action_menu .action {
+  -webkit-box-flex: 1;
+  margin: 3px;
+}
+
+div.action_menu .action a {
+  color: white;
+}
