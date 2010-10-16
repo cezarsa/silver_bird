@@ -332,6 +332,18 @@ input[type='text'] {
   display: inline;
 }
 
+.tweet_space {
+  position: relative;
+}
+
+div.reply_separator {
+  position: absolute;
+  left: 50%;
+  right: 50%;
+  margin-top: -10px;
+  cursor: pointer;
+}
+
 div#popup_footer {
   display: none;
   float: right;
