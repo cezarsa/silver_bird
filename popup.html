@@ -809,7 +809,7 @@ $.extend(Renderer, {
 
     var useColors = true;
     if(OptionsBackend.get('tweets_color_only_unified')) {
-      if(timelineId != 'unified') {
+      if(timelineId != TimelineTemplate.UNIFIED) {
         useColors = false;
       }
     }
@@ -1273,7 +1273,7 @@ var Autocomplete = {
   },
 
   autocomplete: function(hintStr) {
-    var usersList = tweetManager.getUsersToComplete();
+    var usersList = tweetManager.getFollowingUsers();
     if(usersList === null || usersList.length === 0) {
       return [];
     }
@@ -1289,8 +1289,8 @@ var Autocomplete = {
     var validScreenNames = [];
     for(var i = 0, len = usersList.length; i < len; ++i) {
       var user = usersList[i];
-      if(user.screen_name.toLowerCase().indexOf(hintStr) === 0) {
-        validScreenNames.push(user.screen_name);
+      if(user.toLowerCase().indexOf(hintStr) === 0) {
+        validScreenNames.push(user);
       }
     }
     return validScreenNames;
