@@ -631,5 +631,17 @@
 	},
 	"detach_window": {
 	  "message": "Detach Window"
+	},
+	"follow_action": {
+	  "message": "Follow"
+	},
+	"unfollow_action": {
+	  "message": "Unfollow"
+	},
+	"tweets_action": {
+	  "message": "Tweets"
+	},
+	"profile_action": {
+	  "message": "Profile"
 	}
 }
