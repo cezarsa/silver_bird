@@ -39,50 +39,54 @@ LocaleTable.prototype = {
     this.prepareLocaleData();
     this.tableEl.empty();
 
-    var titleRowEl = $('<tr>').append($('<th>'));
-    for(var k = 0, len3 = this.orderedLocaleCodes.length; k < len3; ++k) {
-      var code = this.orderedLocaleCodes[k];
-      var localeCellEl = $('<th>').html(code);
-      titleRowEl.append(localeCellEl);
-    }
-    this.tableEl.append(titleRowEl);
-
+    var emptyCount = {};
     for(var i = 0, len = this.orderedKeywords.length; i < len; ++i) {
       var keyword = this.orderedKeywords[i];
       var rowEl = $('<tr>');
       var titleCellEl = $('<th>').html(keyword);
       rowEl.append(titleCellEl);
+      var isKeywordComplete = true;
       for(var j = 0, len2 = this.orderedLocaleCodes.length; j < len2; ++j) {
         var localeCode = this.orderedLocaleCodes[j];
         var localeData = this.locales[localeCode];
         var message = localeData.hasOwnProperty(keyword) ? localeData[keyword].message : '-';
-        var className = ''
+        var className = '';
         if(message == '-') {
           className = 'empty';
+          emptyCount[localeCode] = emptyCount[localeCode] ? emptyCount[localeCode] + 1 : 1;
+          isKeywordComplete = false;
         }
         var cellEl = $('<td>').addClass(className).html(message);
         rowEl.append(cellEl);
       }
-      var isPropertyInDefault = this.locales[this.defaultLocale].hasOwnProperty(keyword);
+      var isPropertyInDefault = this.locales[this.defaultLocale] && this.locales[this.defaultLocale].hasOwnProperty(keyword);
       if(!isPropertyInDefault) {
         rowEl.addClass('invalid');
+      } else if(!isKeywordComplete) {
+        rowEl.addClass('incomplete');
       }
-
       this.tableEl.append(rowEl);
     }
-  },
 
-  addLocale: function(localeCode, data) {
-    this.locales[localeCode] = data;
-    this.drawTable();
+    var titleRowEl = $('<tr>').append($('<th>'));
+    for(var k = 0, len3 = this.orderedLocaleCodes.length; k < len3; ++k) {
+      var code = this.orderedLocaleCodes[k];
+      var localeCellEl = $('<th>').html(code);
+      if(emptyCount[code]) {
+        localeCellEl.append($('<span>').addClass('empty_count').html(' (' + emptyCount[code] + ')'))
+      }
+      titleRowEl.append(localeCellEl);
+    }
+    this.tableEl.prepend(titleRowEl);
   },
 
   loadData: function() {
     var _this = this;
     this.loadDefaultLocale(function(defaultLocale) {
       _this.defaultLocale = defaultLocale;
-      _this.loadLocaleMessages(function(localeCode, localeData) {
-        _this.addLocale(localeCode, localeData);
+      _this.loadLocaleMessages(function(locales) {
+        _this.locales = locales;
+        _this.drawTable();
       });
     })
   },
@@ -103,6 +107,20 @@ LocaleTable.prototype = {
   },
 
   loadLocaleMessages: function(callback) {
+    var remainingLocalesMap = {};
+    $.each(LocaleTable.availableLocaleCodes, function() {
+      remainingLocalesMap[this] = true;
+    });
+    var locales = {};
+    var updateLocaleCallback = function(localeCode, data) {
+      delete remainingLocalesMap[localeCode];
+      if(data) {
+        locales[localeCode] = data;
+      }
+      if($.isEmptyObject(remainingLocalesMap)) {
+        callback(locales);
+      }
+    };
     for(var i = 0, len = LocaleTable.availableLocaleCodes.length; i < len; ++i) {
       var localeCode = LocaleTable.availableLocaleCodes[i];
       (function(localeCode) {
@@ -113,9 +131,10 @@ LocaleTable.prototype = {
           dataType: 'json',
           timeout: 5000,
           success: function(data, status, xhr) {
-            if(data) {
-              callback(localeCode, data);
-            }
+            updateLocaleCallback(localeCode, data);
+          },
+          error: function() {
+            updateLocaleCallback(localeCode, null);
           }
         });
       })(localeCode);
@@ -147,6 +166,12 @@ $(function() {
 }
 #localeTable tr.invalid td, #localeTable tr.invalid th {
   background-color: #ff0;
+}
+#localeTable tr.incomplete th {
+  color: red;
+}
+span.empty_count {
+  color: red;
 }
 </style>
 </head>
