@@ -11,7 +11,7 @@
 		"message": "Opties",
 		"description": "Options link"
 	},
-	"allRead": {
+	"markAllRead": {
 		"message": "Alles als gelezen markeren"
 	},
 	"newToken": {
