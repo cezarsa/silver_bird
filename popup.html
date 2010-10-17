@@ -49,6 +49,7 @@ if(!twitterBackend.authenticated() && !twitterBackend.tokenRequested()) {
 <script type="text/javascript" src="lib/3rdparty/jquery.insertatcaret.min.js"></script>
 
 <!--script type="text/javascript" src="lib/debug.js"></script-->
+<script type="text/javascript" src="lib/any_click.js"></script>
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
 <script type="text/javascript" src="lib/simple_select.js"></script>
 <script type="text/javascript" src="lib/tweet_transforms.js"></script>
@@ -1514,7 +1515,7 @@ function initializeWorkspace() {
     $("#shorten_current").attr("title", chrome.i18n.getMessage("shorten_current"));
     $("#detach_img").attr("title", chrome.i18n.getMessage("detach_window"));
 
-    ClickEmulator.handleClick($("#options_page_link")[0], function() {
+    $("#options_page_link").anyClick(function() {
       openTab(chrome.extension.getURL('options.html'));
     });
   }, 0);
