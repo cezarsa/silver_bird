@@ -643,5 +643,8 @@
 	},
 	"profile_action": {
 	  "message": "Profile"
+	},
+	"add_mention_action": {
+	  "message": "Mention"
 	}
 }
