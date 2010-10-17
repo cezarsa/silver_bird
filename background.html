@@ -473,9 +473,11 @@ TweetManager.prototype = {
       };
       injectHelper('script', 'lib/3rdparty/jquery.js', true, function() {
         injectHelper('css', 'css/injectedTweets.css', true, function() {
-          injectHelper('script', 'lib/tweet_transforms.js', true, function() {
-            injectHelper('script', 'lib/timeline_template.js', true, function() {
-              injectHelper('script', 'lib/tweets_assembler.js', true);
+          injectHelper('script', 'lib/any_click.js', true, function() {
+            injectHelper('script', 'lib/tweet_transforms.js', true, function() {
+              injectHelper('script', 'lib/timeline_template.js', true, function() {
+                injectHelper('script', 'lib/tweets_assembler.js', true);
+              });
             });
           });
         });
