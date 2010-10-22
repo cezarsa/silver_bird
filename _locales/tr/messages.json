@@ -626,4 +626,25 @@
 	"shorten_current": {
 		"message": "Aktif sayfayı paylaş"
 	}
+	"tweet_send_error": {
+		"message": "Tweetinizi gönderirken bir hata oluştu. Twitter garip davranıyor olabilir mi? Tekrar deneyebilirsiniz ama aynı mesajı göndermediğinizden emin olun."
+	},
+	"detach_window": {
+	  "message": "Pencereyi Ayır"
+	},
+	"follow_action": {
+	  "message": "Takip Et"
+	},
+	"unfollow_action": {
+	  "message": "Takip Etmeyi Bırak"
+	},
+	"tweets_action": {
+	  "message": "Tweetler"
+	},
+	"profile_action": {
+	  "message": "Profil"
+	},
+	"add_mention_action": {
+	  "message": "Bahset"
+	}
 }
