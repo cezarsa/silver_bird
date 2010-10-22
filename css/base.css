@@ -341,6 +341,7 @@ div.reply_separator {
   left: 50%;
   right: 50%;
   margin-top: -10px;
+  margin-left: 11px; /* Half of the padding used for the actions */
   cursor: pointer;
 }
 
