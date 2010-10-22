@@ -1,3 +1,17 @@
+1.9.5 (2010-10-21)
+
+* Showing a inline menu with different actions after clicking user's names or avatars
+  This will allow you to follow/unfollow users, create a new search tab with messages from
+  this user or open the user's profile page (previous default behavior).
+* Expanding original messages for replies (when clicking the 'in reply to' link). (Thanks Yuki!);
+* Optimized autocompletion (Thanks again Yuki);
+* Opening hashtags inside Chromed Bird itself as a new search tab;
+* Allowing users to detach the popup windows (still needs some improvement);
+* Introduced a report showing the state of each one of the existing translations (bottom of the options page);
+* Fixed the behavior of middle-click and ctrl-click in links, correctly leaving the popup still opened.
+* Added mcaf.ee, rod.gs and minify shorteners;
+* Cleaning and fixing up the code after running it through JavasScript Lint.
+
 1.9.2 (2010-10-08)
 
 * Arghh, invalid locale name (de_DE) was still causing installation errors.
