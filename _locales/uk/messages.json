@@ -242,15 +242,15 @@
 		"message": "Авторизуйтесь!"
 	},
 	"exceededAPIHits": {
-		"message": "Ви перевищили ліміт API. Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='javascript:chrome.tabs.create({url:"$options_url$"})'>налаштуваннях</a>. Chromed Bird не буде оновлювати до $nextResetDate$ $nextResetTime$.",
+		"message": "Ви перевищили ліміт API. Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>налаштуваннях</a>. Chromed Bird не буде оновлювати до $nextResetDate$ $nextResetTime$.",
 		"placeholders": {"options_url":{"content":"$1"},"nextResetDate":{"content":"$2"},"nextResetTime":{"content":"$3"}}
 	},
 	"warningAPIHits": {
-		"message": "Гей! Ліміт звернень до API настає дуже швидко. <br> Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='javascript:chrome.tabs.create({url:"$options_url$"})'>налаштуваннях</a>. Зверніть увагу, що якщо ви використовуєте кілька Twitter клієнтів вони мають загальний ліміт. <br> Залишилося звернень: $remainingHits$ - Наступний скидання: $nextResetDate$ $nextResetTime$",
+		"message": "Гей! Ліміт звернень до API настає дуже швидко. <br> Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>налаштуваннях</a>. Зверніть увагу, що якщо ви використовуєте кілька Twitter клієнтів вони мають загальний ліміт. <br> Залишилося звернень: $remainingHits$ - Наступний скидання: $nextResetDate$ $nextResetTime$",
 		"placeholders": {"options_url":{"content":"$1"},"remainingHits":{"content":"$2"},"nextResetDate":{"content":"$3"},"nextResetTime":{"content":"$4"}}
 	},
 	"oAuthError": {
-		"message": "Під час перевірки автентичності виникла помилка: $errorMessage$. Будь ласка, <a href="javascript:OAuth.requestNewToken();">натисніть щоб повторити процес</a>",
+		"message": "Під час перевірки автентичності виникла помилка: $errorMessage$. Будь ласка, <a href=\"javascript:OAuth.requestNewToken();\">натисніть щоб повторити процес</a>",
 		"placeholders": {"errorMessage":{"content":"$1"}}
 	},
 	"justNow": {
@@ -445,7 +445,7 @@
 		"message": "Стрічки"
 	},
 	"notice_api_hits": {
-		"message": "Ви повинні тримати число звернень до API <span style="color: red;">нижче <span class="__hourly_limit"></span></span> ! Інакше Chromed Bird перестане працювати і стрічки не будуть оновлюватися. <br> <span style="color: red;">Пам&#39;ятайте,</span> якщо ви використовуєте кілька Twitter клієнтів, ви повинні тримати число звернень ще нижче."
+		"message": "Ви повинні тримати число звернень до API <span style=\"color: red;\">нижче <span class=\"__hourly_limit\"></span></span> ! Інакше Chromed Bird перестане працювати і стрічки не будуть оновлюватися. <br> <span style=\"color: red;\">Пам&#39;ятайте,</span> якщо ви використовуєте кілька Twitter клієнтів, ви повинні тримати число звернень ще нижче."
 	},
 	"l_hits_notice": {
 		"message": "Звернень до API на годину:"
