@@ -208,6 +208,9 @@ var ThemeManager = {
   },
 
   setPopupSize: function(width, height, autoFitWidth) {
+    if(!ThemeManager.isPopup) {
+      return;
+    }
     width = width || 490;
     height = height || 400;
     if(autoFitWidth) {
@@ -223,17 +226,8 @@ var ThemeManager = {
       }, 300);
     }
 
-    if(ThemeManager.isPopup) {
-      $(".timeline").width(width + 'px');
-      $(".inner_timeline,.timeline").height(height + 'px');
-    } else {
-      var resizeWindowFunc = function() {
-        var timelineHeight = window.innerHeight - 79;
-        $('.inner_timeline,.timeline').css('maxHeight', timelineHeight + 'px');
-      };
-      resizeWindowFunc();
-      $(window).resize(resizeWindowFunc);
-    }
+    $(".timeline").width(width + 'px');
+    $(".inner_timeline,.timeline").height(height + 'px');
   },
 
   popupSizeData: Persistence.popupSize(),
@@ -253,6 +247,12 @@ var ThemeManager = {
   initWindowResizing: function() {
     ThemeManager.handleWindowResizing();
     if(!ThemeManager.isPopup) {
+      var resizeFunc = function() {
+        var timelineHeight = window.innerHeight - 79;
+        $('.inner_timeline,.timeline').css('maxHeight', timelineHeight + 'px');
+      };
+      $(window).resize(resizeFunc);
+      resizeFunc();
       return;
     }
     setTimeout(function() {
