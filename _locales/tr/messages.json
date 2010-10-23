@@ -625,7 +625,7 @@
 	},
 	"shorten_current": {
 		"message": "Aktif sayfayı paylaş"
-	}
+	},
 	"tweet_send_error": {
 		"message": "Tweetinizi gönderirken bir hata oluştu. Twitter garip davranıyor olabilir mi? Tekrar deneyebilirsiniz ama aynı mesajı göndermediğinizden emin olun."
 	},

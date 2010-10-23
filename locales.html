@@ -100,6 +100,10 @@ LocaleTable.prototype = {
     }, 'manifest.json');
   },
 
+  showError: function(message) {
+    document.body.appendChild(Util.makeElem('h2', {}, message));
+  },
+
   loadLocaleMessages: function(callback) {
     var remainingLocalesMap = {};
     for(var k = 0, codesLen = LocaleTable.availableLocaleCodes.length; k < codesLen; ++k) {
@@ -115,12 +119,19 @@ LocaleTable.prototype = {
         callback(locales);
       }
     };
+    var _this = this;
     for(var i = 0, len = LocaleTable.availableLocaleCodes.length; i < len; ++i) {
       var localeCode = LocaleTable.availableLocaleCodes[i];
       (function(localeCode) {
         Util.ajax(function(status, data) {
           if(data) {
-            data = JSON.parse(data);
+            try {
+              data = JSON.parse(data);
+            } catch(e) {
+              _this.showError('Invalid JSON file for "' + localeCode + '", check console.');
+              console.log('Invalid JSON', data, e);
+              throw e;
+            }
           }
           updateLocaleCallback(localeCode, data);
         }, '_locales/' + localeCode + '/messages.json');
