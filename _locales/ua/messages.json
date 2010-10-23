@@ -1,0 +1,533 @@
+{
+	"extDescription": {
+		"message": "Chromed Bird це Twitter розширення, яке дозволяє читати стрічку і взаємодіє з вашим twitter аккаунтом.",
+		"description": "Extension description"
+	},
+	"resetSize": {
+		"message": "Подвійний клік для скидання розміру"
+	},
+	"composeTweet": {
+		"message": "Написати Твіт",
+		"description": "Text for composing new tweet"
+	},
+	"tweetit": {
+		"message": "Затвітувати!"
+	},
+	"logout": {
+		"message": "Вихід",
+		"description": "The text for the logout link"
+	},
+	"options": {
+		"message": "Налаштування",
+		"description": "Options link"
+	},
+	"refresh": {
+		"message": "Оновити",
+		"description": "Refresh link"
+	},
+	"suspend": {
+		"message": "Призупинити",
+		"description": "Suspend link"
+	},
+	"autoUpdatesSuspended": {
+		"message": "Автоматичне оновлення призупинено"
+	},
+	"resume": {
+		"message": "Продовжити"
+	},
+	"remove": {
+		"message": "Видалити"
+	},
+	"hide": {
+		"message": "Приховати"
+	},
+	"show": {
+		"message": "Показати"
+	},
+	"add": {
+		"message": "Додати"
+	},
+	"selectList": {
+		"message": "- списки -"
+	},
+	"updateList": {
+		"message": "Поновлюю списки..."
+	},
+	"w_Unified": {
+		"message": "Загальна"
+	},
+	"w_Home": {
+		"message": "Home"
+	},
+	"w_DM": {
+		"message": "DMs"
+	},
+	"w_Favorites": {
+		"message": "Обране"
+	},
+	"w_Lists": {
+		"message": "Списки"
+	},
+	"w_Search": {
+		"message": "Пошук"
+	},
+	"fromApp": {
+		"message": "через"
+	},
+	"inReply": {
+		"message": "у відповідь на"
+	},
+	"retweetedBy": {
+		"message": "ретвіт від"
+	},
+	"retweetedByMe": {
+		"message": "мій ретвіт"
+	},
+	"unmarkFavorite": {
+		"message": "Видалити з обраного"
+	},
+	"markFavorite": {
+		"message": "Помітити як обране"
+	},
+	"Delete": {
+		"message": "Видалити"
+	},
+	"deleteConfirm": {
+		"message": "Видалити це повідомлення:"
+	},
+	"Yes": {
+		"message": "Так"
+	},
+	"No": {
+		"message": "Ні"
+	},
+	"Reply": {
+		"message": "Відповісти"
+	},
+	"Retweet": {
+		"message": "Ретвіт"
+	},
+	"retweetConfirm": {
+		"message": "Ретвіт цього повідомлення:"
+	},
+	"oldRT": {
+		"message": "Поділитися (старий RT)"
+	},
+	"markAllRead": {
+		"message": "Помітити всі як прочитане"
+	},
+	"newToken": {
+		"message": "Запросити інший ключ"
+	},
+	"shortenerIdleString": {
+		"message": "Наберіть посилання для скорочення, або натисніть сюди →"
+	},
+	"timelineHome": {
+		"message": "Home",
+		"description": "The home time line tab"
+	},
+	"timelineDM": {
+		"message": "DM",
+		"description": "The direct message time line tab"
+	},
+	"timelineFavorites": {
+		"message": "Вибране",
+		"description": "The home time line tab"
+	},
+	"tweet_singular": {
+		"message": "твіт"
+	},
+	"tweet_plural": {
+		"message": "твіти"
+	},
+	"newTweetsAvailable": {
+		"message": "Нових твітів: $count$. Оновити зараз.",
+		"placeholders": {"count":{"content":"$1"},"tweets":{"content":"$2"}}
+	},
+	"preventClosing": {
+		"message": "Клацніть правою для запобігання закриття."
+	},
+	"changeNotificationSettings": {
+		"message": "Ви можете змінити налаштування сповіщень на сторінці налаштувань"
+	},
+	"loadingMap": {
+		"message": "Завантаження карти ..."
+	},
+	"loadingImage": {
+		"message": "Завантаження зображення ..."
+	},
+	"loadingLongUrl": {
+		"message": "Завантаження довгого посилання ..."
+	},
+	"errorExpandingUrl": {
+		"message": "Вибачте, щось вийшло не так, <nobr>спробуйте</nobr> ще раз."
+	},
+	"ajaxFailed": {
+		"message": "Збій запиту AJAX (погане з&#39;єднання?)"
+	},
+	"successAuth": {
+		"message": "Вітаємо, ви успішно увійшли в систему. Насолоджуйтесь Chromed Bird!"
+	},
+	"cbAuthorized": {
+		"message": "Chromed Bird авторизований!"
+	},
+	"cbNotAuthorized": {
+		"message": "Упс... Щось пішло не так. Спробуйте натиснути на іконку Chromed Bird знову."
+	},
+	"authorizing": {
+		"message": "Будь ласка, почекайте, авторизації Chromed Bird..."
+	},
+	"yourPIN": {
+		"message": "Ваш PIN: $pin$",
+		"placeholders": {"pin":{"content":"$1"}}
+	},
+	"tryAgain": {
+		"message": "Спробувати знову"
+	},
+	"canceling": {
+		"message": "Скасування..."
+	},
+	"cancelTweet": {
+		"message": "Скасувати твіт"
+	},
+	"queued_messages": {
+		"message": "Повідомлення в черзі:"
+	},
+	"queue_trying": {
+		"message": "намагаюся відправити вже $timediff$",
+		"placeholders": {"timediff":{"content":"$1"}}
+	},
+	"queue_retried": {
+		"message": "$retries$ повторів за $timediff$ [$laststatus$]",
+		"placeholders": {"retries":{"content":"$1"},"timediff":{"content":"$2"},"laststatus":{"content":"$3"}}
+	},
+	"ue_fetchingLists": {
+		"message": "Несподівана помилка $status$ при отриманні списку.",
+		"placeholders": {"status":{"content":"$1"}}
+	},
+	"ue_updatingTweets": {
+		"message": "Несподівана помилка $baseError$ при оновленні твіту.",
+		"placeholders": {"baseError":{"content":"$1"}}
+	},
+	"ue_updatingTweets2": {
+		"message": "Якщо ця помилка повторюється, спробуйте вийти та зайти знову."
+	},
+	"ue_deletingTweet": {
+		"message": "Несподівана помилка $status$ видалення твіту.",
+		"placeholders": {"status":{"content":"$1"}}
+	},
+	"ue_retweeting": {
+		"message": "Несподівана помилка $status$ ретвіту.",
+		"placeholders": {"status":{"content":"$1"}}
+	},
+	"ue_markFavorite": {
+		"message": "Несподівана помилка $status$ при додаванні в вибране.",
+		"placeholders": {"status":{"content":"$1"}}
+	},
+	"ue_unmarkFavorite": {
+		"message": "Несподівана помилка $status$ при видаленні з обраного.",
+		"placeholders": {"status":{"content":"$1"}}
+	},
+	"newTweets": {
+		"message": "$newtweets$: $count$",
+		"placeholders": {"count":{"content":"$1"},"newtweets":{"content":"$2"}}
+	},
+	"newtweets_singular": {
+		"message": "Нових твітів"
+	},
+	"newtweets_plural": {
+		"message": "Нових твітів"
+	},
+	"btnAuthorize": {
+		"message": "Авторизуйтесь!"
+	},
+	"exceededAPIHits": {
+		"message": "Ви перевищили ліміт API. Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='javascript:chrome.tabs.create({url:"$options_url$"})'>налаштуваннях</a>. Chromed Bird не буде оновлювати до $nextResetDate$ $nextResetTime$.",
+		"placeholders": {"options_url":{"content":"$1"},"nextResetDate":{"content":"$2"},"nextResetTime":{"content":"$3"}}
+	},
+	"warningAPIHits": {
+		"message": "Гей! Ліміт звернень до API настає дуже швидко. <br> Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='javascript:chrome.tabs.create({url:"$options_url$"})'>налаштуваннях</a>. Зверніть увагу, що якщо ви використовуєте кілька Twitter клієнтів вони мають загальний ліміт. <br> Залишилося звернень: $remainingHits$ - Наступний скидання: $nextResetDate$ $nextResetTime$",
+		"placeholders": {"options_url":{"content":"$1"},"remainingHits":{"content":"$2"},"nextResetDate":{"content":"$3"},"nextResetTime":{"content":"$4"}}
+	},
+	"oAuthError": {
+		"message": "Під час перевірки автентичності виникла помилка: $errorMessage$. Будь ласка, <a href="javascript:OAuth.requestNewToken();">натисніть щоб повторити процес</a>",
+		"placeholders": {"errorMessage":{"content":"$1"}}
+	},
+	"justNow": {
+		"message": "тільки що"
+	},
+	"minuteAgo": {
+		"message": "менше хвилини тому"
+	},
+	"minutes": {
+		"message": "$nr_of_minutes$ $minutes$ тому",
+		"placeholders": {"nr_of_minutes":{"content":"$1"},"minutes":{"content":"$2","example":"minute or minutes (singular / plural)"}}
+	},
+	"minute_singular": {
+		"message": "хвилини"
+	},
+	"minute_plural": {
+		"message": "хвилин"
+	},
+	"timeAgo": {
+		"message": "близько $time$ $time_string$ тому",
+		"placeholders": {"time":{"content":"$1"},"time_string":{"content":"$2"}}
+	},
+	"hour_singular": {
+		"message": "години"
+	},
+	"hour_plural": {
+		"message": "годин"
+	},
+	"day_singular": {
+		"message": "день"
+	},
+	"day_plural": {
+		"message": "днів"
+	},
+	"month_singular": {
+		"message": "місяць"
+	},
+	"month_plural": {
+		"message": "місяців"
+	},
+	"yearsAgo": {
+		"message": "років тому"
+	},
+	"options_title": {
+		"message": "Налаштування Chromed Bird"
+	},
+	"conf_saved": {
+		"message": "Ваші налаштування успішно збережені!"
+	},
+	"changes_restart": {
+		"message": "Однак, деякі зміни вимагають перезапуску розширення. Зробити це зараз? <br> (Це скине лічильник непрочитаних твітів.)"
+	},
+	"remaining_api_hits": {
+		"message": "Залишилося звернень до Twitter API:"
+	},
+	"rate_limit_reset": {
+		"message": "Скидання лімітів:"
+	},
+	"nerds_link": {
+		"message": "Статистика звернень до API (для ботанів)"
+	},
+	"g_ui": {
+		"message": "Інтерфейс"
+	},
+	"l_name_attribute": {
+		"message": "Ім&#39;я в твіти:"
+	},
+	"o_screen_name": {
+		"message": "Ім&#39;я користувача (nickname)"
+	},
+	"o_name": {
+		"message": "Справжнє ім&#39;я"
+	},
+	"o_both": {
+		"message": "Обидва імені"
+	},
+	"l_compose_position": {
+		"message": "Положення поля вводу:"
+	},
+	"o_top": {
+		"message": "Зверху"
+	},
+	"o_bottom": {
+		"message": "Знизу"
+	},
+	"l_theme": {
+		"message": "Тема:"
+	},
+	"l_font_size": {
+		"message": "Розмір шрифту:"
+	},
+	"o_small": {
+		"message": "Маленький"
+	},
+	"o_normal": {
+		"message": "Нормальний"
+	},
+	"o_large": {
+		"message": "Великий"
+	},
+	"o_extra_large": {
+		"message": "Дуже великий"
+	},
+	"l_font_family": {
+		"message": "Шрифт:"
+	},
+	"l_hover_timeout": {
+		"message": "Час читання (мс):"
+	},
+	"l_show_expanded_urls": {
+		"message": "Розгортати короткі посилання:"
+	},
+	"l_reply_all": {
+		"message": "Відповідати всім згаданим:"
+	},
+	"l_show_hits_in_popup": {
+		"message": "Показувати кількість звернень до API:"
+	},
+	"l_show_user_autocomplete": {
+		"message": "Автодополнять імена:"
+	},
+	"l_icon_color": {
+		"message": "Колір іконки"
+	},
+	"l_tweets_color_only_unified": {
+		"message": "Кольори тільки в загальній стрічці:"
+	},
+	"l_tweet_color": {
+		"message": "Колір твіту:"
+	},
+	"w_Mentions": {
+		"message": "Згадки"
+	},
+	"btn_reset_popup_size": {
+		"message": "Скинути розмір вікна"
+	},
+	"g_notifications": {
+		"message": "Закладки"
+	},
+	"l_tweet_notification": {
+		"message": "Повідомлення про твіти"
+	},
+	"l_change_icon": {
+		"message": "Змінити іконку"
+	},
+	"notif_home": {
+		"message": "Головна:"
+	},
+	"notif_mentions": {
+		"message": "Згадки:"
+	},
+	"notif_dms": {
+		"message": "Приватні:"
+	},
+	"notif_lists": {
+		"message": "Списки:"
+	},
+	"notif_search": {
+		"message": "Пошук:"
+	},
+	"l_tweets_notification_style": {
+		"message": "Стиль оповіщень:"
+	},
+	"l_noti_on_page": {
+		"message": "Закладки на сторінці"
+	},
+	"l_noti_desktop": {
+		"message": "На робочому столі"
+	},
+	"l_notification_fade_timeout": {
+		"message": "Таймаут оповіщення (с):"
+	},
+	"g_shortener": {
+		"message": "Сокращатель"
+	},
+	"l_url_shortener": {
+		"message": "Сокращатель посилань:"
+	},
+	"l_shortener_acct": {
+		"message": "Використовувати особистий аккаунт?"
+	},
+	"l_shortener_login": {
+		"message": "API Login:"
+	},
+	"l_shortener_key": {
+		"message": "API Key:"
+	},
+	"l_share_include_title": {
+		"message": "Включати назву сторінки (поділитися):"
+	},
+	"g_timelines": {
+		"message": "Стрічки"
+	},
+	"notice_api_hits": {
+		"message": "Ви повинні тримати число звернень до API <span style="color: red;">нижче <span class="__hourly_limit"></span></span> ! Інакше Chromed Bird перестане працювати і стрічки не будуть оновлюватися. <br> <span style="color: red;">Пам&#39;ятайте,</span> якщо ви використовуєте кілька Twitter клієнтів, ви повинні тримати число звернень ще нижче."
+	},
+	"l_hits_notice": {
+		"message": "Звернень до API на годину:"
+	},
+	"l_visible": {
+		"message": "Показувати"
+	},
+	"l_refresh_interval": {
+		"message": "Інтервал оновлення (с)"
+	},
+	"l_include_in_unified": {
+		"message": "Включати в загальну стрічку"
+	},
+	"l_tabs_count": {
+		"message": "Число закладок"
+	},
+	"l_unified_timeline": {
+		"message": "Загальна стрічка:"
+	},
+	"tml_favorites": {
+		"message": "Вибране:"
+	},
+	"l_blocked_users": {
+		"message": "Заблоковані користувачі:"
+	},
+	"notice_right_click_change": {
+		"message": "* Гей, тепер ви можете натиснути правою кнопкою, щоб змінити більшість цих значень прямо зі спливаючого вікна. Просто забирайтеся звідси! :)"
+	},
+	"l_tweets_per_page": {
+		"message": "Твітів на сторінці:"
+	},
+	"l_max_cached_tweets": {
+		"message": "Максимум показаних твітів:"
+	},
+	"g_microblogging_service": {
+		"message": "Служба мікроблогів"
+	},
+	"g_advanced": {
+		"message": "Додаткові"
+	},
+	"l_request_timeout": {
+		"message": "Таймаут запиту (мс):"
+	},
+	"l_base_url": {
+		"message": "Twitter&#39;s API URL:"
+	},
+	"l_base_oauth_url": {
+		"message": "OAuth URL:"
+	},
+	"l_same_signing_urls": {
+		"message": "Same signing URLs:"
+	},
+	"l_base_signing_url": {
+		"message": "API Signing URL:"
+	},
+	"l_base_oauth_signing_url": {
+		"message": "OAuth Signing URL:"
+	},
+	"l_base_search_url": {
+		"message": "Search API URL:"
+	},
+	"btn_save": {
+		"message": "Зберегти"
+	},
+	"btn_reset": {
+		"message": "Скинути"
+	},
+	"btn_default": {
+		"message": "По-замовчуванню"
+	},
+	"shortenIt": {
+		"message": "Скоротити!"
+	},
+	"shorten_current": {
+		"message": "Поділитися поточною сторінкою"
+	},
+	"_inf": {
+		"message": "",
+		"description": "Author"
+	},
+	"_gen": {
+		"message": "Localizer, http://www.mixesoft.com/localizer.html",
+		"description": "Editor"
+	}
+}
