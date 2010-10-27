@@ -213,6 +213,14 @@ var ThemeManager = {
     }
     width = width || 490;
     height = height || 400;
+    var minWidth = 450;
+    var maxWidth = 800 - 14;
+    if(width > maxWidth) {
+      width = maxWidth;
+    }
+    if(width < minWidth) {
+      width = minWidth;
+    }
     if(autoFitWidth) {
       setTimeout(function() {
         var tabsBarWidth = 0;
@@ -232,18 +240,6 @@ var ThemeManager = {
 
   popupSizeData: Persistence.popupSize(),
 
-  setMinMaxWidth: function(width, height) {
-    var minWidth = 450;
-    var maxWidth = window.innerWidth - 14;
-    if(width > maxWidth) {
-      width = maxWidth;
-    }
-    if(width < minWidth) {
-      width = minWidth;
-    }
-    ThemeManager.setPopupSize(width, height);
-  },
-
   initWindowResizing: function() {
     ThemeManager.handleWindowResizing();
     if(!ThemeManager.isPopup) {
@@ -255,10 +251,6 @@ var ThemeManager = {
       resizeFunc();
       return;
     }
-    setTimeout(function() {
-      // Delay the execution of this code to allow the window to resize first.
-      ThemeManager.setMinMaxWidth($(".timeline").width(), $(".timeline").height());
-    }, 1000);
     $(".timeline").resizable({
       handles: 'e, s, se',
       minWidth: 450,
@@ -268,7 +260,6 @@ var ThemeManager = {
       },
       stop: function(e, ui) {
         var $this = $(this);
-        ThemeManager.setMinMaxWidth($this.width(), $this.height());
         ThemeManager.popupSizeData.save($this.width() + 'x' + $this.height());
       }
     });
@@ -1539,7 +1530,6 @@ function initializeWorkspace() {
 }
 
 $(function() {
-
   $("input.i18n").each(function() {
     $(this).val(chrome.i18n.getMessage(this.id));
   });
