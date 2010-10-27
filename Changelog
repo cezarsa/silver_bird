@@ -1,3 +1,13 @@
+1.9.5.1 (2010-10-26)
+
+* New Ukrainian translation (Thanks usercard!);
+* Improved Turkish translation (Thanks Onur Baykaş!);
+* Fixed some resizing bugs that caused the layout to go insane;
+* Changed the behavior of middle clicks in users to just open their profile
+  (Left clicks or right clicks still open the action menu.);
+* Fixed a memory leak caused by adding listeners to the same event multiple times;
+* Getting ready to Snowflake (Twitter's new id generator) by using _str ids.
+
 1.9.5 (2010-10-21)
 
 * Showing a inline menu with different actions after clicking user's names or avatars
