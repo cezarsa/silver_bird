@@ -48,22 +48,22 @@
 		"message": "Додати"
 	},
 	"selectList": {
-		"message": "- списки -"
+		"message": "Виберіть список"
 	},
 	"updateList": {
-		"message": "Поновлюю списки..."
+		"message": "Оновлюю списки..."
 	},
 	"w_Unified": {
 		"message": "Загальна"
 	},
 	"w_Home": {
-		"message": "Home"
+		"message": "Домашня"
 	},
 	"w_DM": {
-		"message": "DMs"
+		"message": "Приватні"
 	},
 	"w_Favorites": {
-		"message": "Обране"
+		"message": "Обрані"
 	},
 	"w_Lists": {
 		"message": "Списки"
@@ -120,15 +120,15 @@
 		"message": "Запросити інший ключ"
 	},
 	"shortenerIdleString": {
-		"message": "Наберіть посилання для скорочення, або натисніть сюди →"
+		"message": "Наберіть посилання для скорочення, або натисніть сюди \u2192"
 	},
 	"timelineHome": {
-		"message": "Home",
-		"description": "The home time line tab"
+		"message": "Домашня",
+		"description": "Головна закладка повідомлень"
 	},
 	"timelineDM": {
-		"message": "DM",
-		"description": "The direct message time line tab"
+		"message": "Приватні",
+		"description": "Закладка прямих приватних повідомлень"
 	},
 	"timelineFavorites": {
 		"message": "Вибране",
@@ -142,10 +142,17 @@
 	},
 	"newTweetsAvailable": {
 		"message": "Нових твітів: $count$. Оновити зараз.",
-		"placeholders": {"count":{"content":"$1"},"tweets":{"content":"$2"}}
+		"placeholders":{
+			"count": {
+				"content": "$1"
+			},
+			"tweets": {
+				"content": "$2"
+			}
+		}
 	},
 	"preventClosing": {
-		"message": "Клацніть правою для запобігання закриття."
+		"message": "Клацніть для запобігання закриття."
 	},
 	"changeNotificationSettings": {
 		"message": "Ви можете змінити налаштування сповіщень на сторінці налаштувань"
@@ -163,7 +170,7 @@
 		"message": "Вибачте, щось вийшло не так, <nobr>спробуйте</nobr> ще раз."
 	},
 	"ajaxFailed": {
-		"message": "Збій запиту AJAX (погане з&#39;єднання?)"
+		"message": "Зрив запиту AJAX (погане з&#39;єднання?)"
 	},
 	"successAuth": {
 		"message": "Вітаємо, ви успішно увійшли в систему. Насолоджуйтесь Chromed Bird!"
@@ -172,17 +179,21 @@
 		"message": "Chromed Bird авторизований!"
 	},
 	"cbNotAuthorized": {
-		"message": "Упс... Щось пішло не так. Спробуйте натиснути на іконку Chromed Bird знову."
+		"message": "Гей... Щось пішло не так. Спробуйте натиснути на іконку Chromed Bird знову."
 	},
 	"authorizing": {
 		"message": "Будь ласка, почекайте, авторизації Chromed Bird..."
 	},
 	"yourPIN": {
 		"message": "Ваш PIN: $pin$",
-		"placeholders": {"pin":{"content":"$1"}}
+		"placeholders": {
+			"pin":{
+				"content": "$1"
+			}
+		}
 	},
 	"tryAgain": {
-		"message": "Спробувати знову"
+		"message": "Спробуйте знову"
 	},
 	"canceling": {
 		"message": "Скасування..."
@@ -195,63 +206,135 @@
 	},
 	"queue_trying": {
 		"message": "намагаюся відправити вже $timediff$",
-		"placeholders": {"timediff":{"content":"$1"}}
+		"placeholders": {
+			"timediff": {
+				"content": "$1"
+			}
+		}
 	},
 	"queue_retried": {
 		"message": "$retries$ повторів за $timediff$ [$laststatus$]",
-		"placeholders": {"retries":{"content":"$1"},"timediff":{"content":"$2"},"laststatus":{"content":"$3"}}
+		"placeholders":{
+			"retries": {
+				"content": "$1"
+			},
+			"timediff": {
+				"content": "$2"
+			},
+			"laststatus": {
+				"content": "$3"
+			}
+		}
 	},
 	"ue_fetchingLists": {
 		"message": "Несподівана помилка $status$ при отриманні списку.",
-		"placeholders": {"status":{"content":"$1"}}
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
 	},
 	"ue_updatingTweets": {
 		"message": "Несподівана помилка $baseError$ при оновленні твіту.",
-		"placeholders": {"baseError":{"content":"$1"}}
+		"placeholders": {
+			"baseError": {
+				"content": "$1"
+			}
+		}
 	},
 	"ue_updatingTweets2": {
 		"message": "Якщо ця помилка повторюється, спробуйте вийти та зайти знову."
 	},
 	"ue_deletingTweet": {
 		"message": "Несподівана помилка $status$ видалення твіту.",
-		"placeholders": {"status":{"content":"$1"}}
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
 	},
 	"ue_retweeting": {
 		"message": "Несподівана помилка $status$ ретвіту.",
-		"placeholders": {"status":{"content":"$1"}}
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
 	},
 	"ue_markFavorite": {
-		"message": "Несподівана помилка $status$ при додаванні в вибране.",
-		"placeholders": {"status":{"content":"$1"}}
+		"message": "Несподівана помилка $status$ при додаванні в обране.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
 	},
 	"ue_unmarkFavorite": {
 		"message": "Несподівана помилка $status$ при видаленні з обраного.",
-		"placeholders": {"status":{"content":"$1"}}
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
 	},
 	"newTweets": {
 		"message": "$newtweets$: $count$",
-		"placeholders": {"count":{"content":"$1"},"newtweets":{"content":"$2"}}
+		"placeholders":{
+			"count": {
+				"content": "$1"
+			},
+			"newtweets": {
+				"content": "$2"
+			}
+		}
 	},
 	"newtweets_singular": {
-		"message": "Нових твітів"
+		"message": "Новий твіт"
 	},
 	"newtweets_plural": {
 		"message": "Нових твітів"
 	},
 	"btnAuthorize": {
-		"message": "Авторизуйтесь!"
+		"message": "Завторизуйтеся!"
 	},
 	"exceededAPIHits": {
 		"message": "Ви перевищили ліміт API. Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>налаштуваннях</a>. Chromed Bird не буде оновлювати до $nextResetDate$ $nextResetTime$.",
-		"placeholders": {"options_url":{"content":"$1"},"nextResetDate":{"content":"$2"},"nextResetTime":{"content":"$3"}}
+		"placeholders": {
+			"options_url": {
+				"content": "$1"
+			},
+			"nextResetDate": {
+				"content": "$2"
+			},
+			"nextResetTime": {
+				"content": "$3"
+			}
+		}
 	},
 	"warningAPIHits": {
-		"message": "Гей! Ліміт звернень до API настає дуже швидко. <br> Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>налаштуваннях</a>. Зверніть увагу, що якщо ви використовуєте кілька Twitter клієнтів вони мають загальний ліміт. <br> Залишилося звернень: $remainingHits$ - Наступний скидання: $nextResetDate$ $nextResetTime$",
-		"placeholders": {"options_url":{"content":"$1"},"remainingHits":{"content":"$2"},"nextResetDate":{"content":"$3"},"nextResetTime":{"content":"$4"}}
+		"message": "Гей! Ліміт звернень до API настає дуже швидко. <br> Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>налаштуваннях</a>. Зверніть увагу, що якщо ви використовуєте кілька Twitter клієнтів вони мають загальний ліміт. <br> Залишилося звернень: $remainingHits$ - Наступне скидання оновлень: $nextResetDate$ $nextResetTime$",
+		"placeholders": {
+			"options_url": {
+				"content": "$1"
+			},
+			"remainingHits": {
+				"content": "$2"
+			},
+			"nextResetDate": {
+				"content": "$3"
+			},
+			"nextResetTime": {
+				"content": "$4"
+			}
+		}
 	},
 	"oAuthError": {
 		"message": "Під час перевірки автентичності виникла помилка: $errorMessage$. Будь ласка, <a href=\"javascript:OAuth.requestNewToken();\">натисніть щоб повторити процес</a>",
-		"placeholders": {"errorMessage":{"content":"$1"}}
+		"placeholders": {
+			"errorMessage": {
+				"content": "$1"
+			}
+		}
 	},
 	"justNow": {
 		"message": "тільки що"
@@ -261,23 +344,38 @@
 	},
 	"minutes": {
 		"message": "$nr_of_minutes$ $minutes$ тому",
-		"placeholders": {"nr_of_minutes":{"content":"$1"},"minutes":{"content":"$2","example":"minute or minutes (singular / plural)"}}
+		"placeholders": {
+			"nr_of_minutes":{
+				"content": "$1"
+			},
+			"minutes": {
+				"content": "$2",
+				"example": "хвилина або хвилини (єдиного і множинного числа)"
+			}
+		}
 	},
 	"minute_singular": {
-		"message": "хвилини"
+		"message": "хвилин"
 	},
 	"minute_plural": {
-		"message": "хвилин"
+		"message": "хвилини"
 	},
 	"timeAgo": {
 		"message": "близько $time$ $time_string$ тому",
-		"placeholders": {"time":{"content":"$1"},"time_string":{"content":"$2"}}
+		"placeholders": {
+			"time": {
+				"content": "$1"
+			},
+			"time_string": {
+				"content": "$2"
+			}
+		}
 	},
 	"hour_singular": {
-		"message": "години"
+		"message": "година"
 	},
 	"hour_plural": {
-		"message": "годин"
+		"message": "години"
 	},
 	"day_singular": {
 		"message": "день"
@@ -307,10 +405,10 @@
 		"message": "Залишилося звернень до Twitter API:"
 	},
 	"rate_limit_reset": {
-		"message": "Скидання лімітів:"
+		"message": "Скидання лімітів оновлення:"
 	},
 	"nerds_link": {
-		"message": "Статистика звернень до API (для ботанів)"
+		"message": "Статистика звернень до API (для заучок)"
 	},
 	"g_ui": {
 		"message": "Інтерфейс"
@@ -337,7 +435,7 @@
 		"message": "Знизу"
 	},
 	"l_theme": {
-		"message": "Тема:"
+		"message": "Тема інтерфейсу:"
 	},
 	"l_font_size": {
 		"message": "Розмір шрифту:"
@@ -370,10 +468,10 @@
 		"message": "Показувати кількість звернень до API:"
 	},
 	"l_show_user_autocomplete": {
-		"message": "Автодополнять імена:"
+		"message": "Автоматичне доповнення імен:"
 	},
 	"l_icon_color": {
-		"message": "Колір іконки"
+		"message": "Колір іконки:"
 	},
 	"l_tweets_color_only_unified": {
 		"message": "Кольори тільки в загальній стрічці:"
@@ -388,13 +486,16 @@
 		"message": "Скинути розмір вікна"
 	},
 	"g_notifications": {
-		"message": "Закладки"
+		"message": "Сповіщення"
 	},
 	"l_tweet_notification": {
 		"message": "Повідомлення про твіти"
 	},
 	"l_change_icon": {
 		"message": "Змінити іконку"
+	},
+	"l_icon_color": {
+		"message": "Колір іконки"
 	},
 	"notif_home": {
 		"message": "Головна:"
@@ -412,22 +513,25 @@
 		"message": "Пошук:"
 	},
 	"l_tweets_notification_style": {
-		"message": "Стиль оповіщень:"
+		"message": "Стиль сповіщень:"
 	},
 	"l_noti_on_page": {
-		"message": "Закладки на сторінці"
+		"message": "Сповіщення на сторінці"
 	},
 	"l_noti_desktop": {
-		"message": "На робочому столі"
+		"message": "Сповіщення на робочому столі"
 	},
 	"l_notification_fade_timeout": {
-		"message": "Таймаут оповіщення (с):"
+		"message": "Таймаут сповіщення (сек):"
+	},
+	"l_notification_max_popups": {
+		"message": "Сповіщень одразу (-1: всі):"
 	},
 	"g_shortener": {
-		"message": "Сокращатель"
+		"message": "Скорочувач"
 	},
 	"l_url_shortener": {
-		"message": "Сокращатель посилань:"
+		"message": "Скорочувач посилань:"
 	},
 	"l_shortener_acct": {
 		"message": "Використовувати особистий аккаунт?"
@@ -466,7 +570,7 @@
 		"message": "Загальна стрічка:"
 	},
 	"tml_favorites": {
-		"message": "Вибране:"
+		"message": "Обране:"
 	},
 	"l_blocked_users": {
 		"message": "Заблоковані користувачі:"
@@ -481,10 +585,10 @@
 		"message": "Максимум показаних твітів:"
 	},
 	"g_microblogging_service": {
-		"message": "Служба мікроблогів"
+		"message": "Сервіси мікроблогів"
 	},
 	"g_advanced": {
-		"message": "Додаткові"
+		"message": "Додаткові налаштування"
 	},
 	"l_request_timeout": {
 		"message": "Таймаут запиту (мс):"
@@ -514,7 +618,7 @@
 		"message": "Скинути"
 	},
 	"btn_default": {
-		"message": "По-замовчуванню"
+		"message": "За-замовчуванням"
 	},
 	"shortenIt": {
 		"message": "Скоротити!"
@@ -522,12 +626,33 @@
 	"shorten_current": {
 		"message": "Поділитися поточною сторінкою"
 	},
+	"tweet_send_error": {
+		"message": "Сталася помилка при спробі відправити твіт. Можливо Twitter перевантажений? Спробуйте знову, але будь ласка, перевірте ваш акаунт, щоб запобігти дубльованню повідомлень."
+	},
+	"detach_window": {
+	  "message": "Відкріпити вікно"
+	},
+	"follow_action": {
+	  "message": "Слідувати"
+	},
+	"unfollow_action": {
+	  "message": "Не слідувати"
+	},
+	"tweets_action": {
+	  "message": "Твіти"
+	},
+	"profile_action": {
+	  "message": "Профайл"
+	},
+	"add_mention_action": {
+	  "message": "Згадка"
+	}
 	"_inf": {
-		"message": "",
-		"description": "Author"
+		"message": "Translated by Denis aka usercard",
+		"description": ""
 	},
 	"_gen": {
 		"message": "Localizer, http://www.mixesoft.com/localizer.html",
-		"description": "Editor"
+		"description": "Editor, Akelpad and WinMerge"
 	}
 }
