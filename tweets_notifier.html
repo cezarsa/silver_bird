@@ -19,6 +19,7 @@
   var OptionsBackend = chrome.extension.getBackgroundPage().OptionsBackend;
   var urlExpander = chrome.extension.getBackgroundPage().urlExpander;
   var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
+  var ImageServices = chrome.extension.getBackgroundPage().ImageServices;
 
   $(function() {
     var fadeTimeout = OptionsBackend.get('notification_fade_timeout');

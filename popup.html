@@ -16,6 +16,7 @@ var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
 var twitterBackend = tweetManager.twitterBackend;
 var OptionsBackend = chrome.extension.getBackgroundPage().OptionsBackend;
 var TimelineTemplate = chrome.extension.getBackgroundPage().TimelineTemplate;
+var ImageServices = chrome.extension.getBackgroundPage().ImageServices;
 
 var microbloggingService = OptionsBackend.get('microblogging_service');
 var TwitterLib;
