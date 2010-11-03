@@ -570,6 +570,23 @@ var Composer = {
     var textarea = $("textarea", composeArea);
     var visible = composeArea.is(':visible');
     return visible && textarea.val().length > 0;
+  },
+
+  addText: function(value) {
+    var textarea = $("#compose_tweet_area textarea");
+    var tmpText = textarea.val();
+    if(tmpText.length > 0) {
+      if((textarea[0].selectionStart > 0) &&
+        (tmpText[textarea[0].selectionStart-1] != ' ')) {
+        value = ' ' + value;
+      }
+      if((textarea[0].selectionEnd < tmpText.length) &&
+         (tmpText[textarea[0].selectionEnd+1] != ' ')) {
+         value += ' ';
+      }
+    }
+    textarea.insertAtCaret(value);
+    Composer.textareaChanged();
   }
 };
 
@@ -787,22 +804,10 @@ var Shortener = {
       _this.clear();
       var textarea = $("#compose_tweet_area textarea");
       if(success && shortUrl) {
-        var tmpText = textarea.val();
-        if(tmpText.length > 0) {
-          if((textarea[0].selectionStart > 0) &&
-            (tmpText[textarea[0].selectionStart-1] != ' ')) {
-            shortUrl = ' ' + shortUrl;
-          }
-          if((textarea[0].selectionEnd < tmpText.length) &&
-             (tmpText[textarea[0].selectionEnd+1] != ' ')) {
-             shortUrl += ' ';
-          }
-        }
         if(context && context.title && OptionsBackend.get('share_include_title')) {
           shortUrl = context.title + ' - ' + shortUrl;
         }
-        textarea.insertAtCaret(shortUrl);
-        Composer.textareaChanged();
+        Composer.addText(shortUrl);
       } else if(!success) {
         Renderer.showError(shortUrl);
       }
@@ -920,7 +925,7 @@ $.extend(Renderer, {
       if(!params) {
         params = '';
       }
-      msg += ' <a href="#" onclick="' + tryAgainFunction + '(' + params + '); Renderer.hideMessage();">' + chrome.i18n.getMessage("tryAgain") + '</a>';
+      msg += ' <a href="#" onclick="' + tryAgainFunction + '(' + params + '); Renderer.hideMessage(); return false;">' + chrome.i18n.getMessage("tryAgain") + '</a>';
     }
     Renderer.showMessage(msg);
   },
@@ -1307,6 +1312,39 @@ var Autocomplete = {
   }
 };
 
+var ImageService = {
+  upload: function() {
+    var inputEl = $('#image_input')[0];
+    var progressEl = $('#upload_progress');
+    progressEl.show();
+
+    var files = inputEl.files;
+    $('#loading').show();
+    ImageServices.twitpic.upload(files[0], function(imageUrl, statusMsg) {
+      if(!window) {
+        return;
+      }
+      $('#loading').hide();
+      progressEl.hide();
+      if(imageUrl != null) {
+        inputEl.value = null;
+        Composer.addText(imageUrl);
+      } else {
+        Renderer.showError(statusMsg, 'ImageService.upload');
+      }
+    }, function(loaded, total) {
+      if(!window) {
+        return;
+      }
+      var progress = (loaded / total) * 100.0;
+      if(progress == 100.0) {
+        progress = 0;
+      }
+      progressEl[0].value = progress;
+    });
+  }
+};
+
 var loadingNewTweets = false;
 
 function onTimelineRetrieved(tweets, timelineId) {
@@ -1572,6 +1610,8 @@ $(function() {
     </div>
     <div class="footer">
       <input id="tweetit" class="i18n" type="button" onclick="Composer.sendTweet();"/>
+      <img id="attach_icon" src="img/attachment.png"><input id="image_input" type="file" name="media" accept="image/*" onchange="ImageService.upload();"/>
+      <progress id="upload_progress" max="100"></progress>
       <span class="chars_left"></span>
     </div>
   </div>
