@@ -848,7 +848,7 @@ TweetManager.prototype = {
         _this.followingUsersNames.push(user.screen_name);
       }
       _this.followingUsersNames.sort(function(a, b) {
-        a.toUpperCase().localeCompare(b.toUpperCase());
+        return a.toUpperCase().localeCompare(b.toUpperCase());
       });
     }, usersIdList);
   },
@@ -899,7 +899,7 @@ TweetManager.prototype = {
         _this.followingUsersMap[userData.screen_name] = userData;
         _this.followingUsersNames.push(userData.screen_name);
         _this.followingUsersNames.sort(function(a, b) {
-          a.toUpperCase().localeCompare(b.toUpperCase());
+          return a.toUpperCase().localeCompare(b.toUpperCase());
         });
         _this.resetTimeline(TimelineTemplate.HOME);
         _this.resetTimeline(TimelineTemplate.UNIFIED);
