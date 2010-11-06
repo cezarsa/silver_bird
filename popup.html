@@ -16,7 +16,7 @@ var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
 var twitterBackend = tweetManager.twitterBackend;
 var OptionsBackend = chrome.extension.getBackgroundPage().OptionsBackend;
 var TimelineTemplate = chrome.extension.getBackgroundPage().TimelineTemplate;
-var ImageServices = chrome.extension.getBackgroundPage().ImageServices;
+var ImageService = chrome.extension.getBackgroundPage().ImageService;
 
 var microbloggingService = OptionsBackend.get('microblogging_service');
 var TwitterLib;
@@ -1312,7 +1312,7 @@ var Autocomplete = {
   }
 };
 
-var ImageService = {
+var ImageUpload = {
   upload: function() {
     var inputEl = $('#image_input')[0];
     var progressEl = $('#upload_progress');
@@ -1320,28 +1320,29 @@ var ImageService = {
 
     var files = inputEl.files;
     $('#loading').show();
-    ImageServices.twitpic.upload(files[0], function(imageUrl, statusMsg) {
-      if(!window) {
-        return;
+    var imageService = ImageService.getService(OptionsBackend.get('image_upload_service'));
+    imageService.upload(files[0],
+      function onFinish(success, urlOrError) {
+        if(!window) {
+          return;
+        }
+        $('#loading').hide();
+        progressEl.hide();
+        if(success) {
+          inputEl.value = null;
+          Composer.addText(urlOrError);
+        } else {
+          Renderer.showError(urlOrError, 'ImageService.upload');
+        }
+      },
+      function onProgress(loaded, total) {
+        if(!window) {
+          return;
+        }
+        var progress = (loaded / total) * 100.0;
+        progressEl[0].value = progress;
       }
-      $('#loading').hide();
-      progressEl.hide();
-      if(imageUrl != null) {
-        inputEl.value = null;
-        Composer.addText(imageUrl);
-      } else {
-        Renderer.showError(statusMsg, 'ImageService.upload');
-      }
-    }, function(loaded, total) {
-      if(!window) {
-        return;
-      }
-      var progress = (loaded / total) * 100.0;
-      if(progress == 100.0) {
-        progress = 0;
-      }
-      progressEl[0].value = progress;
-    });
+    );
   }
 };
 
@@ -1610,7 +1611,7 @@ $(function() {
     </div>
     <div class="footer">
       <input id="tweetit" class="i18n" type="button" onclick="Composer.sendTweet();"/>
-      <img id="attach_icon" src="img/attachment.png"><input id="image_input" type="file" name="media" accept="image/*" onchange="ImageService.upload();"/>
+      <img id="attach_icon" src="img/attachment.png"><input id="image_input" type="file" name="media" accept="image/*" onchange="ImageUpload.upload();"/>
       <progress id="upload_progress" max="100"></progress>
       <span class="chars_left"></span>
     </div>

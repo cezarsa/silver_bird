@@ -646,5 +646,11 @@
 	},
 	"add_mention_action": {
 	  "message": "Mention"
+	},
+	"g_image_service": {
+	  "message": "Image Service"
+	},
+	"l_image_up_service": {
+	  "message": "Image Upload Service:"
 	}
 }
