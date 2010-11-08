@@ -62,6 +62,12 @@
 	"w_DM": {
 		"message": "DMs"
 	},
+	"w_SentDM": {
+		"message": "Sent DMs"
+	},
+	"w_ReceivedDM": {
+	  "message": "Received DMs"
+	},
 	"w_Favorites": {
 		"message": "Favorites"
 	},
@@ -76,6 +82,9 @@
 	},
 	"inReply": {
 		"message": "in reply to"
+	},
+	"sentTo": {
+		"message": "sent to"
 	},
 	"retweetedBy": {
 		"message": "retweeted by"

@@ -19,6 +19,7 @@
 <script type="text/javascript" src="lib/timelines/timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/favorites_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/unified_timeline.js"></script>
+<script type="text/javascript" src="lib/timelines/unified_dms_timeline.js"></script>
 
 <script type="text/javascript" src="lib/timelines/multiple_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/lists_timeline.js"></script>
@@ -170,7 +171,7 @@ TweetManager.prototype = {
         createdTimelines = template.createTimelines();
       }
     }
-    for(var i in createdTimelines) {
+    for(var i = 0, len = createdTimelines.length; i < len; ++i) {
       var timeline = createdTimelines[i];
       this.timelines[timeline.timelineId] = timeline;
       if(this.authenticated) {
@@ -260,7 +261,7 @@ TweetManager.prototype = {
   eachTimeline: function(callback, includeHidden) {
     for(var tId in this.timelines) {
       var timeline = this.timelines[tId];
-      if(!includeHidden && !timeline.template.visible) {
+      if(!includeHidden && (!timeline.template.visible || timeline.template.hiddenTemplate)) {
         continue;
       }
       if(callback.call(tId, timeline) === false) {
@@ -291,7 +292,7 @@ TweetManager.prototype = {
       tId = retList[i];
       if(tId) {
         timeline = this.timelines[tId];
-        if(timeline.template.visible) {
+        if(timeline.template.visible && !timeline.template.hiddenTemplate) {
           var ret = callback.call(tId, timeline);
           if(ret === false) {
             break;
@@ -561,7 +562,7 @@ TweetManager.prototype = {
       }
       callback(success, data, status);
     };
-    if(tweetTimelineId == TimelineTemplate.DMS) {
+    if(tweetTimelineId == TimelineTemplate.RECEIVED_DMS || tweetTimelineId == TimelineTemplate.SENT_DMS) {
       return this.twitterBackend.destroyDM(firstCallback, id);
     } else {
       return this.twitterBackend.destroy(firstCallback, id);

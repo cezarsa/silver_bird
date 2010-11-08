@@ -457,7 +457,7 @@ var Composer = {
     var user = $(".user", node).attr('screen_name');
     var timelineId = $(node).attr('timelineid');
 
-    if(timelineId == "dms") {
+    if(timelineId == TimelineTemplate.RECEIVED_DMS || timelineId == TimelineTemplate.SENT_DMS) {
       textArea.val("d " + user + " ");
       Composer.textareaChanged();
       return;
