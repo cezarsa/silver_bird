@@ -598,11 +598,11 @@ var WorkList = {
     if(tweetManager.sendQueue.queueSize() !== 0) {
       $("#queue_loading").show();
     }
-    tweetManager.sendQueue.onQueueEmpty(function() {
+    tweetManager.sendQueue.onQueueEmpty(function(lastSent) {
       if(!window) {
         return;
       }
-      WorkList.sendQueueEmpty();
+      WorkList.sendQueueEmpty(lastSent);
     });
     tweetManager.sendQueue.onTweetEnqueued(function() {
       if(!window) {
@@ -684,9 +684,13 @@ var WorkList = {
     $("#queue_loading").tipsy({refresh: true});
   },
 
-  sendQueueEmpty: function() {
+  sendQueueEmpty: function(lastSent) {
     $("#queue_loading").hide();
-    loadTimeline(true, "home");
+    var updateTimelineId = TimelineTemplate.HOME;
+    if(lastSent && lastSent.message.indexOf('d ') == 0) {
+      updateTimelineId = TimelineTemplate.SENT_DMS;
+    }
+    loadTimeline(true, updateTimelineId);
   },
 
   tweetEnqueued: function() {
