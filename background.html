@@ -1036,6 +1036,16 @@ function checkVersionChanges(manifest) {
         // users may switch back to onpage notifications latter if they wish.
         OptionsBackend.saveOption('tweets_notification_style', 'desktop');
       }
+      if(compareVersions(storageVersion, [1, 9, 5, 1]) <= 0) {
+        var maxNotifications = OptionsBackend.get('notification_max_popups');
+        if(maxNotifications == -1) {
+          // Set new default value if we're using unlimited notifications,
+          // otherwise there might have been thousands of notifications
+          // to be shown, mainly after we fixed the way we fetch new
+          // tweets.
+          OptionsBackend.saveOption('notification_max_popups', OptionsBackend.defaultOptions['notification_max_popups']);
+        }
+      }
       storageData.save(JSON.stringify(currentVersion));
     }
   } catch(e) {
