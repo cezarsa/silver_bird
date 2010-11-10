@@ -17,6 +17,7 @@ var twitterBackend = tweetManager.twitterBackend;
 var OptionsBackend = chrome.extension.getBackgroundPage().OptionsBackend;
 var TimelineTemplate = chrome.extension.getBackgroundPage().TimelineTemplate;
 var ImageService = chrome.extension.getBackgroundPage().ImageService;
+var UploadManager = chrome.extension.getBackgroundPage().UploadManager;
 
 var microbloggingService = OptionsBackend.get('microblogging_service');
 var TwitterLib;
@@ -1317,36 +1318,58 @@ var Autocomplete = {
 };
 
 var ImageUpload = {
-  upload: function() {
-    var inputEl = $('#image_input')[0];
-    var progressEl = $('#upload_progress');
-    progressEl.show();
-
-    var files = inputEl.files;
-    $('#loading').show();
-    var imageService = ImageService.getService(OptionsBackend.get('image_upload_service'));
-    imageService.upload(files[0],
-      function onFinish(success, urlOrError) {
-        if(!window) {
-          return;
-        }
-        $('#loading').hide();
-        progressEl.hide();
-        if(success) {
-          inputEl.value = null;
-          Composer.addText(urlOrError);
-        } else {
-          Renderer.showError(urlOrError, 'ImageService.upload');
-        }
+  init: function() {
+    var _this = this;
+    this.progressEl = $('#upload_progress');
+    this.loadingEl = $('#loading');
+    this.inputEl = $('#image_input')[0]
+    var running = UploadManager.registerCallbacks(
+      function (success, urlOrError) {
+        return _this.onFinish(success, urlOrError);
       },
-      function onProgress(loaded, total) {
-        if(!window) {
-          return;
-        }
-        var progress = (loaded / total) * 100.0;
-        progressEl[0].value = progress;
+      function (loaded, total) {
+        return _this.onProgress(loaded, total);
       }
     );
+    if(running) {
+      this.inputEl.disabled = true;
+      this.progressEl.show();
+      this.loadingEl.show();
+    }
+  },
+
+  upload: function() {
+    this.inputEl.disabled = true;
+    this.progressEl.show();
+    this.loadingEl.show();
+
+    var files = this.inputEl.files;
+    UploadManager.upload(files[0]);
+  },
+
+  onFinish: function(success, urlOrError) {
+    if(!window) {
+      return false;
+    }
+    this.inputEl.disabled = false;
+    this.progressEl.hide();
+    this.loadingEl.hide();
+    if(success) {
+      this.inputEl.value = null;
+      Composer.addText(urlOrError);
+    } else {
+      Renderer.showError(urlOrError, 'ImageUpload.upload');
+    }
+    return true;
+  },
+
+  onProgress: function(loaded, total) {
+    if(!window) {
+      return false;
+    }
+    var progress = (loaded / total) * 100.0;
+    this.progressEl[0].value = progress;
+    return true;
   }
 };
 
@@ -1551,6 +1574,7 @@ function initializeWorkspace() {
     TimelineTab.select(tweetManager.currentTimelineId);
     Composer.init();
     Shortener.init();
+    ImageUpload.init();
 
     prepareAndLoadTimeline();
     var tabEl = $("#timeline-" + tweetManager.currentTimelineId + ' .inner_timeline');
