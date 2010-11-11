@@ -489,7 +489,7 @@
 	"l_change_icon": {
 		"message": "Mudar Ícone"
 	},
-	"l_icon_color": {
+	"l_icon_color_column": {
 		"message": "Cor do Ícone"
 	},
 	"notif_home": {

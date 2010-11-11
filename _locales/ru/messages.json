@@ -494,7 +494,7 @@
 	"l_change_icon": {
 		"message": "Изменить иконку"
 	},
-	"l_icon_color": {
+	"l_icon_color_column": {
 		"message": "Цвет иконки"
 	},
 	"notif_home": {
