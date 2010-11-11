@@ -14,9 +14,13 @@
 <title>Chromed Bird Options</title>
 
 <script type="text/javascript">
+var LocaleTable = chrome.extension.getBackgroundPage().LocaleTable;
 var ImageService = chrome.extension.getBackgroundPage().ImageService;
 var IconCreator = chrome.extension.getBackgroundPage().IconCreator;
 var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
+
+chrome.i18n.getMessage = chrome.extension.getBackgroundPage().chrome.i18n.getMessage;
+
 var twitterBackend = tweetManager.twitterBackend;
 var options = new Options();
 var imgEl = null;
@@ -58,6 +62,11 @@ $(function() {
     }
   }
   $(".__hourly_limit").text(hourlyLimit);
+
+  $("select[name='default_locale']").append($("<option>").attr('value', 'auto').text('Auto'));
+  for(var localeCode in LocaleTable.instance.locales) {
+    $("select[name='default_locale']").append($("<option>").attr('value', localeCode).text(localeCode));
+  }
 
   for(var key in SHORTENERS_BACKEND) {
     var desc = SHORTENERS_BACKEND[key].desc;
@@ -322,6 +331,8 @@ function updatePredictedHitsCount() {
       <option value="1.2em" id="o_large" class="i18n">Large</option>
       <option value="1.4em" id="o_extra_large" class="i18n">Extra Large</option>
     </select><br>
+    <label for="default_locale" class="i18n" id="l_default_locale">Default Locale:</label>
+    <select name="default_locale"></select><br>
     <label for="font_family" id="l_font_family" class="i18n">Font Family:</label>
     <input type="text" style="width: 20em"; name="font_family" validator="required"><br>
     <label for="hover_timeout" class="i18n" id="l_hover_timeout">Hover to read time (ms):</label>

@@ -21,6 +21,8 @@
   var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
   var ImageService = chrome.extension.getBackgroundPage().ImageService;
 
+  chrome.i18n.getMessage = chrome.extension.getBackgroundPage().chrome.i18n.getMessage;
+
   $(function() {
     var fadeTimeout = OptionsBackend.get('notification_fade_timeout');
 

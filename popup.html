@@ -19,6 +19,8 @@ var TimelineTemplate = chrome.extension.getBackgroundPage().TimelineTemplate;
 var ImageService = chrome.extension.getBackgroundPage().ImageService;
 var UploadManager = chrome.extension.getBackgroundPage().UploadManager;
 
+chrome.i18n.getMessage = chrome.extension.getBackgroundPage().chrome.i18n.getMessage;
+
 var microbloggingService = OptionsBackend.get('microblogging_service');
 var TwitterLib;
 if(microbloggingService == 'twitter') {
