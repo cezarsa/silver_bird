@@ -63,7 +63,7 @@ $(function() {
   }
   $(".__hourly_limit").text(hourlyLimit);
 
-  $("select[name='default_locale']").append($("<option>").attr('value', 'auto').text('Auto'));
+  $("select[name='default_locale']").append($("<option>").attr('value', 'auto').text(chrome.i18n.getMessage('automatic')));
   for(var localeCode in LocaleTable.instance.locales) {
     $("select[name='default_locale']").append($("<option>").attr('value', localeCode).text(localeCode));
   }

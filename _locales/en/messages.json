@@ -664,5 +664,8 @@
 	},
 	"l_default_locale": {
 	  "message": "Default Locale:"
+	},
+	"automatic": {
+	  "message": "Same as browser"
 	}
 }
