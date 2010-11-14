@@ -690,7 +690,7 @@ var WorkList = {
   sendQueueEmpty: function(lastSent) {
     $("#queue_loading").hide();
     var updateTimelineId = TimelineTemplate.HOME;
-    if(lastSent && lastSent.message.indexOf('d ') == 0) {
+    if(lastSent && lastSent.message.indexOf('d ') === 0) {
       updateTimelineId = TimelineTemplate.SENT_DMS;
     }
     loadTimeline(true, updateTimelineId);
@@ -1324,7 +1324,15 @@ var ImageUpload = {
     var _this = this;
     this.progressEl = $('#upload_progress');
     this.loadingEl = $('#loading');
-    this.inputEl = $('#image_input')[0]
+    this.inputEl = $('#image_input')[0];
+
+    // FIXME: This check is here only because of http://crbug.com/61632
+    if(ThemeManager.isPopup) {
+      var platform = navigator.userAgent.match(/\((\w+);/)[1];
+      if(platform == 'Macintosh') {
+        $('#upload_button_area').hide();
+      }
+    }
     var running = UploadManager.registerCallbacks(
       function (success, urlOrError) {
         return _this.onFinish(success, urlOrError);
@@ -1641,7 +1649,9 @@ $(function() {
     </div>
     <div class="footer">
       <input id="tweetit" class="i18n" type="button" onclick="Composer.sendTweet();"/>
-      <img id="attach_icon" src="img/attachment.png"><input id="image_input" type="file" name="media" accept="image/*" onchange="ImageUpload.upload();"/>
+      <span id="upload_button_area">
+        <img id="attach_icon" src="img/attachment.png"><input id="image_input" type="file" name="media" accept="image/*" onchange="ImageUpload.upload();"/>
+      </span>
       <progress id="upload_progress" max="100"></progress>
       <span class="chars_left"></span>
     </div>
