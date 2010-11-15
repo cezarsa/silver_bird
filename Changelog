@@ -1,3 +1,16 @@
+1.9.6 (2010-11-15)
+
+* Integration with image upload services! (Sorry, only for Chrome 8+ and not yet on OS X)
+* Allowing users to change the default locale in the options page;
+* Making sure we always fetch all new tweets, even if there's a huge amount of them;
+* Showing sent DMs along with received ones in the DMs tab;
+* Correctly handling credentials to bit.ly pro accounts;
+* Fixed the way we show links to lists;
+* Fixed ordering in autocomplete;
+* Fixed opening the tabs context menu with Ctrl-click;
+* Added pict.mobi image preview;
+* Fixed migre.me shortener not working.
+
 1.9.5.1 (2010-10-26)
 
 * New Ukrainian translation (Thanks usercard!);
