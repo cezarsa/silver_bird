@@ -1326,13 +1326,23 @@ var ImageUpload = {
     this.loadingEl = $('#loading');
     this.inputEl = $('#image_input')[0];
 
-    // FIXME: This check is here only because of http://crbug.com/61632
+    // FIXME: This check is here only because of http://crbug.com/61632 and
+    // http://crbug.com/28829 (already fixed but not on stable channel yet)
+    var hideButton = false;
+    var majorVersion = parseInt(navigator.userAgent.match(/Chrome\/(\d+)\./)[1], 10);
+    if(majorVersion < 8) {
+      hideButton = true;
+    }
     if(ThemeManager.isPopup) {
       var platform = navigator.userAgent.match(/\((\w+);/)[1];
       if(platform == 'Macintosh') {
-        $('#upload_button_area').hide();
+        hideButton = true;
       }
     }
+    if(hideButton) {
+      $('#upload_button_area').hide();
+    }
+
     var running = UploadManager.registerCallbacks(
       function (success, urlOrError) {
         return _this.onFinish(success, urlOrError);
@@ -1584,7 +1594,6 @@ function initializeWorkspace() {
     TimelineTab.select(tweetManager.currentTimelineId);
     Composer.init();
     Shortener.init();
-    ImageUpload.init();
 
     prepareAndLoadTimeline();
     var tabEl = $("#timeline-" + tweetManager.currentTimelineId + ' .inner_timeline');
@@ -1604,6 +1613,8 @@ function initializeWorkspace() {
     $("#options_page_link").anyClick(function() {
       openTab(chrome.extension.getURL('options.html'));
     });
+
+    ImageUpload.init();
   }, 0);
 }
 
