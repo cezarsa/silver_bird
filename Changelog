@@ -1,3 +1,7 @@
+1.9.6.1 (2010-11-16)
+
+* Avoiding annoying notifications for messages sent by the current user.
+
 1.9.6 (2010-11-15)
 
 * Integration with image upload services! (Sorry, only for Chrome 8+ and not yet on OS X)
