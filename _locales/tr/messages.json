@@ -57,7 +57,7 @@
 		"message": "Tümü"
 	},
 	"w_Home": {
-		"message": "Anasayfa"
+		"message": "Ana sayfa"
 	},
 	"w_DM": {
 		"message": "Mesajlar"
@@ -81,7 +81,7 @@
 		"message": "tekrar tweetleyen:"
 	},
 	"retweetedByMe": {
-		"message": "siz tarafından tekrar tweetlendi"
+		"message": "sizin tarafınızdan tekrar tweetlendi"
 	},
 	"unmarkFavorite": {
 		"message": "Favorilerden kaldır"
@@ -123,7 +123,7 @@
 		"message": "Buraya kısaltılacak adresi yazın. Açık sayfayı sağdaki simgeden kısaltın."
 	},
 	"timelineHome": {
-		"message": "Ana Sayfa",
+		"message": "Ana sayfa",
 		"description": "The home time line tab"
 	},
 	"timelineDM": {
@@ -243,7 +243,7 @@
 		}
 	},
 	"ue_updatingTweets2": {
-		"message": " Eğer bu hata ile çok sık karşılaşıyorsanız çıkış yapıp tekrar girmeyi deneyin."
+		"message": "Eğer bu hata ile çok sık karşılaşıyorsanız çıkış yapıp tekrar girmeyi deneyin."
 	},
 	"ue_deletingTweet": {
 		"message": "Tweet silinirken $status$ hatası oluştu.",
@@ -453,7 +453,7 @@
 		"message": "Çok büyük"
 	},
 	"l_font_family": {
-		"message": "Yazıtipi:"
+		"message": "Yazı tipi:"
 	},
 	"l_hover_timeout": {
 		"message": "Okumak için üzerinde bekleme süresi (ms):"
@@ -498,7 +498,7 @@
 		"message": "Simge rengi"
 	},
 	"notif_home": {
-		"message": "Ana Sayfa:"
+		"message": "Ana sayfa:"
 	},
 	"notif_mentions": {
 		"message": "Bahsetmeler:"
