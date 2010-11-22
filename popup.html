@@ -304,8 +304,10 @@ var ThemeManager = {
       var correctPanel = $("#timeline-" + correctTimeline);
       var positionPanel = panels.eq(i);
       if(correctPanel[0].id != positionPanel[0].id) {
-        correctPanel.remove();
+        var currentScroll = $('.inner_timeline', correctPanel).scrollTop();
+        correctPanel.detach();
         positionPanel.before(correctPanel);
+        $('.inner_timeline', correctPanel).scrollTop(currentScroll);
         panels = $("#tabs .ui-tabs-panel");
       }
     }
@@ -1584,8 +1586,8 @@ function initializeWorkspace() {
   ThemeManager.handleSortableTabs();
 
   if(OptionsBackend.get('compose_position') == 'bottom') {
-    var composeArea = $("#compose_tweet_area").remove();
-    var composeButton = $("#compose_tweet").remove();
+    var composeArea = $("#compose_tweet_area").detach();
+    var composeButton = $("#compose_tweet").detach();
     $("#workspace").append(composeArea).append(composeButton);
   }
 
