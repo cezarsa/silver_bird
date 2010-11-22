@@ -970,6 +970,9 @@ var Lists = {
   init: function(force) {
     var _this = this;
     tweetManager.lists(force, function(success, lists, status) {
+      if(!window) { // Popup closed
+        return;
+      }
       if(!success) {
         if(force) {
           Renderer.showError(chrome.i18n.getMessage("ue_fetchingLists", status), 'Lists.init', 'true');
