@@ -1,3 +1,8 @@
+1.9.6.3 (2010-11-23)
+
+* Lots of fixes related to the way we update timelines;
+* Improved Turkish translation. (Thanks Berker)
+
 1.9.6.2 (2010-11-19)
 
 * Reverting the way we get new tweets to the way it was before 1.9.6
