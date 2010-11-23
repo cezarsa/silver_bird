@@ -1,3 +1,7 @@
+1.9.6.4 (2010-11-23)
+
+* Stupid bug preventing updates now fixed.
+
 1.9.6.3 (2010-11-23)
 
 * Lots of fixes related to the way we update timelines;
