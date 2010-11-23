@@ -1406,13 +1406,17 @@ function onTimelineRetrieved(tweets, timelineId) {
     //Sanity check, popup might be closed.
     return;
   }
-  if(!tweetManager.getCurrentTimeline().template.visible) {
+
+  var timeline = tweetManager.getTimeline(timelineId);
+  if(!timeline.template.visible) {
     return;
   }
+
   $("#loading").hide();
   if(tweets) {
     Paginator.needsMore = false;
     Renderer.assemblyTweets(tweets, timelineId);
+    $("#timeline-" + timelineId + ' .inner_timeline').scrollTop(timeline.currentScroll);
   } else {
     var baseErrorMsg = tweetManager.currentError();
     var errorMsg = chrome.i18n.getMessage("ue_updatingTweets", baseErrorMsg);
@@ -1602,6 +1606,7 @@ function initializeWorkspace() {
     Shortener.init();
 
     prepareAndLoadTimeline();
+
     var tabEl = $("#timeline-" + tweetManager.currentTimelineId + ' .inner_timeline');
     tabEl.scrollTop(tweetManager.getCurrentTimeline().currentScroll);
 
