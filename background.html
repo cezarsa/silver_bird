@@ -929,12 +929,12 @@ TweetManager.prototype = {
   },
 
   retrieveTrendingTopics: function(callback, woeid) {
-	this.twitterBackend.trendingTopics(function(success, userData) {
-	  if(success) {
-	    callback( userData[0] );
-	  }
-	}, woeid);
-  },
+    this.twitterBackend.trendingTopics(function(success, userData) {
+      if(success) {
+        callback(userData[0]);
+      }
+    }, woeid);
+  }
 };
 
 /* Clean up old versions mess */

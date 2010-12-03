@@ -1546,29 +1546,29 @@ function loadNewTweets() {
 }
 
 function loadTrends() {
-  //var _this = this;
-  //$("#loading").show();
-  currentTTLocale = eval('(' + OptionsBackend.get('trending_topics_woeid')+ ')');
+  var currentTTLocale = OptionsBackend.get('trending_topics_woeid');
+
+  $("#trending_topics").actionMenu({
+    loading: 'img/loading.gif',
+    parentContainer: '#workspace'
+  });
 
   tweetManager.retrieveTrendingTopics(function(userData) {
-    trendings = [];
-    for( var i=0; i < userData.trends.length; ++i )
-      trendings.push( userData.trends[i].name );
-
-    var myActions = [];
-    $.each( trendings, function(i, myName) {
-      myActions.push({
-        name: myName,
-        action: function(event) {
-          TimelineTab.addNewSearchTab(myName, event.isAlternateClick);
-        },
-      });
-    });
+    var actions = [];
+    for(var i = 0, len = userData.trends.length; i < len; ++i) {
+      (function(trendName) {
+        actions.push({
+          name: trendName,
+          action: function(event) {
+            TimelineTab.addNewSearchTab(trendName, event.isAlternateClick);
+          }
+        });
+      })(userData.trends[i].name);
+    }
     $("#trending_topics").actionMenu({
-      actions: myActions, 
-      parentContainer: '#workspace'
+      actions: actions
     });
-  }, currentTTLocale.woeid );
+  }, currentTTLocale);
 }
 
 function prepareTimelines() {
