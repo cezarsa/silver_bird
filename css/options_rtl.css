@@ -1,0 +1,26 @@
+body {
+  font-family: Tahoma;
+  line-height: 1.5;
+}
+
+h1 {
+  text-align: center;
+  font-family: "Times New Roman";
+}
+
+fieldset legend {
+  font-size: 15px;
+  font-family: Arial;
+}
+
+#main_area label {
+  float: right;
+}
+
+#main_area input[type="text"], #main_area input[type="password"], #main_area select {
+  font-family: Tahoma;
+}
+
+input {
+  font-family: Tahoma;
+}

@@ -9,6 +9,7 @@ body {
   color: black;
   font-size: 10pt;
   overflow: hidden;
+  direction: __MSG_@@bidi_dir__;
 }
 
 a {

@@ -1,0 +1,679 @@
+﻿{
+   "Delete": {
+      "message": "حذف"
+   },
+   "No": {
+      "message": "نه"
+   },
+   "Reply": {
+      "message": "پاسخ"
+   },
+   "Retweet": {
+      "message": "بازتوییت"
+   },
+   "Yes": {
+      "message": "بله"
+   },
+   "add": {
+      "message": "اضافه"
+   },
+	 "_gen": {
+      "description": "",
+      "message": "Localizer, http://kamiar.net"
+   },
+   "_inf": {
+      "description": "",
+      "message": "Translated by Kamiar Nadimi"
+   },
+   "add_mention_action": {
+      "message": "ارسال شده به من"
+   },
+   "ajaxFailed": {
+      "message": "درخواست AJAX موفق نبود (مشکل اتصال ندارید؟)"
+   },
+   "authorizing": {
+      "message": "لطفا صبر کنید، در حال گرفتن مجوز..."
+   },
+   "autoUpdatesSuspended": {
+      "message": "بروزرسانی خودکار منع شده است"
+   },
+   "automatic": {
+      "message": "مانند مرورگر"
+   },
+   "btnAuthorize": {
+      "message": "مجوز بگیر!"
+   },
+   "btn_default": {
+      "message": "بازگشت به حالت اولیه"
+   },
+   "btn_reset": {
+      "message": "بازنشاندن"
+   },
+   "btn_reset_popup_size": {
+      "message": "بازنشاندن اندازه Popup"
+   },
+   "btn_save": {
+      "message": "ذخیره"
+   },
+   "cancelTweet": {
+      "message": "لغو توییت"
+   },
+   "canceling": {
+      "message": "در حال لغو کردن..."
+   },
+   "cbAuthorized": {
+      "message": "کروم‌برد مجوز گرفت"
+   },
+   "cbNotAuthorized": {
+      "message": "اوه... خطایی وجود دارد، لطفا دوباره بر آیکون کروم‌برد کلیک کنید"
+   },
+   "changeNotificationSettings": {
+      "message": "شما میتوانید تنظیمات اطلاع‌رسانی را در صفحه تنظیمات تغییر دهید"
+   },
+   "changes_restart": {
+      "message": "به هر حال برخی از تنظیمات برای ثبت شدن احتیاج به راه‌اندازی مجدد دارند، اینکار را انجام می‌دهید؟\u003Cbr\u003E    (این کار باعث بازنشانی تعداد توییت‌های نخوانده می‌شود)"
+   },
+   "composeTweet": {
+      "description": "متن برای توییت جدید",
+      "message": "ارسال توییت"
+   },
+   "conf_saved": {
+      "message": "تنظیمات شما با موفقیت ذخیره شدند!"
+   },
+   "day_plural": {
+      "message": "روز"
+   },
+   "day_singular": {
+      "message": "روز"
+   },
+   "deleteConfirm": {
+      "message": "حذف این پیام: "
+   },
+   "detach_window": {
+      "message": "جدا کردن پنجره"
+   },
+   "errorExpandingUrl": {
+      "message": "متاسفم، خطایی پیش آمده، لطفا دوباره امتحان کنید."
+   },
+   "exceededAPIHits": {
+      "message": "شما از محدوده درخواست API تجاوز کردید. لطفا دوره ارسال درخواست را بررسی کنید \u003Ca href='javascript:chrome.tabs.create({url:\"$options_url$\"})'\u003Eصفحه تنظیمات\u003C/a\u003E. کروم‌برد تا $nextResetDate $nextResetTime$ محتوا را بروز نمی‌کند.",
+      "placeholders": {
+         "nextResetDate": {
+            "content": "$2"
+         },
+         "nextResetTime": {
+            "content": "$3"
+         },
+         "options_url": {
+            "content": "$1"
+         }
+      }
+   },
+   "extDescription": {
+      "description": "توضیحات افزونه",
+      "message": "کروم برد یک افزونه برای توییتر است که به شما اجازه می‌دهد تا توییت‌های خود و دوستانتان را دنبال کنید و با حساب خود در توییتر ارتباط فعل و انفعالی داشته باشید."
+   },
+   "follow_action": {
+      "message": "دنبال کردن"
+   },
+   "fromApp": {
+      "message": "از"
+   },
+   "g_advanced": {
+      "message": "پیشرفته"
+   },
+   "g_image_service": {
+      "message": "سرویس عکس"
+   },
+   "g_microblogging_service": {
+      "message": "سرویس میکروبلاگ"
+   },
+   "g_notifications": {
+      "message": "اطلاع‌رسانی‌ها"
+   },
+   "g_shortener": {
+      "message": "کوتاه کننده"
+   },
+   "g_timelines": {
+      "message": "جدول زمانی"
+   },
+   "g_ui": {
+      "message": "رابط کاربری"
+   },
+   "hide": {
+      "message": "مخفی"
+   },
+   "hour_plural": {
+      "message": "ساعت"
+   },
+   "hour_singular": {
+      "message": "ساعت"
+   },
+   "inReply": {
+      "message": "در پاسخ به"
+   },
+   "justNow": {
+      "message": "هم اکنون"
+   },
+   "l_base_oauth_signing_url": {
+      "message": "آدرس ورود با OAuth:"
+   },
+   "l_base_oauth_url": {
+      "message": "آدرس OAuth:"
+   },
+   "l_base_search_url": {
+      "message": "آدرس API جستجو:"
+   },
+   "l_base_signing_url": {
+      "message": "آدرس ورود API:"
+   },
+   "l_base_url": {
+      "message": "آدرس API توییتر:"
+   },
+   "l_blocked_users": {
+      "message": "کاربران مسدود شده:"
+   },
+   "l_change_icon": {
+      "message": "تغییر نشان"
+   },
+   "l_compose_position": {
+      "message": "محل قرارگیری جعبه نوشتن:"
+   },
+   "l_default_locale": {
+      "message": "تنظیمات محلی پیشفرض:"
+   },
+   "l_font_family": {
+      "message": "نوع فونت:"
+   },
+   "l_font_size": {
+      "message": "اندازه فونت:"
+   },
+   "l_hits_notice": {
+      "message": "مراجعه به API در ساعت: "
+   },
+   "l_hover_timeout": {
+      "message": "انتظار تا زمان خواندن (ms):"
+   },
+   "l_icon_color": {
+      "message": "رنگ نشان:"
+   },
+   "l_icon_color_column": {
+      "message": "رنگ نشان"
+   },
+   "l_image_up_service": {
+      "message": "سرویس بالاگذاری عکس:"
+   },
+   "l_include_in_unified": {
+      "message": "حضور در جدول زمانی کلی"
+   },
+   "l_max_cached_tweets": {
+      "message": "حداکثر توییت‌های نمایش داده شده:"
+   },
+   "l_name_attribute": {
+      "message": "نام در توییت‌ها:"
+   },
+   "l_noti_desktop": {
+      "message": "اطلاع‌رسانی‌های میزکار"
+   },
+   "l_noti_on_page": {
+      "message": "اطلاع‌رسانی در صفحه"
+   },
+   "l_notification_fade_timeout": {
+      "message": "تایم‌اوت اطلاع‌رسانی (s):"
+   },
+   "l_notification_max_popups": {
+      "message": "همه اطلاع‌رسانی‌ها با هم (-1: all):"
+   },
+   "l_refresh_interval": {
+      "message": "دوره بروزرسانی (s)"
+   },
+   "l_reply_all": {
+      "message": "پاسخ به همه ارسال شده‌ها به من:"
+   },
+   "l_request_timeout": {
+      "message": "تایم‌اوت درخواست (ms):"
+   },
+   "l_same_signing_urls": {
+      "message": "آدرس‌های ورود مشابه:"
+   },
+   "l_share_include_title": {
+      "message": "آوردن عنوان صفحه (به اشتراک گذاری):"
+   },
+   "l_shortener_acct": {
+      "message": "حساب شخصی کاربر؟"
+   },
+   "l_shortener_key": {
+      "message": "کلید API:"
+   },
+   "l_shortener_login": {
+      "message": "حساب API:"
+   },
+   "l_show_expanded_urls": {
+      "message": "بسط دادن آدرس‌های کوتاه شده:"
+   },
+   "l_show_hits_in_popup": {
+      "message": "نمایش تعداد دسترسی به API:"
+   },
+   "l_show_user_autocomplete": {
+      "message": "تکمیل خودکار نام‌های کاربری:"
+   },
+   "l_tabs_count": {
+      "message": "تعداد برگه‌ها"
+   },
+   "l_theme": {
+      "message": "نمای رابط کاربری:"
+   },
+   "l_tweet_color": {
+      "message": "رنگ توییت:"
+   },
+   "l_tweet_notification": {
+      "message": "اطلاعا‌رسانی توییت"
+   },
+   "l_tweets_color_only_unified": {
+      "message": "رنگ‌ها فقط در برگه همگانی:"
+   },
+   "l_tweets_notification_style": {
+      "message": "شیوه اطلاع‌رسانی:"
+   },
+   "l_tweets_per_page": {
+      "message": "تعداد توییت در هر صفحه:"
+   },
+   "l_unified_timeline": {
+      "message": "جدول زمانی همگانی:"
+   },
+   "l_url_shortener": {
+      "message": "کوتاه‌کننده آدرس:"
+   },
+   "l_visible": {
+      "message": "قابل دیدن"
+   },
+   "loadingImage": {
+      "message": "در حال بارگزاری تصویر..."
+   },
+   "loadingLongUrl": {
+      "message": "در حال بارگزاری آدرس بلند..."
+   },
+   "loadingMap": {
+      "message": "در حال بارگزاری نقشه..."
+   },
+   "logout": {
+      "description": "متن برای لینک خروج از حساب",
+      "message": "خروج"
+   },
+   "markAllRead": {
+      "message": "همه را خواندم"
+   },
+   "markFavorite": {
+      "message": "نشانه‌گذاری به عنوان موردعلاقه"
+   },
+   "minuteAgo": {
+      "message": "کمتر از یک دقیقه پیش"
+   },
+   "minute_plural": {
+      "message": "دقیقه"
+   },
+   "minute_singular": {
+      "message": "دقیقه"
+   },
+   "minutes": {
+      "message": "$nr_of_minutes$ $minutes$ قبل",
+      "placeholders": {
+         "minutes": {
+            "content": "$2",
+            "example": "دقیقه (singular / plural)"
+         },
+         "nr_of_minutes": {
+            "content": "$1"
+         }
+      }
+   },
+   "month_plural": {
+      "message": "ماه"
+   },
+   "month_singular": {
+      "message": "ماه"
+   },
+   "nerds_link": {
+      "message": "آمار دسترسی به API (برای نرد‌ها)"
+   },
+   "newToken": {
+      "message": "درخواست یک مجوز دیگر"
+   },
+   "newTweets": {
+      "message": "$count$ $newtweets$",
+      "placeholders": {
+         "count": {
+            "content": "$1"
+         },
+         "newtweets": {
+            "content": "$2"
+         }
+      }
+   },
+   "newTweetsAvailable": {
+      "message": "$count$ $tweets$ دیگر در دسترس است، بروزرسانی کنید.",
+      "placeholders": {
+         "count": {
+            "content": "$1"
+         },
+         "tweets": {
+            "content": "$2"
+         }
+      }
+   },
+   "newtweets_plural": {
+      "message": "توییت‌های جدید"
+   },
+   "newtweets_singular": {
+      "message": "توییت جدید"
+   },
+   "notice_api_hits": {
+      "message": "شما باید تعداد دسترسی به API را  \u003Cspan style=\"color: red;\"\u003Eزیر \u003Cspan class=\"__hourly_limit\"\u003E\u003C/span\u003E\u003C/span\u003E درخواست نگه‌دارید! در غیر اینصورت کروم برد به خوبی کار نمی‌کند و جدول زمانی شما بروز نمی‌شود.\u003Cbr\u003E\u003Cspan style=\"color: red;\"\u003Eبه یاد داشته باشید\u003C/span\u003E اگر شما چند برنامه توییتر دارید باید تعداد درخواست‌ها را پایین نگه‌دارید."
+   },
+   "notice_right_click_change": {
+      "message": "* شما می‌توانید بسیاری از این تنظیمات را در پنجره خود کروم‌برد انجام دهید، فقط کافیست از اینجا خارج شوید! :)"
+   },
+   "notif_dms": {
+      "message": "پیام‌های مستقیم:"
+   },
+   "notif_home": {
+      "message": "خانه:"
+   },
+   "notif_lists": {
+      "message": "فهرست‌ها:"
+   },
+   "notif_mentions": {
+      "message": "ارسال‌شده به من:"
+   },
+   "notif_search": {
+      "message": "جستجو:"
+   },
+   "oAuthError": {
+      "message": "این خطا در مرحله مجوزگیری اتفاق اقتاده است: $errorMessage$. لطفا, \u003Ca href=\"javascript:OAuth.requestNewToken();\"\u003Eبرای شروع مجدد عملیات کلیک کنید\u003C/a\u003E",
+      "placeholders": {
+         "errorMessage": {
+            "content": "$1"
+         }
+      }
+   },
+   "o_both": {
+      "message": "هر دو نام"
+   },
+   "o_bottom": {
+      "message": "پایین"
+   },
+   "o_extra_large": {
+      "message": "خیلی بزرگ"
+   },
+   "o_large": {
+      "message": "بزرگ"
+   },
+   "o_name": {
+      "message": "نام واقعی"
+   },
+   "o_normal": {
+      "message": "معمولی"
+   },
+   "o_screen_name": {
+      "message": "لقب"
+   },
+   "o_small": {
+      "message": "کوچک"
+   },
+   "o_top": {
+      "message": "بالا"
+   },
+   "oldRT": {
+      "message": "اشتراک‌گذاری (RT سابق)"
+   },
+   "options": {
+      "description": "لینک تنظیمات",
+      "message": "تنظیمات"
+   },
+   "options_title": {
+      "message": "تنظیمات کروم‌برد"
+   },
+   "preventClosing": {
+      "message": "کلیک برای جلوگیری از بسته شدن"
+   },
+   "profile_action": {
+      "message": "نمایه"
+   },
+   "queue_retried": {
+      "message": "$retries$ بار تلاش در $timediff$ قبل از [$laststatus$]",
+      "placeholders": {
+         "laststatus": {
+            "content": "$3"
+         },
+         "retries": {
+            "content": "$1"
+         },
+         "timediff": {
+            "content": "$2"
+         }
+      }
+   },
+   "queue_trying": {
+      "message": "تلاش برای ارسال $timediff$",
+      "placeholders": {
+         "timediff": {
+            "content": "$1"
+         }
+      }
+   },
+   "queued_messages": {
+      "message": "پیام‌های در صف:"
+   },
+   "rate_limit_reset": {
+      "message": "بازنشانی محدودیت امتیاز: "
+   },
+   "refresh": {
+      "description": "لینک بروزرسانی",
+      "message": "بروزرسانی"
+   },
+   "remaining_api_hits": {
+      "message": "تعداد دسترسی‌های باقی مانده به API: "
+   },
+   "remove": {
+      "message": "حذف"
+   },
+   "resetSize": {
+      "message": "دابل-کلیک برای بازنشانی اندازه"
+   },
+   "resume": {
+      "message": "ادامه"
+   },
+   "retweetConfirm": {
+      "message": "بازتوییت این پیام: "
+   },
+   "retweetedBy": {
+      "message": "بازتوییت شده توسط:"
+   },
+   "retweetedByMe": {
+      "message": "توییت"
+   },
+   "selectList": {
+      "message": "- یک فهرست را انتخاب کنید -"
+   },
+   "sentTo": {
+      "message": "ارسال شده به"
+   },
+   "shortenIt": {
+      "message": "کوتاه کن!"
+   },
+   "shorten_current": {
+      "message": "به اشتراک‌گذاری صفحه کنونی"
+   },
+   "shortenerIdleString": {
+      "message": "یک آدرس را برای کوتاه‌سازی وارد کنید یا روی عکس کره زمین کلیک کنید"
+   },
+   "show": {
+      "message": "نمایش"
+   },
+   "successAuth": {
+      "message": "تبریک، شما با موفقیت کروم‌برد را مجاز کردید، از آن لذت ببرید!"
+   },
+   "suspend": {
+      "description": "لینک تعلیق",
+      "message": "تعلیق"
+   },
+   "timeAgo": {
+      "message": "حدود $time$ $time_string$ قبل",
+      "placeholders": {
+         "time": {
+            "content": "$1"
+         },
+         "time_string": {
+            "content": "$2"
+         }
+      }
+   },
+   "timelineDM": {
+      "description": "برگه پیام‌های مستقیم",
+      "message": "پیام مستقیم"
+   },
+   "timelineFavorites": {
+      "description": "برگه پیام‌های مورد علاقه",
+      "message": "Favorites"
+   },
+   "timelineHome": {
+      "description": "برگه خانه توییت‌ها",
+      "message": "خانه"
+   },
+   "tml_favorites": {
+      "message": "موردعلاقه‌ها:"
+   },
+   "tryAgain": {
+      "message": "تلاش مجدد"
+   },
+   "tweet_plural": {
+      "message": "توییت‌ها"
+   },
+   "tweet_send_error": {
+      "message": "در زمان ارسال توییت شما خطایی رخ داد. شاید توییت عجیب و غریب شده است؟ شما می‌توانید دوباره تلاش کنید، اما قبل از آن حسابتان را بررسی کنید تا توییت تکرار نفرستید."
+   },
+   "tweet_singular": {
+      "message": "توییت"
+   },
+   "tweetit": {
+      "message": "توییتش کن!"
+   },
+   "tweets_action": {
+      "message": "توییت‌ها"
+   },
+   "ue_deletingTweet": {
+      "message": "خطای غیرمنتظره $status$ در حذف توییت.",
+      "placeholders": {
+         "status": {
+            "content": "$1"
+         }
+      }
+   },
+   "ue_fetchingLists": {
+      "message": "خطای غیر منتظره $status$ گرفتن فهرست‌ها.",
+      "placeholders": {
+         "status": {
+            "content": "$1"
+         }
+      }
+   },
+   "ue_markFavorite": {
+      "message": "خطای غیرمنتظره $status$ نشانه‌گذاری به عنوان موردعلاقه.",
+      "placeholders": {
+         "status": {
+            "content": "$1"
+         }
+      }
+   },
+   "ue_retweeting": {
+      "message": "خطای غیرمنتظره $status$ بازتوییت کردن.",
+      "placeholders": {
+         "status": {
+            "content": "$1"
+         }
+      }
+   },
+   "ue_unmarkFavorite": {
+      "message": "خطای غیر منتظره $status$ براداشتن نشان موردعلاقه.",
+      "placeholders": {
+         "status": {
+            "content": "$1"
+         }
+      }
+   },
+   "ue_updatingTweets": {
+      "message": "خطای غیرمنتظره $baseError$ بروزرسانی توییت‌ها.",
+      "placeholders": {
+         "baseError": {
+            "content": "$1"
+         }
+      }
+   },
+   "ue_updatingTweets2": {
+      "message": " اگر این خطا پشت سرهم اتفاق افتاد یکبار از حسابتان خارج و دوباره وارد شوید."
+   },
+   "unfollow_action": {
+      "message": "دنبال نکردن"
+   },
+   "unmarkFavorite": {
+      "message": "برداشتن نشان مورد علاقه"
+   },
+   "updateList": {
+      "message": "بروزرسانی فهرست‌ها..."
+   },
+   "w_DM": {
+      "message": "پیام‌های مستقیم"
+   },
+   "w_Favorites": {
+      "message": "موردعلاقه‌ها"
+   },
+   "w_Home": {
+      "message": "خانه"
+   },
+   "w_Lists": {
+      "message": "فهرست‌ها"
+   },
+   "w_Mentions": {
+      "message": "ارسال شده به من"
+   },
+   "w_ReceivedDM": {
+      "message": "پیام‌های مستقیم دریافتی"
+   },
+   "w_Search": {
+      "message": "جستجو"
+   },
+   "w_SentDM": {
+      "message": "پیام‌های مستقیم ارسالی"
+   },
+   "w_Unified": {
+      "message": "همگانی"
+   },
+   "warningAPIHits": {
+      "message": "مقدار دسترسی به API باقی مانده برای شما سریعا در حال اتمام است.\u003Cbr\u003Eلطفا تعداد دوره‌های درخواست را در \u003Ca href='javascript:chrome.tabs.create({url:\"$options_url$\"})'\u003Eصفحه تنظیمات\u003C/a\u003E بررسی کنید. اگر چند برنامه برای توییتر دارید خیلی مراقب باشید که همه به یک اندازه محدودیت داشته باشند. \u003Cbr\u003Eتعداد درخواست‌های باقی‌مانده: $remainingHits$ - بازنشاندن بعدی تعداد درخواست‌ها: $nextResetDate$ $nextResetTime$",
+      "placeholders": {
+         "nextResetDate": {
+            "content": "$3"
+         },
+         "nextResetTime": {
+            "content": "$4"
+         },
+         "options_url": {
+            "content": "$1"
+         },
+         "remainingHits": {
+            "content": "$2"
+         }
+      }
+   },
+   "yearsAgo": {
+      "message": "سال پیش"
+   },
+   "yourPIN": {
+      "message": "شماره پین شما: $pin$",
+      "placeholders": {
+         "pin": {
+            "content": "$1"
+         }
+      }
+   }
+}

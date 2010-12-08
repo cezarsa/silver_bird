@@ -156,11 +156,29 @@ var Paginator = {
 var ThemeManager = {
   init: function () {
     $("link.theme").remove();
+    var baseStyle = $("#base_stylesheet")[0];
+
+    var direction = 'ltr';
+    try {
+      var newDefaultLocale = OptionsBackend.get('default_locale');
+      if(newDefaultLocale == 'fa_IR') {
+        direction = 'rtl';
+        baseStyle.sheet.cssRules[1].style.direction = 'rtl';
+      } else {
+        direction = baseStyle.sheet.cssRules[1].style.direction;
+        baseStyle.sheet.cssRules[1].style.direction = '';
+      }
+    } catch(e) {}
+    if(direction == 'rtl') {
+      baseStyle.sheet.cssRules[1].style.direction
+      $("<link rel='stylesheet' type='text/css' href='css/base_rtl.css'>").appendTo(document.head);
+    }
+
     var theme = OptionsBackend.get('theme');
     $(theme.split(",")).each(function(i, p) {
       $("<link rel='stylesheet' type='text/css' class='theme' href='" + p + "'>").appendTo(document.head);
     });
-    var baseStyle = $("#base_stylesheet")[0];
+
     if(baseStyle.sheet && baseStyle.sheet.cssRules) {
       var baseRules = baseStyle.sheet.cssRules;
       var fontFamily = OptionsBackend.get('font_family');

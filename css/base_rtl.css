@@ -1,0 +1,72 @@
+html, body {
+  font-family: Tahoma;
+}
+
+input {
+  font-family: Tahoma !important;
+  font-size: 11px;
+}
+
+#error {
+	direction: rtl;
+	text-align: right;
+}
+
+#warning {
+	direction: rtl;
+	text-align: right;
+}
+
+#warning .content {
+	margin-right: 10px;
+}
+
+#warning .dismiss {
+  float: left;
+}
+
+#update_tweets {
+	direction: rtl;
+}
+
+#compose_tweet_area textarea {
+	font-family: Tahoma;
+	direction: rtl;
+}
+
+#compose_tweet_area .footer input[type='button'] {
+  direction: rtl;
+}
+
+.tweet {
+  padding: 2px 22px 0px 0px;
+  text-align: right;
+}
+
+.tweet .text {
+  clear: left;
+  text-align: right !important;
+  direction: rtl !important;
+}
+
+.tweet .footer {
+	margin-right: 62px;
+	text-align: right;
+	direction: rtl;
+}
+
+.tweet img.profile {
+	margin-left: 10px;
+  float: right;
+}
+
+.tweet img.profile.retweet_source {
+  margin-right: 4px;
+}
+
+.tweet img.profile.retweet_retweeter {
+  margin-right: 0px;
+  margin-left: -20px;
+  left: 0px;
+  right: -27px;
+}
