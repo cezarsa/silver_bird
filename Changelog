@@ -1,3 +1,10 @@
+1.9.6.5 (2010-12-06)
+
+* Fixing mobile notifications being always enabled when following a user;
+* Fixing snowflake caused id truncation when showing "in reply to" tweets;
+* Fixing OAuth errors due to incorrect timestamps by adjusting the local
+  clock based on server's timestamp.
+
 1.9.6.4 (2010-11-23)
 
 * Stupid bug preventing updates now fixed.
