@@ -1,3 +1,7 @@
+1.9.6.6 (2010-12-11)
+
+* Fixing bug that caused timelines to stop updating after a timeout.
+
 1.9.6.5 (2010-12-06)
 
 * Fixing mobile notifications being always enabled when following a user;
