@@ -1,0 +1,668 @@
+﻿{
+   "Delete": {
+      "message": "Sil"
+   },
+   "No": {
+      "message": "Xeyr"
+   },
+   "Reply": {
+      "message": "Cavabla"
+   },
+   "Retweet": {
+      "message": "Yenidən tvitlə"
+   },
+   "Yes": {
+      "message": "Bəli"
+   },
+   "add": {
+      "message": "Əlavə et"
+   },
+   "add_mention_action": {
+      "message": "Xatırlat"
+   },
+   "ajaxFailed": {
+      "message": "AJAX istəyi uğursuzdur (pis bağlantı?)"
+   },
+   "authorizing": {
+      "message": "Lütfən gözləyin..."
+   },
+   "autoUpdatesSuspended": {
+      "message": "Avtomatik yenilənmələr ləğv edildi"
+   },
+   "btnAuthorize": {
+      "message": "Səlahiyyət ver!"
+   },
+   "btn_default": {
+      "message": "Fərz edilən nizamlara bərpa et"
+   },
+   "btn_reset": {
+      "message": "Bərpa et"
+   },
+   "btn_reset_popup_size": {
+      "message": "Pəncərə Ölçüsünü Bərpa et"
+   },
+   "btn_save": {
+      "message": "Qeyd et"
+   },
+   "cancelTweet": {
+      "message": "Ləğv et"
+   },
+   "canceling": {
+      "message": "Ləğv edilir..."
+   },
+   "cbAuthorized": {
+      "message": "Chromed Bird səlahiyyətli!"
+   },
+   "cbNotAuthorized": {
+      "message": "Bir səhv yarandı. Lütfən Chromed Bird simvoluna təkrar basın."
+   },
+   "changeNotificationSettings": {
+      "message": "Bildiriş variantlarını nizamlar səhifəsindən dəyişdirə bilərsiniz."
+   },
+   "changes_restart": {
+      "message": "Bəzi nizamların aktiv olması üçün əlavənin yenidən başladılması gərək. Bunu indi etmək istərsinizmi?\u003Cbr\u003E    (Oxunmamış tvit sayınız sıfırlanacaq)"
+   },
+   "composeTweet": {
+      "description": "Text for composing new tweet",
+      "message": "Yeni tvit"
+   },
+   "conf_saved": {
+      "message": "Nizamlarınız müvəffəqiyyətlə qeyd edildi."
+   },
+   "day_plural": {
+      "message": "gün"
+   },
+   "day_singular": {
+      "message": "gün"
+   },
+   "deleteConfirm": {
+      "message": "Bu ismarışı sil: "
+   },
+   "detach_window": {
+      "message": "Pəncərəni Ayır"
+   },
+   "errorExpandingUrl": {
+      "message": "Bir səhv yarandı. Lütfən təkrar sınayın."
+   },
+   "exceededAPIHits": {
+      "message": "Gündəlik API istifadə limitini keçdiniz. Lütfən \u003Ca href='javascript:chrome.tabs.create({url:\"$options_url$\"})'\u003Enizamlar səhifəsindən\u003C/a\u003E yeniləmə aralığını yoxlayın. Chromed Bird $nextResetDate $nextResetTime$ tarixinə qədər yenilənməyəcək.",
+      "placeholders": {
+         "nextResetDate": {
+            "content": "$2"
+         },
+         "nextResetTime": {
+            "content": "$3"
+         },
+         "options_url": {
+            "content": "$1"
+         }
+      }
+   },
+   "extDescription": {
+      "description": "Extension description",
+      "message": "Chromed Bird, Twitter hesabınızı Google Chrome üzərindən izləmənizi və idarə etmənizi təmin edən bir əlavədir."
+   },
+   "follow_action": {
+      "message": "İzlə"
+   },
+   "fromApp": {
+      "message": "nə ilə?:"
+   },
+   "g_advanced": {
+      "message": "Təkminləşmiş"
+   },
+   "g_image_service": {
+      "message": "Şəkil Xidməti"
+   },
+   "g_microblogging_service": {
+      "message": "Mikrobloq xidməti"
+   },
+   "g_notifications": {
+      "message": "Bildirişlər"
+   },
+   "g_shortener": {
+      "message": "Qısaldıcı"
+   },
+   "g_timelines": {
+      "message": "Axışlar"
+   },
+   "g_ui": {
+      "message": "İnterfeys"
+   },
+   "hide": {
+      "message": "Gizlət"
+   },
+   "hour_plural": {
+      "message": "saat"
+   },
+   "hour_singular": {
+      "message": "saat"
+   },
+   "inReply": {
+      "message": "cavab olaraq:"
+   },
+   "justNow": {
+      "message": "Az əvvəl"
+   },
+   "l_base_oauth_signing_url": {
+      "message": "OAuth Giriş Ünvanı:"
+   },
+   "l_base_oauth_url": {
+      "message": "OAuth Ünvanı:"
+   },
+   "l_base_search_url": {
+      "message": "Axtarış API Ünvanı:"
+   },
+   "l_base_signing_url": {
+      "message": "API Giriş Ünvanı:"
+   },
+   "l_base_url": {
+      "message": "Twitter API Ünvanı:"
+   },
+   "l_blocked_users": {
+      "message": "Qadağan edilən istifadəçilər:"
+   },
+   "l_change_icon": {
+      "message": "Simvolu dəyişdir"
+   },
+   "l_compose_position": {
+      "message": "Yeni tvit mövqesi:"
+   },
+   "l_default_locale": {
+      "message": "Fərz edilən dil:"
+   },
+   "l_font_family": {
+      "message": "Şrift:"
+   },
+   "l_font_size": {
+      "message": "Şrift ölçüsü:"
+   },
+   "l_hits_notice": {
+      "message": "Saatlıq API limiti: "
+   },
+   "l_hover_timeout": {
+      "message": "Oxumaq üçün gözləmə müddəti (ms):"
+   },
+   "l_icon_color": {
+      "message": "Simvol rəngi:"
+   },
+   "l_icon_color_column": {
+      "message": "Simvol rəngi"
+   },
+   "l_image_up_service": {
+      "message": "Şəkil Yükləmə Xidməti:"
+   },
+   "l_include_in_unified": {
+      "message": "Birləşdirilən vaxt qrafikinə daxil et"
+   },
+   "l_max_cached_tweets": {
+      "message": "Göstəriləcək maksimum tvit:"
+   },
+   "l_name_attribute": {
+      "message": "Tvitlərdəki adlar necə görünsün?:"
+   },
+   "l_noti_desktop": {
+      "message": "Stolüstü bildirişləri"
+   },
+   "l_noti_on_page": {
+      "message": "Səhifə bildirişləri"
+   },
+   "l_notification_fade_timeout": {
+      "message": "Bildiriş Fasiləsi(s):"
+   },
+   "l_notification_max_popups": {
+      "message": "Maksimum bildiriş sayı (-1: hamısı):"
+   },
+   "l_refresh_interval": {
+      "message": "Yeniləmə vaxtı(s)"
+   },
+   "l_reply_all": {
+      "message": "Bütün bəhs edilənləri cavablandır:"
+   },
+   "l_request_timeout": {
+      "message": "Sorğu Fasiləsi(ms):"
+   },
+   "l_same_signing_urls": {
+      "message": "Eyni Giriş Ünvanları:"
+   },
+   "l_share_include_title": {
+      "message": "Səhifə başlığını daxil et:"
+   },
+   "l_shortener_acct": {
+      "message": "Şəxsi hesab istifadə et?"
+   },
+   "l_shortener_key": {
+      "message": "API Açarı:"
+   },
+   "l_shortener_login": {
+      "message": "API Giriş:"
+   },
+   "l_show_expanded_urls": {
+      "message": "Qısaldılmış ünvanları genişlət:"
+   },
+   "l_show_hits_in_popup": {
+      "message": "API istifadə sayını göstər:"
+   },
+   "l_show_user_autocomplete": {
+      "message": "İstifadəçi adlarını avtomatik tamamla:"
+   },
+   "l_tabs_count": {
+      "message": "Tir sayı"
+   },
+   "l_theme": {
+      "message": "Mövzu:"
+   },
+   "l_tweet_color": {
+      "message": "Tvit rəngi:"
+   },
+   "l_tweet_notification": {
+      "message": "Tvit bildirişi"
+   },
+   "l_tweets_color_only_unified": {
+      "message": "Rənglər yalnız birləşdiriləndə:"
+   },
+   "l_tweets_notification_style": {
+      "message": "Bildiriş üslubu:"
+   },
+   "l_tweets_per_page": {
+      "message": "Səhifə üçün göstəriləcək tvit sayı:"
+   },
+   "l_unified_timeline": {
+      "message": "Birləşdirilən vaxt qrafiki:"
+   },
+   "l_url_shortener": {
+      "message": "URL qısaldıcı:"
+   },
+   "l_visible": {
+      "message": "Görünsün"
+   },
+   "loadingImage": {
+      "message": "Təsvir yüklənir..."
+   },
+   "loadingLongUrl": {
+      "message": "URL yüklənir..."
+   },
+   "loadingMap": {
+      "message": "Xəritə yüklənir..."
+   },
+   "logout": {
+      "description": "The text for the logout link",
+      "message": "Çıxış"
+   },
+   "markAllRead": {
+      "message": "Hamısını oxundu olaraq işarələ"
+   },
+   "markFavorite": {
+      "message": "Favoritlərə əlavə et"
+   },
+   "minuteAgo": {
+      "message": "Saniyələr əvvəl"
+   },
+   "minute_plural": {
+      "message": "dəqiqə"
+   },
+   "minute_singular": {
+      "message": "dəqiqə"
+   },
+   "minutes": {
+      "message": "$nr_of_minutes$ $minutes$ əvvəl",
+      "placeholders": {
+         "minutes": {
+            "content": "$2",
+            "example": "minute or minutes (singular / plural)"
+         },
+         "nr_of_minutes": {
+            "content": "$1"
+         }
+      }
+   },
+   "month_plural": {
+      "message": "ay"
+   },
+   "month_singular": {
+      "message": "ay"
+   },
+   "nerds_link": {
+      "message": "API istifadə statistikaları"
+   },
+   "newToken": {
+      "message": "Başqa simvolu xahiş edt"
+   },
+   "newTweets": {
+      "message": "$count$ $newtweets$",
+      "placeholders": {
+         "count": {
+            "content": "$1"
+         },
+         "newtweets": {
+            "content": "$2"
+         }
+      }
+   },
+   "newTweetsAvailable": {
+      "message": "Yeni $count$ tvit var. Oxumaq üçün basın.",
+      "placeholders": {
+         "count": {
+            "content": "$1"
+         },
+         "tweets": {
+            "content": "$2"
+         }
+      }
+   },
+   "newtweets_plural": {
+      "message": "yeni tvit"
+   },
+   "newtweets_singular": {
+      "message": "yeni tvit"
+   },
+   "notice_api_hits": {
+      "message": "Saatlıq API limiti ən çox \u003Cspan style=\"color: red;\"\u003E\u003Cspan class=\"__hourly_limit\"\u003E\u003C/span\u003E\u003C/span\u003E ola bilər!\u003Cbr\u003EƏgər birdən çox Twitter istəkçisi istifadə edirsinizsə aşağıdakı dəyərləri daha da azaltmalısınız."
+   },
+   "notice_right_click_change": {
+      "message": "* Artıq pəncərədə sağı basaraq buradakı nizamların çoxunu pəncərə üzərindən dəyişdirə bilərsiniz."
+   },
+   "notif_dms": {
+      "message": "Birbaşa ismarışlar:"
+   },
+   "notif_home": {
+      "message": "Ana səhifə:"
+   },
+   "notif_lists": {
+      "message": "Siyahılar:"
+   },
+   "notif_mentions": {
+      "message": "Xatırlatmalar:"
+   },
+   "notif_search": {
+      "message": "Axtar:"
+   },
+   "oAuthError": {
+      "message": "Bir səhv yarandı: $errorMessage$. Lütfən \u003Ca href=\"javascript:OAuth.requestNewToken();\"\u003Esəlahiyyətləndirmə əməliyyatını təkrar başladın\u003C/a\u003E.",
+      "placeholders": {
+         "errorMessage": {
+            "content": "$1"
+         }
+      }
+   },
+   "o_both": {
+      "message": "İkisi də"
+   },
+   "o_bottom": {
+      "message": "Alt"
+   },
+   "o_extra_large": {
+      "message": "Çok Böyük"
+   },
+   "o_large": {
+      "message": "Böyük"
+   },
+   "o_name": {
+      "message": "Əsl ad"
+   },
+   "o_normal": {
+      "message": "Normal"
+   },
+   "o_screen_name": {
+      "message": "İstifadəçi adı"
+   },
+   "o_small": {
+      "message": "Kiçik"
+   },
+   "o_top": {
+      "message": "Üst"
+   },
+   "oldRT": {
+      "message": "Paylaş"
+   },
+   "options": {
+      "description": "Options link",
+      "message": "Seçimlər"
+   },
+   "options_title": {
+      "message": "Chromed Bird Seçimləri"
+   },
+   "preventClosing": {
+      "message": "Bağlanmaması üçün basın."
+   },
+   "profile_action": {
+      "message": "Profil"
+   },
+   "queue_retried": {
+      "message": "$timediff$ tarixindən bəri $retries$ dəfə göndərilməyə cəhd edildi [$laststatus$]",
+      "placeholders": {
+         "laststatus": {
+            "content": "$3"
+         },
+         "retries": {
+            "content": "$1"
+         },
+         "timediff": {
+            "content": "$2"
+         }
+      }
+   },
+   "queue_trying": {
+      "message": "$timediff$ tarixindən bəri göndərilməyi gözləyir",
+      "placeholders": {
+         "timediff": {
+            "content": "$1"
+         }
+      }
+   },
+   "queued_messages": {
+      "message": "Sıradakı ismarışlar:"
+   },
+   "rate_limit_reset": {
+      "message": "Bir sonrakı Twitter API sıfırlama tarixi: "
+   },
+   "refresh": {
+      "description": "Refresh link",
+      "message": "Yenilə"
+   },
+   "remaining_api_hits": {
+      "message": "Qalan Twitter API İstifadə Sayı: "
+   },
+   "remove": {
+      "message": "Yığışdır"
+   },
+   "resetSize": {
+      "message": "Fərz edilən ölçüyə qayıtmaq üçün cüt basın"
+   },
+   "resume": {
+      "message": "Davam"
+   },
+   "retweetConfirm": {
+      "message": "Bunu yenidən tvitlə: "
+   },
+   "retweetedBy": {
+      "message": "təkrar tvitləyən:"
+   },
+   "retweetedByMe": {
+      "message": "sizin tərəfinizdən təkrar tvitləndi"
+   },
+   "selectList": {
+      "message": "- Siyahı seçin -"
+   },
+   "sentTo": {
+      "message": "göndərildi"
+   },
+   "shortenIt": {
+      "message": "Qısalt"
+   },
+   "shorten_current": {
+      "message": "Cari səhifəni paylaş"
+   },
+   "shortenerIdleString": {
+      "message": "Bura qısaldılacaq ünvanı yazın (Ctrl+V). Açıq səhifəni sağdakı simvoldan qısaldın."
+   },
+   "show": {
+      "message": "Göstər"
+   },
+   "successAuth": {
+      "message": "Təbriklər, şəxsiyyətiniz təsdiqləndi. Chromed Birddən zövq alın!"
+   },
+   "suspend": {
+      "description": "Suspend link",
+      "message": "Ləğv et"
+   },
+   "timeAgo": {
+      "message": "$time$ $time_string$ əvvəl",
+      "placeholders": {
+         "time": {
+            "content": "$1"
+         },
+         "time_string": {
+            "content": "$2"
+         }
+      }
+   },
+   "timelineDM": {
+      "description": "The direct message time line tab",
+      "message": "İsmarışlar"
+   },
+   "timelineFavorites": {
+      "description": "The home time line tab",
+      "message": "Favoritlər"
+   },
+   "timelineHome": {
+      "description": "The home time line tab",
+      "message": "Ana səhifə"
+   },
+   "tml_favorites": {
+      "message": "Favoritlər:"
+   },
+   "tryAgain": {
+      "message": "Təkrar sınayın"
+   },
+   "tweet_plural": {
+      "message": "tvit"
+   },
+   "tweet_send_error": {
+      "message": "Tvitinizi göndərərkən səhv yarandı. Twitter qəribə davranır ola bilərmi? Təkrar sınaya bilərsiniz amma eyni ismarışı göndərmədiyinizdən əmin olun."
+   },
+   "tweet_singular": {
+      "message": "tvit"
+   },
+   "tweetit": {
+      "message": "Göndər"
+   },
+   "tweets_action": {
+      "message": "Tvitlər"
+   },
+   "ue_deletingTweet": {
+      "message": "Tvit silinərkən $status$ səhvi yarandı.",
+      "placeholders": {
+         "status": {
+            "content": "$1"
+         }
+      }
+   },
+   "ue_fetchingLists": {
+      "message": "Siyahılar alınarkən $status$ səhvi yarandı.",
+      "placeholders": {
+         "status": {
+            "content": "$1"
+         }
+      }
+   },
+   "ue_markFavorite": {
+      "message": "Favoritlərə əlavə edərkən $status$ səhvi yarandı.",
+      "placeholders": {
+         "status": {
+            "content": "$1"
+         }
+      }
+   },
+   "ue_retweeting": {
+      "message": "Təkrar tvitlərkən $status$ səhvi yarandı.",
+      "placeholders": {
+         "status": {
+            "content": "$1"
+         }
+      }
+   },
+   "ue_unmarkFavorite": {
+      "message": "Favoritdən silərkən $status$ səhvi yarandı.",
+      "placeholders": {
+         "status": {
+            "content": "$1"
+         }
+      }
+   },
+   "ue_updatingTweets": {
+      "message": "Tvitlər yenilərkən $baseError$ səhvi yarandı.",
+      "placeholders": {
+         "baseError": {
+            "content": "$1"
+         }
+      }
+   },
+   "ue_updatingTweets2": {
+      "message": "Əgər bu səhv ilə çox sıx qarşılaşırsınızsa çıxış edib təkrar girməyi sınayın."
+   },
+   "unfollow_action": {
+      "message": "İzləməyi Burax"
+   },
+   "unmarkFavorite": {
+      "message": "Favoritlərdən sil"
+   },
+   "updateList": {
+      "message": "Siyahılar yenilənir..."
+   },
+   "w_DM": {
+      "message": "İsmarışlar"
+   },
+   "w_Favorites": {
+      "message": "Favoritlər"
+   },
+   "w_Home": {
+      "message": "Ana səhifə"
+   },
+   "w_Lists": {
+      "message": "Siyahılar"
+   },
+   "w_Mentions": {
+      "message": "Xatırlatmalar"
+   },
+   "w_ReceivedDM": {
+      "message": "Alınan İsmarışlar"
+   },
+   "w_Search": {
+      "message": "Axtar"
+   },
+   "w_SentDM": {
+      "message": "Göndərilən İsmarışlar"
+   },
+   "w_Unified": {
+      "message": "Hamısı"
+   },
+   "warningAPIHits": {
+      "message": "API limitinizi çox sürətli doldurursunuz.\u003Cbr\u003ELütfən \u003Ca href='javascript:chrome.tabs.create({url:\"$options_url$\"})'\u003Enizamlar səhifəsindən\u003C/a\u003E yeniləmə vaxtını yoxlayın.\u003Cbr\u003EQalan haqq: $remainingHits$ - Bir sonrakı sıfırlama tarixi: $nextResetDate$ $nextResetTime$",
+      "placeholders": {
+         "nextResetDate": {
+            "content": "$3"
+         },
+         "nextResetTime": {
+            "content": "$4"
+         },
+         "options_url": {
+            "content": "$1"
+         },
+         "remainingHits": {
+            "content": "$2"
+         }
+      }
+   },
+   "yearsAgo": {
+      "message": "il əvvəl"
+   },
+   "yourPIN": {
+      "message": "PIN nömrəniz: $pin$",
+      "placeholders": {
+         "pin": {
+            "content": "$1"
+         }
+      }
+   }
+}
