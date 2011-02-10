@@ -101,6 +101,8 @@ function TweetManager() {
   this.maxApiHitsStates = 30;
   this.apiHitsStates = [];
   this.firstPossibleWarnTime = null;
+  
+  this.ttLocales = null;
 
   this.authenticated = false;
 
@@ -924,6 +926,14 @@ TweetManager.prototype = {
       }
       callback(success, userData);
     }, username);
+  },
+
+  retrieveTrendingTopics: function(callback, woeid) {
+	this.twitterBackend.trendingTopics(function(success, userData) {
+	  if(success) {
+	    callback( userData[0] );
+	  }
+	}, woeid);
   },
 };
 

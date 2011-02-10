@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 
 <html>
 
@@ -185,6 +186,48 @@ $(function() {
     }
   });
   options.load();
+
+  currentTTLocale = eval('(' + options.optionsMap['trending_topics_woeid']+ ')');
+  if( tweetManager.ttLocales == null )
+  {
+    tweetManager.ttLocales = [ currentTTLocale ];
+    twitterBackend.trendingTopics(function(success,userData) {
+      //$("select[name='trending_topics_woeid']").append($("<option>").attr('value', '1').text('Worldwide'));
+      if(!success)
+        return;
+      function mySort(a,b){
+        if(a.name < b.name) return -1;
+        if(a.name > b.name) return 1;
+        return 0;
+      };
+
+      var woeids = [];
+      $.each(userData, function(i, loc){
+        id = loc.woeid;
+        myName = "";
+        if( loc.placeType.name == "Country" )
+          myName = loc.name;
+        else if( loc.placeType.name == "Town" )
+          myName = loc.country + ' - ' + loc.name;
+        else
+          return;
+        woeids.push({woeid: id, name: myName});
+      });
+      woeids.sort(mySort);
+      woeids.unshift({woeid:'1', name: 'Worldwide'});
+      tweetManager.ttLocales = woeids;
+      $("select[name='trending_topics_woeid']").empty();
+      $.each( tweetManager.ttLocales, function(i, id){
+        $("select[name='trending_topics_woeid']").append($("<option>").attr('value', '{woeid:\''+id.woeid+'\',name:\''+id.name+'\'}').text(id.name));
+      });
+      $("select[name='trending_topics_woeid']").val(options.optionsMap['trending_topics_woeid']);  
+    }, 'available' );
+  }
+  $("select[name='trending_topics_woeid']").empty();
+  $.each( tweetManager.ttLocales, function(i, id){
+    $("select[name='trending_topics_woeid']").append($("<option>").attr('value', '{woeid:\''+id.woeid+'\',name:\''+id.name+'\'}').text(id.name));
+  });
+  $("select[name='trending_topics_woeid']").val(options.optionsMap['trending_topics_woeid']);
 
   updatePredictedHitsCount();
   $('table.timelines input, table.timelines select').
@@ -466,6 +509,12 @@ function updatePredictedHitsCount() {
     <legend class="i18n" id="g_image_service">Image Service</legend>
     <label for="url_shortener" class="i18n" id="l_image_up_service">Image Upload Service:</label>
     <select name="image_upload_service"></select>
+  </fieldset>
+  
+  <fieldset>
+    <legend class="i18n" id="g_trending_topics">Trending Topics</legend>
+    <label for="trending_topics_woeid" class="i18n" id="l_trending_topics_woeid">Trending Topics Locale:</label>
+    <select name="trending_topics_woeid"></select>
   </fieldset>
 
   <fieldset>
