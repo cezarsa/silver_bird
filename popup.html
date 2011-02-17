@@ -1546,7 +1546,7 @@ function loadNewTweets() {
 }
 
 function loadTrends() {
-  var currentTTLocale = eval('(' + OptionsBackend.get('trending_topics_woeid')+ ')');
+  var currentTTLocale = OptionsBackend.get('trending_topics_woeid');
 
   $("#trending_topics").actionMenu({
     loading: 'img/loading.gif',
@@ -1568,7 +1568,7 @@ function loadTrends() {
     $("#trending_topics").actionMenu({
       actions: actions
     });
-  }, currentTTLocale.woeid);
+  }, currentTTLocale);
 }
 
 function prepareTimelines() {
