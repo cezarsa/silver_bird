@@ -73,3 +73,7 @@ div.action_menu .action {
 div.action_menu .action a {
   color: white;
 }
+
+div.action_menu .action_area img.action_loading {
+  margin: 5px 3px 3px 3px;
+}
