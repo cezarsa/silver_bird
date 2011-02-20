@@ -934,6 +934,47 @@ TweetManager.prototype = {
         callback(userData[0]);
       }
     }, woeid);
+  },
+
+  worldWideWoeid: {
+    woeid: 1,
+    name: 'Worldwide'
+  },
+
+  retrieveTrendingRegions: function(callback) {
+    if(this.ttLocales === null) {
+      var _this = this;
+      this.twitterBackend.trendingTopics(function(success, userData) {
+        if(!success) {
+          return;
+        }
+
+        var woeids = [];
+        $.each(userData, function(i, loc) {
+          var myName = "";
+          if(loc.placeType.name == "Country") {
+            myName = loc.name;
+          } else if(loc.placeType.name == "Town") {
+            myName = loc.country + ' - ' + loc.name;
+          } else {
+            return;
+          }
+          woeids.push({woeid: loc.woeid, name: myName});
+        });
+
+        woeids.sort(function(a, b) {
+          if(a.name < b.name) return -1;
+          if(a.name > b.name) return 1;
+          return 0;
+        });
+
+        woeids.unshift(_this.worldWideWoeid);
+        _this.ttLocales = woeids;
+        callback(woeids);
+      }, 'available');
+    }
+
+    return this.ttLocales || [this.worldWideWoeid];
   }
 };
 
