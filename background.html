@@ -1098,6 +1098,16 @@ function checkVersionChanges(manifest) {
           OptionsBackend.saveOption('notification_max_popups', OptionsBackend.defaultOptions['notification_max_popups']);
         }
       }
+      if(compareVersions(storageVersion, [1, 9, 6, 6]) <= 0) {
+        var baseOauthUrl = OptionsBackend.get('base_oauth_url');
+        var baseOauthSignUrl = OptionsBackend.get('base_oauth_signing_url');
+        if(baseOauthUrl == 'https://twitter.com/oauth/') {
+          OptionsBackend.setDefault('base_oauth_url');
+        }
+        if(baseOauthSignUrl == 'https://twitter.com/oauth/') {
+          OptionsBackend.setDefault('base_oauth_signing_url');
+        }
+      }
       storageData.save(JSON.stringify(currentVersion));
     }
   } catch(e) {

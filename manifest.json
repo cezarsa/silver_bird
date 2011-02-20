@@ -1,6 +1,6 @@
 {
   "name": "Chromed Bird",
-  "version": "1.9.6.6",
+  "version": "1.9.6.7",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
   "browser_action": {
@@ -24,7 +24,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://twitter.com/oauth/authorize", "https://twitter.com/oauth/authorize"],
+      "matches": ["http://twitter.com/oauth/authorize", "https://twitter.com/oauth/authorize", "http://api.twitter.com/oauth/authorize", "https://api.twitter.com/oauth/authorize"],
       "js": ["lib/3rdparty/jquery.js", "lib/oauth_authorizer.js"]
     },
     {
