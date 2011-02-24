@@ -93,6 +93,7 @@ function TweetManager() {
     _this.currentTimelineId = timeline.timelineId;
     return false;
   }, true);
+  this.previousTimelineId = null;
 
   this.warningsCallback = null;
   this.warningMessage = null;
