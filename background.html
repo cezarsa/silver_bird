@@ -13,6 +13,8 @@
 
 <script type="text/javascript" src="lib/options_backend.js"></script>
 
+<script type="text/javascript" src="lib/stream_listener.js"></script>
+
 <script type="text/javascript" src="lib/timeline_factory.js"></script>
 <script type="text/javascript" src="lib/timeline_template.js"></script>
 
@@ -83,10 +85,7 @@ function TweetManager() {
 
   TimelineTemplate.initTemplates(this);
   TimelineTemplate.eachTimelineTemplate(function(template) {
-    var createdTimelines = template.createTimelines();
-    for(var i in createdTimelines) {
-      _this.timelines[createdTimelines[i].timelineId] = createdTimelines[i];
-    }
+    _this.createTimelineTemplate(template, true);
   });
 
   this.orderedEachTimeline(function(timeline) {
@@ -119,6 +118,7 @@ function TweetManager() {
         timeline.init();
       }, true);
       _this.retrieveFollowingUsers();
+      StreamListener.start(this);
     },
     function(remainingHits, nextHitsReset, hourlyLimit) {
       _this.onHitsUpdated.call(_this, remainingHits, nextHitsReset, hourlyLimit);
@@ -770,6 +770,7 @@ TweetManager.prototype = {
       timeline.killTimeline();
       delete timeline;
     }, true);
+    StreamListener.disconnect();
   },
 
   signout: function() {
