@@ -53,7 +53,7 @@ function TweetManager() {
   this.readTweets = {};
   this.shouldNotReadMap = {};
   this.retweets = {};
-  this.injectTweets = null;
+  this.injectTweets = [];
 
   // Using an object instead of an array to take advantage of hash look-ups
   this.blockedUserIds = {};
@@ -398,7 +398,7 @@ TweetManager.prototype = {
     if(maxTweetsNotifications != -1 && tweetsToNotify.length > maxTweetsNotifications) {
       tweetsToNotify.splice(maxTweetsNotifications, tweetsToNotify.length - maxTweetsNotifications);
     }
-    this.injectTweets = tweetsToNotify;
+    this.injectTweets = this.injectTweets.concat(tweetsToNotify);
 
     var notificationStyle = OptionsBackend.get('tweets_notification_style');
     if(!forceOnPage && notificationStyle == 'desktop') {
@@ -1141,7 +1141,7 @@ function initializeExtension() {
             });
           }
           waitingFirstRequest = true;
-          TweetManager.instance.injectTweets = null;
+          TweetManager.instance.injectTweets = [];
           biggestArea = -1;
         }, 200);
       }
