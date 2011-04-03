@@ -1559,16 +1559,27 @@ function loadTrends() {
 
   tweetManager.retrieveTrendingTopics(function(userData) {
     var actions = [];
-    for(var i = 0, len = userData.trends.length; i < len; ++i) {
-      (function(trendName) {
-        actions.push({
-          name: trendName,
-          action: function(event) {
-            TimelineTab.addNewSearchTab(trendName, event.isAlternateClick);
-          }
-        });
-      })(userData.trends[i].name);
+
+    if(userData) {
+      for(var i = 0, len = userData.trends.length; i < len; ++i) {
+        (function(trendName) {
+          actions.push({
+            name: trendName,
+            action: function(event) {
+              TimelineTab.addNewSearchTab(trendName, event.isAlternateClick);
+            }
+          });
+        })(userData.trends[i].name);
+      }
+    } else {
+      actions.push({
+        name: 'Error, try again.',
+        action: function(event) {
+          loadTrends();
+        }
+      })
     }
+
     $("#trending_topics").actionMenu({
       actions: actions
     });

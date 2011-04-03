@@ -915,10 +915,21 @@ TweetManager.prototype = {
   },
 
   retrieveTrendingTopics: function(callback, woeid) {
+    var _this = this;
+
+    if(this.lastTrendsTime && this.cachedTrendingTopics && (new Date() - this.lastTrendsTime) < 90 * 1000) {
+      setTimeout(function() {
+        callback(_this.cachedTrendingTopics);
+      }, 0);
+      return;
+    }
+    this.lastTrendsTime = new Date();
+
     this.twitterBackend.trendingTopics(function(success, userData) {
       if(success) {
-        callback(userData[0]);
+        _this.cachedTrendingTopics = userData[0];
       }
+      callback(_this.cachedTrendingTopics);
     }, woeid);
   },
 
