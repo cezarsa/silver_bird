@@ -216,10 +216,17 @@ var ThemeManager = {
     if(!ThemeManager.isPopup) {
       return;
     }
+
+    /* HACK: Magic numbers */
+    var hackBordersWidth = 14;
+    var hackTabsAdditionalWidth = 40;
+    var hackHeaderHeight = 75;
+    var hackMinValidHeight = 400;
+
     width = width || 490;
     height = height || 400;
     var minWidth = 450;
-    var maxWidth = 800 - 14;
+    var maxWidth = 800 - hackBordersWidth;
     if(width > maxWidth) {
       width = maxWidth;
     }
@@ -232,7 +239,7 @@ var ThemeManager = {
         $("li.timeline_tab").each(function() {
           tabsBarWidth += $(this).width();
         });
-        tabsBarWidth += 40;
+        tabsBarWidth += hackTabsAdditionalWidth;
         if(tabsBarWidth > width) {
           ThemeManager.setPopupSize(tabsBarWidth, height);
         }
@@ -241,6 +248,14 @@ var ThemeManager = {
 
     $(".timeline").width(width + 'px');
     $(".inner_timeline,.timeline").height(height + 'px');
+
+    setTimeout(function() {
+      if(window.innerHeight < hackMinValidHeight) { return; }
+      if(window.innerHeight < ($(".timeline").height() + hackHeaderHeight)) {
+        var height = window.innerHeight - hackHeaderHeight;
+        ThemeManager.setPopupSize(width, height, autoFitWidth);
+      }
+    }, 100);
   },
 
   popupSizeData: Persistence.popupSize(),
@@ -1577,7 +1592,7 @@ function loadTrends() {
         action: function(event) {
           loadTrends();
         }
-      })
+      });
     }
 
     $("#trending_topics").actionMenu({
