@@ -1,3 +1,16 @@
+1.9.7.0 (2010-04-03)
+
+* Added "Trends" link showing currently trending topics with the ability to
+  change the region on the options page (Thanks Rafael Vargas);
+* Experimental support for Twitter's streaming API. Enable it on the options page
+  for near real time timeline updates;
+* Improved compatibility with proxlet.com (Sending OAuth params on HTTP header);
+* Lots of fixes for desktop notification misbehavior;
+* Returning to previously selected tab after closing a tab;
+* Azerbaijani localization (Thanks Berker Peksag);
+* New url shortener va.mu (Thanks Arthur Furlan) and hurl.im;
+* Improved support to img.ur (Thanks Shelby DeNike)
+
 1.9.6.6 (2010-12-11)
 
 * Fixing bug that caused timelines to stop updating after a timeout.
