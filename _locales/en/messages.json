@@ -682,5 +682,11 @@
 	},
 	"l_user_stream_url": {
 	  "message": "User Stream URL:"
+	},
+	"block_action": {
+	  "message": "Block"
+	},
+	"report_action": {
+	  "message": "Report Spam"
 	}
 }

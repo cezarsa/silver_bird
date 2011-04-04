@@ -898,17 +898,41 @@ TweetManager.prototype = {
     }, username);
   },
 
+  _removeUser: function(userData) {
+    delete this.followingUsersMap[userData.screen_name];
+    var position = $.inArray(userData.screen_name);
+    if(position > -1) {
+      this.followingUsersNames.splice(position, 1);
+    }
+    this.resetTimeline(TimelineTemplate.HOME);
+    this.resetTimeline(TimelineTemplate.UNIFIED);
+  },
+
   unfollowUser: function(callback, username) {
     var _this = this;
     this.twitterBackend.unfollow(function(success, userData) {
       if(success) {
-        delete _this.followingUsersMap[userData.screen_name];
-        var position = $.inArray(userData.screen_name);
-        if(position > -1) {
-          _this.followingUsersNames.splice(position, 1);
-        }
-        _this.resetTimeline(TimelineTemplate.HOME);
-        _this.resetTimeline(TimelineTemplate.UNIFIED);
+        _this._removeUser(userData);
+      }
+      callback(success, userData);
+    }, username);
+  },
+
+  blockUser: function(callback, username) {
+    var _this = this;
+    this.twitterBackend.block(function(success, userData) {
+      if(success) {
+        _this._removeUser(userData);
+      }
+      callback(success, userData);
+    }, username);
+  },
+
+  reportUser: function(callback, username) {
+    var _this = this;
+    this.twitterBackend.report(function(success, userData) {
+      if(success) {
+        _this._removeUser(userData);
       }
       callback(success, userData);
     }, username);
