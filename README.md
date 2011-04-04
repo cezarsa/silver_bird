@@ -6,11 +6,11 @@
 
 2. Installing
 
-    Check the [download page](http://cezarsa.github.com/chromed_bird/)
+    Check the [download page](https://chrome.google.com/webstore/detail/encaiiljifbdbjlphpgpiimidegddhic)
 
 3. Compatibility
 
-    Currently only Dev channel releases of Google Chrome support extensions. Check [http://dev.chromium.org/getting-involved/dev-channel](http://dev.chromium.org/getting-involved/dev-channel).
+    It works on all Chrome distribution channels: Stable, Beta and Dev.
 
 4. Features
 
