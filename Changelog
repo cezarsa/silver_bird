@@ -7,7 +7,7 @@
 * Improved compatibility with proxlet.com (Sending OAuth params on HTTP header);
 * Lots of fixes for desktop notification misbehavior;
 * Returning to previously selected tab after closing a tab;
-* Azerbaijani localization (Thanks Berker Peksag);
+* Azerbaijani localization (Thanks Tural Əlisoy);
 * New url shortener va.mu (Thanks Arthur Furlan) and hurl.im;
 * Improved support to img.ur (Thanks Shelby DeNike)
 
