@@ -216,10 +216,17 @@ var ThemeManager = {
     if(!ThemeManager.isPopup) {
       return;
     }
+
+    /* HACK: Magic numbers */
+    var hackBordersWidth = 14;
+    var hackTabsAdditionalWidth = 40;
+    var hackHeaderHeight = 75;
+    var hackMinValidHeight = 400;
+
     width = width || 490;
     height = height || 400;
     var minWidth = 450;
-    var maxWidth = 800 - 14;
+    var maxWidth = 800 - hackBordersWidth;
     if(width > maxWidth) {
       width = maxWidth;
     }
@@ -232,7 +239,7 @@ var ThemeManager = {
         $("li.timeline_tab").each(function() {
           tabsBarWidth += $(this).width();
         });
-        tabsBarWidth += 40;
+        tabsBarWidth += hackTabsAdditionalWidth;
         if(tabsBarWidth > width) {
           ThemeManager.setPopupSize(tabsBarWidth, height);
         }
@@ -241,6 +248,14 @@ var ThemeManager = {
 
     $(".timeline").width(width + 'px');
     $(".inner_timeline,.timeline").height(height + 'px');
+
+    setTimeout(function() {
+      if(window.innerHeight < hackMinValidHeight) { return; }
+      if(window.innerHeight < ($(".timeline").height() + hackHeaderHeight)) {
+        var height = window.innerHeight - hackHeaderHeight;
+        ThemeManager.setPopupSize(width, height, autoFitWidth);
+      }
+    }, 100);
   },
 
   popupSizeData: Persistence.popupSize(),
@@ -1183,6 +1198,7 @@ var TimelineTab = {
       tabTemplate: '<li id="tab_#{href}" class="timeline_tab"><a href="#{href}"><span>#{label}</span></a></li>',
       selected: 0,
       select: function(event, ui) {
+        tweetManager.previousTimelineId = tweetManager.currentTimelineId;
         tweetManager.currentTimelineId = ui.panel.id.split('-')[1];
         prepareAndLoadTimeline();
       },
@@ -1252,6 +1268,9 @@ var TimelineTab = {
   },
 
   removeTab: function(timelineId) {
+    if(timelineId == tweetManager.currentTimelineId && tweetManager.previousTimelineId) {
+      this.select(tweetManager.previousTimelineId);
+    }
     $("#tabs > ul li:has(a[href])").each(function(index, el) {
       if($(el).attr('id') == 'tab_#timeline-' + timelineId) {
         $("#tabs").tabs('remove', index);
@@ -1555,16 +1574,27 @@ function loadTrends() {
 
   tweetManager.retrieveTrendingTopics(function(userData) {
     var actions = [];
-    for(var i = 0, len = userData.trends.length; i < len; ++i) {
-      (function(trendName) {
-        actions.push({
-          name: trendName,
-          action: function(event) {
-            TimelineTab.addNewSearchTab(trendName, event.isAlternateClick);
-          }
-        });
-      })(userData.trends[i].name);
+
+    if(userData) {
+      for(var i = 0, len = userData.trends.length; i < len; ++i) {
+        (function(trendName) {
+          actions.push({
+            name: trendName,
+            action: function(event) {
+              TimelineTab.addNewSearchTab(trendName, event.isAlternateClick);
+            }
+          });
+        })(userData.trends[i].name);
+      }
+    } else {
+      actions.push({
+        name: 'Error, try again.',
+        action: function(event) {
+          loadTrends();
+        }
+      });
     }
+
     $("#trending_topics").actionMenu({
       actions: actions
     });

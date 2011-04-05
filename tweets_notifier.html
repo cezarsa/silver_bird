@@ -26,9 +26,9 @@
   $(function() {
     var fadeTimeout = OptionsBackend.get('notification_fade_timeout');
 
-    var tweet = tweetManager.injectTweets.shift();
-    Renderer.setContext('desktop');
     try {
+      var tweet = tweetManager.injectTweets.shift();
+      Renderer.setContext('desktop');
       $(document.body).prepend(Renderer.renderTweet(tweet, false, OptionsBackend.get('name_attribute')));
     } catch(e) {
       console.log(e);

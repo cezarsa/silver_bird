@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 
 <html>
 
@@ -187,48 +186,17 @@ $(function() {
   });
   options.load();
 
-  var currentTTLocale = OptionsBackend.get('trending_topics_woeid');
-  var worldWideWoeid = {
-    woeid: 1,
-    name: 'Worldwide'
-  };
   var createTTSelect = function(ttLocales) {
     $("select[name='trending_topics_woeid']").empty();
     $.each(ttLocales, function(i, locale){
       $("select[name='trending_topics_woeid']").append($("<option>").attr('value', locale.woeid).text(locale.name));
     });
-    $("select[name='trending_topics_woeid']").val(currentTTLocale);
+    $("select[name='trending_topics_woeid']").val(OptionsBackend.get('trending_topics_woeid'));
   };
-  if(tweetManager.ttLocales == null) {
-    tweetManager.ttLocales = [worldWideWoeid];
-    twitterBackend.trendingTopics(function(success, userData) {
-      if(!success)
-        return;
-      function nameSort(a, b) {
-        if(a.name < b.name) return -1;
-        if(a.name > b.name) return 1;
-        return 0;
-      };
-
-      var woeids = [];
-      $.each(userData, function(i, loc) {
-        var myName = "";
-        if(loc.placeType.name == "Country") {
-          myName = loc.name;
-        } else if(loc.placeType.name == "Town") {
-          myName = loc.country + ' - ' + loc.name;
-        } else {
-          return;
-        }
-        woeids.push({woeid: loc.woeid, name: myName});
-      });
-      woeids.sort(nameSort);
-      woeids.unshift(worldWideWoeid);
-      tweetManager.ttLocales = woeids;
-      createTTSelect(tweetManager.ttLocales);
-    }, 'available');
-  }
-  createTTSelect(tweetManager.ttLocales);
+  var woeids = tweetManager.retrieveTrendingRegions(function(woeids) {
+    createTTSelect(woeids);
+  });
+  createTTSelect(woeids);
 
   updatePredictedHitsCount();
   $('table.timelines input, table.timelines select').
@@ -525,7 +493,7 @@ function updatePredictedHitsCount() {
       <span style="color: red;">Remember</span> that if you're using multiple Twitter clients you'll need to keep your API hits even lower.
     </p>
     <p class="hits_notice">
-      <span class="i18n" id="l_hits_notice">API hits per hour: </span><span id="predicted_hits_count"></span> / <span class="__hourly_limit">
+      <span class="i18n" id="l_hits_notice">API hits per hour: </span><span id="predicted_hits_count"></span> / <span class="__hourly_limit"></span>
     </p>
     <table class="timelines">
       <tr>
@@ -613,6 +581,7 @@ function updatePredictedHitsCount() {
 
   <fieldset>
     <legend class="i18n" id="g_advanced">Advanced</legend>
+
     <label for="request_timeout" class="i18n" id="l_request_timeout">Request Timeout (ms):</label>
     <input type="text" name="request_timeout" validator="required,number,positive" must_restart><br>
     <label for="base_url" class="i18n" id="l_base_url">Twitter's API URL:</label>
@@ -630,6 +599,12 @@ function updatePredictedHitsCount() {
 
     <label for="base_search_url" class="i18n" id="l_base_search_url">Search API URL:</label>
     <input type="text" name="base_search_url" style="width: 300px;" validator="required,url" must_restart><br>
+
+    <label for="use_streaming_api" class="i18n" id="l_use_streaming_api">Use streaming API:</label>
+    <input type="checkbox" name="use_streaming_api"><br>
+
+    <label for="user_stream_url" class="i18n" id="l_user_stream_url">User Stream URL:</label>
+    <input type="text" name="user_stream_url" style="width: 300px;" validator="required,url" must_restart><br>
   </fieldset>
 
   <br>

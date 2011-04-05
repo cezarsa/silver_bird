@@ -13,6 +13,8 @@
 
 <script type="text/javascript" src="lib/options_backend.js"></script>
 
+<script type="text/javascript" src="lib/stream_listener.js"></script>
+
 <script type="text/javascript" src="lib/timeline_factory.js"></script>
 <script type="text/javascript" src="lib/timeline_template.js"></script>
 
@@ -51,7 +53,7 @@ function TweetManager() {
   this.readTweets = {};
   this.shouldNotReadMap = {};
   this.retweets = {};
-  this.injectTweets = null;
+  this.injectTweets = [];
 
   // Using an object instead of an array to take advantage of hash look-ups
   this.blockedUserIds = {};
@@ -83,16 +85,14 @@ function TweetManager() {
 
   TimelineTemplate.initTemplates(this);
   TimelineTemplate.eachTimelineTemplate(function(template) {
-    var createdTimelines = template.createTimelines();
-    for(var i in createdTimelines) {
-      _this.timelines[createdTimelines[i].timelineId] = createdTimelines[i];
-    }
+    _this.createTimelineTemplate(template, true);
   });
 
   this.orderedEachTimeline(function(timeline) {
     _this.currentTimelineId = timeline.timelineId;
     return false;
   }, true);
+  this.previousTimelineId = null;
 
   this.warningsCallback = null;
   this.warningMessage = null;
@@ -118,6 +118,7 @@ function TweetManager() {
         timeline.init();
       }, true);
       _this.retrieveFollowingUsers();
+      StreamListener.start(this);
     },
     function(remainingHits, nextHitsReset, hourlyLimit) {
       _this.onHitsUpdated.call(_this, remainingHits, nextHitsReset, hourlyLimit);
@@ -397,7 +398,7 @@ TweetManager.prototype = {
     if(maxTweetsNotifications != -1 && tweetsToNotify.length > maxTweetsNotifications) {
       tweetsToNotify.splice(maxTweetsNotifications, tweetsToNotify.length - maxTweetsNotifications);
     }
-    this.injectTweets = tweetsToNotify;
+    this.injectTweets = this.injectTweets.concat(tweetsToNotify);
 
     var notificationStyle = OptionsBackend.get('tweets_notification_style');
     if(!forceOnPage && notificationStyle == 'desktop') {
@@ -411,22 +412,7 @@ TweetManager.prototype = {
           throw 'Desktop notifications not allowed';
         }
 
-        // FIXME: This check is here because stable channel releases
-        // currently silently fail in showing html notifications
-        var notificationDisplayed = false;
-        var onDisplayFunc = function() {
-          notificationDisplayed = true;
-        };
         var _this = this;
-        setTimeout(function() {
-          if(!notificationDisplayed) {
-            for(var i = 0; i < tweetsToNotify.length; ++i) {
-              _this.shouldNotReadMap[tweetsToNotify[i].id] = true;
-            }
-            _this.safeTweetsNotifications(tweetsToNotify, false);
-          }
-        }, 1000);
-
         for(var i = 0; i < tweetsToNotify.length; ++i) {
           var notification = notificationCenter.createHTMLNotification(
             chrome.extension.getURL('tweets_notifier.html'));
@@ -437,7 +423,6 @@ TweetManager.prototype = {
               }, 200);
             };
           })(tweetsToNotify[i]);
-          notification.ondisplay = onDisplayFunc;
           notification.show();
         }
       } catch(e) {
@@ -769,6 +754,7 @@ TweetManager.prototype = {
       timeline.killTimeline();
       delete timeline;
     }, true);
+    StreamListener.disconnect();
   },
 
   signout: function() {
@@ -912,28 +898,104 @@ TweetManager.prototype = {
     }, username);
   },
 
+  _removeUser: function(userData) {
+    delete this.followingUsersMap[userData.screen_name];
+    var position = $.inArray(userData.screen_name);
+    if(position > -1) {
+      this.followingUsersNames.splice(position, 1);
+    }
+    this.resetTimeline(TimelineTemplate.HOME);
+    this.resetTimeline(TimelineTemplate.UNIFIED);
+  },
+
   unfollowUser: function(callback, username) {
     var _this = this;
     this.twitterBackend.unfollow(function(success, userData) {
       if(success) {
-        delete _this.followingUsersMap[userData.screen_name];
-        var position = $.inArray(userData.screen_name);
-        if(position > -1) {
-          _this.followingUsersNames.splice(position, 1);
-        }
-        _this.resetTimeline(TimelineTemplate.HOME);
-        _this.resetTimeline(TimelineTemplate.UNIFIED);
+        _this._removeUser(userData);
+      }
+      callback(success, userData);
+    }, username);
+  },
+
+  blockUser: function(callback, username) {
+    var _this = this;
+    this.twitterBackend.block(function(success, userData) {
+      if(success) {
+        _this._removeUser(userData);
+      }
+      callback(success, userData);
+    }, username);
+  },
+
+  reportUser: function(callback, username) {
+    var _this = this;
+    this.twitterBackend.report(function(success, userData) {
+      if(success) {
+        _this._removeUser(userData);
       }
       callback(success, userData);
     }, username);
   },
 
   retrieveTrendingTopics: function(callback, woeid) {
+    var _this = this;
+
+    if(this.lastTrendsTime && this.cachedTrendingTopics && (new Date() - this.lastTrendsTime) < 90 * 1000) {
+      setTimeout(function() {
+        callback(_this.cachedTrendingTopics);
+      }, 0);
+      return;
+    }
+    this.lastTrendsTime = new Date();
+
     this.twitterBackend.trendingTopics(function(success, userData) {
       if(success) {
-        callback(userData[0]);
+        _this.cachedTrendingTopics = userData[0];
       }
+      callback(_this.cachedTrendingTopics);
     }, woeid);
+  },
+
+  worldWideWoeid: {
+    woeid: 1,
+    name: 'Worldwide'
+  },
+
+  retrieveTrendingRegions: function(callback) {
+    if(this.ttLocales === null) {
+      var _this = this;
+      this.twitterBackend.trendingTopics(function(success, userData) {
+        if(!success) {
+          return;
+        }
+
+        var woeids = [];
+        $.each(userData, function(i, loc) {
+          var myName = "";
+          if(loc.placeType.name == "Country") {
+            myName = loc.name;
+          } else if(loc.placeType.name == "Town") {
+            myName = loc.country + ' - ' + loc.name;
+          } else {
+            return;
+          }
+          woeids.push({woeid: loc.woeid, name: myName});
+        });
+
+        woeids.sort(function(a, b) {
+          if(a.name < b.name) return -1;
+          if(a.name > b.name) return 1;
+          return 0;
+        });
+
+        woeids.unshift(_this.worldWideWoeid);
+        _this.ttLocales = woeids;
+        callback(woeids);
+      }, 'available');
+    }
+
+    return this.ttLocales || [this.worldWideWoeid];
   }
 };
 
@@ -1057,6 +1119,16 @@ function checkVersionChanges(manifest) {
           OptionsBackend.saveOption('notification_max_popups', OptionsBackend.defaultOptions['notification_max_popups']);
         }
       }
+      if(compareVersions(storageVersion, [1, 9, 6, 6]) <= 0) {
+        var baseOauthUrl = OptionsBackend.get('base_oauth_url');
+        var baseOauthSignUrl = OptionsBackend.get('base_oauth_signing_url');
+        if(baseOauthUrl == 'https://twitter.com/oauth/') {
+          OptionsBackend.setDefault('base_oauth_url');
+        }
+        if(baseOauthSignUrl == 'https://twitter.com/oauth/') {
+          OptionsBackend.setDefault('base_oauth_signing_url');
+        }
+      }
       storageData.save(JSON.stringify(currentVersion));
     }
   } catch(e) {
@@ -1104,7 +1176,7 @@ function initializeExtension() {
             });
           }
           waitingFirstRequest = true;
-          TweetManager.instance.injectTweets = null;
+          TweetManager.instance.injectTweets = [];
           biggestArea = -1;
         }, 200);
       }

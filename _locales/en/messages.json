@@ -671,10 +671,22 @@
 	"trending_topics": {
 	  "message": "Trends"
 	},
-	"g_trending_topics":{
+	"g_trending_topics": {
 	  "message": "Trending Topics" 
 	},
-	"l_trending_topics_woeid":{
+	"l_trending_topics_woeid": {
 	  "message": "Trending Topics Locale:" 
+	},
+	"l_use_streaming_api": {
+	  "message": "Use streaming API (experimental!):"
+	},
+	"l_user_stream_url": {
+	  "message": "User Stream URL:"
+	},
+	"block_action": {
+	  "message": "Block"
+	},
+	"report_action": {
+	  "message": "Report Spam"
 	}
 }
