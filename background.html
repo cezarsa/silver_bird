@@ -247,7 +247,8 @@ TweetManager.prototype = {
   },
 
   /**
-  * Update this.blockedUserIds and schedule another update after
+  * Update this.blockedUserIds and this.blockedUserNames,
+  * and schedule another update after
   * "blockedusers_refresh_interval" time has elapsed.
   */
   retrieveBlockedUserIds: function() {
