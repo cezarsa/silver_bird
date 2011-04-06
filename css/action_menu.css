@@ -1,0 +1,79 @@
+div.action_menu {
+  position: absolute;
+  z-index: 999999;
+  opacity: 0.9;
+}
+
+div.action_menu .action_area {
+  display: -webkit-box;
+  background-color: rgb(0, 153, 219);
+  -webkit-border-radius: 5px;
+}
+
+div.action_menu.horizontal div.balloon {
+  height: 9px;
+  width: 12px;
+  margin-top: 6px;
+  float: left; /* will be overriden later, just to ensure we proper calculate the size of the ballon */
+}
+
+div.action_menu.vertical div.balloon {
+  height: 12px;
+  width: 9px;
+  margin-left: 6px;
+}
+
+div.action_menu.horizontal.right div.balloon {
+  background-image: url('../img/balloon_right.png');
+  float: left;
+}
+
+div.action_menu.horizontal.left div.balloon {
+  background-image: url('../img/balloon_left.png');
+  float: right;
+}
+
+div.action_menu.vertical.up div.balloon {
+  background-image: url('../img/balloon_up.png');
+}
+
+div.action_menu.vertical.down div.balloon {
+  background-image: url('../img/balloon_down.png');
+}
+
+div.action_menu.up {
+  margin-top: -3px;
+}
+
+div.action_menu.down {
+  margin-top: 3px;
+}
+
+div.action_menu.right {
+  margin-left: 3px;
+}
+
+div.action_menu.left {
+  margin-left: -3px;
+}
+
+div.action_menu.horizontal .action_area {
+  -webkit-box-orient: horizontal;
+}
+
+div.action_menu.vertical .action_area {
+  -webkit-box-orient: vertical;
+}
+
+div.action_menu .action {
+  -webkit-box-flex: 1;
+  margin: 3px;
+}
+
+div.action_menu .action a {
+  color: white;
+}
+
+div.action_menu .action_area img.action_loading {
+  margin: 5px 3px 3px 3px;
+}

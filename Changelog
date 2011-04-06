@@ -1,3 +1,96 @@
+1.9.7.0 (2010-04-03)
+
+* Added "Trends" link showing currently trending topics with the ability to
+  change the region on the options page (Thanks Rafael Vargas);
+* Experimental support for Twitter's streaming API. Enable it on the options page
+  for near real time timeline updates;
+* Improved compatibility with proxlet.com (Sending OAuth params on HTTP header);
+* Lots of fixes for desktop notification misbehavior;
+* Returning to previously selected tab after closing a tab;
+* Azerbaijani localization (Thanks Tural Əlisoy);
+* New url shortener va.mu (Thanks Arthur Furlan) and hurl.im;
+* Improved support to img.ur (Thanks Shelby DeNike)
+
+1.9.6.6 (2010-12-11)
+
+* Fixing bug that caused timelines to stop updating after a timeout.
+
+1.9.6.5 (2010-12-06)
+
+* Fixing mobile notifications being always enabled when following a user;
+* Fixing snowflake caused id truncation when showing "in reply to" tweets;
+* Fixing OAuth errors due to incorrect timestamps by adjusting the local
+  clock based on server's timestamp.
+
+1.9.6.4 (2010-11-23)
+
+* Stupid bug preventing updates now fixed.
+
+1.9.6.3 (2010-11-23)
+
+* Lots of fixes related to the way we update timelines;
+* Improved Turkish translation. (Thanks Berker)
+
+1.9.6.2 (2010-11-19)
+
+* Reverting the way we get new tweets to the way it was before 1.9.6
+  Many people reported problems with Chromed Bird not updating correctly
+  so I'm reverting this changes until I'm able to investigate this
+  further.
+
+1.9.6.1 (2010-11-16)
+
+* Avoiding annoying notifications for messages sent by the current user.
+
+1.9.6 (2010-11-15)
+
+* Integration with image upload services! (Sorry, only for Chrome 8+ and not yet on OS X)
+* Allowing users to change the default locale in the options page;
+* Making sure we always fetch all new tweets, even if there's a huge amount of them;
+* Showing sent DMs along with received ones in the DMs tab;
+* Correctly handling credentials to bit.ly pro accounts;
+* Fixed the way we show links to lists;
+* Fixed ordering in autocomplete;
+* Fixed opening the tabs context menu with Ctrl-click;
+* Added pict.mobi image preview;
+* Fixed migre.me shortener not working.
+
+1.9.5.1 (2010-10-26)
+
+* New Ukrainian translation (Thanks usercard!);
+* Improved Turkish translation (Thanks Onur Baykaş!);
+* Fixed some resizing bugs that caused the layout to go insane;
+* Changed the behavior of middle clicks in users to just open their profile
+  (Left clicks or right clicks still open the action menu.);
+* Fixed a memory leak caused by adding listeners to the same event multiple times;
+* Getting ready to Snowflake (Twitter's new id generator) by using _str ids.
+
+1.9.5 (2010-10-21)
+
+* Showing a inline menu with different actions after clicking user's names or avatars
+  This will allow you to follow/unfollow users, create a new search tab with messages from
+  this user or open the user's profile page (previous default behavior).
+* Expanding original messages for replies (when clicking the 'in reply to' link). (Thanks Yuki!);
+* Optimized autocompletion (Thanks again Yuki);
+* Opening hashtags inside Chromed Bird itself as a new search tab;
+* Allowing users to detach the popup windows (still needs some improvement);
+* Introduced a report showing the state of each one of the existing translations (bottom of the options page);
+* Fixed the behavior of middle-click and ctrl-click in links, correctly leaving the popup still opened.
+* Added mcaf.ee, rod.gs and minify shorteners;
+* Cleaning and fixing up the code after running it through JavasScript Lint.
+
+1.9.2 (2010-10-08)
+
+* Arghh, invalid locale name (de_DE) was still causing installation errors.
+
+1.9.1 (2010-10-07)
+
+* Updated translations (Thanks to Antonio Perez, Onur Baykaş, Vladimir Yakovlev and Dima Mikhailov);
+* Better status updates error handling;
+* Fixing middle-click behavior for recent Chrome versions;
+* Fixing encoding for German translation (Failing installation);
+* Fixing small bug in url expanding.
+
 1.9.0 (2010-09-28)
 
 It's awesome to have such a big list of contributors. Thanks a lot guys!!!

@@ -62,6 +62,12 @@
 	"w_DM": {
 		"message": "DMs"
 	},
+	"w_SentDM": {
+		"message": "Sent DMs"
+	},
+	"w_ReceivedDM": {
+	  "message": "Received DMs"
+	},
 	"w_Favorites": {
 		"message": "Favorites"
 	},
@@ -76,6 +82,9 @@
 	},
 	"inReply": {
 		"message": "in reply to"
+	},
+	"sentTo": {
+		"message": "sent to"
 	},
 	"retweetedBy": {
 		"message": "retweeted by"
@@ -494,7 +503,7 @@
 	"l_change_icon": {
 		"message": "Change Icon"
 	},
-	"l_icon_color": {
+	"l_icon_color_column": {
 		"message": "Icon Color"
 	},
 	"notif_home": {
@@ -625,5 +634,59 @@
 	},
 	"shorten_current": {
 		"message": "Share current page"
+	},
+	"tweet_send_error": {
+		"message": "An error occurred while trying to send your tweet. Maybe Twitter is acting weird? You can try it again but please double check your account to prevent duplicated messages."
+	},
+	"detach_window": {
+	  "message": "Detach Window"
+	},
+	"follow_action": {
+	  "message": "Follow"
+	},
+	"unfollow_action": {
+	  "message": "Unfollow"
+	},
+	"tweets_action": {
+	  "message": "Tweets"
+	},
+	"profile_action": {
+	  "message": "Profile"
+	},
+	"add_mention_action": {
+	  "message": "Mention"
+	},
+	"g_image_service": {
+	  "message": "Image Service"
+	},
+	"l_image_up_service": {
+	  "message": "Image Upload Service:"
+	},
+	"l_default_locale": {
+	  "message": "Default Locale:"
+	},
+	"automatic": {
+	  "message": "Same as browser"
+	},
+	"trending_topics": {
+	  "message": "Trends"
+	},
+	"g_trending_topics": {
+	  "message": "Trending Topics" 
+	},
+	"l_trending_topics_woeid": {
+	  "message": "Trending Topics Locale:" 
+	},
+	"l_use_streaming_api": {
+	  "message": "Use streaming API (experimental!):"
+	},
+	"l_user_stream_url": {
+	  "message": "User Stream URL:"
+	},
+	"block_action": {
+	  "message": "Block"
+	},
+	"report_action": {
+	  "message": "Report Spam"
 	}
 }

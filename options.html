@@ -14,8 +14,13 @@
 <title>Chromed Bird Options</title>
 
 <script type="text/javascript">
+var LocaleTable = chrome.extension.getBackgroundPage().LocaleTable;
+var ImageService = chrome.extension.getBackgroundPage().ImageService;
 var IconCreator = chrome.extension.getBackgroundPage().IconCreator;
 var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
+
+chrome.i18n.getMessage = chrome.extension.getBackgroundPage().chrome.i18n.getMessage;
+
 var twitterBackend = tweetManager.twitterBackend;
 var options = new Options();
 var imgEl = null;
@@ -49,22 +54,34 @@ $(function() {
     var hitsInfo = twitterBackend.remainingHitsInfo();
     $(".twitter_hits_left").text(hitsInfo[0]);
 
-    resetDateObj.setTime(parseInt(hitsInfo[1]) * 1000);
+    resetDateObj.setTime(parseInt(hitsInfo[1], 10) * 1000);
     $(".twitter_hits_reset").text(resetDateObj.toLocaleDateString() + " " + resetDateObj.toLocaleTimeString());
 
     if(hitsInfo[2]) {
-      hourlyLimit = parseInt(hitsInfo[2]);
+      hourlyLimit = parseInt(hitsInfo[2], 10);
     }
   }
   $(".__hourly_limit").text(hourlyLimit);
+
+  $("select[name='default_locale']").append($("<option>").attr('value', 'auto').text(chrome.i18n.getMessage('automatic')));
+  for(var localeCode in LocaleTable.instance.locales) {
+    $("select[name='default_locale']").append($("<option>").attr('value', localeCode).text(localeCode));
+  }
 
   for(var key in SHORTENERS_BACKEND) {
     var desc = SHORTENERS_BACKEND[key].desc;
     $("select[name='url_shortener']").append($("<option>").attr('value', key).text(desc));
   }
 
+  for(var i = 0, len = ImageService.services.length; i < len; ++i) {
+    var service = ImageService.services[i];
+    if(service.hasUpload()) {
+      $("select[name='image_upload_service']").append($("<option>").attr('value', service.domain).text(service.domain));
+    }
+  }
+
   var onShortenerChange = function() {
-    var shortenerSelect = $("select[name='url_shortener']")[0]
+    var shortenerSelect = $("select[name='url_shortener']")[0];
     if(shortenerSelect.value == 'bitly' || shortenerSelect.value == 'jmp' || shortenerSelect.value == 'karmacracy') {
       $("#shortener_opts").show();
       $("#yourls_opts").hide();
@@ -131,16 +148,16 @@ $(function() {
     onSigningUrlCheck();
   });
   options.onsaveChangedOption(function(optionName, oldValue, newValue) {
-    var idx;
+    var idx, templateId;
     if((idx = optionName.indexOf('_visible')) != -1) {
-      var templateId = optionName.substring(0, idx);
+      templateId = optionName.substring(0, idx);
       if(newValue) {
         tweetManager.showTimelineTemplate(templateId, true);
       } else {
         tweetManager.hideTimelineTemplate(templateId);
       }
     } else if((idx = optionName.indexOf('_include_unified')) != -1) {
-      var templateId = optionName.substring(0, idx);
+      templateId = optionName.substring(0, idx);
       tweetManager.toggleUnified(templateId, newValue);
     }
   });
@@ -155,7 +172,7 @@ $(function() {
         if(authStatus == 1 || authStatus == 2) { // Not allowed or Denied
           notificationCenter.requestPermission(function() {
             var authStatus = notificationCenter.checkPermission();
-            if(authStatus != 0) { // Permission denied
+            if(authStatus !== 0) { // Permission denied
               $("#noti_on_page").click();
               options.save();
             }
@@ -169,12 +186,24 @@ $(function() {
   });
   options.load();
 
+  var createTTSelect = function(ttLocales) {
+    $("select[name='trending_topics_woeid']").empty();
+    $.each(ttLocales, function(i, locale){
+      $("select[name='trending_topics_woeid']").append($("<option>").attr('value', locale.woeid).text(locale.name));
+    });
+    $("select[name='trending_topics_woeid']").val(OptionsBackend.get('trending_topics_woeid'));
+  };
+  var woeids = tweetManager.retrieveTrendingRegions(function(woeids) {
+    createTTSelect(woeids);
+  });
+  createTTSelect(woeids);
+
   updatePredictedHitsCount();
-  $('table.timelines input, table.timelines select')
-    .keyup(updatePredictedHitsCount)
-    .blur(updatePredictedHitsCount)
-    .click(updatePredictedHitsCount)
-    .change(updatePredictedHitsCount);
+  $('table.timelines input, table.timelines select').
+    keyup(updatePredictedHitsCount).
+    blur(updatePredictedHitsCount).
+    click(updatePredictedHitsCount).
+    change(updatePredictedHitsCount);
 
   $("input[name='microblogging_service'],label[for='service_twitter'],label[for='service_identica']").mousedown(function(e) {
     var el = $(e.target);
@@ -239,7 +268,7 @@ function updatePredictedHitsCount() {
     }
 
     var inputRefreshEl = $('input[name="' +  template.id + '_refresh_interval"]');
-    var intVal = parseInt(inputRefreshEl.val());
+    var intVal = parseInt(inputRefreshEl.val(), 10);
     var timelineHits = (60 * 60) / intVal;
     var timelineCount = 1;
     var userData = template.getUserData();
@@ -247,9 +276,10 @@ function updatePredictedHitsCount() {
       timelineCount = userData.length;
     }
     totalHits += timelineHits * timelineCount;
+    return true;
   });
-  totalHits += (60 * 60) / parseInt($('input[name="blockedusers_refresh_interval"]').val());
-  totalHits = parseInt(totalHits);
+  totalHits += (60 * 60) / parseInt($('input[name="blockedusers_refresh_interval"]').val(), 10);
+  totalHits = parseInt(totalHits, 10);
   $('#predicted_hits_count').text(totalHits);
   if(totalHits >= hourlyLimit) {
     $('#predicted_hits_count').css('backgroundColor', 'red');
@@ -313,6 +343,8 @@ function updatePredictedHitsCount() {
       <option value="1.2em" id="o_large" class="i18n">Large</option>
       <option value="1.4em" id="o_extra_large" class="i18n">Extra Large</option>
     </select><br>
+    <label for="default_locale" class="i18n" id="l_default_locale">Default Locale:</label>
+    <select name="default_locale"></select><br>
     <label for="font_family" id="l_font_family" class="i18n">Font Family:</label>
     <input type="text" style="width: 20em"; name="font_family" validator="required"><br>
     <label for="hover_timeout" class="i18n" id="l_hover_timeout">Hover to read time (ms):</label>
@@ -378,7 +410,7 @@ function updatePredictedHitsCount() {
         <th></th>
         <th class="i18n" id="l_tweet_notificacion">Tweet Notification</th>
         <th class="i18n" id="l_change_icon">Change Icon</th>
-        <th class="i18n" id="l_icon_color">Icon Color</th>
+        <th class="i18n" id="l_icon_color_column">Icon Color</th>
       <tr>
         <td class="label i18n" id="notif_home">Home:</td>
         <td><input type="checkbox" name="home_on_page"></td>
@@ -443,13 +475,25 @@ function updatePredictedHitsCount() {
   </fieldset>
 
   <fieldset>
+    <legend class="i18n" id="g_image_service">Image Service</legend>
+    <label for="url_shortener" class="i18n" id="l_image_up_service">Image Upload Service:</label>
+    <select name="image_upload_service"></select>
+  </fieldset>
+
+  <fieldset>
+    <legend class="i18n" id="g_trending_topics">Trending Topics</legend>
+    <label for="trending_topics_woeid" class="i18n" id="l_trending_topics_woeid">Trending Topics Locale:</label>
+    <select name="trending_topics_woeid"></select>
+  </fieldset>
+
+  <fieldset>
     <legend class="i18n" id="g_timelines">Timelines</legend>
     <p class="notice i18n" style="text-align: center; color: black;" id="notice_api_hits">
       You should keep API hits <span style="color: red;">below <span class="__hourly_limit"></span></span>! Otherwise Chromed Bird will stop working properly and timelines won't update anymore.<br>
       <span style="color: red;">Remember</span> that if you're using multiple Twitter clients you'll need to keep your API hits even lower.
     </p>
     <p class="hits_notice">
-      <span class="i18n" id="l_hits_notice">API hits per hour: </span><span id="predicted_hits_count"></span> / <span class="__hourly_limit">
+      <span class="i18n" id="l_hits_notice">API hits per hour: </span><span id="predicted_hits_count"></span> / <span class="__hourly_limit"></span>
     </p>
     <table class="timelines">
       <tr>
@@ -537,6 +581,7 @@ function updatePredictedHitsCount() {
 
   <fieldset>
     <legend class="i18n" id="g_advanced">Advanced</legend>
+
     <label for="request_timeout" class="i18n" id="l_request_timeout">Request Timeout (ms):</label>
     <input type="text" name="request_timeout" validator="required,number,positive" must_restart><br>
     <label for="base_url" class="i18n" id="l_base_url">Twitter's API URL:</label>
@@ -554,6 +599,12 @@ function updatePredictedHitsCount() {
 
     <label for="base_search_url" class="i18n" id="l_base_search_url">Search API URL:</label>
     <input type="text" name="base_search_url" style="width: 300px;" validator="required,url" must_restart><br>
+
+    <label for="use_streaming_api" class="i18n" id="l_use_streaming_api">Use streaming API:</label>
+    <input type="checkbox" name="use_streaming_api"><br>
+
+    <label for="user_stream_url" class="i18n" id="l_user_stream_url">User Stream URL:</label>
+    <input type="text" name="user_stream_url" style="width: 300px;" validator="required,url" must_restart><br>
   </fieldset>
 
   <br>
@@ -564,5 +615,6 @@ function updatePredictedHitsCount() {
   </div>
 </div>
 
+<a class="locales_report" href="locales.html">Locales Report</a>
 </body>
 </html>

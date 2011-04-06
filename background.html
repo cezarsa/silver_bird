@@ -13,18 +13,23 @@
 
 <script type="text/javascript" src="lib/options_backend.js"></script>
 
+<script type="text/javascript" src="lib/stream_listener.js"></script>
+
 <script type="text/javascript" src="lib/timeline_factory.js"></script>
 <script type="text/javascript" src="lib/timeline_template.js"></script>
 
 <script type="text/javascript" src="lib/timelines/timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/favorites_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/unified_timeline.js"></script>
+<script type="text/javascript" src="lib/timelines/unified_dms_timeline.js"></script>
 
 <script type="text/javascript" src="lib/timelines/multiple_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/lists_timeline.js"></script>
 <script type="text/javascript" src="lib/timelines/search_timeline.js"></script>
 
 <script type="text/javascript" src="lib/send_queue.js"></script>
+<script type="text/javascript" src="lib/image_services.js"></script>
+<script type="text/javascript" src="lib/locales.js"></script>
 <script>
 function initializeJQueryOptions() {
   $.ajaxSetup({
@@ -48,7 +53,7 @@ function TweetManager() {
   this.readTweets = {};
   this.shouldNotReadMap = {};
   this.retweets = {};
-  this.injectTweets = null;
+  this.injectTweets = [];
 
   // Using an object instead of an array to take advantage of hash look-ups
   this.blockedUserIds = {};
@@ -80,16 +85,14 @@ function TweetManager() {
 
   TimelineTemplate.initTemplates(this);
   TimelineTemplate.eachTimelineTemplate(function(template) {
-    var createdTimelines = template.createTimelines();
-    for(var i in createdTimelines) {
-      _this.timelines[createdTimelines[i].timelineId] = createdTimelines[i];
-    }
+    _this.createTimelineTemplate(template, true);
   });
 
   this.orderedEachTimeline(function(timeline) {
     _this.currentTimelineId = timeline.timelineId;
     return false;
   }, true);
+  this.previousTimelineId = null;
 
   this.warningsCallback = null;
   this.warningMessage = null;
@@ -98,12 +101,13 @@ function TweetManager() {
   this.maxApiHitsStates = 30;
   this.apiHitsStates = [];
   this.firstPossibleWarnTime = null;
+  
+  this.ttLocales = null;
 
   this.authenticated = false;
 
   this.initIconAndAlerts();
 
-  var _this = this;
   this.twitterBackend = new TwitterLib(
     function onAuthenticated() {
       TimelineTemplate.initAfterAuthentication();
@@ -114,6 +118,7 @@ function TweetManager() {
         timeline.init();
       }, true);
       _this.retrieveFollowingUsers();
+      StreamListener.start(this);
     },
     function(remainingHits, nextHitsReset, hourlyLimit) {
       _this.onHitsUpdated.call(_this, remainingHits, nextHitsReset, hourlyLimit);
@@ -124,8 +129,7 @@ function TweetManager() {
     OptionsBackend.get('base_signing_url'),
     OptionsBackend.get('base_oauth_signing_url'),
     OptionsBackend.get('base_search_url'),
-    this.oauthTokenData
-  );
+    this.oauthTokenData);
 
   this.sendQueue = new SendQueue(this.twitterBackend);
 }
@@ -171,7 +175,7 @@ TweetManager.prototype = {
         createdTimelines = template.createTimelines();
       }
     }
-    for(var i in createdTimelines) {
+    for(var i = 0, len = createdTimelines.length; i < len; ++i) {
       var timeline = createdTimelines[i];
       this.timelines[timeline.timelineId] = timeline;
       if(this.authenticated) {
@@ -261,18 +265,20 @@ TweetManager.prototype = {
   eachTimeline: function(callback, includeHidden) {
     for(var tId in this.timelines) {
       var timeline = this.timelines[tId];
-      if(!includeHidden && !timeline.template.visible) {
+      if(!includeHidden && (!timeline.template.visible || timeline.template.hiddenTemplate)) {
         continue;
       }
-      callback.call(tId, this.timelines[tId]);
+      if(callback.call(tId, timeline) === false) {
+        break;
+      }
     }
   },
 
   /* Lists timelines won't be included as they'll only be shown later */
   orderedEachTimeline: function(callback, includeLists) {
-    var retList = [];
-    for(var tId in this.timelines) {
-      var timeline = this.timelines[tId];
+    var retList = [], tId, timeline;
+    for(tId in this.timelines) {
+      timeline = this.timelines[tId];
       if(!includeLists && timeline.template.id == TimelineTemplate.LISTS) {
         continue;
       }
@@ -287,10 +293,10 @@ TweetManager.prototype = {
       }
     }
     for(var i = 0; i < retList.length; ++i) {
-      var tId = retList[i];
+      tId = retList[i];
       if(tId) {
-        var timeline = this.timelines[tId];
-        if(timeline.template.visible) {
+        timeline = this.timelines[tId];
+        if(timeline.template.visible && !timeline.template.hiddenTemplate) {
           var ret = callback.call(tId, timeline);
           if(ret === false) {
             break;
@@ -360,7 +366,7 @@ TweetManager.prototype = {
       }
     }, true);
     var totalUnreadNewCount = this.unique(totalUnreadNewIds).length;
-    if(colors.length == 0) {
+    if(colors.length === 0) {
       chrome.browserAction.setTitle({title: "Chromed Bird"});
       chrome.browserAction.setIcon({imageData: IconCreator.paintIcon(this.iconImg, OptionsBackend.get('idle_color'))});
       chrome.browserAction.setBadgeText({text: ''});
@@ -385,14 +391,14 @@ TweetManager.prototype = {
   },
 
   showTweetsNotifications: function(tweetsToNotify, forceOnPage) {
-    if(!tweetsToNotify || tweetsToNotify.length == 0) {
+    if(!tweetsToNotify || tweetsToNotify.length === 0) {
       return;
     }
     var maxTweetsNotifications = OptionsBackend.get('notification_max_popups');
     if(maxTweetsNotifications != -1 && tweetsToNotify.length > maxTweetsNotifications) {
       tweetsToNotify.splice(maxTweetsNotifications, tweetsToNotify.length - maxTweetsNotifications);
     }
-    this.injectTweets = tweetsToNotify;
+    this.injectTweets = this.injectTweets.concat(tweetsToNotify);
 
     var notificationStyle = OptionsBackend.get('tweets_notification_style');
     if(!forceOnPage && notificationStyle == 'desktop') {
@@ -406,26 +412,10 @@ TweetManager.prototype = {
           throw 'Desktop notifications not allowed';
         }
 
-        // FIXME: This check is here because stable channel releases
-        // currently silently fail in showing html notifications
-        var notificationDisplayed = false;
-        var onDisplayFunc = function() {
-          notificationDisplayed = true;
-        };
         var _this = this;
-        setTimeout(function() {
-          if(!notificationDisplayed) {
-            for(var i = 0; i < tweetsToNotify.length; ++i) {
-              _this.shouldNotReadMap[tweetsToNotify[i].id] = true;
-            }
-            _this.safeTweetsNotifications(tweetsToNotify, false);
-          }
-        }, 1000);
-
         for(var i = 0; i < tweetsToNotify.length; ++i) {
           var notification = notificationCenter.createHTMLNotification(
-            chrome.extension.getURL('tweets_notifier.html')
-          );
+            chrome.extension.getURL('tweets_notifier.html'));
           (function inClosure(tweet) {
             notification.onclose = function(e) {
               setTimeout(function() {
@@ -433,7 +423,6 @@ TweetManager.prototype = {
               }, 200);
             };
           })(tweetsToNotify[i]);
-          notification.ondisplay = onDisplayFunc;
           notification.show();
         }
       } catch(e) {
@@ -474,9 +463,11 @@ TweetManager.prototype = {
       };
       injectHelper('script', 'lib/3rdparty/jquery.js', true, function() {
         injectHelper('css', 'css/injectedTweets.css', true, function() {
-          injectHelper('script', 'lib/tweet_transforms.js', true, function() {
-            injectHelper('script', 'lib/timeline_template.js', true, function() {
-              injectHelper('script', 'lib/tweets_assembler.js', true);
+          injectHelper('script', 'lib/any_click.js', true, function() {
+            injectHelper('script', 'lib/tweet_transforms.js', true, function() {
+              injectHelper('script', 'lib/timeline_template.js', true, function() {
+                injectHelper('script', 'lib/tweets_assembler.js', true);
+              });
             });
           });
         });
@@ -535,6 +526,20 @@ TweetManager.prototype = {
     }, id);
   },
 
+  getInReplyToTweet: function(callback, tweet) {
+    if(tweet.inReplyToTweet) {
+      callback(true, tweet.inReplyToTweet);
+      return;
+    }
+    var _this = this;
+    this.twitterBackend.showTweet(function(success, data, status) {
+      if(success) {
+        tweet.inReplyToTweet = data;
+      }
+      callback(success, data, status);
+    }, tweet.in_reply_to_status_id);
+  },
+
   destroy: function(callback, tweetTimelineId, id) {
     var _this = this;
     var firstCallback = function(success, data, status) {
@@ -545,7 +550,7 @@ TweetManager.prototype = {
       }
       callback(success, data, status);
     };
-    if(tweetTimelineId == TimelineTemplate.DMS) {
+    if(tweetTimelineId == TimelineTemplate.RECEIVED_DMS || tweetTimelineId == TimelineTemplate.SENT_DMS) {
       return this.twitterBackend.destroyDM(firstCallback, id);
     } else {
       return this.twitterBackend.destroy(firstCallback, id);
@@ -652,6 +657,7 @@ TweetManager.prototype = {
       return null;
     }
     timeline.changeList(listId);
+    return undefined;
   },
 
   getListId: function(timelineId) {
@@ -697,7 +703,7 @@ TweetManager.prototype = {
     var timeline = this.timelines[timelineId];
     if(!timeline) {
       callback([], timelineId);
-      return;
+      return undefined;
     }
     if(syncNew && timeline.template.includeInUnified) {
       var originalCallback = callback;
@@ -748,6 +754,7 @@ TweetManager.prototype = {
       timeline.killTimeline();
       delete timeline;
     }, true);
+    StreamListener.disconnect();
   },
 
   signout: function() {
@@ -771,8 +778,8 @@ TweetManager.prototype = {
 
   onHitsUpdated: function(remainingHits, nextHitsReset, hourlyLimit) {
     var nextResetDate = new Date();
-    nextResetDate.setTime(parseInt(nextHitsReset) * 1000);
-    if(remainingHits == 0) {
+    nextResetDate.setTime(parseInt(nextHitsReset, 10) * 1000);
+    if(remainingHits === 0) {
       this.autoClearWarning = true;
       this.setWarning(chrome.i18n.getMessage("exceededAPIHits", [chrome.extension.getURL('options.html'), nextResetDate.toLocaleDateString(), nextResetDate.toLocaleTimeString()]));
       return;
@@ -789,7 +796,7 @@ TweetManager.prototype = {
       }
     }
 
-    this.apiHitsStates.push([(new Date()).getTime(), parseInt(remainingHits)]);
+    this.apiHitsStates.push([(new Date()).getTime(), parseInt(remainingHits, 10)]);
     if(this.apiHitsStates.length > this.maxApiHitsStates) {
       this.apiHitsStates.shift();
     }
@@ -825,15 +832,20 @@ TweetManager.prototype = {
         }, 120000);
         return;
       }
-      _this.followingUsers = _this.followingUsers.concat(users);
-      _this.followingUsers.sort(function(a, b) {
-        return a.screen_name.toUpperCase().localeCompare(b.screen_name.toUpperCase());
+      for(var i = 0, len = users.length; i < len; ++i) {
+        var user = users[i];
+        _this.followingUsersMap[user.screen_name] = user;
+        _this.followingUsersNames.push(user.screen_name);
+      }
+      _this.followingUsersNames.sort(function(a, b) {
+        return a.toUpperCase().localeCompare(b.toUpperCase());
       });
     }, usersIdList);
   },
 
   retrieveFollowingUsers: function() {
-    this.followingUsers = [];
+    this.followingUsersNames = [];
+    this.followingUsersMap = {};
     var _this = this;
     this.twitterBackend.friendsIds(function(success, usersData) {
       if(!success) {
@@ -855,10 +867,137 @@ TweetManager.prototype = {
     });
   },
 
-  getUsersToComplete: function() {
-    return this.followingUsers;
+  getFollowingUsers: function() {
+    return this.followingUsersNames;
+  },
+
+  getFollowingUsersMap: function() {
+    return this.followingUsersMap;
+  },
+
+  resetTimeline: function(timelineId) {
+    var timeline = this.getTimeline(timelineId);
+    if(timeline) {
+      timeline.reset();
+    }
+  },
+
+  followUser: function(callback, username) {
+    var _this = this;
+    this.twitterBackend.follow(function(success, userData) {
+      if(success) {
+        _this.followingUsersMap[userData.screen_name] = userData;
+        _this.followingUsersNames.push(userData.screen_name);
+        _this.followingUsersNames.sort(function(a, b) {
+          return a.toUpperCase().localeCompare(b.toUpperCase());
+        });
+        _this.resetTimeline(TimelineTemplate.HOME);
+        _this.resetTimeline(TimelineTemplate.UNIFIED);
+      }
+      callback(success, userData);
+    }, username);
+  },
+
+  _removeUser: function(userData) {
+    delete this.followingUsersMap[userData.screen_name];
+    var position = $.inArray(userData.screen_name);
+    if(position > -1) {
+      this.followingUsersNames.splice(position, 1);
+    }
+    this.resetTimeline(TimelineTemplate.HOME);
+    this.resetTimeline(TimelineTemplate.UNIFIED);
+  },
+
+  unfollowUser: function(callback, username) {
+    var _this = this;
+    this.twitterBackend.unfollow(function(success, userData) {
+      if(success) {
+        _this._removeUser(userData);
+      }
+      callback(success, userData);
+    }, username);
+  },
+
+  blockUser: function(callback, username) {
+    var _this = this;
+    this.twitterBackend.block(function(success, userData) {
+      if(success) {
+        _this._removeUser(userData);
+      }
+      callback(success, userData);
+    }, username);
+  },
+
+  reportUser: function(callback, username) {
+    var _this = this;
+    this.twitterBackend.report(function(success, userData) {
+      if(success) {
+        _this._removeUser(userData);
+      }
+      callback(success, userData);
+    }, username);
+  },
+
+  retrieveTrendingTopics: function(callback, woeid) {
+    var _this = this;
+
+    if(this.lastTrendsTime && this.cachedTrendingTopics && (new Date() - this.lastTrendsTime) < 90 * 1000) {
+      setTimeout(function() {
+        callback(_this.cachedTrendingTopics);
+      }, 0);
+      return;
+    }
+    this.lastTrendsTime = new Date();
+
+    this.twitterBackend.trendingTopics(function(success, userData) {
+      if(success) {
+        _this.cachedTrendingTopics = userData[0];
+      }
+      callback(_this.cachedTrendingTopics);
+    }, woeid);
+  },
+
+  worldWideWoeid: {
+    woeid: 1,
+    name: 'Worldwide'
+  },
+
+  retrieveTrendingRegions: function(callback) {
+    if(this.ttLocales === null) {
+      var _this = this;
+      this.twitterBackend.trendingTopics(function(success, userData) {
+        if(!success) {
+          return;
+        }
+
+        var woeids = [];
+        $.each(userData, function(i, loc) {
+          var myName = "";
+          if(loc.placeType.name == "Country") {
+            myName = loc.name;
+          } else if(loc.placeType.name == "Town") {
+            myName = loc.country + ' - ' + loc.name;
+          } else {
+            return;
+          }
+          woeids.push({woeid: loc.woeid, name: myName});
+        });
+
+        woeids.sort(function(a, b) {
+          if(a.name < b.name) return -1;
+          if(a.name > b.name) return 1;
+          return 0;
+        });
+
+        woeids.unshift(_this.worldWideWoeid);
+        _this.ttLocales = woeids;
+        callback(woeids);
+      }, 'available');
+    }
+
+    return this.ttLocales || [this.worldWideWoeid];
   }
-}
+};
 
 /* Clean up old versions mess */
 Persistence.cleanupOldData();
@@ -870,8 +1009,8 @@ function compareVersions(v1, v2) {
   for(var i = 0; i < maxLen; ++i) {
     if(v1[i] === undefined) return -1;
     if(v2[i] === undefined) return 1;
-    if(parseInt(v1[i]) > parseInt(v2[i])) return 1;
-    if(parseInt(v1[i]) < parseInt(v2[i])) return -1;
+    if(parseInt(v1[i], 10) > parseInt(v2[i], 10)) return 1;
+    if(parseInt(v1[i], 10) < parseInt(v2[i], 10)) return -1;
   }
   return 0;
 }
@@ -881,6 +1020,7 @@ function checkVersionChanges(manifest) {
     var currentVersion = manifest.version.split('.');
     var storageData = Persistence.version();
     var storageVersion = storageData.val();
+    var options, baseUrl;
     if(storageVersion) {
       storageVersion = JSON.parse(storageVersion);
     } else {
@@ -889,12 +1029,12 @@ function checkVersionChanges(manifest) {
       return;
     }
 
-    if(compareVersions(currentVersion, storageVersion) != 0) {
+    if(compareVersions(currentVersion, storageVersion) !== 0) {
       // if last version is < 1.3.0
       if(compareVersions(storageVersion, [1, 3, 0]) < 0) {
         //Old default refresh interval, let's update it for the new version
         if(OptionsBackend.get('home_refresh_interval') == 60000) {
-          var options = OptionsBackend.load();
+          options = OptionsBackend.load();
           options['home_refresh_interval'] = OptionsBackend.defaultOptions['home_refresh_interval'];
           OptionsBackend.save(options);
         }
@@ -911,8 +1051,8 @@ function checkVersionChanges(manifest) {
         timelineOrderData.save(JSON.stringify(storedOrder));
       }
       if(compareVersions(storageVersion, [1, 6, 1]) <= 0) {
-        var options = OptionsBackend.load();
-        var baseUrl = options['base_url'];
+        options = OptionsBackend.load();
+        baseUrl = options['base_url'];
         if(baseUrl.match(/http:\/\/twitter\.com/)) {
           options['base_url'] = 'http://api.twitter.com/1/';
           options['base_signing_url'] = 'http://api.twitter.com/1/';
@@ -951,7 +1091,7 @@ function checkVersionChanges(manifest) {
           initializeJQueryOptions();
         }
 
-        var baseUrl = OptionsBackend.get('base_url');
+        baseUrl = OptionsBackend.get('base_url');
         var baseSigningUrl = OptionsBackend.get('base_signing_url');
         if(baseUrl == baseSigningUrl && baseUrl == 'http://api.twitter.com/1/') {
           // This days the SSL endpoint seems more reliable, let's make it the
@@ -968,6 +1108,26 @@ function checkVersionChanges(manifest) {
         // Enabling desktop notifications as the default option,
         // users may switch back to onpage notifications latter if they wish.
         OptionsBackend.saveOption('tweets_notification_style', 'desktop');
+      }
+      if(compareVersions(storageVersion, [1, 9, 5, 1]) <= 0) {
+        var maxNotifications = OptionsBackend.get('notification_max_popups');
+        if(maxNotifications == -1) {
+          // Set new default value if we're using unlimited notifications,
+          // otherwise there might have been thousands of notifications
+          // to be shown, mainly after we fixed the way we fetch new
+          // tweets.
+          OptionsBackend.saveOption('notification_max_popups', OptionsBackend.defaultOptions['notification_max_popups']);
+        }
+      }
+      if(compareVersions(storageVersion, [1, 9, 6, 6]) <= 0) {
+        var baseOauthUrl = OptionsBackend.get('base_oauth_url');
+        var baseOauthSignUrl = OptionsBackend.get('base_oauth_signing_url');
+        if(baseOauthUrl == 'https://twitter.com/oauth/') {
+          OptionsBackend.setDefault('base_oauth_url');
+        }
+        if(baseOauthSignUrl == 'https://twitter.com/oauth/') {
+          OptionsBackend.setDefault('base_oauth_signing_url');
+        }
       }
       storageData.save(JSON.stringify(currentVersion));
     }
@@ -1016,7 +1176,7 @@ function initializeExtension() {
             });
           }
           waitingFirstRequest = true;
-          TweetManager.instance.injectTweets = null;
+          TweetManager.instance.injectTweets = [];
           biggestArea = -1;
         }, 200);
       }

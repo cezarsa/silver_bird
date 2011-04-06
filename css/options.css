@@ -159,3 +159,7 @@ div.checkerboard {
 canvas#nerds {
   display: block;
 }
+
+a.locales_report {
+  color: black;
+}

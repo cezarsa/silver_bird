@@ -4,6 +4,7 @@
   <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
   <script type='text/javascript' src='lib/3rdparty/jquery.tipsy.js'></script>
 
+  <script type="text/javascript" src="lib/any_click.js"></script>
   <script type="text/javascript" src="lib/tweet_transforms.js"></script>
   <script type="text/javascript" src="lib/timeline_template.js"></script>
   <script type="text/javascript" src="lib/tweets_assembler.js"></script>
@@ -18,13 +19,16 @@
   var OptionsBackend = chrome.extension.getBackgroundPage().OptionsBackend;
   var urlExpander = chrome.extension.getBackgroundPage().urlExpander;
   var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
+  var ImageService = chrome.extension.getBackgroundPage().ImageService;
+
+  chrome.i18n.getMessage = chrome.extension.getBackgroundPage().chrome.i18n.getMessage;
 
   $(function() {
     var fadeTimeout = OptionsBackend.get('notification_fade_timeout');
 
-    var tweet = tweetManager.injectTweets.shift();
-    Renderer.setContext('desktop');
     try {
+      var tweet = tweetManager.injectTweets.shift();
+      Renderer.setContext('desktop');
       $(document.body).prepend(Renderer.renderTweet(tweet, false, OptionsBackend.get('name_attribute')));
     } catch(e) {
       console.log(e);
@@ -33,8 +37,8 @@
 
     setTimeout(function() {
       $("#progress").text(chrome.i18n.getMessage("preventClosing"));
-      $('#progress').show().css('bottom', '0px').css('width', '100%')
-            .animate({width: '0px'}, fadeTimeout, 'linear', function() {
+      $('#progress').show().css('bottom', '0px').css('width', '100%').
+          animate({width: '0px'}, fadeTimeout, 'linear', function() {
         // Tell manager that this tweet shouldn't be marked as read
         tweetManager.shouldNotReadMap[tweet.id] = true;
         window.close();

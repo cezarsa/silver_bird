@@ -97,6 +97,11 @@ input[type='text'] {
   margin-top: 4px;
 }
 
+.header_link_right #detach_img {
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
 #loading, #queue_loading {
   float: right;
   margin: 0px;
@@ -119,6 +124,7 @@ input[type='text'] {
   padding-right: 35px;
   overflow: auto;
   overflow-x: hidden;
+  position: relative;
 }
 
 #update_tweets {
@@ -326,6 +332,19 @@ input[type='text'] {
   display: inline;
 }
 
+.tweet_space {
+  position: relative;
+}
+
+div.reply_separator {
+  position: absolute;
+  left: 50%;
+  right: 50%;
+  margin-top: -10px;
+  margin-left: 13px; /* Half of the padding used for the actions */
+  cursor: pointer;
+}
+
 div#popup_footer {
   display: none;
   float: right;
@@ -368,4 +387,15 @@ ul.worklist li {
   padding: 0px;
   margin: 0px;
   display: block;
+}
+
+#upload_progress {
+  width: 120px;
+  display: none;
+}
+
+#attach_icon {
+  margin-left: 10px;
+  width: 12px;
+  height: 12px;
 }

@@ -3,10 +3,11 @@
 <head>
 <!-- Theme specific CSS files are loaded later by the ThemeManager -->
 <link id="base_stylesheet" rel="stylesheet" type="text/css" href="css/base.css" />
+<link rel="stylesheet" type="text/css" href="css/action_menu.css" />
 <link rel="stylesheet" type="text/css" href="css/simple_select.css" />
 <link rel="stylesheet" type="text/css" href="css/tipsy.css" />
 <link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.css" />
-
+<title>Chromed Bird</title>
 <script>
 var MAX_TWEET_SIZE = 140;
 var Persistence = chrome.extension.getBackgroundPage().Persistence;
@@ -15,6 +16,10 @@ var tweetManager = chrome.extension.getBackgroundPage().TweetManager.instance;
 var twitterBackend = tweetManager.twitterBackend;
 var OptionsBackend = chrome.extension.getBackgroundPage().OptionsBackend;
 var TimelineTemplate = chrome.extension.getBackgroundPage().TimelineTemplate;
+var ImageService = chrome.extension.getBackgroundPage().ImageService;
+var UploadManager = chrome.extension.getBackgroundPage().UploadManager;
+
+chrome.i18n.getMessage = chrome.extension.getBackgroundPage().chrome.i18n.getMessage;
 
 var microbloggingService = OptionsBackend.get('microblogging_service');
 var TwitterLib;
@@ -48,9 +53,11 @@ if(!twitterBackend.authenticated() && !twitterBackend.tokenRequested()) {
 <script type="text/javascript" src="lib/3rdparty/jquery.insertatcaret.min.js"></script>
 
 <!--script type="text/javascript" src="lib/debug.js"></script-->
+<script type="text/javascript" src="lib/any_click.js"></script>
 <script type="text/javascript" src="lib/shortener_lib.js"></script>
 <script type="text/javascript" src="lib/simple_select.js"></script>
 <script type="text/javascript" src="lib/tweet_transforms.js"></script>
+<script type="text/javascript" src="lib/action_menu.js"></script>
 <script type="text/javascript" src="lib/tweets_assembler.js"></script>
 <script>
 $.ajaxSetup({
@@ -137,13 +144,14 @@ var Paginator = {
     this.needsMore = false;
     if(shouldScrollTop) {
       $("#timeline-" + tweetManager.currentTimelineId + ' .inner_timeline').scrollTop(0);
+      tweetManager.getCurrentTimeline().currentScroll = 0;
     }
   },
   nextPage: function() {
     this.needsMore = true;
     loadTimeline();
   }
-}
+};
 
 var ThemeManager = {
   init: function () {
@@ -166,36 +174,102 @@ var ThemeManager = {
         }
       }
     }
+
+    ThemeManager.isPopup = location.search == '?popup';
+    ThemeManager.isDetached = location.search == '?detached';
+
+    if(!ThemeManager.isPopup) {
+      $('<base target="_blank">').appendTo(document.head);
+    }
+
+    var persistedPosition = Persistence.windowPosition();
+    ThemeManager.detachedPos = persistedPosition.val();
+    if(!ThemeManager.detachedPos) {
+      // Setting default values
+      ThemeManager.detachedPos = {
+        left: 100,
+        top: 100,
+        height: null,
+        width: null
+      };
+      persistedPosition.save(ThemeManager.detachedPos);
+    }
+    if(ThemeManager.isDetached) {
+      $("#detach_img").hide();
+      // Listening to resize and move events
+      $(window).resize(function() {
+        ThemeManager.detachedPos.height = window.innerHeight;
+        ThemeManager.detachedPos.width = window.innerWidth;
+        persistedPosition.save(ThemeManager.detachedPos);
+      });
+      setInterval(function() {
+        if(ThemeManager.detachedPos.left != window.screenLeft || ThemeManager.detachedPos.top != window.screenTop) {
+          ThemeManager.detachedPos.left = window.screenLeft;
+          ThemeManager.detachedPos.top = window.screenTop;
+          persistedPosition.save(ThemeManager.detachedPos);
+        }
+      }, 1000);
+    }
   },
+
   setPopupSize: function(width, height, autoFitWidth) {
+    if(!ThemeManager.isPopup) {
+      return;
+    }
+
+    /* HACK: Magic numbers */
+    var hackBordersWidth = 14;
+    var hackTabsAdditionalWidth = 40;
+    var hackHeaderHeight = 75;
+    var hackMinValidHeight = 400;
+
     width = width || 490;
+    height = height || 400;
+    var minWidth = 450;
+    var maxWidth = 800 - hackBordersWidth;
+    if(width > maxWidth) {
+      width = maxWidth;
+    }
+    if(width < minWidth) {
+      width = minWidth;
+    }
     if(autoFitWidth) {
       setTimeout(function() {
         var tabsBarWidth = 0;
         $("li.timeline_tab").each(function() {
           tabsBarWidth += $(this).width();
         });
-        tabsBarWidth += 40;
+        tabsBarWidth += hackTabsAdditionalWidth;
         if(tabsBarWidth > width) {
           ThemeManager.setPopupSize(tabsBarWidth, height);
         }
       }, 300);
     }
+
     $(".timeline").width(width + 'px');
-    if(height) {
-      $(".inner_timeline,.timeline").height(height + 'px');
-    } else {
-      $(".inner_timeline,.timeline").height('400px');
-    }
+    $(".inner_timeline,.timeline").height(height + 'px');
+
+    setTimeout(function() {
+      if(window.innerHeight < hackMinValidHeight) { return; }
+      if(window.innerHeight < ($(".timeline").height() + hackHeaderHeight)) {
+        var height = window.innerHeight - hackHeaderHeight;
+        ThemeManager.setPopupSize(width, height, autoFitWidth);
+      }
+    }, 100);
   },
+
   popupSizeData: Persistence.popupSize(),
-  handleWindowResizing: function () {
-    var sizeArray = ThemeManager.popupSizeData.val();
-    if(sizeArray) {
-      sizeArray = sizeArray.split('x');
-      ThemeManager.setPopupSize(sizeArray[0], sizeArray[1], true);
-    } else {
-      ThemeManager.setPopupSize(null, null, true);
+
+  initWindowResizing: function() {
+    ThemeManager.handleWindowResizing();
+    if(!ThemeManager.isPopup) {
+      var resizeFunc = function() {
+        var timelineHeight = window.innerHeight - 79;
+        $('.inner_timeline,.timeline').css('maxHeight', timelineHeight + 'px');
+      };
+      $(window).resize(resizeFunc);
+      resizeFunc();
+      return;
     }
     $(".timeline").resizable({
       handles: 'e, s, se',
@@ -214,6 +288,16 @@ var ThemeManager = {
       ThemeManager.popupSizeData.remove();
       ThemeManager.setPopupSize(null, null, true);
     });
+  },
+
+  handleWindowResizing: function() {
+    var sizeArray = ThemeManager.popupSizeData.val();
+    if(sizeArray) {
+      sizeArray = sizeArray.split('x');
+      ThemeManager.setPopupSize(sizeArray[0], sizeArray[1], true);
+    } else {
+      ThemeManager.setPopupSize(null, null, true);
+    }
   },
 
   sortableEl: null,
@@ -235,8 +319,10 @@ var ThemeManager = {
       var correctPanel = $("#timeline-" + correctTimeline);
       var positionPanel = panels.eq(i);
       if(correctPanel[0].id != positionPanel[0].id) {
-        correctPanel.remove();
+        var currentScroll = $('.inner_timeline', correctPanel).scrollTop();
+        correctPanel.detach();
         positionPanel.before(correctPanel);
+        $('.inner_timeline', correctPanel).scrollTop(currentScroll);
         panels = $("#tabs .ui-tabs-panel");
       }
     }
@@ -252,7 +338,7 @@ var ThemeManager = {
     this.reOrderPanels(sortedTimelines);
     this.uiTabs.tabs('refreshPositions');
   }
-}
+};
 
 var Composer = {
   replyId: null,
@@ -264,11 +350,17 @@ var Composer = {
 
   init: function() {
     if(tweetManager.composerData.isComposing) {
-      Composer.replyId = tweetManager.composerData.replyId;
-      Composer.replyUser = tweetManager.composerData.replyUser;
-      $("#compose_tweet_area textarea").val(tweetManager.composerData.saveMessage || '');
-      Composer.showComposeArea(true, true);
+      Composer.initMessage(tweetManager.composerData.saveMessage, tweetManager.composerData.replyId,
+          tweetManager.composerData.replyUser, false);
     }
+    Composer.textareaChanged();
+  },
+
+  initMessage: function(message, replyId, replyUser, shouldAnimate) {
+    Composer.replyId = replyId;
+    Composer.replyUser = replyUser;
+    $("#compose_tweet_area textarea").val(message || '');
+    Composer.showComposeArea(true, !shouldAnimate);
     Composer.textareaChanged();
   },
 
@@ -290,7 +382,7 @@ var Composer = {
       $("#loading").hide();
       var notFound = status && status.match(/Not Found/);
       if(success || notFound) {
-        $(".tweet[tweetid='" + _this.destroyId + "']").hide('blind', { direction: "vertical" });
+        $(".tweet[tweetid='" + _this.destroyId + "']").parents('.tweet_space').first().hide('blind', { direction: "vertical" });
         var currentCount = tweetManager.getCurrentTimeline().getTweetsCache().length;
         if(currentCount < OptionsBackend.get('tweets_per_page')) {
           Paginator.nextPage();
@@ -371,7 +463,7 @@ var Composer = {
   addUser: function (user, replies) {
     var textArea = $("#compose_tweet_area textarea");
     var currentVal = textArea.val();
-    var replies =  replies || [];
+    replies =  replies || [];
     if(currentVal.length > 0 && currentVal[currentVal.length - 1] != ' ') {
       currentVal += ' ';
     }
@@ -386,7 +478,7 @@ var Composer = {
     var user = $(".user", node).attr('screen_name');
     var timelineId = $(node).attr('timelineid');
 
-    if(timelineId == "dms") {
+    if(timelineId == TimelineTemplate.RECEIVED_DMS || timelineId == TimelineTemplate.SENT_DMS) {
       textArea.val("d " + user + " ");
       Composer.textareaChanged();
       return;
@@ -398,7 +490,7 @@ var Composer = {
     if (reply_all) {
       $(".text a", node).each(function(){
         var t = $(this).text();
-        if (t !== ownName && /^[A-Z0-9_-]{1,15}$/i.test(t)) {
+        if (t !== ownName && (/^[A-Z0-9_-]{1,15}$/i).test(t)) {
           replies.push('@'+t+' ');
         }
       });
@@ -477,7 +569,7 @@ var Composer = {
 
   sendTweet: function () {
     var textarea = $("#compose_tweet_area textarea");
-    tweetManager.enqueueTweet(textarea.val(), Composer.replyId);
+    tweetManager.enqueueTweet(textarea.val(), Composer.replyId, Composer.replyUser);
 
     textarea.val("");
     Composer.replyId = null;
@@ -492,22 +584,46 @@ var Composer = {
       return;
     }
     loadTimeline(true);
+  },
+
+  isVisible: function() {
+    var composeArea = $("#compose_tweet_area");
+    var textarea = $("textarea", composeArea);
+    var visible = composeArea.is(':visible');
+    return visible && textarea.val().length > 0;
+  },
+
+  addText: function(value) {
+    var textarea = $("#compose_tweet_area textarea");
+    var tmpText = textarea.val();
+    if(tmpText.length > 0) {
+      if((textarea[0].selectionStart > 0) &&
+        (tmpText[textarea[0].selectionStart-1] != ' ')) {
+        value = ' ' + value;
+      }
+      if((textarea[0].selectionEnd < tmpText.length) &&
+         (tmpText[textarea[0].selectionEnd+1] != ' ')) {
+         value += ' ';
+      }
+    }
+    textarea.insertAtCaret(value);
+    Composer.textareaChanged();
   }
-}
+};
 
 var WorkList = {
   /* Not really a work list yet, but I intend in making it into one
      and hopefully stop this #loading madness.
    */
   init: function() {
-    if(tweetManager.sendQueue.queueSize() != 0) {
+    if(tweetManager.sendQueue.queueSize() !== 0) {
       $("#queue_loading").show();
     }
-    tweetManager.sendQueue.onQueueEmpty(function() {
+    tweetManager.sendQueue.onQueueEmpty(function(lastSent) {
       if(!window) {
         return;
       }
-      WorkList.sendQueueEmpty();
+      WorkList.sendQueueEmpty(lastSent);
     });
     tweetManager.sendQueue.onTweetEnqueued(function() {
       if(!window) {
@@ -515,6 +631,14 @@ var WorkList = {
       }
       WorkList.tweetEnqueued();
     });
+    tweetManager.sendQueue.onSendFailed(function() {
+      if(!window) {
+        return;
+      }
+      WorkList.sendFailed();
+    });
+    // Just checking
+    WorkList.sendFailed();
 
     $("#queue_loading").tipsy({
       title: function() {
@@ -526,20 +650,20 @@ var WorkList = {
         for(var i = 0, len = queueItems.length; i < len; ++i) {
           var queueItem = queueItems[i];
           var message = queueItem.message;
-          if(i == 0 && message.length > 15) {
+          if(i === 0 && message.length > 15) {
             message = message.substring(0, 13) + '...';
           } else if(message.length > 50) {
             message = message.substring(0, 48) + '...';
           }
           html += '<li>';
           html += message;
-          if(i == 0) {
+          if(i === 0) {
             var timeDiff = ((new Date()).getTime() - queueItem.createdAt.getTime()) / 1000;
             var timeDiffDesc;
             if(timeDiff < 60) {
-              timeDiffDesc = parseInt(timeDiff) + 's';
+              timeDiffDesc = parseInt(timeDiff, 10) + 's';
             } else {
-              timeDiffDesc = parseInt(timeDiff / 60) + 'm';
+              timeDiffDesc = parseInt(timeDiff / 60, 10) + 'm';
             }
             if(queueItem.retryCount == 1) {
               html += '<span class="title"> ' +
@@ -581,14 +705,32 @@ var WorkList = {
     $("#queue_loading").tipsy({refresh: true});
   },
 
-  sendQueueEmpty: function() {
+  sendQueueEmpty: function(lastSent) {
     $("#queue_loading").hide();
-    loadTimeline(true, "home");
+    var updateTimelineId = TimelineTemplate.HOME;
+    if(lastSent && lastSent.message.indexOf('d ') === 0) {
+      updateTimelineId = TimelineTemplate.SENT_DMS;
+    }
+    loadTimeline(true, updateTimelineId);
   },
 
   tweetEnqueued: function() {
     $("#queue_loading").show();
   },
+
+  sendFailed: function() {
+    var abortedQueue = tweetManager.sendQueue.abortedStatus();
+    if(!abortedQueue || abortedQueue.length === 0) {
+      return;
+    }
+    // If we're here that's because something went wrong
+    if(!Composer.isVisible()) {
+      // For now let's just show the first enqueued message
+      var topMessage = abortedQueue[0];
+      Composer.initMessage(topMessage.message, topMessage.replyId, topMessage.replyUser, true);
+    }
+    Renderer.showError(chrome.i18n.getMessage("tweet_send_error"));
+  }
 };
 
 var Shortener = {
@@ -596,7 +738,7 @@ var Shortener = {
 
   init: function() {
     var savedUrl = tweetManager.composerData.urlShortener;
-    if(savedUrl != '') {
+    if(savedUrl !== '') {
       $("#shortener_area input").val(savedUrl);
     }
     this.blur();
@@ -635,7 +777,7 @@ var Shortener = {
   blur: function() {
     var shortener = $("#shortener_area input");
     var val = shortener.val();
-    if($.trim(val) == '' || val == this.SHORTENER_IDLE_STR) {
+    if($.trim(val) === '' || val == this.SHORTENER_IDLE_STR) {
       shortener.val(this.SHORTENER_IDLE_STR);
       shortener.attr('style', 'color: #aaa;');
       this.hideButton();
@@ -648,7 +790,7 @@ var Shortener = {
     var shortener = $("#shortener_area input");
     var val = shortener.val();
     tweetManager.composerData.urlShortener = val;
-    if($.trim(val) != '') {
+    if($.trim(val) !== '') {
       if(e.which == 13) { //Enter key
         this.shortenIt();
       } else {
@@ -687,41 +829,27 @@ var Shortener = {
       _this.clear();
       var textarea = $("#compose_tweet_area textarea");
       if(success && shortUrl) {
-        var tmpText = textarea.val();
-        if(tmpText.length > 0) {
-          if((textarea[0].selectionStart > 0) &&
-            (tmpText[textarea[0].selectionStart-1] != ' ')
-          ) {
-            shortUrl = ' ' + shortUrl;
-          }
-          if((textarea[0].selectionEnd < tmpText.length) &&
-             (tmpText[textarea[0].selectionEnd+1] != ' ')
-          ) {
-             shortUrl += ' ';
-          }
-        }
         if(context && context.title && OptionsBackend.get('share_include_title')) {
           shortUrl = context.title + ' - ' + shortUrl;
         }
-        textarea.insertAtCaret(shortUrl);
-        Composer.textareaChanged();
+        Composer.addText(shortUrl);
       } else if(!success) {
         Renderer.showError(shortUrl);
       }
       Composer.showComposeArea(true);
     });
   }
-}
+};
 
 $.extend(Renderer, {
   assemblyTweets: function (tweets, timelineId) {
     var destination = $("#timeline-" + timelineId + " .inner_timeline");
-    if(destination.length == 0)
+    if(destination.length === 0)
       return;
 
     var useColors = true;
     if(OptionsBackend.get('tweets_color_only_unified')) {
-      if(timelineId != 'unified') {
+      if(timelineId != TimelineTemplate.UNIFIED) {
         useColors = false;
       }
     }
@@ -733,26 +861,32 @@ $.extend(Renderer, {
       destinationDom.appendChild(Renderer.renderTweet(tweets[i], useColors, nameAttribute));
     }
 
-    $(".tweet").hover(
-    function() {
-      $(".new_actions img:not(.starred)", this).show();
-    },
-    function() {
-      $(".new_actions img:not(.starred)", this).hide();
+    $(".tweet").live('mouseover mouseout', function(event) {
+      if(event.type == 'mouseover') {
+        $(".new_actions img:not(.starred)", this).show();
+      } else {
+        $(".new_actions img:not(.starred)", this).hide();
+      }
     });
 
-    var hoverFunc = function() {
+    var hoverFunc = function(event) {
       var $this = $(this);
       var old_src = $this.attr('src');
-      var new_src;
-      if(old_src.match(/hover/)) {
-        new_src = old_src.replace(/_hover/, '');
+      var new_src = old_src;
+      var isStarred = $this.is('.starred');
+      var isHoverImage = old_src.match(/hover/);
+      if((!isStarred && event.type == 'mouseover') || (isStarred && event.type == 'mouseout')) {
+        if(!isHoverImage) {
+          new_src = old_src.replace(/\.png/, '_hover.png');
+        }
       } else {
-        new_src = old_src.replace(/\.png/, '_hover.png');
+        if(isHoverImage) {
+          new_src = old_src.replace(/_hover/, '');
+        }
       }
       $this.attr('src', new_src);
-    }
-    $(".new_actions img").hover(hoverFunc, hoverFunc);
+    };
+    $(".new_actions img").live('mouseover mouseout', hoverFunc);
 
     $(".tweet.unread").click(function() {
       tweetManager.readTweet($(this).attr('tweetid'));
@@ -771,7 +905,7 @@ $.extend(Renderer, {
       },
       function() {
         //Starting countdown to read
-        var testEl = $("<div class='tweet' style='display:none'></div>")
+        var testEl = $("<div class='tweet' style='display:none'></div>");
         $(document.body).append(testEl);
         var transformation = {};
         jQuery.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopColor', 'outlineColor'], function(i, attr) {
@@ -816,7 +950,7 @@ $.extend(Renderer, {
       if(!params) {
         params = '';
       }
-      msg += ' <a href="#" onclick="' + tryAgainFunction + '(' + params + '); Renderer.hideMessage();">' + chrome.i18n.getMessage("tryAgain") + '</a>';
+      msg += ' <a href="#" onclick="' + tryAgainFunction + '(' + params + '); Renderer.hideMessage(); return false;">' + chrome.i18n.getMessage("tryAgain") + '</a>';
     }
     Renderer.showMessage(msg);
   },
@@ -832,6 +966,18 @@ $.extend(Renderer, {
       tweetManager.clearWarning();
     }
     $("#absolute_container").slideUp('slow');
+  },
+
+  detach: function() {
+    if(!ThemeManager.detachedPos.width || !ThemeManager.detachedPos.height) {
+      ThemeManager.detachedPos.width = window.innerWidth;
+      ThemeManager.detachedPos.height = window.innerHeight;
+    }
+    window.open(chrome.extension.getURL('popup.html?detached'), 'cb_popup_window',
+      'left=' + ThemeManager.detachedPos.left + ',top=' + (ThemeManager.detachedPos.top - 22) + // Magic 22...
+      ',width=' + ThemeManager.detachedPos.width + ',height=' + ThemeManager.detachedPos.height +
+      'location=no,menubar=no,resizable=yes,status=no,titlebar=yes,toolbar=no');
+    window.close();
   }
 });
 
@@ -842,6 +988,9 @@ var Lists = {
   init: function(force) {
     var _this = this;
     tweetManager.lists(force, function(success, lists, status) {
+      if(!window) { // Popup closed
+        return;
+      }
       if(!success) {
         if(force) {
           Renderer.showError(chrome.i18n.getMessage("ue_fetchingLists", status), 'Lists.init', 'true');
@@ -856,7 +1005,7 @@ var Lists = {
           return true;
         }
         var $listSelect = $("select#" + timeline.timelineId + "-selector");
-        if($listSelect.length == 0) {
+        if($listSelect.length === 0) {
           var pos = tweetManager.getTimelinePosition(timeline.timelineId);
           if(pos == -1) {
             pos = undefined;
@@ -890,6 +1039,7 @@ var Lists = {
             return true;
           }
         });
+        return true;
       });
       ThemeManager.handleWindowResizing();
     });
@@ -918,27 +1068,9 @@ var ContextMenu = {
 
   runMenuAction: function(action, el, pos) {
     var actionParts = action.split('-');
+    var templateId = actionParts[1];
     if(actionParts[0] == 'show') {
-      var templateId = actionParts[1];
-      var createdTimelines = tweetManager.showTimelineTemplate(templateId);
-      if(templateId == TimelineTemplate.LISTS) {
-        Lists.init();
-      } else {
-        for(var i = 0, len = createdTimelines.length; i < len; ++i) {
-          var timeline = createdTimelines[i];
-          var pos = tweetManager.getTimelinePosition(timeline.timelineId);
-          if(pos == -1) {
-            pos = undefined;
-          }
-          if(templateId == TimelineTemplate.SEARCH) {
-            SearchTab.addSearchTab(timeline.timelineId, pos, true);
-          } else {
-            TimelineTab.addTab(timeline.timelineId, timeline.template.timelineName, pos);
-          }
-        }
-        ThemeManager.handleWindowResizing();
-      }
-      ThemeManager.updateTabsOrder();
+      TimelineTab.addNewTab(templateId);
     } else if(actionParts[0] == 'remove') {
       var timelineId = actionParts[1];
       TimelineTab.removeTab(timelineId);
@@ -948,16 +1080,13 @@ var ContextMenu = {
         prepareAndLoadTimeline();
       }
     } else if(actionParts[0] == 'unified') {
-      var templateId = actionParts[1];
       tweetManager.toggleUnified(templateId);
       if(tweetManager.getCurrentTimeline().template.id == TimelineTemplate.UNIFIED) {
         prepareAndLoadTimeline();
       }
     } else if(actionParts[0] == 'notify') {
-      var templateId = actionParts[1];
       tweetManager.toggleNotify(templateId);
     } else if(actionParts[0] == 'icon') {
-      var templateId = actionParts[1];
       tweetManager.toggleChangeIcon(templateId);
     }
   },
@@ -984,6 +1113,7 @@ var ContextMenu = {
             className = 'check_marked';
           }
           specificMenu.push({action: 'unified-' + template.id, label: template.timelineName, className: className});
+          return true;
         });
       } else if(timeline.template.id != TimelineTemplate.FAVORITES) {
         specificMenu.push({label: 'separator'});
@@ -1023,7 +1153,7 @@ var ContextMenu = {
 
 var SearchTab = {
   addSearchTab: function(timelineId, pos, setFocus) {
-    var inputHtml = '<input type="text" spellcheck="false" class="search_selector" id="' + timelineId + '-selector"></input>'
+    var inputHtml = '<input type="text" spellcheck="false" class="search_selector" id="' + timelineId + '-selector"></input>';
     TimelineTab.addTab(timelineId, inputHtml, pos);
     var inputEl = $('input#' + timelineId + '-selector');
     inputEl.val(tweetManager.getSearchQuery(timelineId));
@@ -1032,8 +1162,7 @@ var SearchTab = {
     }
 
     inputEl.blur(function(e) {
-      SearchTab.updateSearch(e);
-      TimelineTab.select(timelineId);
+      SearchTab.updateSearchEvent(e);
     });
     inputEl.keyup(function(e) {
       if(e && e.which == 13) { // Enter
@@ -1042,11 +1171,22 @@ var SearchTab = {
     });
   },
 
-  updateSearch: function(e) {
+  updateSearchEvent: function(e) {
     var timelineId = e.target.id.split('-')[0];
-    if(tweetManager.changeSearch(timelineId, $(e.target).val())) {
-      Paginator.firstPage(true);
-      prepareAndLoadTimeline();
+    var searchQuery = $(e.target).val();
+    SearchTab.updateSearch(timelineId, searchQuery, false);
+  },
+
+  updateSearch: function(timelineId, searchQuery, isBackground) {
+    if(!isBackground) {
+      TimelineTab.select(timelineId);
+    }
+    $('#' + timelineId + '-selector').val(searchQuery);
+    if(tweetManager.changeSearch(timelineId, searchQuery)) {
+      if(!isBackground) {
+        Paginator.firstPage(true);
+        prepareAndLoadTimeline();
+      }
     }
   }
 };
@@ -1058,6 +1198,7 @@ var TimelineTab = {
       tabTemplate: '<li id="tab_#{href}" class="timeline_tab"><a href="#{href}"><span>#{label}</span></a></li>',
       selected: 0,
       select: function(event, ui) {
+        tweetManager.previousTimelineId = tweetManager.currentTimelineId;
         tweetManager.currentTimelineId = ui.panel.id.split('-')[1];
         prepareAndLoadTimeline();
       },
@@ -1065,6 +1206,46 @@ var TimelineTab = {
         $('.inner_timeline', ui.panel).scrollTop(tweetManager.getCurrentTimeline().currentScroll);
       }
     });
+  },
+
+  addNewTab: function(templateId, automaticallyAdded) {
+    var createdTimelines = tweetManager.showTimelineTemplate(templateId);
+    if(templateId == TimelineTemplate.LISTS) {
+      Lists.init();
+    } else {
+      for(var i = 0, len = createdTimelines.length; i < len; ++i) {
+        var timeline = createdTimelines[i];
+        pos = tweetManager.getTimelinePosition(timeline.timelineId);
+        if(pos == -1) {
+          pos = undefined;
+        }
+        if(templateId == TimelineTemplate.SEARCH) {
+          SearchTab.addSearchTab(timeline.timelineId, pos, !automaticallyAdded);
+        } else {
+          TimelineTab.addTab(timeline.timelineId, timeline.template.timelineName, pos);
+        }
+      }
+      ThemeManager.handleWindowResizing();
+    }
+    ThemeManager.updateTabsOrder();
+    return createdTimelines;
+  },
+
+  addNewSearchTab: function(searchQuery, isBackground) {
+    var searchTimeline;
+    tweetManager.eachTimeline(function(timeline) {
+      if(timeline.template.id == TimelineTemplate.SEARCH && timeline.getSearchQuery() == searchQuery) {
+        searchTimeline = timeline;
+        return false;
+      }
+      return true;
+    });
+    if(!searchTimeline) {
+      searchTimeline = TimelineTab.addNewTab(TimelineTemplate.SEARCH, true)[0];
+    }
+    if(searchQuery) {
+      SearchTab.updateSearch(searchTimeline.timelineId, searchQuery, isBackground);
+    }
   },
 
   addTab: function(timelineId, tabName, pos) {
@@ -1087,6 +1268,9 @@ var TimelineTab = {
   },
 
   removeTab: function(timelineId) {
+    if(timelineId == tweetManager.currentTimelineId && tweetManager.previousTimelineId) {
+      this.select(tweetManager.previousTimelineId);
+    }
     $("#tabs > ul li:has(a[href])").each(function(index, el) {
       if($(el).attr('id') == 'tab_#timeline-' + timelineId) {
         $("#tabs").tabs('remove', index);
@@ -1136,8 +1320,8 @@ var Autocomplete = {
   },
 
   autocomplete: function(hintStr) {
-    var usersList = tweetManager.getUsersToComplete();
-    if(usersList == null || usersList.length == 0) {
+    var usersList = tweetManager.getFollowingUsers();
+    if(usersList === null || usersList.length === 0) {
       return [];
     }
     var lastSpaceIdx = hintStr.lastIndexOf(' ');
@@ -1148,15 +1332,89 @@ var Autocomplete = {
     } else {
       return [];
     }
-    hintStr = hintStr.substr(this.startPosition);
+    hintStr = hintStr.substr(this.startPosition).toLowerCase();
     var validScreenNames = [];
     for(var i = 0, len = usersList.length; i < len; ++i) {
       var user = usersList[i];
-      if(user.screen_name.toLowerCase().indexOf(hintStr.toLowerCase()) == 0) {
-        validScreenNames.push(user.screen_name);
+      if(user.toLowerCase().indexOf(hintStr) === 0) {
+        validScreenNames.push(user);
       }
     }
     return validScreenNames;
+  }
+};
+
+var ImageUpload = {
+  init: function() {
+    var _this = this;
+    this.progressEl = $('#upload_progress');
+    this.loadingEl = $('#loading');
+    this.inputEl = $('#image_input')[0];
+
+    // FIXME: This check is here only because of http://crbug.com/61632 and
+    // http://crbug.com/28829 (already fixed but not on stable channel yet)
+    var hideButton = false;
+    var majorVersion = parseInt(navigator.userAgent.match(/Chrome\/(\d+)\./)[1], 10);
+    if(majorVersion < 8) {
+      hideButton = true;
+    }
+    if(ThemeManager.isPopup) {
+      var platform = navigator.userAgent.match(/\((\w+);/)[1];
+      if(platform == 'Macintosh') {
+        hideButton = true;
+      }
+    }
+    if(hideButton) {
+      $('#upload_button_area').hide();
+    }
+
+    var running = UploadManager.registerCallbacks(
+      function (success, urlOrError) {
+        return _this.onFinish(success, urlOrError);
+      },
+      function (loaded, total) {
+        return _this.onProgress(loaded, total);
+      }
+    );
+    if(running) {
+      this.inputEl.disabled = true;
+      this.progressEl.show();
+      this.loadingEl.show();
+    }
+  },
+
+  upload: function() {
+    this.inputEl.disabled = true;
+    this.progressEl.show();
+    this.loadingEl.show();
+
+    var files = this.inputEl.files;
+    UploadManager.upload(files[0]);
+  },
+
+  onFinish: function(success, urlOrError) {
+    if(!window) {
+      return false;
+    }
+    this.inputEl.disabled = false;
+    this.progressEl.hide();
+    this.loadingEl.hide();
+    if(success) {
+      this.inputEl.value = null;
+      Composer.addText(urlOrError);
+    } else {
+      Renderer.showError(urlOrError, 'ImageUpload.upload');
+    }
+    return true;
+  },
+
+  onProgress: function(loaded, total) {
+    if(!window) {
+      return false;
+    }
+    var progress = (loaded / total) * 100.0;
+    this.progressEl[0].value = progress;
+    return true;
   }
 };
 
@@ -1167,13 +1425,17 @@ function onTimelineRetrieved(tweets, timelineId) {
     //Sanity check, popup might be closed.
     return;
   }
-  if(!tweetManager.getCurrentTimeline().template.visible) {
+
+  var timeline = tweetManager.getTimeline(timelineId);
+  if(!timeline.template.visible) {
     return;
   }
+
   $("#loading").hide();
   if(tweets) {
     Paginator.needsMore = false;
     Renderer.assemblyTweets(tweets, timelineId);
+    $("#timeline-" + timelineId + ' .inner_timeline').scrollTop(timeline.currentScroll);
   } else {
     var baseErrorMsg = tweetManager.currentError();
     var errorMsg = chrome.i18n.getMessage("ue_updatingTweets", baseErrorMsg);
@@ -1246,7 +1508,7 @@ function showRateLimit() {
     var hitsInfo = tweetManager.twitterBackend.remainingHitsInfo();
     $("#twitter_hits_left").text("API: "+ hitsInfo[0] + "/" + hitsInfo[2] + ",");
 
-    resetDateObj.setTime(parseInt(hitsInfo[1]) * 1000);
+    resetDateObj.setTime(parseInt(hitsInfo[1], 10) * 1000);
     var leftMins = resetDateObj.getMinutes() - nowmin;
     if (leftMins < 0) leftMins = 60 + leftMins;
     $("#twitter_hits_reset").text(leftMins + " mins to reset");
@@ -1260,20 +1522,19 @@ function newTweetsAvailable(count, unreadCount, timelineId) {
   }
   var currentTimeline = tweetManager.currentTimelineId;
   if(timelineId != currentTimeline) {
-    if(unreadCount == 0) {
+    if(unreadCount === 0) {
       $("#tab_modifier_" + timelineId).remove();
       return;
     }
     $("#tab_modifier_" + timelineId).remove();
     var timelineTabLink = $("a[href='#timeline-" + timelineId + "']");
-    var divEl = $("<div class='tab_modifier'></div>")
-      .attr('id', "tab_modifier_" + timelineId);
+    var divEl = $("<div class='tab_modifier'></div>").attr('id', "tab_modifier_" + timelineId);
     timelineTabLink.before(divEl);
-    var modWidth = parseInt(timelineTabLink.parent().width()) - 12;
+    var modWidth = parseInt(timelineTabLink.parent().width(), 10) - 12;
     divEl.css({width: modWidth + 'px'});
     return;
   }
-  if(count == 0)
+  if(count === 0)
     return;
   var tweets_string = count > 1 ? "tweet_plural" : "tweet_singular";
   $("#update_tweets").text(chrome.i18n.getMessage("newTweetsAvailable", [count, chrome.i18n.getMessage(tweets_string)]));
@@ -1285,7 +1546,7 @@ function updateNotificationFunc(timeline) {
   var newTweetsInfo = tweetManager.newTweetsCount(timelineId);
   var newTweetsCount = newTweetsInfo[0];
 
-  if(timeline.timelineId == tweetManager.currentTimelineId && timeline.currentScroll == 0) {
+  if(timeline.timelineId == tweetManager.currentTimelineId && timeline.currentScroll === 0) {
     if(newTweetsCount > 0) {
       tweetManager.updateNewTweets();
       $("#tab_modifier_" + timelineId).remove();
@@ -1301,6 +1562,43 @@ function loadNewTweets() {
   $("#update_tweets").fadeOut();
 
   prepareAndLoadTimeline();
+}
+
+function loadTrends() {
+  var currentTTLocale = OptionsBackend.get('trending_topics_woeid');
+
+  $("#trending_topics").actionMenu({
+    loading: 'img/loading.gif',
+    parentContainer: '#workspace'
+  });
+
+  tweetManager.retrieveTrendingTopics(function(userData) {
+    var actions = [];
+
+    if(userData) {
+      for(var i = 0, len = userData.trends.length; i < len; ++i) {
+        (function(trendName) {
+          actions.push({
+            name: trendName,
+            action: function(event) {
+              TimelineTab.addNewSearchTab(trendName, event.isAlternateClick);
+            }
+          });
+        })(userData.trends[i].name);
+      }
+    } else {
+      actions.push({
+        name: 'Error, try again.',
+        action: function(event) {
+          loadTrends();
+        }
+      });
+    }
+
+    $("#trending_topics").actionMenu({
+      actions: actions
+    });
+  }, currentTTLocale);
 }
 
 function prepareTimelines() {
@@ -1326,11 +1624,16 @@ function initializeWorkspace() {
       tweetManager.registerNewTweetsCallback(null);
     }
   });
-  Renderer.setContext('popup');
 
   tweetManager.registerNewTweetsCallback(newTweetsAvailable);
   $("#workspace").show();
   ThemeManager.init();
+
+  if(ThemeManager.isPopup) {
+    Renderer.setContext('popup');
+  } else {
+    Renderer.setContext('standalone');
+  }
 
   TimelineTab.init();
   tweetManager.orderedEachTimeline(function(timeline) {
@@ -1343,14 +1646,14 @@ function initializeWorkspace() {
   ThemeManager.handleSortableTabs();
 
   if(OptionsBackend.get('compose_position') == 'bottom') {
-    var composeArea = $("#compose_tweet_area").remove();
-    var composeButton = $("#compose_tweet").remove();
+    var composeArea = $("#compose_tweet_area").detach();
+    var composeButton = $("#compose_tweet").detach();
     $("#workspace").append(composeArea).append(composeButton);
   }
 
   //Delay loading, improving responsiveness
   setTimeout(function() {
-    ThemeManager.handleWindowResizing();
+    ThemeManager.initWindowResizing();
     Lists.init();
     ContextMenu.init();
 
@@ -1359,6 +1662,7 @@ function initializeWorkspace() {
     Shortener.init();
 
     prepareAndLoadTimeline();
+
     var tabEl = $("#timeline-" + tweetManager.currentTimelineId + ' .inner_timeline');
     tabEl.scrollTop(tweetManager.getCurrentTimeline().currentScroll);
 
@@ -1370,17 +1674,29 @@ function initializeWorkspace() {
 
     WorkList.init();
     Autocomplete.init();
-    $("#shorten_current").attr("title",chrome.i18n.getMessage("shorten_current"));
+    $("#shorten_current").attr("title", chrome.i18n.getMessage("shorten_current"));
+    $("#detach_img").attr("title", chrome.i18n.getMessage("detach_window"));
+
+    $("#options_page_link").anyClick(function() {
+      openTab(chrome.extension.getURL('options.html'));
+    });
+    
+    loadTrends();
+    
+    ImageUpload.init();
   }, 0);
 }
 
 $(function() {
-
   $("input.i18n").each(function() {
     $(this).val(chrome.i18n.getMessage(this.id));
   });
 
   $("span.i18n").each(function() {
+    $(this).html(chrome.i18n.getMessage(this.id));
+  });
+
+  $("a.i18n").each(function() {
     $(this).html(chrome.i18n.getMessage(this.id));
   });
 
@@ -1392,18 +1708,6 @@ $(function() {
   }
 
   initializeWorkspace();
-
-  chrome.tabs.getAllInWindow(null, function(tabs) {
-    //Let's make it fullscreen if we're running it in an exclusive window.
-    if(tabs.length == 1 && tabs[0].url == chrome.extension.getURL('popup.html')) {
-      var resizeWindowFunc = function() {
-        var timelineHeight = window.innerHeight - 79;
-        $('.timeline').css('maxHeight', timelineHeight + 'px');
-      }
-      resizeWindowFunc();
-      $(window).resize(resizeWindowFunc);
-    }
-  });
 });
 </script>
 </head>
@@ -1429,6 +1733,10 @@ $(function() {
     </div>
     <div class="footer">
       <input id="tweetit" class="i18n" type="button" onclick="Composer.sendTweet();"/>
+      <span id="upload_button_area">
+        <img id="attach_icon" src="img/attachment.png"><input id="image_input" type="file" name="media" accept="image/*" onchange="ImageUpload.upload();"/>
+      </span>
+      <progress id="upload_progress" max="100"></progress>
       <span class="chars_left"></span>
     </div>
   </div>
@@ -1438,12 +1746,16 @@ $(function() {
 
   <span class="header_link_left">
     <a href="javascript:signout()"><span id="logout" class="i18n"></span></a> |
-    <a href="#" onclick="openTab(chrome.extension.getURL('options.html'))"><span id="options" class="i18n"></span></a> |
+    <a href="#" id="options_page_link"><span id="options" class="i18n"></span></a> |
     <a href="javascript:Composer.refreshNew();"><span id="refresh" class="i18n"></span></a> |
-    <a id="suspend_toggle" href="javascript:suspend()"><span id="suspend" class="i18n"></span></a>
+    <a id="suspend_toggle" href="javascript:suspend()"><span id="suspend" class="i18n"></span></a> |
+    <a id="trending_topics" href="#" class="i18n">Trends</a>
     <span id="suspended_notice"><span id="autoUpdatesSuspended" class="i18n"></span></span>
   </span>
-  <a class="header_link_right" href="javascript:Renderer.markAllAsRead();"><span id="markAllRead" class="i18n"></span></a>
+  <span class="header_link_right">
+    <a href="javascript:Renderer.markAllAsRead();"><span id="markAllRead" class="i18n"></span></a>
+    <a href="javascript:Renderer.detach();"><img id="detach_img" src="img/up_detach.png"/></a>
+  </span>
   <img src="img/loading.gif" id="loading" style="display: none;"/>
   <img src="img/loading.gif" id="queue_loading" style="display: none;"/>
   <div style="clear: both;"></div>
