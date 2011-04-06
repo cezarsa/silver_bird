@@ -18,7 +18,7 @@
 		"description": "The text for the logout link"
 	},
 	"options": {
-		"message": "Opcions",
+		"message": "Opcións",
 		"description": "Options link"
 	},
 	"refresh": {
@@ -618,12 +618,66 @@
 		"message": "Reiniciar"
 	},
 	"btn_default": {
-		"message": "Reiniciar a por omisión"
+		"message": "Reiniciar a inicial"
 	},
 	"shortenIt": {
 		"message": "¡Acurtar!"
 	},
 	"shorten_current": {
 		"message": "Compartir páxina actual"
+	},
+	"tweet_send_error": {
+		"message": "Houbo un erro ao tentar envialo teu chío. Fai Twetter cousas raras? Pódelo tentar de novo, pero comproba a túa conta para evitar chíos repetidos."
+	},
+	"detach_window": {
+	  "message": "Detach Window"
+	},
+	"follow_action": {
+	  "message": "Seguir"
+	},
+	"unfollow_action": {
+	  "message": "Deixar de seguir"
+	},
+	"tweets_action": {
+	  "message": "Chíos"
+	},
+	"profile_action": {
+	  "message": "Perfil"
+	},
+	"add_mention_action": {
+	  "message": "Mencionar"
+	},
+	"g_image_service": {
+	  "message": "Servizo de imaxes"
+	},
+	"l_image_up_service": {
+	  "message": "Servizo de subida de imaxes:"
+	},
+	"l_default_locale": {
+	  "message": "Locale por omisión:"
+	},
+	"automatic": {
+	  "message": "O mesmo que o navegador"
+	},
+	"trending_topics": {
+	  "message": "Tendencias"
+	},
+	"g_trending_topics": {
+	  "message": "Asuntos de moda" 
+	},
+	"l_trending_topics_woeid": {
+	  "message": "Locale dos asuntos de moda:" 
+	},
+	"l_use_streaming_api": {
+	  "message": "Use streaming API (experimental!):"
+	},
+	"l_user_stream_url": {
+	  "message": "User Stream URL:"
+	},
+	"block_action": {
+	  "message": "Bloquear"
+	},
+	"report_action": {
+	  "message": "Marcar coma Spam"
 	}
 }
