@@ -159,7 +159,7 @@ $(function() {
     } else if((idx = optionName.indexOf('_include_unified')) != -1) {
       templateId = optionName.substring(0, idx);
       tweetManager.toggleUnified(templateId, newValue);
-    } else if(optionsName == 'trending_topics_woeid') {
+    } else if(optionName == 'trending_topics_woeid') {
       tweetManager.cachedTrendingTopics = null;
     }
   });
