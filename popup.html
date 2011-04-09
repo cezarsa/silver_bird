@@ -863,9 +863,9 @@ $.extend(Renderer, {
 
     $(".tweet").live('mouseover mouseout', function(event) {
       if(event.type == 'mouseover') {
-        $(".new_actions img:not(.starred)", this).show();
+        $(".new_actions img:not(.starred)", this).css('display', 'inline');
       } else {
-        $(".new_actions img:not(.starred)", this).hide();
+        $(".new_actions img:not(.starred)", this).css('display', 'none');
       }
     });
 
