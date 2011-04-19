@@ -646,5 +646,35 @@
 	},
 	"add_mention_action": {
 	  "message": "Bahset"
-	}
+	},
+    "g_image_service": {
+        "message": "Görsel servisi"
+    },
+    "g_trending_topics": {
+        "message": "Popüler konular"
+    },
+    "automatic": {
+        "message": "Tarayıcı ile aynı"
+    },
+    "l_default_locale": {
+        "message": "Varsayılan dil"
+    },
+    "l_image_up_service": {
+        "message": "Görsel yükleme servisi"
+    },
+    "l_trending_topics_woeid": {
+        "message": "Popüler konular yerelleştirmesi"
+    },
+    "sentTo": {
+        "message": "gönderildi"
+    },
+    "trending_topics": {
+        "message": "Popüler konular"
+    },
+    "w_ReceivedDM": {
+        "message": "Alınan iletiler"
+    },
+    "w_SentDM": {
+        "message": "Gönderilen iletiler"
+    }
 }
