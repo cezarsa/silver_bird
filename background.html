@@ -132,6 +132,14 @@ function TweetManager() {
     this.oauthTokenData);
 
   this.sendQueue = new SendQueue(this.twitterBackend);
+  
+  this.shortenerAuth = {
+    token: OptionsBackend.get('shortener_token'),
+    tokenSecret: OptionsBackend.get('shortener_token_secret'),
+    tokenRequested: false,
+    callback: null,
+    longUrl: ''
+  };
 }
 
 TweetManager.prototype = {

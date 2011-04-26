@@ -51,6 +51,8 @@ if(!twitterBackend.authenticated() && !twitterBackend.tokenRequested()) {
 <script type='text/javascript' src='lib/3rdparty/jquery.tipsy.js'></script>
 <script type="text/javascript" src="lib/3rdparty/jquery.contextMenu.js"></script>
 <script type="text/javascript" src="lib/3rdparty/jquery.insertatcaret.min.js"></script>
+<script type="text/javascript" src="lib/3rdparty/oauth.js"></script>
+<script type="text/javascript" src="lib/3rdparty/sha1.js"></script>
 
 <!--script type="text/javascript" src="lib/debug.js"></script-->
 <script type="text/javascript" src="lib/any_click.js"></script>
@@ -75,6 +77,8 @@ if(shortener_acct) {
 
 if (url_shortener == 'yourls'){
   shortener_key = OptionsBackend.get('yourls_key');
+} else if( url_shortener == 'googl' ){
+  shortener_acct = OptionsBackend.get('shortener_oauth');
 }
 
 var reply_all = OptionsBackend.get('reply_all');
