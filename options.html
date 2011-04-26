@@ -81,17 +81,17 @@ $(function() {
   }
 
   var onShortenerChange = function() {
+	$("#shortener_opts").hide();
+	$("#yourls_opts").hide();
+	$("#googl_opts").hide();
     var shortenerSelect = $("select[name='url_shortener']")[0];
     if(shortenerSelect.value == 'bitly' || shortenerSelect.value == 'jmp' || shortenerSelect.value == 'karmacracy') {
       $("#shortener_opts").show();
-      $("#yourls_opts").hide();
     } else if(shortenerSelect.value == 'yourls') {
-      $("#shortener_opts").hide();
       $("#yourls_opts").show();
-    } else {
-      $("#shortener_opts").hide();
-      $("#yourls_opts").hide();
-    }
+    } else if(shortenerSelect.value == 'googl') {
+	  $("#googl_opts").show();
+	}
   };
 
   var onShortenerAcctClick = function() {
@@ -472,6 +472,10 @@ function updatePredictedHitsCount() {
       <label for="yourls_key">Signature token:</label>
       <input type="text" name="yourls_key">
     </p>
+	<p id="googl_opts">
+	  <label for="googl_personal_account" class="i18n" id="l_shortener_oauth">Use personal account authentication:</label>
+	  <input type="checkbox" name="shortener_oauth"><br/>
+	</p>
     <label for="share_include_title" class="i18n" id="l_share_include_title">Include page title (sharing):</label>
     <input type="checkbox" name="share_include_title"><br>
   </fieldset>
