@@ -57,6 +57,12 @@
 	"w_DM": {
 		"message": "DMs"
 	},
+	"w_SentDM": {
+		"message": "DMs enviadas"
+	},
+	"w_ReceivedDM": {
+	  "message": "DMs recebidas"
+	},
 	"w_Favorites": {
 		"message": "Favoritos"
 	},
@@ -71,6 +77,9 @@
 	},
 	"inReply": {
 		"message": "em resposta para"
+	},
+	"sentTo": {
+		"message": "enviado para"
 	},
 	"retweetedBy": {
 		"message": "retwittado por"
@@ -614,5 +623,68 @@
 	},
 	"btn_default": {
 		"message": "Resetar para valores default"
+	},
+	"shortenIt": {
+	  "message": "Encurte!"
+	},
+	"shorten_current": {
+	  "message": "Compartilhar página atual"
+	},
+	"tweet_send_error": {
+	  "message": "Um erro ocorreu enquanto enviávamos seu tweet. O twitter está agindo de maneira estranha? Você pode tentar novamente, mas antes verifique se seu tweet já não foi publicado e previna mensagens duplicadas."
+	},
+	"detach_window": {
+	  "message": "Separar janela"
+	},
+	"follow_action": {
+	  "message": "Seguir"
+	},
+	"unfollow_action": {
+	  "message": "Parar de seguir"
+	},
+	"tweets_action": {
+	  "message": "Tweets"
+	},
+	"profile_action": {
+	  "message": "Perfil"
+	},
+	"add_mention_action": {
+	  "message": "Mencionar"
+	},
+	"g_image_service": {
+	  "message": "Serviço de imagens"
+	},
+	"l_image_up_service": {
+	  "message": "Serviço de upload de imagens:"
+	},
+	"l_default_locale": {
+	  "message": "Idioma padrão:"
+	},
+	"automatic": {
+	  "message": "O mesmo que o browser"
+	},
+	"trending_topics": {
+	  "message": "Trends"
+	},
+	"g_trending_topics": {
+	  "message": "Trending Topics" 
+	},
+	"l_trending_topics_woeid": {
+	  "message": "Local dos Trending Topics:" 
+	},
+	"l_use_streaming_api": {
+	  "message": "Usar a API de streaming (experimental!):"
+	},
+	"l_user_stream_url": {
+	  "message": "URL da stream de usuário:"
+	},
+	"block_action": {
+	  "message": "Bloquear"
+	},
+	"report_action": {
+	  "message": "Reportar como spam"
+	},
+	"l_shortener_oauth": {
+	  "message": "Autenticar usando conta pessoal:"
 	}
 }

@@ -688,5 +688,8 @@
 	},
 	"report_action": {
 	  "message": "Report Spam"
+	},
+	"l_shortener_oauth": {
+	  "message": "Use personal account authentication:"
 	}
 }

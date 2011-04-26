@@ -121,7 +121,7 @@ $.fn.hoverFor = function(time, mainCallback, startingCallback, abortCallback) {
  });
 };
 
-var OAuth = {
+var myOAuth = {
   registerPin: function() {
     var pinNumber = $("input[name='pin']").val();
     $("#loading_oauth").show();
@@ -1776,9 +1776,9 @@ $(function() {
   <img src="img/loading.gif" id="loading_oauth" style="display: none;"/>
   <label for="pin">Twitter's OAuth Pin:</label>
   <input type="text" name="pin"><br>
-  <input type="button" onclick="OAuth.registerPin();" class="i18n" id="btnAuthorize" value="Authorize!">
+  <input type="button" onclick="myOAuth.registerPin();" class="i18n" id="btnAuthorize" value="Authorize!">
   <br><br>
-  <a href="javascript:OAuth.requestNewToken();"><span id="newToken" class="i18n"></span></a>
+  <a href="javascript:myOAuth.requestNewToken();"><span id="newToken" class="i18n"></span></a>
 </div>
 <div id="error_pin" style="display: none;">
 </div>
