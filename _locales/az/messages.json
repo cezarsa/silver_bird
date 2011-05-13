@@ -33,10 +33,10 @@
     "message": "Avtomatik yenilənmələr ləğv edildi"
   },
   "resume": {
-    "message": "Davam"
+    "message": "Davam et"
   },
   "remove": {
-    "message": "Sil"
+    "message": "Yığışdır"
   },
   "hide": {
     "message": "Gizlət"
@@ -48,13 +48,13 @@
     "message": "Əlavə et"
   },
   "selectList": {
-    "message": "- Bir siyahı seç -"
+    "message": "- Siyahı seçin -"
   },
   "updateList": {
     "message": "Siyahılar yenilənir..."
   },
   "w_Unified": {
-    "message": "Hamısı"
+    "message": "Ümumi"
   },
   "w_Home": {
     "message": "Əsas səhifə"
@@ -63,40 +63,40 @@
     "message": "İsmarışlar"
   },
   "w_SentDM": {
-    "message": "Göndərilən İsmarışlar"
+    "message": "Göndərilənlər"
   },
   "w_ReceivedDM": {
-    "message": "Alınan İsmarışlar"
+    "message": "Gələnlər"
   },
   "w_Favorites": {
-    "message": "Favoritlər"
+    "message": "Seçilmişlər"
   },
   "w_Lists": {
     "message": "Siyahılar"
   },
   "w_Search": {
-    "message": "Axtar"
+    "message": "Axtarış"
   },
   "fromApp": {
-    "message": "vasitəçi"
+    "message": "vasitəçi:"
   },
   "inReply": {
-    "message": "cavabında"
+    "message": "cavabında:"
   },
   "sentTo": {
     "message": "göndərildi"
   },
   "retweetedBy": {
-    "message": "təkrar tvitləyən"
+    "message": "təkrar tvitləyən:"
   },
   "retweetedByMe": {
     "message": "sizin tərəfinizdən təkrar tvitləndi"
   },
   "unmarkFavorite": {
-    "message": "Favoritlərdən sil"
+    "message": "Seçilmişlərdən yığışdır"
   },
   "markFavorite": {
-    "message": "Favoritlərə əlavə et"
+    "message": "Seçilmişlərə əlavə et"
   },
   "Delete": {
     "message": "Sil"
@@ -105,10 +105,10 @@
     "message": "Bu ismarışı sil: "
   },
   "Yes": {
-    "message": "Bəli"
+    "message": "Hə"
   },
   "No": {
-    "message": "Xeyr"
+    "message": "Yox"
   },
   "Reply": {
     "message": "Cavabla"
@@ -117,19 +117,19 @@
     "message": "Yenidən tvitlə"
   },
   "retweetConfirm": {
-    "message": "Bu ismarışı yenidən tvitlə: "
+    "message": "Bu tviti yenidən tvitlə: "
   },
   "oldRT": {
     "message": "Paylaş"
   },
   "markAllRead": {
-    "message": "Hamısını oxundu olaraq işarələ"
+    "message": "Hamısını oxunmuş kimi işarələ"
   },
   "newToken": {
-    "message": "Başqa simvolu xahiş edin"
+    "message": "Başqa simvol istə"
   },
   "shortenerIdleString": {
-    "message": "Bura qısaldılacaq ünvanı yazın. Açıq səhifəni sağdakı simvoldan qısaldın."
+    "message": "Bura qısaldılacaq ünvanı yazın və ya səhifəni sağdakı simvoldan qısaldın. »»»"
   },
   "timelineHome": {
     "message": "Əsas səhifə",
@@ -140,7 +140,7 @@
     "description": "The direct message time line tab"
   },
   "timelineFavorites": {
-    "message": "Favoritlər",
+    "message": "Seçilmişlər",
     "description": "The home time line tab"
   },
   "tweet_singular": {
@@ -150,7 +150,7 @@
     "message": "tvit"
   },
   "newTweetsAvailable": {
-    "message": "Yeni $count$ tvit var. Oxumaq üçün basın.",
+    "message": "Yeni $count$ tvit var. İndi yenilə.",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -164,7 +164,7 @@
     "message": "Bağlanmaması üçün basın."
   },
   "changeNotificationSettings": {
-    "message": "Bildiriş nizamlarını seçimlər səhifəsindən dəyişdirə bilərsiniz."
+    "message": "Siz seçimlər səhifəsində bildiriş ayarlarını dəyişə bilərsiniz."
   },
   "loadingMap": {
     "message": "Xəritə yüklənir..."
@@ -176,19 +176,19 @@
     "message": "URL yüklənir..."
   },
   "errorExpandingUrl": {
-    "message": "Bir səhv yarandı. Lütfən təkrar sınayın."
+    "message": "Bağışlayın səhv yarandı. Lütfən təkrar sınayın."
   },
   "ajaxFailed": {
-    "message": "AJAX istəyi uğursuzdur (pis şəbəkə?)"
+    "message": "AJAX istəyi uğursuzdur (pis əlaqə?)"
   },
   "successAuth": {
-    "message": "Təbriklər, şəxsiyyətiniz təsdiqləndi. 'Chromed Bird'dən zövq alın!"
+    "message": "Təbriklər, hesabınızın həqiqili təsdiqləndi. Chromed Bird'dən zövq alın!"
   },
   "cbAuthorized": {
-    "message": "Chromed Bird səlahiyyətli!"
+    "message": "Chromed Bird səlahiyyət verdi!"
   },
   "cbNotAuthorized": {
-    "message": "Bir səhv yarandı. Lütfən Chromed Bird ikonuna təkrar basın."
+    "message": "Nəsə istənilən kimi getmədi. Lütfən Chromed Bird ikonuna təkrar basın."
   },
   "authorizing": {
     "message": "Lütfən gözləyin..."
@@ -208,10 +208,10 @@
     "message": "Ləğv edilir..."
   },
   "cancelTweet": {
-    "message": "Ləğv et"
+    "message": "Tviti Ləğv et"
   },
   "queued_messages": {
-    "message": "Sırada olan İsmarışlar:"
+    "message": "Sırada olan tvitlər:"
   },
   "queue_trying": {
     "message": "$timediff$ tarixindən bəri göndərilməyi gözləyir",
@@ -222,7 +222,7 @@
     }
   },
   "queue_retried": {
-    "message": "$timediff$ tarixindən bəri $retries$ dəfə göndərilməyə cəhd etdi [$laststatus$]",
+    "message": "$timediff$ tarixindən bəri $retries$ dəfə göndərilməyə cəhd edildi [$laststatus$]",
     "placeholders": {
       "retries": {
         "content": "$1"
@@ -252,7 +252,7 @@
     }
   },
   "ue_updatingTweets2": {
-    "message": "Əgər bu səhv ilə çox sıx qarşılaşırsınızsa çıxıb təkrar girməyi sınayın."
+    "message": "Əgər bu səhv ilə çox sıx qarşılaşırsınızsa çıxış edib təkrar daxil olmağı sınayın."
   },
   "ue_deletingTweet": {
     "message": "Tvit silinərkən $status$ səhvi yarandı.",
@@ -271,7 +271,7 @@
     }
   },
   "ue_markFavorite": {
-    "message": "Favoritlərə əlavə edərkən $status$ səhvi yarandı.",
+    "message": "Seçilənlərə əlavə edərkən $status$ səhvi yarandı.",
     "placeholders": {
       "status": {
         "content": "$1"
@@ -279,7 +279,7 @@
     }
   },
   "ue_unmarkFavorite": {
-    "message": "Favoritdən silərkən $status$ səhvi yarandı.",
+    "message": "Seçiləndən yığışdırarkən $status$ səhvi yarandı.",
     "placeholders": {
       "status": {
         "content": "$1"
@@ -304,7 +304,7 @@
     "message": "yeni tvit"
   },
   "btnAuthorize": {
-    "message": "Səlahiyyətləndir!"
+    "message": "Səlahiyyət ver!"
   },
   "exceededAPIHits": {
     "message": "Gündəlik API istifadə limitini keçdiniz. Lütfən <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>seçimlər səhifəsindən</a> yeniləmə aralığını yoxlayın. Chromed Bird $nextResetDate $nextResetTime$ tarixinə qədər yenilənməyəcək.",
@@ -321,7 +321,7 @@
     }
   },
   "warningAPIHits": {
-    "message": "API limitinizi çox sürətli doldurursunuz.<br>Lütfən <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>seçimlər səhifəsindən</a> yeniləmə aralığını yoxlayın.<br>Qalan haq: $remainingHits$ - Bir sonrakı sıfırlama tarixi: $nextResetDate$ $nextResetTime$",
+    "message": "API limitinizi çox sürətli doldurursunuz. <br>Lütfən <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>seçimlər səhifəsindən</a> yeniləmə aralığını idarə edin. <br>Qalan haqq: $remainingHits$ - Bir sonrakı sıfırlama tarixi: $nextResetDate$ $nextResetTime$",
     "placeholders": {
       "options_url": {
         "content": "$1"
@@ -346,7 +346,7 @@
     }
   },
   "justNow": {
-    "message": "Az əvvəl"
+    "message": "İndi"
   },
   "minuteAgo": {
     "message": "Saniyələr əvvəl"
@@ -405,10 +405,10 @@
     "message": "Chromed Bird Seçimləri"
   },
   "conf_saved": {
-    "message": "Nizamlarınız müvəffəqiyyətlə qeyd edildi."
+    "message": "Nizamlarınız uğurla qeyd edildi."
   },
   "changes_restart": {
-    "message": "Bəzi nizamların aktiv olması üçün əlavənin yenidən başladılması gərək. Bunu indi etmək istərsinizmi?<br>    (Oxunmamış tvit sayınız sıfırlanacaq)"
+    "message": "Bəzi nizamların aktiv olması üçün qoşmanın yenidən başladılması gərək. Bunu indi etmək istərsinizmi? <br> (Oxunmamış tvitləriniz sıfırlanacaq)"
   },
   "remaining_api_hits": {
     "message": "Qalan Twitter API İstifadə Sayı: "
@@ -429,7 +429,7 @@
     "message": "İstifadəçi adı"
   },
   "o_name": {
-    "message": "Gerçək ad"
+    "message": "Əsl adı"
   },
   "o_both": {
     "message": "İkisi də"
@@ -447,7 +447,7 @@
     "message": "Mövzu:"
   },
   "l_font_size": {
-    "message": "Şrift ölçüsü:"
+    "message": "Şrift Ölçüsü:"
   },
   "o_small": {
     "message": "Kiçik"
@@ -471,7 +471,7 @@
     "message": "Qısaldılmış ünvanları genişlət:"
   },
   "l_reply_all": {
-    "message": "Bütün xatırlatmaları cavablandır:"
+    "message": "Bütün bəhs edilənləri cavablandır:"
   },
   "l_show_hits_in_popup": {
     "message": "API istifadə sayını göstər:"
@@ -492,7 +492,7 @@
     "message": "Xatırlatmalar"
   },
   "btn_reset_popup_size": {
-    "message": "Pəncərə Ölçüsünü Bərpa et"
+    "message": "Pəncərə Ölçüsünü Sıfırla"
   },
   "g_notifications": {
     "message": "Bildirişlər"
@@ -513,22 +513,22 @@
     "message": "Xatırlatmalar:"
   },
   "notif_dms": {
-    "message": "Birbaşa ismarışlar:"
+    "message": "İsmarışlar:"
   },
   "notif_lists": {
     "message": "Siyahılar:"
   },
   "notif_search": {
-    "message": "Axtar:"
+    "message": "Axtarış:"
   },
   "l_tweets_notification_style": {
-    "message": "Bildiriş tərzi:"
+    "message": "Bildiriş üslubu:"
   },
   "l_noti_on_page": {
-    "message": "Skaner bildirişləri"
+    "message": "Səhifədə bildiriş"
   },
   "l_noti_desktop": {
-    "message": "Stolüstü bildirişləri"
+    "message": "Stolüstü Bildirişlər"
   },
   "l_notification_fade_timeout": {
     "message": "Bildiriş fasiləsi(s):"
@@ -555,7 +555,7 @@
     "message": "Səhifə başlığını daxil et:"
   },
   "g_timelines": {
-    "message": "Axışlar"
+    "message": "Vaxt qrafikləri"
   },
   "notice_api_hits": {
     "message": "Saatlıq API limiti ən çox <span style=\"color: red;\"><span class=\"__hourly_limit\"></span></span> ola bilər!<br>Əgər birdən çox Twitter vasitəçisi istifadə edirsinizsə aşağıdakı dəyərləri daha da azaltmalısınız."
@@ -570,25 +570,25 @@
     "message": "Yeniləmə aralığı(s)"
   },
   "l_include_in_unified": {
-    "message": "Birləşmiş axışa daxil et"
+    "message": "Birləşdirilən vaxt qrafikinə daxil et"
   },
   "l_tabs_count": {
-    "message": "Hesab sayı"
+    "message": "Hesablar Sayı"
   },
   "l_unified_timeline": {
-    "message": "Birləşmiş Axış:"
+    "message": "Birləşdirilən Vaxt qrafiki:"
   },
   "tml_favorites": {
-    "message": "Favoritlər:"
+    "message": "Seçilənlər:"
   },
   "l_blocked_users": {
     "message": "Qadağan edilən istifadəçilər:"
   },
   "notice_right_click_change": {
-    "message": "* Artıq pəncərədə sağı basaraq buradakı nizamların çoxunu pəncərə üzərindən dəyişdirə bilərsiniz."
+    "message": "* Artıq pəncərədə sıçanın sağ düymsini basaraq buradakı nizamların çoxunu pəncərə üzərindən dəyişdirə bilərsiniz."
   },
   "l_tweets_per_page": {
-    "message": "Səhifə başı göstəriləcək tvit sayı:"
+    "message": "Səhifə üçün tvit sayı:"
   },
   "l_max_cached_tweets": {
     "message": "Göstəriləcək maksimum tvit:"
@@ -597,10 +597,10 @@
     "message": "Mikrobloq xidməti"
   },
   "g_advanced": {
-    "message": "Təkminləşmiş"
+    "message": "Təkmilləşmiş"
   },
   "l_request_timeout": {
-    "message": "İstək fasiləsi(ms):"
+    "message": "Sorğu Fasiləsi(ms):"
   },
   "l_base_url": {
     "message": "Twitter API Ünvanı:"
@@ -624,19 +624,19 @@
     "message": "Qeyd et"
   },
   "btn_reset": {
-    "message": "Bərpa et"
+    "message": "Sıfırla"
   },
   "btn_default": {
-    "message": "Fərz edilən nizamlara geri qayıt"
+    "message": "Əvvəlki nizamları bərpa et"
   },
   "shortenIt": {
     "message": "Qısalt"
   },
   "shorten_current": {
-    "message": "Hazırkı səhifəni paylaş"
+    "message": "Hazırkı səhifəni qısalt"
   },
   "tweet_send_error": {
-    "message": "Tvitinizi göndərərkən bir səhv yarandı. Twitter qəribə davranır ola bilərmi? Təkrar sınaya bilərsiniz amma eyni ismarış göndərmədiyinizdən əmin olun."
+    "message": "Tvitinizi göndərərkən səhv yarandı. Twitter qəribə davranır ola bilərmi? Təkrar sınaya bilərsiniz amma eyni tviti göndərmədiyinizdən əmin olun."
   },
   "detach_window": {
     "message": "Pəncərəni Ayır"
@@ -663,7 +663,7 @@
     "message": "Şəkil Yükləmə Xidməti:"
   },
   "l_default_locale": {
-    "message": "Fərz edilən dil:"
+    "message": "Dil:"
   },
   "automatic": {
     "message": "Avtomatik"
@@ -672,10 +672,10 @@
     "message": "Trendlər"
   },
   "g_trending_topics": {
-    "message": "Trend mövzular"
+    "message": "Trend mövzular" 
   },
   "l_trending_topics_woeid": {
-    "message": "Yerlər üzrə trend mövzular:"
+    "message": "Yerlər üzrə trend mövzular:" 
   },
   "l_use_streaming_api": {
     "message": "Axın APİ-si istifadə edin (sınaqda!):"
@@ -688,5 +688,8 @@
   },
   "report_action": {
     "message": "Spam Şikayəti"
+  },
+  "l_shortener_oauth": {
+    "message": "Fərdi hesab təsdiqləməsindən istifadə et:"
   }
 }
