@@ -10,6 +10,15 @@ div.action_menu .action_area {
   -webkit-border-radius: 5px;
 }
 
+div.action_menu .action_area .second_level_hidden {
+  display: none;
+}
+
+div.action_menu .second_level_trigger {
+  cursor: pointer;
+  font-stretch: narrower;
+}
+
 div.action_menu.horizontal div.balloon {
   height: 9px;
   width: 12px;
@@ -68,6 +77,10 @@ div.action_menu.vertical .action_area {
 div.action_menu .action {
   -webkit-box-flex: 1;
   margin: 3px;
+}
+
+div.action.conditionFalse {
+  display: none;
 }
 
 div.action_menu .action a {

@@ -1141,6 +1141,9 @@ function checkVersionChanges(manifest) {
           OptionsBackend.setDefault('base_oauth_signing_url');
         }
       }
+      if(compareVersions(storageVersion, [1, 9, 7, 0]) <= 0) {
+        OptionsBackend.setDefault('use_streaming_api');
+      }
       storageData.save(JSON.stringify(currentVersion));
     }
   } catch(e) {
