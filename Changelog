@@ -1,3 +1,7 @@
+1.9.7.6 (2011-05-14)
+
+* Fixing a few glitches with streaming API reconnecting.
+
 1.9.7.5 (2011-05-14)
 
 * Support for Goo.gl OAuth authentication (Thanks a lot Rafael Vargas);
