@@ -57,6 +57,7 @@ function TweetManager() {
 
   // Using an object instead of an array to take advantage of hash look-ups
   this.blockedUserIds = {};
+  this.blockedUserNames = [];
 
   this.newTweetsCallback = null;
 
@@ -254,16 +255,19 @@ TweetManager.prototype = {
   },
 
   /**
-  * Update this.blockedUserIds and schedule another update after
+  * Update this.blockedUserIds and this.blockedUserNames,
+  * and schedule another update after
   * "blockedusers_refresh_interval" time has elapsed.
   */
   retrieveBlockedUserIds: function() {
     var _this = this;
-    this.twitterBackend.blockedUserIds(function(success, data, status, context) {
+    this.twitterBackend.blockedUsers(function(success, data, status, context) {
         if(success) {
           _this.blockedUserIds = {};
+          _this.blockedUserNames = [];
           for(var i in data) {
-            _this.blockedUserIds[data[i]] = data[i];
+            _this.blockedUserIds[data[i].id] = data[i].id;
+            _this.blockedUserNames[i] = data[i].screen_name;
           }
         }
         setTimeout(function() { _this.retrieveBlockedUserIds(); }, OptionsBackend.get('blockedusers_refresh_interval'));
