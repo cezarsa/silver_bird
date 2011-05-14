@@ -95,7 +95,7 @@ $(function() {
   };
 
   var onShortenerAcctClick = function() {
-    if($("input[name='shortener_acct']").attr('checked')) {
+    if($("input[name='shortener_acct']").is(':checked')) {
       $("input[name='shortener_login']").removeAttr('disabled');
       $("input[name='shortener_key']").removeAttr('disabled');
     } else {
@@ -108,7 +108,7 @@ $(function() {
 
   var onSigningUrlCheck = function() {
     var $check = $("input[name='same_signing_urls']");
-    if($check.attr('checked')) {
+    if($check.is(':checked')) {
       $("input[name='base_signing_url'], input[name='base_oauth_signing_url']").attr('disabled', 'disabled');
       $("input[name='base_signing_url']").val($("input[name='base_url']").val());
       $("input[name='base_oauth_signing_url']").val($("input[name='base_oauth_url']").val());
@@ -507,61 +507,52 @@ function updatePredictedHitsCount() {
         <th id="l_visible" class="i18n">Visible</th>
         <th id="l_refresh_interval" class="i18n">Refresh Interval (s)</th>
         <th id="l_include_in_unified" class="i18n">Include in unified timeline</th>
-        <th id="l_tabs_count" class="i18n">Tabs Count</th>
       <tr>
         <td class="label i18n" id="l_unified_timeline">Unified Timeline:</td>
         <td><input type="checkbox" name="unified_visible" validator="unifiedValidator"></td>
         <td>-</td>
         <td>-</td>
-        <td>1</td>
       </tr>
       <tr>
         <td class="label i18n" id="notif_home">Home:</td>
         <td><input type="checkbox" name="home_visible"></td>
         <td><input type="text" name="home_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td><input type="checkbox" name="home_include_unified"></td>
-        <td>1</td>
       </tr>
       <tr>
         <td class="label i18n" id="notif_mentions">Mentions:</td>
         <td><input type="checkbox" name="mentions_visible"></td>
         <td><input type="text" name="mentions_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td><input type="checkbox" name="mentions_include_unified"></td>
-        <td>1</td>
       </tr>
       <tr>
         <td class="label i18n" id="notif_dms">DM:</td>
         <td><input type="checkbox" name="dms_visible"></td>
         <td><input type="text" name="dms_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td><input type="checkbox" name="dms_include_unified"></td>
-        <td>1</td>
       </tr>
       <tr>
         <td class="label i18n" id="notif_lists">Lists:</td>
         <td><input type="checkbox" name="lists_visible"></td>
         <td><input type="text" name="lists_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td><input type="checkbox" name="lists_include_unified"></td>
-        <td><script>document.write(TimelineTemplate.getTemplate(TimelineTemplate.LISTS).getUserData().length);</script></td>
       </tr>
       <tr>
         <td class="label i18n" id="notif_search">Search:</td>
         <td><input type="checkbox" name="search_visible"></td>
         <td><input type="text" name="search_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td><input type="checkbox" name="search_include_unified"></td>
-        <td><script>document.write(TimelineTemplate.getTemplate(TimelineTemplate.SEARCH).getUserData().length);</script></td>
       </tr>
       <tr>
         <td class="label i18n" id="tml_favorites">Favorites:</td>
         <td><input type="checkbox" name="favorites_visible"></td>
         <td><input type="text" name="favorites_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
         <td><input type="checkbox" name="favorites_include_unified"></td>
-        <td>1</td>
       </tr>
       <tr>
         <td class="label i18n" id="l_blocked_users">Blocked Users:</td>
         <td>-</td>
         <td><input type="text" name="blockedusers_refresh_interval" validator="required,number,minRefresh" converter="RefreshInterval"></td>
-        <td>-</td>
         <td>-</td>
       </tr>
     </table>
