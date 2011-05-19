@@ -1475,12 +1475,8 @@ function signout() {
 }
 
 function suspend(forcedValue) {
-  if(forcedValue !== undefined) {
-    tweetManager.suspend = forcedValue;
-  } else {
-    tweetManager.suspend = !tweetManager.suspend;
-  }
-  if(tweetManager.suspend) {
+  var suspendState = tweetManager.suspendTimelines(forcedValue);
+  if(suspendState) {
     var nextOpacity = 0;
     function animateLoop() {
       if(nextOpacity == 1) {
