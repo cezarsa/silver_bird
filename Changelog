@@ -1,3 +1,8 @@
+1.9.7.7 (2011-05-18)
+
+* Correctly suspending and resuming when using user streams;
+* Prevent duplicated tweets in timelines using user streams.
+
 1.9.7.6 (2011-05-14)
 
 * Fixing a few glitches with streaming API reconnecting.
