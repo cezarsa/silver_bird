@@ -761,6 +761,23 @@ TweetManager.prototype = {
     return this.timelines[this.currentTimelineId].getError();
   },
 
+  suspendTimelines: function(suspend) {
+    var oldSuspendState = this.suspend;
+    if(suspend !== undefined) {
+      this.suspend = suspend;
+    } else {
+      this.suspend = !this.suspend;
+    }
+    if(oldSuspendState != this.suspend) {
+      if(this.suspend) {
+        StreamListener.disconnect(true);
+      } else {
+        StreamListener.start(this.twitterBackend);
+      }
+    }
+    return this.suspend;
+  },
+
   stopAll: function() {
     this.eachTimeline(function(timeline) {
       timeline.killTimeline();

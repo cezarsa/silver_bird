@@ -8,6 +8,7 @@ div.action_menu .action_area {
   display: -webkit-box;
   background-color: rgb(0, 153, 219);
   -webkit-border-radius: 5px;
+  white-space: nowrap;
 }
 
 div.action_menu .action_area .second_level_hidden {
@@ -15,8 +16,21 @@ div.action_menu .action_area .second_level_hidden {
 }
 
 div.action_menu .second_level_trigger {
+  -webkit-box-flex: 1;
+  font-size: 7pt;
+  color: white;
   cursor: pointer;
-  font-stretch: narrower;
+  text-align: center;
+}
+
+div.action_menu.horizontal .second_level_trigger {
+  padding-top: 5px;
+  padding-right: 1px;
+  padding-left: 1px;
+}
+
+div.action_menu.vertical .second_level_trigger {
+  padding-bottom: 1px;
 }
 
 div.action_menu.horizontal div.balloon {

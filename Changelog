@@ -1,4 +1,28 @@
-1.9.7.0 (2010-04-03)
+1.9.7.7 (2011-05-18)
+
+* Correctly suspending and resuming when using user streams;
+* Prevent duplicated tweets in timelines using user streams.
+
+1.9.7.6 (2011-05-14)
+
+* Fixing a few glitches with streaming API reconnecting.
+
+1.9.7.5 (2011-05-14)
+
+* Support for Goo.gl OAuth authentication (Thanks a lot Rafael Vargas);
+* Using Twitter's streaming API by default;
+* Showing some dangerous actions in a second level inside the actions menu;
+* Added block and report as span actions;
+* Correctly changing trending topics locale;
+* Fixed automatically getting the PIN after Twitter OAuth authentication;
+* Fixed occasional flickering when hovering tweets;
+* Fixed popup growing too large in height;
+* Updated Turkish translation (Thanks Berker Peksag);
+* Updated Galician translation (Thanks Antonio Pérez);
+* Updated Azerbaijani translation (Thanks Tural).
+
+
+1.9.7.0 (2011-04-03)
 
 * Added "Trends" link showing currently trending topics with the ability to
   change the region on the options page (Thanks Rafael Vargas);
