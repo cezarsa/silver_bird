@@ -57,7 +57,7 @@ function TweetManager() {
   this.notifiedRetweets = {};
 
   // Using an object instead of an array to take advantage of hash look-ups
-  this.blockedUserIds = {};
+  this.blockedUserNames = {};
 
   this.newTweetsCallback = null;
 
@@ -113,7 +113,7 @@ function TweetManager() {
     function onAuthenticated() {
       TimelineTemplate.initAfterAuthentication();
       _this.authenticated = true;
-      _this.retrieveBlockedUserIds();
+      _this.retrieveBlockedUsers();
       _this.lists();
       _this.eachTimeline(function(timeline) {
         timeline.init();
@@ -255,19 +255,34 @@ TweetManager.prototype = {
   },
 
   /**
-  * Update this.blockedUserIds and schedule another update after
+  * Update this.blockedUsers and schedule another update after
   * "blockedusers_refresh_interval" time has elapsed.
   */
-  retrieveBlockedUserIds: function() {
+  retrieveBlockedUsers: function(errWaitTime) {
     var _this = this;
-    this.twitterBackend.blockedUserIds(function(success, data, status, context) {
+    this.twitterBackend.blockedUsers(function(success, users, status, context) {
+        var refreshTime;
         if(success) {
-          _this.blockedUserIds = {};
-          for(var i in data) {
-            _this.blockedUserIds[data[i]] = data[i];
+          _this.blockedUserNames = {};
+          for(var i = 0, len = users.length; i < len; ++i) {
+            var user = users[i];
+            _this.blockedUserNames[user.screen_name] = user;
           }
+          refreshTime = OptionsBackend.get('blockedusers_refresh_interval');
+          errWaitTime = null;
+
+          _this.eachTimeline(function(timeline) {
+            timeline.purgeBlockedTweets();
+          }, true);
+        } else {
+          if(!errWaitTime) {
+            errWaitTime = 5000;
+          }
+          refreshTime = errWaitTime;
+          errWaitTime *= 2;
         }
-        setTimeout(function() { _this.retrieveBlockedUserIds(); }, OptionsBackend.get('blockedusers_refresh_interval'));
+
+        setTimeout(function() { _this.retrieveBlockedUsers(errWaitTime); }, refreshTime);
     });
   },
 
@@ -948,7 +963,7 @@ TweetManager.prototype = {
     }, username);
   },
 
-  _removeUser: function(userData) {
+  _removeUser: function(userData, isBlocked) {
     delete this.followingUsersMap[userData.screen_name];
     var position = $.inArray(userData.screen_name);
     if(position > -1) {
@@ -956,6 +971,13 @@ TweetManager.prototype = {
     }
     this.resetTimeline(TimelineTemplate.HOME);
     this.resetTimeline(TimelineTemplate.UNIFIED);
+
+    if(isBlocked) {
+      this.blockedUserNames[userData.screen_name] = userData;
+      this.eachTimeline(function(timeline) {
+        timeline.purgeBlockedTweets();
+      }, true);
+    }
   },
 
   unfollowUser: function(callback, username) {
@@ -972,7 +994,7 @@ TweetManager.prototype = {
     var _this = this;
     this.twitterBackend.block(function(success, userData) {
       if(success) {
-        _this._removeUser(userData);
+        _this._removeUser(userData, true);
       }
       callback(success, userData);
     }, username);
@@ -982,7 +1004,7 @@ TweetManager.prototype = {
     var _this = this;
     this.twitterBackend.report(function(success, userData) {
       if(success) {
-        _this._removeUser(userData);
+        _this._removeUser(userData, true);
       }
       callback(success, userData);
     }, username);
