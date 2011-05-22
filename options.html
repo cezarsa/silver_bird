@@ -444,6 +444,7 @@ function updatePredictedHitsCount() {
         <td><canvas name="search_color" width="19" height="19" class="color_selector"></canvas></td>
       </tr>
     </table><br>
+
     <label for="tweets_notification_style" class="i18n" id="l_tweets_notification_style">Notification Style:</label>
     <input type="radio" name="tweets_notification_style" value="on_page" id="noti_on_page"> <label for="noti_on_page" class="radio_opt i18n" id="l_noti_on_page">Notify on Page</label>
     <input type="radio" name="tweets_notification_style" value="desktop" id="noti_desktop"> <label for="noti_desktop" class="radio_opt i18n" id="l_noti_desktop">Desktop Notifications</label><br>
@@ -452,6 +453,12 @@ function updatePredictedHitsCount() {
 
     <label for="notification_max_popups" class="i18n" id="l_notification_max_popups">Notifications at once (-1: all):</label>
     <input type="text" name="notification_max_popups" validator="required,number"><br>
+
+    <label for="notify_retweets" class="i18n" id="l_notify_retweets">Notify retweets of my tweets?</label>
+    <input type="radio" name="notify_retweets" value="always" id="notify_rt_always"> <label for="notify_rt_always" class="radio_opt i18n" id="l_notify_rt_always">Always</label>
+    <input type="radio" name="notify_retweets" value="only_first" id="notify_rt_only_first"> <label for="notify_rt_only_first" class="radio_opt i18n" id="l_notify_rt_only_first">First One Only</label>
+    <input type="radio" name="notify_retweets" value="never" id="notify_rt_never"> <label for="notify_rt_never" class="radio_opt i18n" id="l_notify_rt_never">Never</label><br>
+
   </fieldset>
 
   <fieldset>

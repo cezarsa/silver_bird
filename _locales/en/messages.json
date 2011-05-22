@@ -691,5 +691,17 @@
 	},
 	"l_shortener_oauth": {
 	  "message": "Use personal account authentication:"
+	},
+	"l_notify_retweets": {
+	  "message": "Notify retweets of my tweets?"
+	},
+	"l_notify_rt_always": {
+	  "message": "Always"
+	},
+	"l_notify_rt_only_first": {
+	  "message": "First One Only"
+	},
+	"l_notify_rt_never": {
+	  "message": "Never"
 	}
 }

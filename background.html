@@ -54,6 +54,7 @@ function TweetManager() {
   this.shouldNotReadMap = {};
   this.retweets = {};
   this.injectTweets = [];
+  this.notifiedRetweets = {};
 
   // Using an object instead of an array to take advantage of hash look-ups
   this.blockedUserIds = {};
@@ -406,6 +407,30 @@ TweetManager.prototype = {
     if(maxTweetsNotifications != -1 && tweetsToNotify.length > maxTweetsNotifications) {
       tweetsToNotify.splice(maxTweetsNotifications, tweetsToNotify.length - maxTweetsNotifications);
     }
+
+    var notifyRetweetsOption = OptionsBackend.get('notify_retweets');
+    if(notifyRetweetsOption != 'always') {
+      var newTweetsToNotify = [];
+      var username = this.twitterBackend.username();
+      var isNever = notifyRetweetsOption == 'never';
+
+      for(var i = 0, len = tweetsToNotify.length; i < len; ++i) {
+        var tweet = tweetsToNotify[i];
+        if(tweet.retweeted_status && tweet.retweeted_status.user.screen_name == username) { // it is a retweet of a tweet of mine.
+          if(isNever || this.notifiedRetweets[tweet.retweeted_status.id]) {
+            continue;
+          }
+          this.notifiedRetweets[tweet.retweeted_status.id] = true;
+        }
+        newTweetsToNotify.push(tweet);
+      }
+
+      if(newTweetsToNotify.length === 0) {
+        return;
+      }
+      tweetsToNotify = newTweetsToNotify;
+    }
+
     this.injectTweets = this.injectTweets.concat(tweetsToNotify);
 
     var notificationStyle = OptionsBackend.get('tweets_notification_style');
