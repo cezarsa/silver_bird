@@ -541,8 +541,8 @@ TweetManager.prototype = {
     return !this.unreadTweets[id];
   },
 
-  isRetweet: function(id) {
-    return this.retweets[id];
+  isRetweet: function(tweet) {
+    return this.retweets[tweet.id] || tweet.current_user_retweet;
   },
 
   notifyNewTweets: function() {
