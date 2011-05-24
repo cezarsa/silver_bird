@@ -273,10 +273,15 @@ function updatePredictedHitsCount() {
     var intVal = parseInt(inputRefreshEl.val(), 10);
     var timelineHits = (60 * 60) / intVal;
     var timelineCount = 1;
-    var userData = template.getUserData();
-    if(userData && userData.length > 0) {
-      timelineCount = userData.length;
+    if(template.id == TimelineTemplate.DMS) {
+      timelineCount = 2;
+    } else {
+      var userData = template.getUserData();
+      if(userData && userData.length > 0) {
+        timelineCount = userData.length;
+      }
     }
+
     totalHits += timelineHits * timelineCount;
     return true;
   });
