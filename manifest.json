@@ -1,6 +1,6 @@
 {
   "name": "Chromed Bird",
-  "version": "1.9.7.7",
+  "version": "1.9.7.8",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
   "browser_action": {

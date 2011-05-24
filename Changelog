@@ -1,3 +1,14 @@
+1.9.7.8 (2011-05-24)
+
+* Adding options to control how we show notifications from retweets of tweets written by me;
+  - Default is to only show a notification for the first retweet.
+* Correctly handling blocked users and making sure they never show on any timeline;
+* Making sure we restart after enabling/disabling streaming;
+* Better handling stale streaming connections;
+* Correctly displaying retweets by me;
+* Correctly calculating the number of new tweets.
+
+
 1.9.7.7 (2011-05-18)
 
 * Correctly suspending and resuming when using user streams;
