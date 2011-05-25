@@ -340,7 +340,7 @@
 		"message": "gerade eben"
 	},
 	"minuteAgo": {
-		"message": "vor weniger als einer Minuten"
+		"message": "vor weniger als einer Minute"
 	},
 	"minutes": {
 		"message": "$nr_of_minutes$ $minutes$ her",
