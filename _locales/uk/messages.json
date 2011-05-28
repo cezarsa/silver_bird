@@ -1,6 +1,6 @@
 {
 	"extDescription": {
-		"message": "Chromed Bird це Twitter розширення, яке дозволяє читати стрічку і взаємодіє з вашим twitter аккаунтом.",
+		"message": "Shiny Bird це Twitter розширення, яке дозволяє читати стрічку і взаємодіє з вашим twitter аккаунтом.",
 		"description": "Extension description"
 	},
 	"resetSize": {
@@ -173,16 +173,16 @@
 		"message": "Зрив запиту AJAX (погане з&#39;єднання?)"
 	},
 	"successAuth": {
-		"message": "Вітаємо, ви успішно увійшли в систему. Насолоджуйтесь Chromed Bird!"
+		"message": "Вітаємо, ви успішно увійшли в систему. Насолоджуйтесь Shiny Bird!"
 	},
 	"cbAuthorized": {
-		"message": "Chromed Bird авторизований!"
+		"message": "Shiny Bird авторизований!"
 	},
 	"cbNotAuthorized": {
-		"message": "Гей... Щось пішло не так. Спробуйте натиснути на іконку Chromed Bird знову."
+		"message": "Гей... Щось пішло не так. Спробуйте натиснути на іконку Shiny Bird знову."
 	},
 	"authorizing": {
-		"message": "Будь ласка, почекайте, авторизації Chromed Bird..."
+		"message": "Будь ласка, почекайте, авторизації Shiny Bird..."
 	},
 	"yourPIN": {
 		"message": "Ваш PIN: $pin$",
@@ -298,7 +298,7 @@
 		"message": "Завторизуйтеся!"
 	},
 	"exceededAPIHits": {
-		"message": "Ви перевищили ліміт API. Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>налаштуваннях</a>. Chromed Bird не буде оновлювати до $nextResetDate$ $nextResetTime$.",
+		"message": "Ви перевищили ліміт API. Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>налаштуваннях</a>. Shiny Bird не буде оновлювати до $nextResetDate$ $nextResetTime$.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -393,7 +393,7 @@
 		"message": "років тому"
 	},
 	"options_title": {
-		"message": "Налаштування Chromed Bird"
+		"message": "Налаштування Shiny Bird"
 	},
 	"conf_saved": {
 		"message": "Ваші налаштування успішно збережені!"
@@ -549,7 +549,7 @@
 		"message": "Стрічки"
 	},
 	"notice_api_hits": {
-		"message": "Ви повинні тримати число звернень до API <span style=\"color: red;\">нижче <span class=\"__hourly_limit\"></span></span> ! Інакше Chromed Bird перестане працювати і стрічки не будуть оновлюватися. <br> <span style=\"color: red;\">Пам&#39;ятайте,</span> якщо ви використовуєте кілька Twitter клієнтів, ви повинні тримати число звернень ще нижче."
+		"message": "Ви повинні тримати число звернень до API <span style=\"color: red;\">нижче <span class=\"__hourly_limit\"></span></span> ! Інакше Shiny Bird перестане працювати і стрічки не будуть оновлюватися. <br> <span style=\"color: red;\">Пам&#39;ятайте,</span> якщо ви використовуєте кілька Twitter клієнтів, ви повинні тримати число звернень ще нижче."
 	},
 	"l_hits_notice": {
 		"message": "Звернень до API на годину:"

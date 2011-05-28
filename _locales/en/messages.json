@@ -1,6 +1,6 @@
 {
 	"extDescription": {
-		"message": "Chromed Bird is a Twitter extension that allows you to follow your timelines and interact with your Twitter account.",
+		"message": "Shiny Bird is a Twitter extension that allows you to follow your timelines and interact with your Twitter account.",
 		"description": "Extension description"
 	},
 	"resetSize": {
@@ -182,16 +182,16 @@
 		"message": "AJAX request failed (bad connection?)"
 	},
 	"successAuth": {
-		"message": "Congratulations, you've been successfully authenticated. Enjoy Chromed Bird!"
+		"message": "Congratulations, you've been successfully authenticated. Enjoy Shiny Bird!"
 	},
 	"cbAuthorized": {
-		"message": "Chromed Bird authorized!"
+		"message": "Shiny Bird authorized!"
 	},
 	"cbNotAuthorized": {
-		"message": "Oops... Something went wrong. Please, try clicking Chromed Bird icon again."
+		"message": "Oops... Something went wrong. Please, try clicking Shiny Bird icon again."
 	},
 	"authorizing": {
-		"message": "Please wait, authorizing Chromed Bird..."
+		"message": "Please wait, authorizing Shiny Bird..."
 	},
 	"yourPIN": {
 		"message": "Your PIN number is: $pin$",
@@ -307,7 +307,7 @@
 		"message": "Authorize!"
 	},
 	"exceededAPIHits": {
-		"message": "You've exceeded API hits limit. Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>options page</a>. Chromed Bird won't update until $nextResetDate $nextResetTime$.",
+		"message": "You've exceeded API hits limit. Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>options page</a>. Shiny Bird won't update until $nextResetDate $nextResetTime$.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -402,7 +402,7 @@
 		"message": "years ago"
 	},
 	"options_title": {
-		"message": "Chromed Bird Options"
+		"message": "Shiny Bird Options"
 	},
 	"conf_saved": {
 		"message": "Your configuration has been successfully saved!"
@@ -558,7 +558,7 @@
 		"message": "Timelines"
 	},
 	"notice_api_hits": {
-		"message": "You should keep API hits <span style=\"color: red;\">below <span class=\"__hourly_limit\"></span></span>! Otherwise Chromed Bird will stop working properly and timelines won't update anymore.<br><span style=\"color: red;\">Remember</span> that if you're using multiple Twitter clients you'll need to keep your API hits even lower."
+		"message": "You should keep API hits <span style=\"color: red;\">below <span class=\"__hourly_limit\"></span></span>! Otherwise Shiny Bird will stop working properly and timelines won't update anymore.<br><span style=\"color: red;\">Remember</span> that if you're using multiple Twitter clients you'll need to keep your API hits even lower."
 	},
 	"l_hits_notice": {
 		"message": "API hits per hour: "

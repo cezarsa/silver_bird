@@ -1,6 +1,6 @@
 {
 	"extDescription": {
-		"message": "Chromed Bird, Twitter hesabınızı Google Chrome üzerinden takip etmenizi ve yönetmenizi sağlayan bir eklentidir.",
+		"message": "Shiny Bird, Twitter hesabınızı Google Chrome üzerinden takip etmenizi ve yönetmenizi sağlayan bir eklentidir.",
 		"description": "Extension description"
 	},
 	"resetSize": {
@@ -173,13 +173,13 @@
 		"message": "AJAX isteği başarısız (kötü bağlantı?)"
 	},
 	"successAuth": {
-		"message": "Tebrikler, kimliğiniz doğrulandı. Chromed Bird'ün tadını çıkarın!"
+		"message": "Tebrikler, kimliğiniz doğrulandı. Shiny Bird'ün tadını çıkarın!"
 	},
 	"cbAuthorized": {
-		"message": "Chromed Bird yetkili!"
+		"message": "Shiny Bird yetkili!"
 	},
 	"cbNotAuthorized": {
-		"message": "Bir hata oluştu. Lütfen Chromed Bird ikonuna tekrar tıklayın."
+		"message": "Bir hata oluştu. Lütfen Shiny Bird ikonuna tekrar tıklayın."
 	},
 	"authorizing": {
 		"message": "Lütfen bekleyin..."
@@ -298,7 +298,7 @@
 		"message": "Yetkilendir!"
 	},
 	"exceededAPIHits": {
-		"message": "Günlük API kullanım limitini aştınız. Lütfen <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>ayarlar sayfasından</a> yenileme aralığını kontrol edin. Chromed Bird $nextResetDate $nextResetTime$ tarihine kadar güncellenmeyecek.",
+		"message": "Günlük API kullanım limitini aştınız. Lütfen <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>ayarlar sayfasından</a> yenileme aralığını kontrol edin. Shiny Bird $nextResetDate $nextResetTime$ tarihine kadar güncellenmeyecek.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -393,7 +393,7 @@
 		"message": "yıl önce"
 	},
 	"options_title": {
-		"message": "Chromed Bird Seçenekleri"
+		"message": "Shiny Bird Seçenekleri"
 	},
 	"conf_saved": {
 		"message": "Ayarlarınız başarıyla kaydedildi."

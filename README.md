@@ -1,8 +1,8 @@
-## Chromed Bird ##
+## Shiny Bird ##
 
 1. What is it?
 
-    Chromed Bird is a general purpose Chromium twitter extension.
+    Shiny Bird is a general purpose Chromium twitter extension.
 
 2. Installing
 

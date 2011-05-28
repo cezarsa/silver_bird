@@ -1,6 +1,6 @@
 {
 	"extDescription": {
-		"message": "Chromed Bird é un engadido para Twitter que che permite interactuar coa túa conta de Twitter.",
+		"message": "Shiny Bird é un engadido para Twitter que che permite interactuar coa túa conta de Twitter.",
 		"description": "Extension description"
 	},
 	"resetSize": {
@@ -173,16 +173,16 @@
 		"message": "A petición AJAX fallou (¿problemas de conexión?)"
 	},
 	"successAuth": {
-		"message": "Noraboa, identificacheste correctamente. ¡Disfruta Chromed Bird!"
+		"message": "Noraboa, identificacheste correctamente. ¡Disfruta Shiny Bird!"
 	},
 	"cbAuthorized": {
-		"message": "Chromed Bird autorizado!"
+		"message": "Shiny Bird autorizado!"
 	},
 	"cbNotAuthorized": {
-		"message": "Oops... Algo foi mal. Por favor, téntao de novo facendo clic na icona de Chromed Bird."
+		"message": "Oops... Algo foi mal. Por favor, téntao de novo facendo clic na icona de Shiny Bird."
 	},
 	"authorizing": {
-		"message": "Autorizando Chromed Bird, por favor, agarda..."
+		"message": "Autorizando Shiny Bird, por favor, agarda..."
 	},
 	"yourPIN": {
 		"message": "O teu PIN é: $pin$",
@@ -298,7 +298,7 @@
 		"message": "¡Autorizar!"
 	},
 	"exceededAPIHits": {
-		"message": "Superaches o límite de petións ó API. Por favor, revisa os intervalos de actualización na <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>páxina de opcións</a>. Chromed Bird non actualizará ate $nextResetDate $nextResetTime$.",
+		"message": "Superaches o límite de petións ó API. Por favor, revisa os intervalos de actualización na <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>páxina de opcións</a>. Shiny Bird non actualizará ate $nextResetDate $nextResetTime$.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -393,7 +393,7 @@
 		"message": "hai anos"
 	},
 	"options_title": {
-		"message": "Opcions de Chromed Bird"
+		"message": "Opcions de Shiny Bird"
 	},
 	"conf_saved": {
 		"message": "¡A túa configuración gardouse correctamente!"
@@ -549,7 +549,7 @@
 		"message": "Liñas de tempo"
 	},
 	"notice_api_hits": {
-		"message": "¡Deberías manter as petición ao API <span style=\"color: red;\">por debaixo de <span class=\"__hourly_limit\"></span></span>! Se non, Chromed Bird deixará de funcionar correctamente e as liñas de tempo non se actualizarán máis.<br><span style=\"color: red;\">Recorda</span> que se estás usando máis dun cliente de Twitter entón necesitas manter o número de peticións ao API aínda máis baixo."
+		"message": "¡Deberías manter as petición ao API <span style=\"color: red;\">por debaixo de <span class=\"__hourly_limit\"></span></span>! Se non, Shiny Bird deixará de funcionar correctamente e as liñas de tempo non se actualizarán máis.<br><span style=\"color: red;\">Recorda</span> que se estás usando máis dun cliente de Twitter entón necesitas manter o número de peticións ao API aínda máis baixo."
 	},
 	"l_hits_notice": {
 		"message": "Chamadas ao API por hora: "

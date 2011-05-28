@@ -1,11 +1,11 @@
 {
-  "name": "Chromed Bird",
-  "version": "1.9.7.9",
+  "name": "Shiny Bird",
+  "version": "1.9.8.0",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
   "browser_action": {
     "default_icon": "img/icon19.png",
-    "default_title": "Chromed Bird",
+    "default_title": "Shiny Bird",
     "popup": "popup.html?popup"
   },
   "background_page": "background.html",
