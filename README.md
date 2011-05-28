@@ -6,7 +6,9 @@
 
 2. Installing
 
-    Check the [download page](https://chrome.google.com/webstore/detail/encaiiljifbdbjlphpgpiimidegddhic)
+    <del>Check it at the [chrome web store](https://chrome.google.com/webstore/detail/encaiiljifbdbjlphpgpiimidegddhic)</del>
+
+    [Download it directly from GitHub](https://github.com/downloads/cezarsa/silver_bird/silver_bird_1.9.8.1.crx)
 
 3. Compatibility
 
