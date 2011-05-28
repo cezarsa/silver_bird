@@ -1,6 +1,6 @@
 {
 	"extDescription": {
-		"message": "Shiny Bird es una extensión para Twitter que te permite seguir tus líneas de tiempo e interactuar con tu cuenta de Twitter.",
+		"message": "Silver Bird es una extensión para Twitter que te permite seguir tus líneas de tiempo e interactuar con tu cuenta de Twitter.",
 		"description": "Extension description"
 	},
 	"resetSize": {
@@ -173,16 +173,16 @@
 		"message": "La petición AJAX falló (¿problemas de conexión?)"
 	},
 	"successAuth": {
-		"message": "Felicidades, te has autentificado satisfactoriamente. ¡Disfruta Shiny Bird!"
+		"message": "Felicidades, te has autentificado satisfactoriamente. ¡Disfruta Silver Bird!"
 	},
 	"cbAuthorized": {
-		"message": "Shiny Bird autorizado!"
+		"message": "Silver Bird autorizado!"
 	},
 	"cbNotAuthorized": {
-		"message": "Oops... Algo fue mal. Por favor, inténtalo de nuevo haciendo clic en el icono de Shiny Bird."
+		"message": "Oops... Algo fue mal. Por favor, inténtalo de nuevo haciendo clic en el icono de Silver Bird."
 	},
 	"authorizing": {
-		"message": "Autorizando Shiny Bird, por favor, espera..."
+		"message": "Autorizando Silver Bird, por favor, espera..."
 	},
 	"yourPIN": {
 		"message": "Tu número PIN es: $pin$",
@@ -298,7 +298,7 @@
 		"message": "¡Autorizar!"
 	},
 	"exceededAPIHits": {
-		"message": "Has superado el límite de peticiones al API. Por favor, revisa los intervalos de actualización en la <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>página de opciones</a>. Shiny Bird no actualizará hasta $nextResetDate $nextResetTime$.",
+		"message": "Has superado el límite de peticiones al API. Por favor, revisa los intervalos de actualización en la <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>página de opciones</a>. Silver Bird no actualizará hasta $nextResetDate $nextResetTime$.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -393,7 +393,7 @@
 		"message": "hace años"
 	},
 	"options_title": {
-		"message": "Opciones de Shiny Bird"
+		"message": "Opciones de Silver Bird"
 	},
 	"conf_saved": {
 		"message": "¡Tu configuración se ha guardado satisfactoriamente!"
@@ -549,7 +549,7 @@
 		"message": "Líneas de tiempo"
 	},
 	"notice_api_hits": {
-		"message": "¡Deberías mantener las peticiones al API <span style=\"color: red;\">por debajo de <span class=\"__hourly_limit\"></span></span>! Si no, Shiny Bird dejará de funcionar adecuadamente y las líneas de tiempo no se actualizarán más.<br><span style=\"color: red;\">Recuerda</span> que si estás usando más de un cliente de Twitter entonces necesitarás mantener el número de peticiones al API todavía más bajo."
+		"message": "¡Deberías mantener las peticiones al API <span style=\"color: red;\">por debajo de <span class=\"__hourly_limit\"></span></span>! Si no, Silver Bird dejará de funcionar adecuadamente y las líneas de tiempo no se actualizarán más.<br><span style=\"color: red;\">Recuerda</span> que si estás usando más de un cliente de Twitter entonces necesitarás mantener el número de peticiones al API todavía más bajo."
 	},
 	"l_hits_notice": {
 		"message": "Llamadas al API por hora: "

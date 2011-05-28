@@ -1,8 +1,8 @@
-## Shiny Bird ##
+## Silver Bird ##
 
 1. What is it?
 
-    Shiny Bird is a general purpose Chromium twitter extension.
+    Silver Bird is a general purpose Chromium twitter extension.
 
 2. Installing
 

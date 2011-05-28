@@ -391,7 +391,7 @@ TweetManager.prototype = {
     }, true);
     var totalUnreadNewCount = this.unique(totalUnreadNewIds).length;
     if(colors.length === 0) {
-      chrome.browserAction.setTitle({title: "Shiny Bird"});
+      chrome.browserAction.setTitle({title: "Silver Bird"});
       chrome.browserAction.setIcon({imageData: IconCreator.paintIcon(this.iconImg, OptionsBackend.get('idle_color'))});
       chrome.browserAction.setBadgeText({text: ''});
     } else {

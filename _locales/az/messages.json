@@ -1,6 +1,6 @@
 ﻿{
   "extDescription": {
-    "message": "Shiny Bird, Twitter hesabınızı Google Chrome üzərindən izləmənizi və idarə etmənizi təmin edən bir əlavədir.",
+    "message": "Silver Bird, Twitter hesabınızı Google Chrome üzərindən izləmənizi və idarə etmənizi təmin edən bir əlavədir.",
     "description": "Extension description"
   },
   "resetSize": {
@@ -182,13 +182,13 @@
     "message": "AJAX istəyi uğursuzdur (pis əlaqə?)"
   },
   "successAuth": {
-    "message": "Təbriklər, hesabınızın həqiqili təsdiqləndi. Shiny Bird'dən zövq alın!"
+    "message": "Təbriklər, hesabınızın həqiqili təsdiqləndi. Silver Bird'dən zövq alın!"
   },
   "cbAuthorized": {
-    "message": "Shiny Bird səlahiyyət verdi!"
+    "message": "Silver Bird səlahiyyət verdi!"
   },
   "cbNotAuthorized": {
-    "message": "Nəsə istənilən kimi getmədi. Lütfən Shiny Bird ikonuna təkrar basın."
+    "message": "Nəsə istənilən kimi getmədi. Lütfən Silver Bird ikonuna təkrar basın."
   },
   "authorizing": {
     "message": "Lütfən gözləyin..."
@@ -307,7 +307,7 @@
     "message": "Səlahiyyət ver!"
   },
   "exceededAPIHits": {
-    "message": "Gündəlik API istifadə limitini keçdiniz. Lütfən <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>seçimlər səhifəsindən</a> yeniləmə aralığını yoxlayın. Shiny Bird $nextResetDate $nextResetTime$ tarixinə qədər yenilənməyəcək.",
+    "message": "Gündəlik API istifadə limitini keçdiniz. Lütfən <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>seçimlər səhifəsindən</a> yeniləmə aralığını yoxlayın. Silver Bird $nextResetDate $nextResetTime$ tarixinə qədər yenilənməyəcək.",
     "placeholders": {
       "options_url": {
         "content": "$1"
@@ -402,7 +402,7 @@
     "message": "il əvvəl"
   },
   "options_title": {
-    "message": "Shiny Bird Seçimləri"
+    "message": "Silver Bird Seçimləri"
   },
   "conf_saved": {
     "message": "Nizamlarınız uğurla qeyd edildi."
