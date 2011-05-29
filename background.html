@@ -967,7 +967,7 @@ TweetManager.prototype = {
 
   _removeUser: function(userData, isBlocked) {
     delete this.followingUsersMap[userData.screen_name];
-    var position = $.inArray(userData.screen_name);
+    var position = $.inArray(userData.screen_name, this.followingUsersNames);
     if(position > -1) {
       this.followingUsersNames.splice(position, 1);
     }
