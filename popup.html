@@ -466,14 +466,14 @@ var Composer = {
     }, this.favoriteId);
   },
 
-  addUser: function (user, replies) {
+  addUser: function (replies) {
     var textArea = $("#compose_tweet_area textarea");
     var currentVal = textArea.val();
     replies =  replies || [];
     if(currentVal.length > 0 && currentVal[currentVal.length - 1] != ' ') {
       currentVal += ' ';
     }
-    currentVal += '@' + user + ' ' + replies.join('');
+    currentVal += replies.join(' ') + ' ';
     textArea.val(currentVal);
   },
 
@@ -491,24 +491,26 @@ var Composer = {
     }
 
     var currentVal = textArea.val();
-    var replies = [];
+    var replies = ['@'+user];
     var ownName = tweetManager.twitterBackend.username();
     if (reply_all) {
       $(".text a", node).each(function(){
         var t = $(this).text();
         if (t !== ownName && (/^[A-Z0-9_-]{1,15}$/i).test(t)) {
-          replies.push('@'+t+' ');
+          var user = '@' + t;
+          if (replies.indexOf(user) == -1)
+          	replies.push(user);
         }
       });
     }
 
     if(Composer.replyId && currentVal.indexOf(Composer.replyUser) != -1) {
-      this.addUser(user, replies);
+      this.addUser(replies);
       Composer.textareaChanged();
       return;
     }
 
-    this.addUser(user, replies);
+    this.addUser(replies);
     tweetManager.composerData.replyId = Composer.replyId = $(node).attr('tweetid');
     tweetManager.composerData.replyUser = Composer.replyUser = user;
 
@@ -1365,8 +1367,8 @@ var ImageUpload = {
       hideButton = true;
     }
     if(ThemeManager.isPopup) {
-      var platform = navigator.userAgent.match(/\((\w+);/)[1];
-      if(platform == 'Macintosh') {
+      var platform = navigator.userAgent.match(/\((\w+);/);
+      if(platform && platform[1] == 'Macintosh') {
         hideButton = true;
       }
     }
