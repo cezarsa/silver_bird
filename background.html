@@ -828,6 +828,13 @@ TweetManager.prototype = {
     this.oauthTokenData.remove();
     this.stopAll();
     TweetManager.instance = new TweetManager();
+    var views = chrome.extension.getViews({type: 'popup'});
+    if(views) {
+      for(var i = 0; i < views.length; ++i) {
+        views[i].close();
+      }
+    }
+    return (views && views.length > 0)
   },
 
   restart: function() {
