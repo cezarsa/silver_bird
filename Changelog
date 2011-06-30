@@ -1,3 +1,7 @@
+1.9.8.2 (2011-06-30)
+
+* Correctly requiring a new authentication after receiving a access denied error.
+
 1.9.8.1 (2011-05-28)
 
 * So long, farewell, auf Wiedersehen, good bye Chromed Bird. Welcome Silver Bird. The extension has been renamed.
