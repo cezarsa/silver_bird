@@ -1,3 +1,7 @@
+1.9.8.3 (2011-07-02)
+
+* More fixes regarding Twitter's new permission levels.
+
 1.9.8.2 (2011-06-30)
 
 * Correctly requiring a new authentication after receiving a access denied error.
