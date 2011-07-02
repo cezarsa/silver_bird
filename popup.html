@@ -1080,8 +1080,6 @@ var ContextMenu = {
     } else if(actionParts[0] == 'remove') {
       var timelineId = actionParts[1];
       TimelineTab.removeTab(timelineId);
-      ThemeManager.handleWindowResizing();
-      ThemeManager.updateTabsOrder();
       if(tweetManager.getCurrentTimeline().template.id == TimelineTemplate.UNIFIED) {
         prepareAndLoadTimeline();
       }
@@ -1284,6 +1282,8 @@ var TimelineTab = {
       }
     });
     tweetManager.hideTimeline(timelineId);
+    ThemeManager.handleWindowResizing();
+    ThemeManager.updateTabsOrder();
   },
 
   select: function(timelineId) {

@@ -147,6 +147,21 @@ function TweetManager() {
 
 TweetManager.prototype = {
 
+  disableDMS: function() {
+    this.hideTimelineTemplate(TimelineTemplate.DMS);
+    this.toggleUnified(TimelineTemplate.DMS, false);
+    var views = chrome.extension.getViews({type: 'popup'});
+    if(views) {
+      for(var i = 0; i < views.length; ++i) {
+        if(views[i].TimelineTab) {
+          views[i].TimelineTab.removeTab(TimelineTemplate.DMS);
+          break;
+        }
+      }
+    }
+    this.setWarning("Direct messages tab have been disabled for now. This is happening because Twitter's denying access to them for some bizarre reason. You can try enabling them again in the options page.");
+  },
+
   showTimelineTemplate: function(timelineTemplateId, showOnly) {
     var template = TimelineTemplate.getTemplate(timelineTemplateId);
     template.setVisible(true);
@@ -199,6 +214,9 @@ TweetManager.prototype = {
 
   hideTimeline: function(timelineId){
     var timeline = this.timelines[timelineId];
+    if(!timeline) {
+      return;
+    }
     var shouldDelete = timeline.remove();
     if(shouldDelete) {
       delete this.timelines[timelineId];
@@ -237,8 +255,8 @@ TweetManager.prototype = {
   setWarning: function(msg) {
     this.warningMessage = msg;
     try {
-      if(this.warningCallback) {
-        this.warningCallback(msg);
+      if(this.warningsCallback) {
+        this.warningsCallback(msg);
       }
     } catch(e) {
       /* ignoring, the popup window might be closed. */
@@ -835,6 +853,12 @@ TweetManager.prototype = {
       }
     }
     return (views && views.length > 0)
+  },
+
+  signoutAndReauthenticate: function(attribute) {
+    if(this.signout()) {
+      TweetManager.instance.twitterBackend.startAuthentication();
+    }
   },
 
   restart: function() {
