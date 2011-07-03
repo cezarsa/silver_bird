@@ -1357,17 +1357,15 @@ var ImageUpload = {
     this.loadingEl = $('#loading');
     this.inputEl = $('#image_input')[0];
 
-    // FIXME: This check is here only because of http://crbug.com/61632 and
-    // http://crbug.com/28829 (already fixed but not on stable channel yet)
+    // FIXME: This check is here only because of http://crbug.com/61632
     var hideButton = false;
-    var majorVersion = parseInt(navigator.userAgent.match(/Chrome\/(\d+)\./)[1], 10);
-    if(majorVersion < 8) {
-      hideButton = true;
-    }
     if(ThemeManager.isPopup) {
-      var platform = navigator.userAgent.match(/\((\w+);/)[1];
-      if(platform == 'Macintosh') {
-        hideButton = true;
+      var matchGroup = navigator.userAgent.match(/\((\w+);/);
+      if(matchGroup && matchGroup.length > 1) {
+        var platform = matchGroup[1];
+        if(platform == 'Macintosh') {
+          hideButton = true;
+        }
       }
     }
     if(hideButton) {
