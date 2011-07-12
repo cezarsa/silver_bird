@@ -45,7 +45,7 @@
 		"message": "Показать "
 	},
 	"add": {
-		"message": "Добавить" 
+		"message": "Добавить"
 	},
 	"selectList": {
 		"message": "- списки -"
@@ -457,6 +457,9 @@
 	},
 	"l_hover_timeout": {
 		"message": "Время чтения (мс):"
+	},
+	"l_background_url": {
+		"message": "Open links in background?"
 	},
 	"l_show_expanded_urls": {
 		"message": "Разворачивать короткие ссылки:"

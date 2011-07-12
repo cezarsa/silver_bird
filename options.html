@@ -353,9 +353,11 @@ function updatePredictedHitsCount() {
     <label for="default_locale" class="i18n" id="l_default_locale">Default Locale:</label>
     <select name="default_locale"></select><br>
     <label for="font_family" id="l_font_family" class="i18n">Font Family:</label>
-    <input type="text" style="width: 20em"; name="font_family" validator="required"><br>
+    <input type="text" style="width: 20em" name="font_family" validator="required"><br>
     <label for="hover_timeout" class="i18n" id="l_hover_timeout">Hover to read time (ms):</label>
     <input type="text" name="hover_timeout" validator="required,number,positive"><br>
+	<label for="background_url" class="i18n" id="l_background_url">Open links in background?</label>
+	<input type="checkbox" id="background_url" name="background_url" /><br>
     <label for="show_expanded_urls" class="i18n" id="l_show_expanded_urls">Expand shortened URLs:</label>
     <input type="checkbox" id="show_expanded_urls" name="show_expanded_urls" /><br>
     <label for="reply_all" class="i18n" id="l_reply_all">Reply to all mentioned:</label>

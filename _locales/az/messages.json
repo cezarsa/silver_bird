@@ -467,6 +467,9 @@
   "l_hover_timeout": {
     "message": "Oxumaq üçün üzərində gözləmə müddəti (ms):"
   },
+  "l_background_url": {
+		"message": "Open links in background?"
+  },
   "l_show_expanded_urls": {
     "message": "Qısaldılmış ünvanları genişlət:"
   },
@@ -672,10 +675,10 @@
     "message": "Trendlər"
   },
   "g_trending_topics": {
-    "message": "Trend mövzular" 
+    "message": "Trend mövzular"
   },
   "l_trending_topics_woeid": {
-    "message": "Yerlər üzrə trend mövzular:" 
+    "message": "Yerlər üzrə trend mövzular:"
   },
   "l_use_streaming_api": {
     "message": "Axın APİ-si istifadə edin (sınaqda!):"

@@ -458,6 +458,9 @@
 	"l_hover_timeout": {
 		"message": "Als Gelesen markieren nach (ms):"
 	},
+	"l_background_url": {
+		"message": "Links im Hintergrund öffnen?"
+	},
 	"l_show_expanded_urls": {
 		"message": "Verkürzte URLs auflösen:"
 	},
@@ -524,13 +527,28 @@
 	"l_notification_fade_timeout": {
 		"message": "Benachrichtigungs-Timeout (s):"
 	},
+	"l_notification_max_popups": {
+		"message": "Maximale Benachrichtigungen (-1: alle):"
+	},
+	"l_notify_retweets": {
+		"message": "Benachrichtigen bei Retweets von meinen Tweets?"
+	},
+	"l_notify_rt_always": {
+		"message": "Immer"
+	},
+	"l_notify_rt_only_first": {
+		"message": "Nur den ersten (Retweet)"
+	},
+	"l_notify_rt_never": {
+		"message": "Niemals"
+	},
 	"g_shortener": {
 		"message": "Verkürzer"
 	},
 	"l_url_shortener": {
 		"message": "URL-Verkürzer:"
 	},
-	"l_shortener_acct": {
+	"l_shortener_oauth": {
 		"message": "Privates Konto nutzen?"
 	},
 	"l_shortener_login": {
@@ -541,6 +559,18 @@
 	},
 	"l_share_include_title": {
 		"message": "Seiten-Titel mit angeben (beim Teilen):"
+	},
+	"g_image_service": {
+		"message": "Bilder"
+	},
+	"l_image_up_service": {
+		"message": "Bilder hochladen bei:"
+	},
+	"g_trending_topics": {
+		"message": "Trends"
+	},
+	"l_trending_topics_woeid": {
+		"message": "Von welchem Land?"
 	},
 	"g_timelines": {
 		"message": "Timelines"
@@ -607,6 +637,12 @@
 	},
 	"l_base_search_url": {
 		"message": "Such-API-URL:"
+	},
+	"l_use_streaming_api": {
+		"message": "Streaming API nutzen? (experimentell)"
+	},
+	"l_user_stream_url": {
+		"message": "User Stream URL:"
 	},
 	"btn_save": {
 		"message": "Speicheren"

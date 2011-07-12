@@ -458,6 +458,9 @@
 	"l_hover_timeout": {
 		"message": "Marcar coma leído en (ms):"
 	},
+	"l_background_url": {
+		"message": "Open links in background?"
+	},
 	"l_show_expanded_urls": {
 		"message": "Expandir URLs acortadas:"
 	},
@@ -663,10 +666,10 @@
 	  "message": "Tendencias"
 	},
 	"g_trending_topics": {
-	  "message": "Asuntos de moda" 
+	  "message": "Asuntos de moda"
 	},
 	"l_trending_topics_woeid": {
-	  "message": "Locale dos asuntos de moda:" 
+	  "message": "Locale dos asuntos de moda:"
 	},
 	"l_use_streaming_api": {
 	  "message": "Use streaming API (experimental!):"

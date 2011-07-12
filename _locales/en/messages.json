@@ -467,6 +467,9 @@
 	"l_hover_timeout": {
 		"message": "Hover to read time (ms):"
 	},
+	"l_background_url": {
+		"message": "Open links in background?"
+	},
 	"l_show_expanded_urls": {
 		"message": "Expand shortened URLs:"
 	},
@@ -672,10 +675,10 @@
 	  "message": "Trends"
 	},
 	"g_trending_topics": {
-	  "message": "Trending Topics" 
+	  "message": "Trending Topics"
 	},
 	"l_trending_topics_woeid": {
-	  "message": "Trending Topics Locale:" 
+	  "message": "Trending Topics Locale:"
 	},
 	"l_use_streaming_api": {
 	  "message": "Use streaming API (experimental!):"

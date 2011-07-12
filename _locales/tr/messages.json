@@ -458,6 +458,9 @@
 	"l_hover_timeout": {
 		"message": "Okumak için üzerinde bekleme süresi (ms):"
 	},
+	"l_background_url": {
+		"message": "Open links in background?"
+	},
 	"l_show_expanded_urls": {
 		"message": "Kısaltılmış adresleri genişlet:"
 	},
