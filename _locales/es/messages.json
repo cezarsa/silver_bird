@@ -4,7 +4,7 @@
 		"description": "Extension description"
 	},
 	"resetSize": {
-		"message": "Doble clic para resetar el tamaño"
+		"message": "Doble clic para reiniciar el tamaño"
 	},
 	"composeTweet": {
 		"message": "Publicar un tweet",
@@ -33,7 +33,7 @@
 		"message": "Actualizaciones automáticas suspendidas"
 	},
 	"resume": {
-		"message": "Resume"
+		"message": "Reanudar"
 	},
 	"remove": {
 		"message": "Eliminar"
@@ -72,7 +72,7 @@
 		"message": "Búsqueda"
 	},
 	"fromApp": {
-		"message": "via"
+		"message": "vía"
 	},
 	"inReply": {
 		"message": "en respuesta a"
@@ -600,13 +600,13 @@
 		"message": "URL de OAuth:"
 	},
 	"l_same_signing_urls": {
-		"message": "Same signing URLs:"
+		"message": "URLs iguales para autenticación:"
 	},
 	"l_base_signing_url": {
-		"message": "API Signing URL:"
+		"message": "URL para la API de autenticación:"
 	},
 	"l_base_oauth_signing_url": {
-		"message": "OAuth Signing URL:"
+		"message": "URL de autenticación OAuth:"
 	},
 	"l_base_search_url": {
 		"message": "URL del API de búsquedas:"
