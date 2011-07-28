@@ -863,11 +863,15 @@ $.extend(Renderer, {
     }
 
     var nameAttribute = OptionsBackend.get('name_attribute');
-    var destinationDom = destination[0];
-    destinationDom.innerHTML = "";
+    var fragment = document.createDocumentFragment();
     for(var i = 0; i < tweets.length; ++i) {
-      destinationDom.appendChild(Renderer.renderTweet(tweets[i], useColors, nameAttribute));
+      fragment.appendChild(Renderer.renderTweet(tweets[i], useColors, nameAttribute));
     }
+    var destinationDom = destination[0];
+    while(destinationDom.firstChild) {
+      destinationDom.removeChild(destinationDom.firstChild);
+    }
+    destinationDom.appendChild(fragment);
 
     $(".tweet").live('mouseover mouseout', function(event) {
       if(event.type == 'mouseover') {
