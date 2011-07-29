@@ -45,7 +45,11 @@ $(function() {
     $(this).val(chrome.i18n.getMessage(this.id));
   });
 
-  $(".i18n").not("input").each(function() {
+  $(".i18n").not("input .htmlSafe").each(function() {
+    $(this).text(chrome.i18n.getMessage(this.id));
+  });
+
+  $(".i18n.htmlSafe").each(function() {
     $(this).html(chrome.i18n.getMessage(this.id));
   });
 
@@ -506,7 +510,7 @@ function updatePredictedHitsCount() {
 
   <fieldset>
     <legend class="i18n" id="g_timelines">Timelines</legend>
-    <p class="notice i18n" style="text-align: center; color: black;" id="notice_api_hits">
+    <p class="notice i18n htmlSafe" style="text-align: center; color: black;" id="notice_api_hits">
       You should keep API hits <span style="color: red;">below <span class="__hourly_limit"></span></span>! Otherwise Silver Bird will stop working properly and timelines won't update anymore.<br>
       <span style="color: red;">Remember</span> that if you're using multiple Twitter clients you'll need to keep your API hits even lower.
     </p>

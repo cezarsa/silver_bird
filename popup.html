@@ -943,21 +943,27 @@ $.extend(Renderer, {
     loadTimeline();
   },
 
-  warningsCallback: function(msg, isError) {
+  warningsCallback: function(msg, isError, showHTML) {
     if(isError) {
-      Renderer.showError(msg);
+      Renderer.showError(msg, undefined, undefined, showHTML);
     } else {
-      Renderer.showWarning(msg);
+      Renderer.showWarning(msg, showHTML);
     }
   },
 
-  showWarning: function(msg) {
+  showWarning: function(msg, showHtml) {
     $("#warning .img_area img").attr('src', 'img/warning.png');
+    if(!showHtml) {
+      msg = $("<span>").text(msg).html();
+    }
     Renderer.showMessage(msg);
   },
 
-  showError: function(msg, tryAgainFunction, params) {
+  showError: function(msg, tryAgainFunction, params, showHtml) {
     $("#warning .img_area img").attr('src', 'img/error.png');
+    if(!showHtml) {
+      msg = $("<span>").text(msg).html();
+    }
     if(tryAgainFunction) {
       if(!params) {
         params = '';
@@ -1025,7 +1031,7 @@ var Lists = {
           TimelineTab.addTab(timeline.timelineId, '<select id="' + timeline.timelineId + '-selector"></select>', pos);
           $listSelect = $("select#" + timeline.timelineId + "-selector");
         }
-        $listSelect.html('');
+        $listSelect.empty();
         $listSelect.append($("<option>").attr('value', _this.selector_value).text(chrome.i18n.getMessage("selectList")));
         for(var j = 0; j < lists.length; ++j) {
           $listSelect.append($("<option>").attr('value', lists[j].uri).text(lists[j].name));
@@ -1671,8 +1677,8 @@ function initializeWorkspace() {
     var tabEl = $("#timeline-" + tweetManager.currentTimelineId + ' .inner_timeline');
     tabEl.scrollTop(tweetManager.getCurrentTimeline().currentScroll);
 
-    tweetManager.registerWarningsCallback(function(msg) {
-      Renderer.warningsCallback.call(Renderer, msg);
+    tweetManager.registerWarningsCallback(function(msg, showHTML) {
+      Renderer.warningsCallback.call(Renderer, msg, false, showHTML);
     });
     suspend(tweetManager.suspend);
     showRateLimit();
@@ -1698,11 +1704,11 @@ $(function() {
   });
 
   $("span.i18n").each(function() {
-    $(this).html(chrome.i18n.getMessage(this.id));
+    $(this).text(chrome.i18n.getMessage(this.id));
   });
 
   $("a.i18n").each(function() {
-    $(this).html(chrome.i18n.getMessage(this.id));
+    $(this).text(chrome.i18n.getMessage(this.id));
   });
 
   if(!backgroundPage.SecretKeys.hasValidKeys()) {

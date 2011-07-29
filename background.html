@@ -252,11 +252,12 @@ TweetManager.prototype = {
     template.setShowIconNotification(newState);
   },
 
-  setWarning: function(msg) {
+  setWarning: function(msg, showHTML) {
     this.warningMessage = msg;
+    this.warningMessageHTML = showHTML;
     try {
       if(this.warningsCallback) {
-        this.warningsCallback(msg);
+        this.warningsCallback(msg, showHTML);
       }
     } catch(e) {
       /* ignoring, the popup window might be closed. */
@@ -270,7 +271,7 @@ TweetManager.prototype = {
   registerWarningsCallback: function(callback) {
     this.warningsCallback = callback;
     if(this.warningMessage && this.warningsCallback) {
-      this.warningsCallback(this.warningMessage);
+      this.warningsCallback(this.warningMessage, this.warningMessageHTML);
     }
   },
 
@@ -879,7 +880,7 @@ TweetManager.prototype = {
     nextResetDate.setTime(parseInt(nextHitsReset, 10) * 1000);
     if(remainingHits === 0) {
       this.autoClearWarning = true;
-      this.setWarning(chrome.i18n.getMessage("exceededAPIHits", [chrome.extension.getURL('options.html'), nextResetDate.toLocaleDateString(), nextResetDate.toLocaleTimeString()]));
+      this.setWarning(chrome.i18n.getMessage("exceededAPIHits", [chrome.extension.getURL('options.html'), nextResetDate.toLocaleDateString(), nextResetDate.toLocaleTimeString()]), true);
       return;
     }
     if(this.autoClearWarning) {
