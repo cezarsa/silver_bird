@@ -36,7 +36,9 @@ LocaleTable.prototype = {
 
   drawTable: function() {
     this.prepareLocaleData();
-    this.tableEl.innerText = "";
+    while(this.tableEl.firstChild) {
+      this.tableEl.removeChild(this.tableEl.firstChild);
+    }
 
     var emptyCount = {};
     for(var i = 0, len = this.orderedKeywords.length; i < len; ++i) {
