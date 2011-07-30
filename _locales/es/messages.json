@@ -625,5 +625,83 @@
 	},
 	"shorten_current": {
 		"message": "Compartir página actual"
+	},
+	"detach_window": {
+	  "message": "Separar ventana"
+	},
+	"profile_action": {
+	  "message": "Perfil"
+	},
+	"add_mention_action": {
+	  "message": "Mención"
+	},
+	"automatic": {
+	  "message": "Igual que el navegador"
+	},
+	"block_action": {
+	  "message": "Bloquear"
+	},
+	"follow_action": {
+	  "message": "Seguir"
+	},
+	"unfollow_action": {
+	  "message": "Dejar de seguir"
+	},
+	"g_image_service": {
+	  "message": "Servicio de imágenes"
+	},
+	"g_trending_topics": {
+	  "message": "Temas del momento" 
+	},
+	"invalid_keys": {
+	  "message": "Estás usando API Keys vacías. Esto probablemente esté ocurriendo ya que estás usando una versión de desarrollo. <br>Deberías registrar la aplicación en http://dev.twitter.com y rellenar las API Keys en el fichero lib/secret_keys.js."
+	},
+	"l_default_locale": {
+	  "message": "Localización por defecto:"
+	},
+	"l_image_up_service": {
+	  "message": "Servicio de alojamiento de imágenes:"
+	},
+	"l_notify_retweets": {
+	  "message": "¿Notificar retweets de mis tweets?"
+	},
+	"l_notify_rt_always": {
+	  "message": "Siempre"
+	},
+	"l_notify_rt_only_first": {
+	  "message": "Sólo el primero"
+	},
+	"l_notify_rt_never": {
+	  "message": "Nunca"
+	},
+	"l_shortener_oauth": {
+	  "message": "Usar una cuenta personal de autentificación:"
+	},
+	"l_trending_topics_woeid": {
+	  "message": "Temas del momento locales:"
+	},
+	"l_use_streaming_api": {
+	  "message": "Usar API de streaming (¡Experimental!):"
+	},
+	"l_user_stream_url": {
+	  "message": "URL de Stream de usuario:"
+	},
+	"report_action": {
+	  "message": "Notificar Spam"
+	},
+	"sentTo": {
+		"message": "enviar a"
+	},
+	"trending_topics": {
+	  "message": "Temas"
+	},
+	"tweets_action": {
+	  "message": "Tweets"
+	},
+	"w_ReceivedDM": {
+	  "message": "DMs recibidos"
+	},
+	"w_SentDM": {
+		"message": "DMs enviados"
 	}
 }
