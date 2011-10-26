@@ -131,18 +131,6 @@
 	"shortenerIdleString": {
 		"message": "Type a URL to make it shorter, or, click right here \u2192"
 	},
-	"timelineHome": {
-		"message": "Home",
-		"description": "The home time line tab"
-	},
-	"timelineDM": {
-		"message": "DM",
-		"description": "The direct message time line tab"
-	},
-	"timelineFavorites": {
-		"message": "Favorites",
-		"description": "The home time line tab"
-	},
 	"tweet_singular": {
 		"message": "tweet"
 	},

@@ -126,18 +126,6 @@
 	"shortenerIdleString": {
 		"message": "Digite uma URL para encurtá-la, ou clique aqui \u2192"
 	},
-	"timelineHome": {
-		"message": "Home",
-		"description": "The home time line tab"
-	},
-	"timelineDM": {
-		"message": "DM",
-		"description": "The direct message time line tab"
-	},
-	"timelineFavorites": {
-		"message": "Favoritos",
-		"description": "The home time line tab"
-	},
 	"tweet_singular": {
 		"message": "tweet"
 	},

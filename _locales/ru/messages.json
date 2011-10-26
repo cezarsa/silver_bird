@@ -122,18 +122,6 @@
 	"shortenerIdleString": {
 		"message": "Наберите ссылку для сокращения, или нажмите сюда \u2192"
 	},
-	"timelineHome": {
-		"message": "Home",
-		"description": "The home time line tab"
-	},
-	"timelineDM": {
-		"message": "DM",
-		"description": "The direct message time line tab"
-	},
-	"timelineFavorites": {
-		"message": "Избранное",
-		"description": "The home time line tab"
-	},
 	"tweet_singular": {
 		"message": "твит"
 	},

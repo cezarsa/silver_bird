@@ -1,4 +1,4 @@
-﻿{
+{
   "extDescription": {
     "message": "Silver Bird, Twitter hesabınızı Google Chrome üzərindən izləmənizi və idarə etmənizi təmin edən bir əlavədir.",
     "description": "Extension description"
@@ -130,18 +130,6 @@
   },
   "shortenerIdleString": {
     "message": "Bura qısaldılacaq ünvanı yazın və ya səhifəni sağdakı simvoldan qısaldın. »»»"
-  },
-  "timelineHome": {
-    "message": "Əsas səhifə",
-    "description": "The home time line tab"
-  },
-  "timelineDM": {
-    "message": "İsmarışlar",
-    "description": "The direct message time line tab"
-  },
-  "timelineFavorites": {
-    "message": "Seçilmişlər",
-    "description": "The home time line tab"
   },
   "tweet_singular": {
     "message": "tvit"

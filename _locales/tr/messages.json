@@ -122,18 +122,6 @@
 	"shortenerIdleString": {
 		"message": "Buraya kısaltılacak adresi yazın. Açık sayfayı sağdaki simgeden kısaltın."
 	},
-	"timelineHome": {
-		"message": "Ana sayfa",
-		"description": "The home time line tab"
-	},
-	"timelineDM": {
-		"message": "Mesajlar",
-		"description": "The direct message time line tab"
-	},
-	"timelineFavorites": {
-		"message": "Favoriler",
-		"description": "The home time line tab"
-	},
 	"tweet_singular": {
 		"message": "tweet"
 	},

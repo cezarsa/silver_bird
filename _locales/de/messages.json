@@ -122,18 +122,6 @@
 	"shortenerIdleString": {
 		"message": "URL zum Kürzen eintippen, oder gleich hier klicken \u2192"
 	},
-	"timelineHome": {
-		"message": "Startseite",
-		"description": "Die Timeline der Startseite"
-	},
-	"timelineDM": {
-		"message": "DN",
-		"description": "Direkte Nachrichten"
-	},
-	"timelineFavorites": {
-		"message": "Favoriten",
-		"description": "Die Favoriten-Timeline"
-	},
 	"tweet_singular": {
 		"message": "Tweet"
 	},

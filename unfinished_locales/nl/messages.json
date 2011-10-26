@@ -20,18 +20,6 @@
 	"shortenerIdleString": {
 		"message": "Type een URL om het korter te maken of klik rechts hier \u2192"
 	},
-	"timelineHome": {
-		"message": "Home",
-		"description": "The home timeline tab"
-	},
-	"timelineDM": {
-		"message": "DM",
-		"description": "The direct message timeline tab"
-	},
-	"timelineFavorites": {
-		"message": "Favorieten",
-		"description": "The home timeline tab"
-	},
 	"oAuthError": {
 		"message": "The following error occurred trying to authenticate: $errorMessage$. Please, <a href=\"javascript:OAuth.requestNewToken();\">click here to restart the authentication process</a>",
 		"placeholders": {

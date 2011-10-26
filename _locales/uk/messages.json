@@ -122,18 +122,6 @@
 	"shortenerIdleString": {
 		"message": "Наберіть посилання для скорочення, або натисніть сюди \u2192"
 	},
-	"timelineHome": {
-		"message": "Домашня",
-		"description": "Головна закладка повідомлень"
-	},
-	"timelineDM": {
-		"message": "Приватні",
-		"description": "Закладка прямих приватних повідомлень"
-	},
-	"timelineFavorites": {
-		"message": "Вибране",
-		"description": "The home time line tab"
-	},
 	"tweet_singular": {
 		"message": "твіт"
 	},
