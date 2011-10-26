@@ -548,9 +548,6 @@
 	"l_include_in_unified": {
 		"message": "Включать в общую ленту"
 	},
-	"l_tabs_count": {
-		"message": "Число закладок"
-	},
 	"l_unified_timeline": {
 		"message": "Общая лента:"
 	},

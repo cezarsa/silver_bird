@@ -560,9 +560,6 @@
 	"l_include_in_unified": {
 		"message": "Include in unified timeline"
 	},
-	"l_tabs_count": {
-		"message": "Tabs Count"
-	},
 	"l_unified_timeline": {
 		"message": "Unified Timeline:"
 	},
