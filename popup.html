@@ -1712,7 +1712,7 @@ $(function() {
   });
 
   if(!backgroundPage.SecretKeys.hasValidKeys()) {
-    Renderer.showError(chrome.i18n.getMessage('invalid_keys'));
+    Renderer.showError(chrome.i18n.getMessage('invalid_keys'), null, null, true);
     $("#workspace").show().height(300);
     ThemeManager.init();
     return;
