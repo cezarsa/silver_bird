@@ -25,7 +25,7 @@
 		"message": "Suspender"
 	},
 	"autoUpdatesSuspended": {
-		"message": "Atualizações automáticas suspensas"
+		"message": "Atualizações automáticas foram suspendidas"
 	},
 	"resume": {
 		"message": "Continuar"
@@ -97,7 +97,7 @@
 		"message": "Deletar"
 	},
 	"deleteConfirm": {
-		"message": "Deletar essa menssagem: "
+		"message": "Deletar essa mensagem: "
 	},
 	"Yes": {
 		"message": "Sim"
@@ -156,7 +156,7 @@
 		"message": "Carregando imagem..."
 	},
 	"loadingLongUrl": {
-		"message": "Carregando url real..."
+		"message": "Carregando URL real..."
 	},
 	"errorExpandingUrl": {
 		"message": "Desculpe, aconteceu algo ruim, por favor tente novamente."
@@ -165,7 +165,7 @@
 		"message": "Requisição AJAX falhou (conexão ruim?)"
 	},
 	"successAuth": {
-		"message": "Parabés, você foi autenticado com sucesso. Aproveite o Silver Bird!"
+		"message": "Parabéns, você foi autenticado com sucesso. Aproveite o Silver Bird!"
 	},
 	"cbAuthorized": {
 		"message": "Silver Bird autorizado!"
@@ -194,7 +194,7 @@
 		"message": "Cancelar Tweet"
 	},
 	"queued_messages": {
-		"message": "Menssagens enfileiradas:"
+		"message": "Mensagens enfileiradas:"
 	},
 	"queue_trying": {
 		"message": "tentando enviar por $timediff$",
@@ -304,7 +304,7 @@
 		}
 	},
 	"warningAPIHits": {
-		"message": "Ei! A quantidade de chamdas à API restantes está diminuindo muito rápido.<br>Por favor reveja as suas configurações de intervalo de atualização na <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>página de opções</a>. Tome um cuidado especial caso você esteja utilizando multiplos clientes para o Twitter, eles todos irão compartilhar o mesmo limite.<br>Chamadas restantes disponíveis: $remainingHits$ - Próximo reset: $nextResetDate$ $nextResetTime$",
+		"message": "Ei! A quantidade de chamadas à API restantes está diminuindo muito rápido.<br>Por favor, reveja suas configurações de intervalo de atualização na <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>página de opções</a>. Tome cuidado especial caso você esteja utilizando múltiplos clientes para o Twitter, pois eles todos irão compartilhar o mesmo limite.<br>Chamadas restantes disponíveis: $remainingHits$ - Próximo reset: $nextResetDate$ $nextResetTime$",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -391,7 +391,7 @@
 		"message": "A configuração foi salva com sucesso!"
 	},
 	"changes_restart": {
-		"message": "No entanto, algumas das alterações exigem o reinicio da extensão. Você gostaria de fazer isso agora?<br>    (Isso irá resetar as mensagens não lidas.)"
+		"message": "No entanto, algumas das alterações exigem o reinicio da extensão. Você gostaria de fazer isso agora?<br>(Isso irá resetar as mensagens não lidas.)"
 	},
 	"remaining_api_hits": {
 		"message": "Chamadas à API do Twitter restantes: "
@@ -541,7 +541,7 @@
 		"message": "Timelines"
 	},
 	"notice_api_hits": {
-		"message": "Você deverá deixar o número de chamadas ao Twitter <span style=\"color: red;\">abaixo de <span class=\"__hourly_limit\"></span></span>! Caso contrário o Silver Bird irá parar de funcionar corretamente e as timelines não irão mais atualizar.<br><span style=\"color: red;\">Lembre-se</span> de que se você está utilizando múltiplos clientes para o Twitter você deverá deixar o número de chamadas ainda menor."
+		"message": "Você deverá deixar o número de chamadas ao Twitter <span style=\"color: red;\">abaixo de <span class=\"__hourly_limit\"></span></span>! Caso contrário, o Silver Bird irá parar de funcionar corretamente e as timelines não irão mais atualizar.<br><span style=\"color: red;\">Lembre-se</span> de que se você está utilizando múltiplos clientes para o Twitter você deverá deixar o número de chamadas ainda menor."
 	},
 	"l_hits_notice": {
 		"message": "Chamadas ao Twitter por hora: "
@@ -607,7 +607,7 @@
 		"message": "Resetar"
 	},
 	"btn_default": {
-		"message": "Resetar para valores default"
+		"message": "Resetar para valores padrão"
 	},
 	"shortenIt": {
 	  "message": "Encurte!"
@@ -616,7 +616,7 @@
 	  "message": "Compartilhar página atual"
 	},
 	"tweet_send_error": {
-	  "message": "Um erro ocorreu enquanto enviávamos seu tweet. O twitter está agindo de maneira estranha? Você pode tentar novamente, mas antes verifique se seu tweet já não foi publicado e previna mensagens duplicadas."
+	  "message": "Um erro ocorreu enquanto enviávamos seu tweet. O twitter está agindo de maneira estranha? Você pode tentar novamente, mas antes verifique se seu tweet já não foi publicado para previnir mensagens duplicadas."
 	},
 	"detach_window": {
 	  "message": "Separar janela"

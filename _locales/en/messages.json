@@ -161,7 +161,7 @@
 		"message": "Loading image..."
 	},
 	"loadingLongUrl": {
-		"message": "Loading long url..."
+		"message": "Loading long URL..."
 	},
 	"errorExpandingUrl": {
 		"message": "Sorry, something went wrong, please try again."
@@ -295,7 +295,7 @@
 		"message": "Authorize!"
 	},
 	"exceededAPIHits": {
-		"message": "You've exceeded API hits limit. Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>options page</a>. Silver Bird won't update until $nextResetDate $nextResetTime$.",
+		"message": "You've exceeded the API hits limit. Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>options page</a>. Silver Bird won't update until $nextResetDate $nextResetTime$.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -396,7 +396,7 @@
 		"message": "Your configuration has been successfully saved!"
 	},
 	"changes_restart": {
-		"message": "However, some of your changes require the extension to be restarted. Would you like to do it now?<br>    (This will reset your unread tweets count.)"
+		"message": "However, some of your changes require the extension to be restarted. Would you like to do it now? <br> (This will reset your unread tweets count.)"
 	},
 	"remaining_api_hits": {
 		"message": "Remaining Twitter API Hits: "
@@ -690,6 +690,6 @@
 	  "message": "Never"
 	},
 	"invalid_keys": {
-	  "message": "You are using empty API keys. This is probably happening because you're running a development version.<br>You should register an application at http://dev.twitter.com and fill the API keys in the lib/secret_keys.js file."
+	  "message": "You are using empty API keys. This is probably happening because you're running a development version. <br> You should register an application at http://dev.twitter.com and fill the API keys in the lib/secret_keys.js file."
 	}
 }
