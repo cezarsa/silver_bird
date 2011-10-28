@@ -1116,7 +1116,7 @@ var ContextMenu = {
       if(timeline.template.includeInUnified && !timeline.template.multipleTimelines) {
         label = chrome.i18n.getMessage("hide");
       }
-      specificMenu.push({action: 'remove-' + timeline.timelineId, label: label + ' Tab'});
+      specificMenu.push({action: 'remove-' + timeline.timelineId, label: label + ' ' + chrome.i18n.getMessage("tab")});
 
       if(timeline.template.id == TimelineTemplate.UNIFIED) {
         specificMenu.push({label: 'separator'});
@@ -1128,7 +1128,7 @@ var ContextMenu = {
           if(template.includeInUnified) {
             className = 'check_marked';
           }
-          specificMenu.push({action: 'unified-' + template.id, label: template.timelineName, className: className});
+          specificMenu.push({action: 'unified-' + template.id, label: TimelineTemplate.getTimelineTitleLocale(template.id, template.timelineName), className: className});
           return true;
         });
       } else if(timeline.template.id != TimelineTemplate.FAVORITES) {
@@ -1137,13 +1137,13 @@ var ContextMenu = {
         if(timeline.template.showOnPageNotification) {
           className = 'check_marked';
         }
-        specificMenu.push({action: 'notify-' + timeline.template.id, label: 'Notify', className: className});
+        specificMenu.push({action: 'notify-' + timeline.template.id, label: chrome.i18n.getMessage("notify"), className: className});
 
         className = 'check_unmarked';
         if(timeline.template.showIconNotification) {
           className = 'check_marked';
         }
-        specificMenu.push({action: 'icon-' + timeline.template.id, label: 'Change Icon', className: className});
+        specificMenu.push({action: 'icon-' + timeline.template.id, label: chrome.i18n.getMessage("l_change_icon"), className: className});
       }
     }
 
@@ -1154,7 +1154,7 @@ var ContextMenu = {
         if(template.multipleTimelines) {
           label = chrome.i18n.getMessage("add");
         }
-        generalMenu.push({action: 'show-' + template.id, label: label + " " + template.timelineName + ' Tab'});
+        generalMenu.push({action: 'show-' + template.id, label: label + " " + TimelineTemplate.getTimelineTitleLocale(template.id, template.timelineName) + ' Tab'});
       }
     });
 
@@ -1266,7 +1266,8 @@ var TimelineTab = {
 
   addTab: function(timelineId, tabName, pos) {
     var tabId = '#timeline-' + timelineId;
-    $("#tabs").tabs('add', tabId, tabName, pos);
+
+    $("#tabs").tabs('add', tabId, TimelineTemplate.getTimelineTitleLocale(timelineId, tabName), pos);
     var tabEl = $("#timeline-" + timelineId + ' .inner_timeline');
     tabEl.scroll(function(e) {
       var $this = $(this);
