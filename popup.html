@@ -1154,7 +1154,11 @@ var ContextMenu = {
         if(template.multipleTimelines) {
           label = chrome.i18n.getMessage("add");
         }
-        generalMenu.push({action: 'show-' + template.id, label: label + " " + TimelineTemplate.getTimelineTitleLocale(template.id, template.timelineName) + ' Tab'});
+		label += " ";
+		label += String(chrome.i18n.getMessage("tabWithName",
+			[ TimelineTemplate.getTimelineTitleLocale(template.id, template.timelineName) ]
+			));
+        generalMenu.push({action: 'show-' + template.id, label: label});
       }
     });
 

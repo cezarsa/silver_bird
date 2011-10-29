@@ -42,9 +42,19 @@
 	"add": {
 		"message": "Adicionar"
 	},
+	"tabWithName": {
+		"message": "Aba $name$",
+		"description": "<name> Tab on the context menu for each timeline. This is important because in some languages the word for Tab appears before the tab Name itself",
+		"placeholders": {
+			"name": {
+				"content": "$1",
+				"example": "Lists"
+			}
+		} 
+	},
 	"tab": {
 		"message": "Aba",
-		"description": "The string used on Add ... Tab on the context menu for each timeline"
+		"description": "word Tab when tab name isn't used"
 	},
 	"notify": {
 		"message": "Notificar",
