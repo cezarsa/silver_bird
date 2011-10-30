@@ -163,9 +163,6 @@
 	"successAuth": {
 		"message": "Вітаємо, ви успішно увійшли в систему. Насолоджуйтесь Silver Bird!"
 	},
-	"cbAuthorized": {
-		"message": "Silver Bird авторизований!"
-	},
 	"cbNotAuthorized": {
 		"message": "Гей... Щось пішло не так. Спробуйте натиснути на іконку Silver Bird знову."
 	},

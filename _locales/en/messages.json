@@ -190,9 +190,6 @@
 	"successAuth": {
 		"message": "Congratulations, you've been successfully authenticated. Enjoy Silver Bird!"
 	},
-	"cbAuthorized": {
-		"message": "Silver Bird authorized!"
-	},
 	"cbNotAuthorized": {
 		"message": "Oops... Something went wrong. Please, try clicking Silver Bird icon again."
 	},

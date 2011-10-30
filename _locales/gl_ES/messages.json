@@ -163,9 +163,6 @@
 	"successAuth": {
 		"message": "Noraboa, identificacheste correctamente. ¡Disfruta Silver Bird!"
 	},
-	"cbAuthorized": {
-		"message": "Silver Bird autorizado!"
-	},
 	"cbNotAuthorized": {
 		"message": "Oops... Algo foi mal. Por favor, téntao de novo facendo clic na icona de Silver Bird."
 	},

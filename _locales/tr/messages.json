@@ -163,9 +163,6 @@
 	"successAuth": {
 		"message": "Tebrikler, kimliğiniz doğrulandı. Silver Bird'ün tadını çıkarın!"
 	},
-	"cbAuthorized": {
-		"message": "Silver Bird yetkili!"
-	},
 	"cbNotAuthorized": {
 		"message": "Bir hata oluştu. Lütfen Silver Bird ikonuna tekrar tıklayın."
 	},

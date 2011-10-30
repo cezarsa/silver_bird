@@ -163,9 +163,6 @@
 	"successAuth": {
 		"message": "Glückwunsch, Du wurdest erfolgreich authentifiziert. Viel Spaß mit Silver Bird!"
 	},
-	"cbAuthorized": {
-		"message": "Silver Bird authorisiert!"
-	},
 	"cbNotAuthorized": {
 		"message": "Ups... Irgendwas ist schief gegangen. Bitte klick noch mal auf das Silver Bird Icon."
 	},
