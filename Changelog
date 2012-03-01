@@ -1,3 +1,7 @@
+1.9.8.6 (2012-02-29)
+
+* Correcly handling tweet media entities and html entities.
+
 1.9.8.5 (2012-02-26)
 
 * Using tweet entities if available instead of manually parsing tweets.
