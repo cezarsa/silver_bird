@@ -1633,6 +1633,10 @@ function initializeWorkspace() {
     if(tweetManager) {
       tweetManager.registerWarningsCallback(null);
       tweetManager.registerNewTweetsCallback(null);
+      tweetManager.sendQueue.cleanUpCallbacks();
+    }
+    if(UploadManager) {
+      UploadManager.unregisterCallbacks();
     }
   });
 
@@ -1731,7 +1735,6 @@ $(function() {
 </head>
 <body>
 <div id="error" style="display: none;"></div>
-
 <div id="workspace" style="display: none;">
   <div id="absolute_container">
     <div id="warning">
