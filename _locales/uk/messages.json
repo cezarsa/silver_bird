@@ -122,18 +122,6 @@
 	"shortenerIdleString": {
 		"message": "Наберіть посилання для скорочення, або натисніть сюди \u2192"
 	},
-	"timelineHome": {
-		"message": "Домашня",
-		"description": "Головна закладка повідомлень"
-	},
-	"timelineDM": {
-		"message": "Приватні",
-		"description": "Закладка прямих приватних повідомлень"
-	},
-	"timelineFavorites": {
-		"message": "Вибране",
-		"description": "The home time line tab"
-	},
 	"tweet_singular": {
 		"message": "твіт"
 	},
@@ -174,9 +162,6 @@
 	},
 	"successAuth": {
 		"message": "Вітаємо, ви успішно увійшли в систему. Насолоджуйтесь Silver Bird!"
-	},
-	"cbAuthorized": {
-		"message": "Silver Bird авторизований!"
 	},
 	"cbNotAuthorized": {
 		"message": "Гей... Щось пішло не так. Спробуйте натиснути на іконку Silver Bird знову."
@@ -562,9 +547,6 @@
 	},
 	"l_include_in_unified": {
 		"message": "Включати в загальну стрічку"
-	},
-	"l_tabs_count": {
-		"message": "Число закладок"
 	},
 	"l_unified_timeline": {
 		"message": "Загальна стрічка:"

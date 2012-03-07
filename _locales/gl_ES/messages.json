@@ -122,18 +122,6 @@
 	"shortenerIdleString": {
 		"message": "Escribe unha URL para acortala ou clica xusto aquí \u2192"
 	},
-	"timelineHome": {
-		"message": "Inicio",
-		"description": "The home time line tab"
-	},
-	"timelineDM": {
-		"message": "DM",
-		"description": "The direct message time line tab"
-	},
-	"timelineFavorites": {
-		"message": "Favoritos",
-		"description": "The home time line tab"
-	},
 	"tweet_singular": {
 		"message": "chío"
 	},
@@ -174,9 +162,6 @@
 	},
 	"successAuth": {
 		"message": "Noraboa, identificacheste correctamente. ¡Disfruta Silver Bird!"
-	},
-	"cbAuthorized": {
-		"message": "Silver Bird autorizado!"
 	},
 	"cbNotAuthorized": {
 		"message": "Oops... Algo foi mal. Por favor, téntao de novo facendo clic na icona de Silver Bird."
@@ -562,9 +547,6 @@
 	},
 	"l_include_in_unified": {
 		"message": "Incluir na liña de tempo Unificada"
-	},
-	"l_tabs_count": {
-		"message": "Contador de lapelas"
 	},
 	"l_unified_timeline": {
 		"message": "Liñaa de tempo Unificada:"

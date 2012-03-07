@@ -909,7 +909,7 @@ TweetManager.prototype = {
           if(timeDiff > 3 * 60 * 1000) {
             // We've been keeping this tendency for 5 minutes, so we'll probably
             // exceed the limit if we keep this same rate, let's warn users.
-            this.setWarning(chrome.i18n.getMessage("warmingAPIHits", [chrome.extension.getURL('options.html'), remainingHits, nextResetDate.toLocaleDateString(), nextResetDate.toLocaleTimeString()]));
+            this.setWarning(chrome.i18n.getMessage("warningAPIHits", [chrome.extension.getURL('options.html'), remainingHits, nextResetDate.toLocaleDateString(), nextResetDate.toLocaleTimeString()]));
             this.firstPossibleWarnTime = null;
           }
         } else {

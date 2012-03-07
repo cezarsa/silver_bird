@@ -122,18 +122,6 @@
 	"shortenerIdleString": {
 		"message": "Buraya kısaltılacak adresi yazın. Açık sayfayı sağdaki simgeden kısaltın."
 	},
-	"timelineHome": {
-		"message": "Ana sayfa",
-		"description": "The home time line tab"
-	},
-	"timelineDM": {
-		"message": "Mesajlar",
-		"description": "The direct message time line tab"
-	},
-	"timelineFavorites": {
-		"message": "Favoriler",
-		"description": "The home time line tab"
-	},
 	"tweet_singular": {
 		"message": "tweet"
 	},
@@ -174,9 +162,6 @@
 	},
 	"successAuth": {
 		"message": "Tebrikler, kimliğiniz doğrulandı. Silver Bird'ün tadını çıkarın!"
-	},
-	"cbAuthorized": {
-		"message": "Silver Bird yetkili!"
 	},
 	"cbNotAuthorized": {
 		"message": "Bir hata oluştu. Lütfen Silver Bird ikonuna tekrar tıklayın."
@@ -562,9 +547,6 @@
 	},
 	"l_include_in_unified": {
 		"message": "Birleşik akışa dahil et"
-	},
-	"l_tabs_count": {
-		"message": "Sekme sayısı"
 	},
 	"l_unified_timeline": {
 		"message": "Birleşik Akış:"
