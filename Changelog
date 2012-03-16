@@ -1,3 +1,7 @@
+1.9.8.8 (2012-03-07)
+
+* Further attempts in trying to solve memory leaks, now I think it's solved
+
 1.9.8.7 (2012-03-05)
 
 * General clean up trying to solve memory leaks.
