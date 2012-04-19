@@ -1,3 +1,20 @@
+1.9.8.8 (2012-03-07)
+
+* Further attempts in trying to solve memory leaks, now I think it's solved
+
+1.9.8.7 (2012-03-05)
+
+* General clean up trying to solve memory leaks.
+
+1.9.8.6 (2012-02-29)
+
+* Correcly handling tweet media entities and html entities.
+
+1.9.8.5 (2012-02-26)
+
+* Using tweet entities if available instead of manually parsing tweets.
+* Fixing bug preventing extension from working on Chrome 19+ (crbug.com/115714)
+
 1.9.8.4 (2011-07-30)
 
 * Addressing many possible security issues involving XSS vulnerable points. (Thanks Nicholas and UC Berkeley folks for pointing them out.)
@@ -5,7 +22,6 @@
   - Better positioning;
   - Showing even for shortened urls;
   - Handling more services.
-
 
 1.9.8.3 (2011-07-02)
 

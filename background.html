@@ -369,7 +369,7 @@ TweetManager.prototype = {
   },
 
   setTimelineOrder: function(sortedTimelinesArray) {
-    this.timelineOrderCache = sortedTimelinesArray;
+    this.timelineOrderCache = sortedTimelinesArray.slice(0);
     this.timelineOrderData.save(JSON.stringify(sortedTimelinesArray));
   },
 
