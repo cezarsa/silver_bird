@@ -298,7 +298,7 @@
 		"message": "Завторизуйтеся!"
 	},
 	"exceededAPIHits": {
-		"message": "Ви перевищили ліміт API. Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>налаштуваннях</a>. Silver Bird не буде оновлювати до $nextResetDate$ $nextResetTime$.",
+		"message": "Ви перевищили ліміт API. Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='#' class=\"msg-trigger-openoptions\">налаштуваннях</a>. Silver Bird не буде оновлювати до $nextResetDate$ $nextResetTime$.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -312,7 +312,7 @@
 		}
 	},
 	"warningAPIHits": {
-		"message": "Гей! Ліміт звернень до API настає дуже швидко. <br> Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>налаштуваннях</a>. Зверніть увагу, що якщо ви використовуєте кілька Twitter клієнтів вони мають загальний ліміт. <br> Залишилося звернень: $remainingHits$ - Наступне скидання оновлень: $nextResetDate$ $nextResetTime$",
+		"message": "Гей! Ліміт звернень до API настає дуже швидко. <br> Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='#' class=\"msg-trigger-openoptions\">налаштуваннях</a>. Зверніть увагу, що якщо ви використовуєте кілька Twitter клієнтів вони мають загальний ліміт. <br> Залишилося звернень: $remainingHits$ - Наступне скидання оновлень: $nextResetDate$ $nextResetTime$",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -329,7 +329,7 @@
 		}
 	},
 	"oAuthError": {
-		"message": "Під час перевірки автентичності виникла помилка: $errorMessage$. Будь ласка, <a href=\"javascript:OAuth.requestNewToken();\">натисніть щоб повторити процес</a>",
+		"message": "Під час перевірки автентичності виникла помилка: $errorMessage$. Будь ласка, <a href=\"#\" class=\"msg-trigger-openoptions\">натисніть щоб повторити процес</a>",
 		"placeholders": {
 			"errorMessage": {
 				"content": "$1"

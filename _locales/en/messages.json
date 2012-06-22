@@ -307,7 +307,7 @@
 		"message": "Authorize!"
 	},
 	"exceededAPIHits": {
-		"message": "You've exceeded API hits limit. Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>options page</a>. Silver Bird won't update until $nextResetDate $nextResetTime$.",
+		"message": "You've exceeded API hits limit. Please review your refresh interval settings in the <a href='#' class=\"msg-trigger-openoptions\">options page</a>. Silver Bird won't update until $nextResetDate $nextResetTime$.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -321,7 +321,7 @@
 		}
 	},
 	"warningAPIHits": {
-		"message": "Hey! Your remaining API hits are ending too fast.<br>Please review your refresh interval settings in the <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>options page</a>. Take special care if you're running multiple Twitter clients, as they all share the same limit.<br>Available hits left: $remainingHits$ - Next hits reset: $nextResetDate$ $nextResetTime$",
+		"message": "Hey! Your remaining API hits are ending too fast.<br>Please review your refresh interval settings in the <a href='#' class=\"msg-trigger-openoptions\">options page</a>. Take special care if you're running multiple Twitter clients, as they all share the same limit.<br>Available hits left: $remainingHits$ - Next hits reset: $nextResetDate$ $nextResetTime$",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -338,7 +338,7 @@
 		}
 	},
 	"oAuthError": {
-		"message": "The following error occurred trying to authenticate: $errorMessage$. Please, <a href=\"javascript:OAuth.requestNewToken();\">click here to restart the authentication process</a>",
+		"message": "The following error occurred trying to authenticate: $errorMessage$. Please, <a href=\"#\" class=\"msg-trigger-openoptions\">click here to restart the authentication process</a>",
 		"placeholders": {
 			"errorMessage": {
 				"content": "$1"
