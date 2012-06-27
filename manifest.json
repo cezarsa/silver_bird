@@ -1,7 +1,6 @@
 {
     "name": "Silver Bird",
-    "manifest_version": 2,
-    "version": "1.9.8.9",
+    "version": "1.9.8.10",
     "description": "__MSG_extDescription__",
     "default_locale": "en",
     "browser_action": {
@@ -9,9 +8,7 @@
         "default_title": "Silver Bird",
         "default_popup": "popup.html?popup"
     },
-    "background": {
-        "page": "background.html"
-    },
+    "background_page": "background.html",
     "permissions": [
         "notifications",
         "tabs",
@@ -25,7 +22,6 @@
         "48": "img/icon48.png",
         "128": "img/icon128.png"
     },
-    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
     "content_scripts": [
         {
             "matches": [
