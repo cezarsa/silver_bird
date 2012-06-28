@@ -1,6 +1,6 @@
 {
     "name": "Silver Bird",
-    "version": "1.9.8.10",
+    "version": "1.9.8.11",
     "description": "__MSG_extDescription__",
     "default_locale": "en",
     "browser_action": {
