@@ -298,7 +298,7 @@
 		"message": "Authorisieren!"
 	},
 	"exceededAPIHits": {
-		"message": "Du hast die API-Aufrufgrenze überschritten. Bitte überprüfe Deine Aktualisierungseinstellungen in den <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>Optionen</a>. Silver Bird wird bis $nextResetDate $nextResetTime$ nicht mehr aktualisiert.",
+		"message": "Du hast die API-Aufrufgrenze überschritten. Bitte überprüfe Deine Aktualisierungseinstellungen in den <a href='#' class=\"msg-trigger-openoptions\">Optionen</a>. Silver Bird wird bis $nextResetDate $nextResetTime$ nicht mehr aktualisiert.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -312,7 +312,7 @@
 		}
 	},
 	"warningAPIHits": {
-		"message": "Hey! Die verbleibende API-Aufrufe werden zu schnell weniger.<br>Bitte überprüfe Deine Aktualisierungseinstellungen in den <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>Optionen</a>. Sei besonders vorsichtig, wenn Du mehrere Twitter-Programme verwendest; sie teilen sich die API-Aufrufe!<br>Verbleibende Aufrufe: $remainingHits$ - Nächster Reset: $nextResetDate$ $nextResetTime$",
+		"message": "Hey! Die verbleibende API-Aufrufe werden zu schnell weniger.<br>Bitte überprüfe Deine Aktualisierungseinstellungen in den <a href='#' class=\"msg-trigger-openoptions\">Optionen</a>. Sei besonders vorsichtig, wenn Du mehrere Twitter-Programme verwendest; sie teilen sich die API-Aufrufe!<br>Verbleibende Aufrufe: $remainingHits$ - Nächster Reset: $nextResetDate$ $nextResetTime$",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -329,7 +329,7 @@
 		}
 	},
 	"oAuthError": {
-		"message": "Der folgende Fehler trat während der Authentifizierung auf:: $errorMessage$. Bitte <a href=\"javascript:OAuth.requestNewToken();\">hier klicken zum Neustarten der Authentifizierung</a>.",
+		"message": "Der folgende Fehler trat während der Authentifizierung auf:: $errorMessage$. Bitte <a href=\"#\" class=\"msg-trigger-openoptions\">hier klicken zum Neustarten der Authentifizierung</a>.",
 		"placeholders": {
 			"errorMessage": {
 				"content": "$1"

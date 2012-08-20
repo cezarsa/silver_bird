@@ -298,7 +298,7 @@
 		"message": "¡Autorizar!"
 	},
 	"exceededAPIHits": {
-		"message": "Has superado el límite de peticiones al API. Por favor, revisa los intervalos de actualización en la <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>página de opciones</a>. Silver Bird no actualizará hasta $nextResetDate $nextResetTime$.",
+		"message": "Has superado el límite de peticiones al API. Por favor, revisa los intervalos de actualización en la <a href='#' class=\"msg-trigger-openoptions\">página de opciones</a>. Silver Bird no actualizará hasta $nextResetDate $nextResetTime$.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -312,7 +312,7 @@
 		}
 	},
 	"warningAPIHits": {
-		"message": "Hey! Te estás quedando sin llamadas disponibles al API demasiado rápido.<br>Por favor, revisa los intervalos de actualización en la <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>página de opciones</a>. Presta especial atención si estás usando más de un cliente de Twitter, ya que todos ellos comparten el mismo límite.<br>Llamadas disponibles: $remainingHits$ - Próximo reseteo de llamadas: $nextResetDate$ $nextResetTime$",
+		"message": "Hey! Te estás quedando sin llamadas disponibles al API demasiado rápido.<br>Por favor, revisa los intervalos de actualización en la <a href='#' class=\"msg-trigger-openoptions\">página de opciones</a>. Presta especial atención si estás usando más de un cliente de Twitter, ya que todos ellos comparten el mismo límite.<br>Llamadas disponibles: $remainingHits$ - Próximo reseteo de llamadas: $nextResetDate$ $nextResetTime$",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -329,7 +329,7 @@
 		}
 	},
 	"oAuthError": {
-		"message": "Mientras te autentificabas, ocurrió el siguiente error: $errorMessage$. Por favor, <a href=\"javascript:OAuth.requestNewToken();\">haz clic aquí para reiniciar el proceso de autenticación</a>",
+		"message": "Mientras te autentificabas, ocurrió el siguiente error: $errorMessage$. Por favor, <a href=\"#\" class=\"msg-trigger-openoptions\">haz clic aquí para reiniciar el proceso de autenticación</a>",
 		"placeholders": {
 			"errorMessage":{
 				"content": "$1"

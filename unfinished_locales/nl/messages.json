@@ -33,7 +33,7 @@
 		"description": "The home timeline tab"
 	},
 	"oAuthError": {
-		"message": "The following error occurred trying to authenticate: $errorMessage$. Please, <a href=\"javascript:OAuth.requestNewToken();\">click here to restart the authentication process</a>",
+		"message": "The following error occurred trying to authenticate: $errorMessage$. Please, <a href=\"#\" class=\"msg-trigger-openoptions\">click here to restart the authentication process</a>",
 		"placeholders": {
 			"errorMessage":{
 				"content": "$1"			

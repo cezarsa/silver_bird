@@ -307,7 +307,7 @@
     "message": "Səlahiyyət ver!"
   },
   "exceededAPIHits": {
-    "message": "Gündəlik API istifadə limitini keçdiniz. Lütfən <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>seçimlər səhifəsindən</a> yeniləmə aralığını yoxlayın. Silver Bird $nextResetDate $nextResetTime$ tarixinə qədər yenilənməyəcək.",
+    "message": "Gündəlik API istifadə limitini keçdiniz. Lütfən <a href='#' class=\"msg-trigger-openoptions\">seçimlər səhifəsindən</a> yeniləmə aralığını yoxlayın. Silver Bird $nextResetDate $nextResetTime$ tarixinə qədər yenilənməyəcək.",
     "placeholders": {
       "options_url": {
         "content": "$1"
@@ -321,7 +321,7 @@
     }
   },
   "warningAPIHits": {
-    "message": "API limitinizi çox sürətli doldurursunuz. <br>Lütfən <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>seçimlər səhifəsindən</a> yeniləmə aralığını idarə edin. <br>Qalan haqq: $remainingHits$ - Bir sonrakı sıfırlama tarixi: $nextResetDate$ $nextResetTime$",
+    "message": "API limitinizi çox sürətli doldurursunuz. <br>Lütfən <a href='#' class=\"msg-trigger-openoptions\">seçimlər səhifəsindən</a> yeniləmə aralığını idarə edin. <br>Qalan haqq: $remainingHits$ - Bir sonrakı sıfırlama tarixi: $nextResetDate$ $nextResetTime$",
     "placeholders": {
       "options_url": {
         "content": "$1"
@@ -338,7 +338,7 @@
     }
   },
   "oAuthError": {
-    "message": "Bir səhv yarandı: $errorMessage$. Lütfən <a href=\"javascript:OAuth.requestNewToken();\">səlahiyyətləndirmə əməliyyatını təkrar başladın</a>.",
+    "message": "Bir səhv yarandı: $errorMessage$. Lütfən <a href=\"#\" class=\"msg-trigger-openoptions\">səlahiyyətləndirmə əməliyyatını təkrar başladın</a>.",
     "placeholders": {
       "errorMessage": {
         "content": "$1"

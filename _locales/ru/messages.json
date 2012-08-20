@@ -298,7 +298,7 @@
 		"message": "Авторизуйся!"
 	},
 	"exceededAPIHits": {
-		"message": "Вы превысили лимит API. Пожалуйста, пересмотрите настройки интервалов обновления в <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>настройках</a>. Silver Bird не будет обновлять до $nextResetDate $nextResetTime$.",
+		"message": "Вы превысили лимит API. Пожалуйста, пересмотрите настройки интервалов обновления в <a href='#' class=\"msg-trigger-openoptions\">настройках</a>. Silver Bird не будет обновлять до $nextResetDate $nextResetTime$.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -312,7 +312,7 @@
 		}
 	},
 	"warningAPIHits": {
-		"message": "Эй! Лимит обращений к API наступает слишком быстро.<br>Пожалуйста, пересмотрите настройки интервалов обновления в <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>настройках</a>. Обратите внимание, что если вы используете несколько Twitter клиентов они имеют общий лимит.<br>Осталось обращений: $remainingHits$ - Следующий сброс: $nextResetDate$ $nextResetTime$",
+		"message": "Эй! Лимит обращений к API наступает слишком быстро.<br>Пожалуйста, пересмотрите настройки интервалов обновления в <a href='#' class=\"msg-trigger-openoptions\">настройках</a>. Обратите внимание, что если вы используете несколько Twitter клиентов они имеют общий лимит.<br>Осталось обращений: $remainingHits$ - Следующий сброс: $nextResetDate$ $nextResetTime$",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -329,7 +329,7 @@
 		}
 	},
 	"oAuthError": {
-		"message": "Во время проверки подлинности возникла ошибка: $errorMessage$. Пожалуйста, <a href=\"javascript:OAuth.requestNewToken();\">нажмите чтобы повторить процесс</a>",
+		"message": "Во время проверки подлинности возникла ошибка: $errorMessage$. Пожалуйста, <a href=\"#\" class=\"msg-trigger-openoptions\">нажмите чтобы повторить процесс</a>",
 		"placeholders": {
 			"errorMessage": {
 				"content": "$1"

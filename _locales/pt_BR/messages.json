@@ -302,7 +302,7 @@
 		"message": "Autorizar!"
 	},
 	"exceededAPIHits": {
-		"message": "Você excedeu o limite de chamadas à API do Twitter. Por favor reveja as suas configurações de intervalo de atualização na <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>página de opções</a>. O Silver Bird não irá atualizar até $nextResetDate $nextResetTime$.",
+		"message": "Você excedeu o limite de chamadas à API do Twitter. Por favor reveja as suas configurações de intervalo de atualização na <a href='#' class=\"msg-trigger-openoptions\">página de opções</a>. O Silver Bird não irá atualizar até $nextResetDate $nextResetTime$.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -316,7 +316,7 @@
 		}
 	},
 	"warningAPIHits": {
-		"message": "Ei! A quantidade de chamdas à API restantes está diminuindo muito rápido.<br>Por favor reveja as suas configurações de intervalo de atualização na <a href='javascript:chrome.tabs.create({url:\"$options_url$\"})'>página de opções</a>. Tome um cuidado especial caso você esteja utilizando multiplos clientes para o Twitter, eles todos irão compartilhar o mesmo limite.<br>Chamadas restantes disponíveis: $remainingHits$ - Próximo reset: $nextResetDate$ $nextResetTime$",
+		"message": "Ei! A quantidade de chamdas à API restantes está diminuindo muito rápido.<br>Por favor reveja as suas configurações de intervalo de atualização na <a href='#' class=\"msg-trigger-openoptions\">página de opções</a>. Tome um cuidado especial caso você esteja utilizando multiplos clientes para o Twitter, eles todos irão compartilhar o mesmo limite.<br>Chamadas restantes disponíveis: $remainingHits$ - Próximo reset: $nextResetDate$ $nextResetTime$",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -333,7 +333,7 @@
 		}
 	},
 	"oAuthError": {
-		"message": "O seguinte erro ocorreu tentando autenticar: $errorMessage$. Por favor, <a href=\"javascript:OAuth.requestNewToken();\">clique aqui para reiniciar o processo de autenticação</a>",
+		"message": "O seguinte erro ocorreu tentando autenticar: $errorMessage$. Por favor, <a href=\"#\" class=\"msg-trigger-openoptions\">clique aqui para reiniciar o processo de autenticação</a>",
 		"placeholders": {
 			"errorMessage": {
 				"content": "$1"
