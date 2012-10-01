@@ -24,10 +24,10 @@
     * Tweets caching to avoid hitting Twitter's API rate limit (Only hit Twitter after 1 minute or when fetching uncached tweets)
     * It uses Chromium autoupdate feature, so you won't be left behind
 
-6. License
+5. License
 
     This project uses the very simple and permissive MIT license. Check the LICENSE file.
 
-7. Credits
+6. Credits
 
     [Chiara De Liberato](http://www.chiaradeliberato.it/) - Italian translation
