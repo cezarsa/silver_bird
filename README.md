@@ -27,3 +27,7 @@
 6. License
 
     This project uses the very simple and permissive MIT license. Check the LICENSE file.
+
+7. Credits
+
+    [Chiara De Liberato](http://www.chiaradeliberato.it/) - Italian translation
