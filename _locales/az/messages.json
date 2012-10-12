@@ -18,7 +18,7 @@
     "description": "The text for the logout link"
   },
   "options": {
-    "message": "Seçimlər",
+    "message": "Ayarlar",
     "description": "Options link"
   },
   "refresh": {
@@ -87,10 +87,10 @@
     "message": "göndərildi"
   },
   "retweetedBy": {
-    "message": "təkrar tvitləyən:"
+    "message": "retvitləyən:"
   },
   "retweetedByMe": {
-    "message": "sizin tərəfinizdən təkrar tvitləndi"
+    "message": "tərəfinizdən retvitləndi"
   },
   "unmarkFavorite": {
     "message": "Seçilmişlərdən yığışdır"
@@ -102,7 +102,7 @@
     "message": "Sil"
   },
   "deleteConfirm": {
-    "message": "Bu ismarışı sil: "
+    "message": "Bu tviti sil: "
   },
   "Yes": {
     "message": "Hə"
@@ -114,10 +114,10 @@
     "message": "Cavabla"
   },
   "Retweet": {
-    "message": "Yenidən tvitlə"
+    "message": "Retvit"
   },
   "retweetConfirm": {
-    "message": "Bu tviti yenidən tvitlə: "
+    "message": "Bu tviti retvitlə: "
   },
   "oldRT": {
     "message": "Paylaş"
@@ -182,10 +182,10 @@
     "message": "AJAX istəyi uğursuzdur (pis əlaqə?)"
   },
   "successAuth": {
-    "message": "Təbriklər, hesabınızın həqiqili təsdiqləndi. Silver Bird'dən zövq alın!"
+    "message": "Təbriklər, siz uğurla hesabınızı təsdiq etdiniz. Silver Birddən zövq alın!"
   },
   "cbAuthorized": {
-    "message": "Silver Bird səlahiyyət verdi!"
+    "message": "Silver Bird icazə verdi!"
   },
   "cbNotAuthorized": {
     "message": "Nəsə istənilən kimi getmədi. Lütfən Silver Bird ikonuna təkrar basın."
@@ -402,13 +402,13 @@
     "message": "il əvvəl"
   },
   "options_title": {
-    "message": "Silver Bird Seçimləri"
+    "message": "Silver Bird Ayarları"
   },
   "conf_saved": {
-    "message": "Nizamlarınız uğurla qeyd edildi."
+    "message": "Ayarlarınız uğurla qeyd edildi."
   },
   "changes_restart": {
-    "message": "Bəzi nizamların aktiv olması üçün qoşmanın yenidən başladılması gərək. Bunu indi etmək istərsinizmi? <br> (Oxunmamış tvitləriniz sıfırlanacaq)"
+    "message": "Bəzi ayarların aktiv olması üçün qoşmanın yenidən başladılması gərək. Bunu indi etmək istəyirsinizmi? <br> (Oxunmamış tvitləriniz sıfırlanacaq)"
   },
   "remaining_api_hits": {
     "message": "Qalan Twitter API İstifadə Sayı: "
@@ -465,13 +465,13 @@
     "message": "Şrift:"
   },
   "l_hover_timeout": {
-    "message": "Oxumaq üçün üzərində gözləmə müddəti (ms):"
+    "message": "Oxumaq üçün vaxt (ms):"
   },
   "l_show_expanded_urls": {
-    "message": "Qısaldılmış ünvanları genişlət:"
+    "message": "Qısaldılan URLləri genişləndir:"
   },
   "l_reply_all": {
-    "message": "Bütün bəhs edilənləri cavablandır:"
+    "message": "Bütün bəhs edənləri cavabla:"
   },
   "l_show_hits_in_popup": {
     "message": "API istifadə sayını göstər:"
@@ -483,16 +483,16 @@
     "message": "Simvol rəngi:"
   },
   "l_tweets_color_only_unified": {
-    "message": "Yalnız birləşmiş axışda rənglər:"
+    "message": "Rənglər Yalnız Birləşmişdə:"
   },
   "l_tweet_color": {
     "message": "Tvit rəngi:"
   },
   "w_Mentions": {
-    "message": "Xatırlatmalar"
+    "message": "Bəhs etmələr"
   },
   "btn_reset_popup_size": {
-    "message": "Pəncərə Ölçüsünü Sıfırla"
+    "message": "Əvvəlki ölçüyə sıfırla"
   },
   "g_notifications": {
     "message": "Bildirişlər"
@@ -510,7 +510,7 @@
     "message": "Əsas səhifə:"
   },
   "notif_mentions": {
-    "message": "Xatırlatmalar:"
+    "message": "Bəhs etmələr:"
   },
   "notif_dms": {
     "message": "İsmarışlar:"
@@ -570,19 +570,19 @@
     "message": "Yeniləmə aralığı(s)"
   },
   "l_include_in_unified": {
-    "message": "Birləşdirilən vaxt qrafikinə daxil et"
+    "message": "Birləşmişlərə daxil et"
   },
   "l_tabs_count": {
     "message": "Hesablar Sayı"
   },
   "l_unified_timeline": {
-    "message": "Birləşdirilən Vaxt qrafiki:"
+    "message": "Birləşmiş Vaxt qrafiki:"
   },
   "tml_favorites": {
     "message": "Seçilənlər:"
   },
   "l_blocked_users": {
-    "message": "Qadağan edilən istifadəçilər:"
+    "message": "Bloklanan İstifadəçilər:"
   },
   "notice_right_click_change": {
     "message": "* Artıq pəncərədə sıçanın sağ düymsini basaraq buradakı nizamların çoxunu pəncərə üzərindən dəyişdirə bilərsiniz."
@@ -627,7 +627,7 @@
     "message": "Sıfırla"
   },
   "btn_default": {
-    "message": "Əvvəlki nizamları bərpa et"
+    "message": "Əvvəlki ayarları bərpa et"
   },
   "shortenIt": {
     "message": "Qısalt"
@@ -654,7 +654,7 @@
     "message": "Profil"
   },
   "add_mention_action": {
-    "message": "Xatırlat"
+    "message": "Bəhs et"
   },
   "g_image_service": {
     "message": "Şəkil Xidməti"
@@ -684,12 +684,27 @@
     "message": "İstifadəçi axın URL-i:"
   },
   "block_action": {
-    "message": "Qadağa"
+    "message": "Blok"
   },
   "report_action": {
     "message": "Spam Şikayəti"
   },
   "l_shortener_oauth": {
     "message": "Fərdi hesab təsdiqləməsindən istifadə et:"
-  }
+  },
+  "l_notify_retweets": {
+    "message": "Tvitlərimin retvitini mənə bildir"
+	},
+	"l_notify_rt_always": {
+	  "message": "Həmişə"
+	},
+	"l_notify_rt_only_first": {
+	  "message": "Yalnız İlk Retvit"
+	},
+	"l_notify_rt_never": {
+	  "message": "Heç vaxt"
+	},
+	"invalid_keys": {
+	  "message": "Boş APİ açarlarından istifadə edirsiniz. Bu yəqin ona görə baş verir ki, siz hazırlanmaqda olan developer versiya istifadə edirsiz.<br>Siz http://dev.twitter.com -da tətbiqi qeydə almalısınız və lib/secret_keys.js faylında APİ açarlarını doldurmalısınız."
+	}
 }
