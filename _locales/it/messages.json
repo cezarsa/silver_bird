@@ -8,7 +8,7 @@
 	},
 	"composeTweet": {
 		"message": "Scrivi tweet",
-		"description": "Testo del onuovo tweet"
+		"description": "Testo del nuovo tweet"
 	},
 	"tweetit": {
 		"message": "Invia il tweet!"
@@ -93,7 +93,7 @@
 		"message": "retweettato da me"
 	},
 	"unmarkFavorite": {
-		"message": "Togli dai preferiti"
+		"message": "Rimuovi dai preferiti"
 	},
 	"markFavorite": {
 		"message": "Inserisci tra i preferiti"
@@ -102,7 +102,7 @@
 		"message": "Cancella"
 	},
 	"deleteConfirm": {
-		"message": "Cancella questo messaggio: "
+		"message": "Cancella il messaggio: "
 	},
 	"Yes": {
 		"message": "Sì"
@@ -117,7 +117,7 @@
 		"message": "Retweetta"
 	},
 	"retweetConfirm": {
-		"message": "Retweetta questo messaggio: "
+		"message": "Retweetta il messaggio: "
 	},
 	"oldRT": {
 		"message": "Condividi (RT vecchia maniera)"
@@ -133,15 +133,15 @@
 	},
 	"timelineHome": {
 		"message": "Home",
-		"description": "Il tab della timeline principale"
+		"description": "Tab della timeline principale"
 	},
 	"timelineDM": {
 		"message": "DM",
-		"description": "Il tab della timeline dei DM"
+		"description": "Tab della timeline dei DM"
 	},
 	"timelineFavorites": {
 		"message": "Preferiti",
-		"description": "Il tab della timeline dei preferiti"
+		"description": "Tab della timeline dei preferiti"
 	},
 	"tweet_singular": {
 		"message": "tweet"
@@ -417,7 +417,7 @@
 		"message": "Frequenza di reset API: "
 	},
 	"nerds_link": {
-		"message": "Statistiche sulle hit API(per nerds)"
+		"message": "Statistiche sulle hit API (per nerds)"
 	},
 	"g_ui": {
 		"message": "Interfaccia utente"
@@ -699,7 +699,7 @@
 	  "message": "Sempre"
 	},
 	"l_notify_rt_only_first": {
-	  "message": "Solo il primo"
+	  "message": "Solo il primo RT"
 	},
 	"l_notify_rt_never": {
 	  "message": "Mai"
