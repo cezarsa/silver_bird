@@ -704,6 +704,10 @@
 	"l_notify_rt_never": {
 	  "message": "Mai"
 	},
+    "l_disable_notification_animation": {
+      "message": "Disabilita animazione del timeout (risolve problemi con multimonitor):"
+    },
+
 	"invalid_keys": {
 	  "message": "Stai usando delle API key vuote, probabilmente perché stai utilizzando una versione in via di sviluppo.<br>È preferibile registrare le applicazioni su http://dev.twitter.com e riempire le APi key nel file lib/secret_keys.jso."
 	}
