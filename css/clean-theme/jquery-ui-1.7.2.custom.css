@@ -131,7 +131,7 @@ visit http://jqueryui.com/themeroller/?ffDefault=Helvetica,%20Arial,%20sans-seri
 
 .ui-widget-content {
 	/* border: 1px solid #666666; */
-	background: url(images/ui-bg_inset-soft_25_000000_1x100.png) 50% bottom repeat-x;
+	/* background: url(images/ui-bg_inset-soft_25_000000_1x100.png) 50% bottom repeat-x; */
 	/* color: #ffffff; */
 }
 
@@ -141,7 +141,7 @@ visit http://jqueryui.com/themeroller/?ffDefault=Helvetica,%20Arial,%20sans-seri
 
 .ui-widget-header {
 	/* border: 1px solid #333333; */
-	background: url(images/ui-bg_gloss-wave_25_333333_500x100.png) 50% 50% repeat-x;
+	/* background: url(images/ui-bg_gloss-wave_25_333333_500x100.png) 50% 50% repeat-x; */
 	/* color: #ffffff; */
 	/* font-weight: bold; */
 }
@@ -157,7 +157,7 @@ visit http://jqueryui.com/themeroller/?ffDefault=Helvetica,%20Arial,%20sans-seri
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default {
 	/* border: 1px solid #666666; */
-	background: url(images/ui-bg_glass_20_555555_1x400.png) 50% 50% repeat-x;
+	/* background: url(images/ui-bg_glass_20_555555_1x400.png) 50% 50% repeat-x; */
 /* 	font-weight: bold; */
 	/* color: #eeeeee; */
 }
@@ -176,7 +176,7 @@ visit http://jqueryui.com/themeroller/?ffDefault=Helvetica,%20Arial,%20sans-seri
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
 	/* border: 1px solid #59b4d4; */
-	background: url(images/ui-bg_glass_40_0078a3_1x400.png) 50% 50% repeat-x;
+	/* background: url(images/ui-bg_glass_40_0078a3_1x400.png) 50% 50% repeat-x; */
 /* 	font-weight: bold; */
 	/* color: #ffffff; */
 }
@@ -191,7 +191,7 @@ visit http://jqueryui.com/themeroller/?ffDefault=Helvetica,%20Arial,%20sans-seri
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active {
 	/* border: 1px solid #ffaf0f; */
-	background: url(images/ui-bg_inset-soft_30_f58400_1x100.png) 50% 50% repeat-x;
+	/* background: url(images/ui-bg_inset-soft_30_f58400_1x100.png) 50% 50% repeat-x; */
 /* 	font-weight: bold; */
 	/* color: #ffffff; */
 }
@@ -214,7 +214,7 @@ visit http://jqueryui.com/themeroller/?ffDefault=Helvetica,%20Arial,%20sans-seri
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight  {
 	/* border: 1px solid #cccccc; */
-	background: url(images/ui-bg_highlight-soft_80_eeeeee_1x100.png) 50% top repeat-x;
+	/* background: url(images/ui-bg_highlight-soft_80_eeeeee_1x100.png) 50% top repeat-x; */
 	/* color: #2e7db2; */
 }
 
@@ -227,7 +227,7 @@ visit http://jqueryui.com/themeroller/?ffDefault=Helvetica,%20Arial,%20sans-seri
 .ui-widget-content .ui-state-error,
 .ui-widget-header .ui-state-error {
 	/* border: 1px solid #ffb73d; */
-	background: url(images/ui-bg_glass_40_ffc73d_1x400.png) 50% 50% repeat-x;
+	/* background: url(images/ui-bg_glass_40_ffc73d_1x400.png) 50% 50% repeat-x; */
 	/* color: #111111; */
 }
 
@@ -1084,13 +1084,13 @@ use ui-icon-seek-start instead */
 
 /* Overlays */
 .ui-widget-overlay {
-	background: url(images/ui-bg_flat_50_5c5c5c_40x100.png) 50% 50% repeat-x;
+	/* background: url(images/ui-bg_flat_50_5c5c5c_40x100.png) 50% 50% repeat-x; */
 }
 
 .ui-widget-shadow {
 	margin: -7px 0 0 -7px;
 	padding: 7px;
-	background: url(images/ui-bg_flat_30_cccccc_40x100.png) 50% 50% repeat-x;
+	/* background: url(images/ui-bg_flat_30_cccccc_40x100.png) 50% 50% repeat-x; */
 }
 /* Resizable
 ----------------------------------*/

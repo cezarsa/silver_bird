@@ -5,7 +5,8 @@ body { font-family: 'Raleway', sans-serif;}
 /* Turn on a 16x16 scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
-  height: 16px;
+  /* height: 16px; */
+  /* box-shadow: inset 0 1px 1px hsla(0, 0%, 0%, .1); */
 }
 
 /* Turn on single button up on top, and down on bottom */
@@ -22,33 +23,35 @@ body { font-family: 'Raleway', sans-serif;}
 
 /* Place The scroll down button at the bottom */
 ::-webkit-scrollbar-button:end:increment {
-  background-image: hsla(0, 0%, 0%, .1) url(clean-theme/images/scroll_cntrl_dwn.png);
+  /* background-image: url(clean-theme/images/scroll_cntrl_dwn.png); */
 }
 
 /* Place The scroll up button at the up */
 ::-webkit-scrollbar-button:start:decrement {
-  background-image: hsla(0, 0%, 0%, .1) url(clean-theme/images/scroll_cntrl_up.png);
+  /* background-image: url(clean-theme/images/scroll_cntrl_up.png); */
 }
 
 /* Top area above thumb and below up button */
 ::-webkit-scrollbar-track-piece:vertical:start {
-  background-image: hsla(0, 0%, 0%, .1) url(clean-theme/images/scroll_gutter_top.png), url(clean-theme/images/scroll_gutter_mid.png);
-  background-repeat: no-repeat, repeat-y;
+  /* background-image: url(clean-theme/images/scroll_gutter_top.png), url(clean-theme/images/scroll_gutter_mid.png);
+  background-repeat: no-repeat, repeat-y;*/
 }
 
 /* Bottom area below thumb and down button */
 ::-webkit-scrollbar-track-piece:vertical:end {
-  background-image: hsla(0, 0%, 0%, .1) url(clean-theme/images/scroll_gutter_btm.png), url(clean-theme/images/scroll_gutter_mid.png);
+  /* background-image: hsla(0, 0%, 0%, .1) url(clean-theme/images/scroll_gutter_btm.png), url(clean-theme/images/scroll_gutter_mid.png);
   background-repeat: no-repeat, repeat-y;
-  background-position: bottom left, 0 0;
+  background-position: bottom left, 0 0;*/
 }
 
 /* The thumb itself */
 ::-webkit-scrollbar-thumb:vertical {
   height: 56px;
-  -webkit-border-image: url(clean-theme/images/scroll_thumb.png) 8 0 8 0 stretch stretch;
+  /* -webkit-border-image: url(clean-theme/images/scroll_thumb.png) 8 0 8 0 stretch stretch; */
   /* border-width: 8 0 8 0; */
-  background: hsla(0, 0%, 0%, .1);
+  background: hsla(0, 0%, 0%, .2);
+  border-radius: 4px;
+  box-shadow: inset 1px 0 2px hsla(0, 0%, 0%, .05);
 }
 
 
