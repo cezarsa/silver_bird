@@ -1259,7 +1259,7 @@ the menu expands to 100% in IE6 *
 
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected {
 	/* border-bottom-width: 0; */
-	background: hsla(0, 0%, 0%, .05)
+	background: hsla(0, 0%, 0%, .05);
 }
 
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected a,
