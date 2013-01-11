@@ -1,4 +1,6 @@
+@import url(http://fonts.googleapis.com/css?family=Raleway);
 
+body { font-family: 'Raleway', sans-serif;}
 
 /* Turn on a 16x16 scrollbar */
 ::-webkit-scrollbar {
@@ -78,6 +80,7 @@ input[type='text'] {
 
 .header_link_left, .header_link_left a, .header_link_right {
   /* color: #eee; */
+  letter-spacing: 1px;
 }
 
 .header_link_right {
@@ -138,7 +141,7 @@ input[type='text'] {
 }
 
 .tweet.unread {
-  background-color: #333;
+  background-color: hsla(0, 0%, 0%, .05);
   border-color: #fff;
 }
 
