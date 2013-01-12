@@ -139,7 +139,7 @@ input[type='text'] {
 
 .tweet {
   /* background-color: #000; */
-  padding: 1em .5em;
+  padding: 1em .5em 1em 1em;
   border-bottom: 1px solid hsl(0, 0%, 90%);
 }
 
@@ -213,7 +213,7 @@ input[type='text'] {
 }
 
 .tweet img.verified {
-  margin: 0;
+  margin: 0 .5em;
 }
 
 .tweet .rt_confirm {
