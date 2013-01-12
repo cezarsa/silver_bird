@@ -1230,11 +1230,12 @@ the menu expands to 100% in IE6 *
 /* Tabs
 ----------------------------------*/
 .ui-tabs {
-	padding: .2em;
-	zoom: 1;
+	/* padding: .2em; */
 }
 
 .ui-tabs .ui-tabs-nav {
+	background-color: hsl(0, 0%, 20%);
+
 	white-space: nowrap;
 	list-style: none;
 	position: relative;
@@ -1244,6 +1245,7 @@ the menu expands to 100% in IE6 *
 .ui-tabs .ui-tabs-nav li {
 	display: inline-block;
 	position: relative;
+	letter-spacing: 1px;
 	/* border-bottom-width: 0 !important; */
 	/* margin: 1px .2em 0px 0px; */
 	padding: 0;
@@ -1251,15 +1253,24 @@ the menu expands to 100% in IE6 *
 }
 
 .ui-tabs .ui-tabs-nav li a {
+	color: #fff;
 	text-decoration: none;
 	display: inline-block;
 	padding: .5em 1em;
 	white-space: nowrap;
 }
 
+.ui-tabs .ui-tabs-nav li.ui-state-hover {
+	background-color: hsl(0, 0%, 25%);
+}
+
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected {
 	/* border-bottom-width: 0; */
-	background: hsla(0, 0%, 0%, .05);
+	background: #fff;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+	color: hsl(0, 0%, 20%);
 }
 
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected a,

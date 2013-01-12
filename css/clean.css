@@ -56,7 +56,8 @@ body { font-family: 'Raleway', sans-serif;}
 
 
 input[type='text'] {
-  border: 1px solid #882;
+  padding: .5em;
+  border: 1px solid hsl(0, 0%, 85%);
 }
 
 #warning {
@@ -75,15 +76,22 @@ input[type='text'] {
 
 #shorten_current {
   background: url(../img/globe_yellow.png) repeat-x 0 0;
+  width: 16px;
+  height: 16px;
+  right: .5em;
+  margin-top: -1.5em;
 }
 
 #compose_tweet_area textarea {
-  border: 1px solid #882;
+  padding: .5em;
+  border: 1px solid hsl(0, 0%, 85%);
 }
 
 .header_link_left, .header_link_left a, .header_link_right {
-  /* color: #eee; */
+  color: hsl(0, 0%, 85%);
   letter-spacing: 1px;
+  margin-top: 0;
+  margin-bottom: .25em;
 }
 
 .header_link_right {
@@ -107,31 +115,43 @@ input[type='text'] {
   outline: inherit;
 }
 
-#workspace {margin: 0 1px; padding: 0; /* background-color: #000 */}
+#workspace {margin: 0; padding: 0; /* background-color: #000 */}
 
 #compose_tweet_area input[type="button"], #update_tweets, #compose_tweet {
-  -webkit-border-radius: 5px;
-  background: url(clean-theme/images/ui-bg_inset-soft_30_f58400_1x100.png) repeat-x scroll 50% 50%;
-  /* color: #fff; */
-  font-style: italic;
-  border: 1px solid #FFAF0F;
+  background-color: hsl(0, 0%, 20%);
+  font-weight: normal;
+  color: #fff;
+  text-transform: uppercase;
+  margin-bottom: .5em;
+  padding: .5em 1em;
+  border: 0;
 }
 
+#update_tweets { margin-bottom: 0;}
+
 #compose_tweet_area input[type="button"]:hover, #update_tweets:hover, #compose_tweet:hover {
-  background: url(clean-theme/images/ui-bg_glass_40_0078a3_1x400.png) repeat-x scroll 50% 50%;
-  border: 1px solid #59B4D4;
+  background-color: hsl(0, 0%, 25%);
+}
+
+.inner_timeline {
+  padding-right: 1.5em;
 }
 
 .tweet {
   /* background-color: #000; */
-  border-bottom: 1px solid #666;
-  margin-bottom: 0.5em;
+  padding: 1em .5em;
+  border-bottom: 1px solid hsl(0, 0%, 90%);
+}
+
+.tweet_overlay {
+  width: auto;
+  min-height: 50px;
+  margin: 0;
+  padding: 0;
 }
 
 .tweet .text {
-  float: left;
-  margin-top: 3px;
-  width: 340px;
+  padding: 0 1.5em 0 58px;
 
 }
 
@@ -140,20 +160,21 @@ input[type='text'] {
 }
 
 .timeline {
-  padding: 0.1em 0.1em !important;
+  padding: 0;
 }
 
 .tweet.unread {
   background-color: hsla(0, 0%, 0%, .05);
-  border-color: #fff;
 }
 
 .tweet .user {
   /* color: #666; */
-  font-weight: bold;
+  /* font-weight: bold; */
   font-style: italic;
   text-decoration: none;
-  display: block;
+  display: inline-block;
+  margin-bottom: .5em;
+  /* margin-left: 58px; */
 }
 
 .tweet .footer {
@@ -161,16 +182,38 @@ input[type='text'] {
   text-align: right;
   font-style: italic;
   position: absolute;
-  top: 3px;
-  right: 50px;
+  top: 0;
+  right: 2em;
+  margin: 0;
 }
 
 .tweet .new_actions {
-  right: 30px;
-  top: 2px;
+  right: 0;
 }
 
 .tweet img.profile {
+  margin-right: 1em;
+}
+
+.tweet img.retweet {
+  margin-right: .5em;
+}
+
+.tweet img.profile.retweet_source {
+  margin-right: 1.5em;
+}
+
+.tweet img.profile.retweet_retweeter {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+}
+
+.tweet img.verified {
+  margin: 0;
 }
 
 .tweet .rt_confirm {
@@ -187,9 +230,14 @@ input[type='text'] {
 }
 
 /* Simple Select */
+div.simple_select {
+  height: 15px;
+  margin-top: 1px;
+}
+
 div.simple_select .label {
   /* background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F2ED97), color-stop(0.5, #FECE2F), to(#F2ED97)); */
-  border: 1px solid #FECE2F;
+  outline: 1px solid hsl(0, 0%, 85%);
   /* color: #381F00; */
 }
 
