@@ -4,9 +4,9 @@
 * Dual licensed under the MIT (MIT-LICENSE.txt) and GPL (GPL-LICENSE.txt) licenses.
 */
 
-@import url(http://fonts.googleapis.com/css?family=Raleway);
+/* @import url(http://fonts.googleapis.com/css?family=Raleway);
 
-body { font-family: 'Raleway', sans-serif;}
+body { font-family: 'Raleway', sans-serif;} */
 
 /* Layout helpers
 ----------------------------------*/
@@ -130,24 +130,15 @@ visit http://jqueryui.com/themeroller/?ffDefault=Helvetica,%20Arial,%20sans-seri
 }
 
 .ui-widget-content {
-	/* border: 1px solid #666666; */
-	/* background: url(images/ui-bg_inset-soft_25_000000_1x100.png) 50% bottom repeat-x; */
-	/* color: #ffffff; */
 }
 
 .ui-widget-content a {
-	/* color: #ffffff; */
 }
 
 .ui-widget-header {
-	/* border: 1px solid #333333; */
-	/* background: url(images/ui-bg_gloss-wave_25_333333_500x100.png) 50% 50% repeat-x; */
-	/* color: #ffffff; */
-	/* font-weight: bold; */
 }
 
 .ui-widget-header a {
-	/* color: #ffffff; */
 }
 
 
@@ -156,16 +147,11 @@ visit http://jqueryui.com/themeroller/?ffDefault=Helvetica,%20Arial,%20sans-seri
 .ui-state-default,
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default {
-	/* border: 1px solid #666666; */
-	/* background: url(images/ui-bg_glass_20_555555_1x400.png) 50% 50% repeat-x; */
-/* 	font-weight: bold; */
-	/* color: #eeeeee; */
 }
 
 .ui-state-default a,
 .ui-state-default a:link,
 .ui-state-default a:visited {
-	/* color: #eeeeee; */
 	text-decoration: none;
 }
 
@@ -175,31 +161,21 @@ visit http://jqueryui.com/themeroller/?ffDefault=Helvetica,%20Arial,%20sans-seri
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
-	/* border: 1px solid #59b4d4; */
-	/* background: url(images/ui-bg_glass_40_0078a3_1x400.png) 50% 50% repeat-x; */
-/* 	font-weight: bold; */
-	/* color: #ffffff; */
 }
 
 .ui-state-hover a,
 .ui-state-hover a:hover {
-	/* color: #ffffff; */
 	text-decoration: none;
 }
 
 .ui-state-active,
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active {
-	/* border: 1px solid #ffaf0f; */
-	/* background: url(images/ui-bg_inset-soft_30_f58400_1x100.png) 50% 50% repeat-x; */
-/* 	font-weight: bold; */
-	/* color: #ffffff; */
 }
 
 .ui-state-active a,
 .ui-state-active a:link,
 .ui-state-active a:visited {
-	/* color: #ffffff; */
 	text-decoration: none;
 }
 
@@ -213,40 +189,30 @@ visit http://jqueryui.com/themeroller/?ffDefault=Helvetica,%20Arial,%20sans-seri
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight  {
-	/* border: 1px solid #cccccc; */
-	/* background: url(images/ui-bg_highlight-soft_80_eeeeee_1x100.png) 50% top repeat-x; */
-	/* color: #2e7db2; */
 }
 
 .ui-state-highlight a,
 .ui-widget-content .ui-state-highlight a,.ui-widget-header .ui-state-highlight a {
-	/* color: #2e7db2; */
 }
 
 .ui-state-error,
 .ui-widget-content .ui-state-error,
 .ui-widget-header .ui-state-error {
-	/* border: 1px solid #ffb73d; */
-	/* background: url(images/ui-bg_glass_40_ffc73d_1x400.png) 50% 50% repeat-x; */
-	/* color: #111111; */
 }
 
 .ui-state-error a,
 .ui-widget-content .ui-state-error a,
 .ui-widget-header .ui-state-error a {
-	/* color: #111111; */
 }
 
 .ui-state-error-text,
 .ui-widget-content .ui-state-error-text,
 .ui-widget-header .ui-state-error-text {
-	/* color: #111111; */
 }
 
 .ui-priority-primary,
 .ui-widget-content .ui-priority-primary,
 .ui-widget-header .ui-priority-primary {
-/* 	font-weight: bold; */
 }
 
 .ui-priority-secondary,
@@ -1084,13 +1050,11 @@ use ui-icon-seek-start instead */
 
 /* Overlays */
 .ui-widget-overlay {
-	/* background: url(images/ui-bg_flat_50_5c5c5c_40x100.png) 50% 50% repeat-x; */
 }
 
 .ui-widget-shadow {
 	margin: -7px 0 0 -7px;
 	padding: 7px;
-	/* background: url(images/ui-bg_flat_30_cccccc_40x100.png) 50% 50% repeat-x; */
 }
 /* Resizable
 ----------------------------------*/
@@ -1230,7 +1194,6 @@ the menu expands to 100% in IE6 *
 /* Tabs
 ----------------------------------*/
 .ui-tabs {
-	/* padding: .2em; */
 }
 
 .ui-tabs .ui-tabs-nav {
@@ -1239,17 +1202,13 @@ the menu expands to 100% in IE6 *
 	white-space: nowrap;
 	list-style: none;
 	position: relative;
-	/* padding: .1em .3em 0em .3em; */
 }
 
 .ui-tabs .ui-tabs-nav li {
 	display: inline-block;
 	position: relative;
 	letter-spacing: 1px;
-	/* border-bottom-width: 0 !important; */
-	/* margin: 1px .2em 0px 0px; */
 	padding: 0;
-	/* padding-top: 3px; */
 }
 
 .ui-tabs .ui-tabs-nav li a {
@@ -1265,7 +1224,6 @@ the menu expands to 100% in IE6 *
 }
 
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected {
-	/* border-bottom-width: 0; */
 	background: #fff;
 }
 

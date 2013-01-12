@@ -2,11 +2,8 @@
 
 body { font-family: 'Raleway', sans-serif;}
 
-/* Turn on a 16x16 scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
-  /* height: 16px; */
-  /* box-shadow: inset 0 1px 1px hsla(0, 0%, 0%, .1); */
 }
 
 /* Turn on single button up on top, and down on bottom */
@@ -23,32 +20,23 @@ body { font-family: 'Raleway', sans-serif;}
 
 /* Place The scroll down button at the bottom */
 ::-webkit-scrollbar-button:end:increment {
-  /* background-image: url(clean-theme/images/scroll_cntrl_dwn.png); */
 }
 
 /* Place The scroll up button at the up */
 ::-webkit-scrollbar-button:start:decrement {
-  /* background-image: url(clean-theme/images/scroll_cntrl_up.png); */
 }
 
 /* Top area above thumb and below up button */
 ::-webkit-scrollbar-track-piece:vertical:start {
-  /* background-image: url(clean-theme/images/scroll_gutter_top.png), url(clean-theme/images/scroll_gutter_mid.png);
-  background-repeat: no-repeat, repeat-y;*/
 }
 
 /* Bottom area below thumb and down button */
 ::-webkit-scrollbar-track-piece:vertical:end {
-  /* background-image: hsla(0, 0%, 0%, .1) url(clean-theme/images/scroll_gutter_btm.png), url(clean-theme/images/scroll_gutter_mid.png);
-  background-repeat: no-repeat, repeat-y;
-  background-position: bottom left, 0 0;*/
 }
 
 /* The thumb itself */
 ::-webkit-scrollbar-thumb:vertical {
   height: 56px;
-  /* -webkit-border-image: url(clean-theme/images/scroll_thumb.png) 8 0 8 0 stretch stretch; */
-  /* border-width: 8 0 8 0; */
   background: hsla(0, 0%, 0%, .2);
   border-radius: 4px;
   box-shadow: inset 1px 0 2px hsla(0, 0%, 0%, .05);
@@ -61,17 +49,13 @@ input[type='text'] {
 }
 
 #warning {
-  /* background-color: #000; */
-  /* color: #eee; */
   padding: 5px;
 }
 
 #shortener_button div {
-  /* background-color: #EDEDB1; */
 }
 
 #shortener_button div:hover {
-  /* background-color: #ee7; */
 }
 
 #shorten_current {
@@ -103,7 +87,6 @@ input[type='text'] {
 }
 
 .chars_left {
-  /* color: #eee !important; */
   margin-right:5px;
 }
 
@@ -115,7 +98,7 @@ input[type='text'] {
   outline: inherit;
 }
 
-#workspace {margin: 0; padding: 0; /* background-color: #000 */}
+#workspace {margin: 0; padding: 0;}
 
 #compose_tweet_area input[type="button"], #update_tweets, #compose_tweet {
   background-color: hsl(0, 0%, 20%);
@@ -138,7 +121,7 @@ input[type='text'] {
 }
 
 .tweet {
-  /* background-color: #000; */
+  font-family: 'Raleway', sans-serif;
   padding: 1em .5em 1em 1em;
   border-bottom: 1px solid hsl(0, 0%, 90%);
 }
@@ -168,17 +151,13 @@ input[type='text'] {
 }
 
 .tweet .user {
-  /* color: #666; */
-  /* font-weight: bold; */
   font-style: italic;
   text-decoration: none;
   display: inline-block;
   margin-bottom: .5em;
-  /* margin-left: 58px; */
 }
 
 .tweet .footer {
-  /* color: #999; */
   text-align: right;
   font-style: italic;
   position: absolute;
@@ -217,16 +196,12 @@ input[type='text'] {
 }
 
 .tweet .rt_confirm {
-  /* background-color: #EDEDB1; */
-  /* color: #000000; */
 }
 
 .tweet .rt_confirm a {
-  /* color: #000000; */
 }
 
 .tweet .extra_tweet_data {
-  /* color: #999; */
 }
 
 /* Simple Select */
@@ -236,13 +211,10 @@ div.simple_select {
 }
 
 div.simple_select .label {
-  /* background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F2ED97), color-stop(0.5, #FECE2F), to(#F2ED97)); */
   outline: 1px solid hsl(0, 0%, 85%);
-  /* color: #381F00; */
 }
 
 div.simple_select .options_area ul li:hover {
-  /* background-color: rgb(253, 240, 151); */
 }
 
 div.simple_select ul li {
@@ -250,5 +222,4 @@ div.simple_select ul li {
 }
 
 div.simple_select ul li.selected {
-  /* background-color: rgb(253, 240, 151); */
 }
