@@ -134,8 +134,8 @@ input[type='text'] {
 }
 
 .tweet .text {
+  line-height: 1.5;
   padding: 0 1.5em 0 58px;
-
 }
 
 .footer .from_app {
