@@ -206,6 +206,14 @@ input[type='text'] {
   cursor: pointer;
 }
 
+#tabs .timeline_tab {
+  vertical-align: top;
+}
+
+#tabs .timeline_tab .simple_select {
+  margin-top: -16px;
+}
+
 #tabs .timeline_tab input.search_selector {
   width: 80px;
   margin: 0;

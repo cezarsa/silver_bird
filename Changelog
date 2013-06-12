@@ -1,3 +1,7 @@
+1.9.10.0 (2013-06-11)
+
+* Using version 1.1 of Twitter API. Everything should be working again.
+
 1.9.8.8 (2012-03-07)
 
 * Further attempts in trying to solve memory leaks, now I think it's solved
