@@ -1,0 +1,225 @@
+@import url(http://fonts.googleapis.com/css?family=Raleway);
+
+body { font-family: 'Raleway', sans-serif;}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Turn on single button up on top, and down on bottom */
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment {
+  display: block;
+}
+
+/* Turn off the down area up on top, and up area on bottom */
+::-webkit-scrollbar-button:vertical:start:increment,
+::-webkit-scrollbar-button:vertical:end:decrement {
+  display: none;
+}
+
+/* Place The scroll down button at the bottom */
+::-webkit-scrollbar-button:end:increment {
+}
+
+/* Place The scroll up button at the up */
+::-webkit-scrollbar-button:start:decrement {
+}
+
+/* Top area above thumb and below up button */
+::-webkit-scrollbar-track-piece:vertical:start {
+}
+
+/* Bottom area below thumb and down button */
+::-webkit-scrollbar-track-piece:vertical:end {
+}
+
+/* The thumb itself */
+::-webkit-scrollbar-thumb:vertical {
+  height: 56px;
+  background: hsla(0, 0%, 0%, .2);
+  border-radius: 4px;
+  box-shadow: inset 1px 0 2px hsla(0, 0%, 0%, .05);
+}
+
+
+input[type='text'] {
+  padding: .5em;
+  border: 1px solid hsl(0, 0%, 85%);
+}
+
+#warning {
+  padding: 5px;
+}
+
+#shortener_button div {
+}
+
+#shortener_button div:hover {
+}
+
+#shorten_current {
+  background: url(../img/globe_yellow.png) repeat-x 0 0;
+  width: 16px;
+  height: 16px;
+  right: .5em;
+  margin-top: -1.5em;
+}
+
+#compose_tweet_area textarea {
+  padding: .5em;
+  border: 1px solid hsl(0, 0%, 85%);
+}
+
+.header_link_left, .header_link_left a, .header_link_right {
+  color: hsl(0, 0%, 85%);
+  letter-spacing: 1px;
+  margin-top: 0;
+  margin-bottom: .25em;
+}
+
+.header_link_right {
+  margin-right: 5px;
+}
+
+.header_link_left {
+  margin-left: 5px;
+}
+
+.chars_left {
+  margin-right:5px;
+}
+
+.tab_modifier {
+  background-color: transparent;
+}
+
+#compose_tweet_area input[type="button"]:hover:disabled {
+  outline: inherit;
+}
+
+#workspace {margin: 0; padding: 0;}
+
+#compose_tweet_area input[type="button"], #update_tweets, #compose_tweet {
+  background-color: hsl(0, 0%, 20%);
+  font-weight: normal;
+  color: #fff;
+  text-transform: uppercase;
+  margin-bottom: .5em;
+  padding: .5em 1em;
+  border: 0;
+}
+
+#update_tweets { margin-bottom: 0;}
+
+#compose_tweet_area input[type="button"]:hover, #update_tweets:hover, #compose_tweet:hover {
+  background-color: hsl(0, 0%, 25%);
+}
+
+.inner_timeline {
+  padding-right: 1.5em;
+}
+
+.tweet {
+  font-family: 'Raleway', sans-serif;
+  padding: 1em .5em 1em 1em;
+  border-bottom: 1px solid hsl(0, 0%, 90%);
+}
+
+.tweet_overlay {
+  width: auto;
+  min-height: 50px;
+  margin: 0;
+  padding: 0;
+}
+
+.tweet .text {
+  line-height: 1.5;
+  padding: 0 1.5em 0 58px;
+}
+
+.footer .from_app {
+  display: none;
+}
+
+.timeline {
+  padding: 0;
+}
+
+.tweet.unread {
+  background-color: hsla(0, 0%, 0%, .05);
+}
+
+.tweet .user {
+  font-style: italic;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: .5em;
+}
+
+.tweet .footer {
+  text-align: right;
+  font-style: italic;
+  position: absolute;
+  top: 0;
+  right: 2em;
+  margin: 0;
+}
+
+.tweet .new_actions {
+  right: 0;
+}
+
+.tweet img.profile {
+  margin-right: 1em;
+}
+
+.tweet img.retweet {
+  margin-right: .5em;
+}
+
+.tweet img.profile.retweet_source {
+  margin-right: 1.5em;
+}
+
+.tweet img.profile.retweet_retweeter {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+}
+
+.tweet img.verified {
+  margin: 0 .5em;
+}
+
+.tweet .rt_confirm {
+}
+
+.tweet .rt_confirm a {
+}
+
+.tweet .extra_tweet_data {
+}
+
+/* Simple Select */
+div.simple_select {
+  height: 15px;
+  margin-top: 1px;
+}
+
+div.simple_select .label {
+  outline: 1px solid hsl(0, 0%, 85%);
+}
+
+div.simple_select .options_area ul li:hover {
+}
+
+div.simple_select ul li {
+  clear: left;
+}
+
+div.simple_select ul li.selected {
+}
