@@ -22,8 +22,6 @@ fieldset legend {
 }
 
 #main_area label.radio_opt {
-  float: none;
-  width: inherit;
 }
 
 #main_area input[type="text"], #main_area input[type="password"], #main_area select {
@@ -66,12 +64,10 @@ fieldset legend {
 }
 
 #main_area table td:not(.label) {
-  text-align: center;
-  border-right: 1px solid #000;
-}
+text-align: center;}
 
 #main_area table.notifications td {
-  width: 120px;
+  width: 170px;
 }
 
 #main_area table.tweet_color td {
@@ -87,18 +83,23 @@ fieldset legend {
 }
 
 #main_area table th:not(:empty) {
-  border-right: 1px solid #000;
+  padding-left: 10px;
+margin-left: 27px;
+text-align: center;
 }
 
 #main_area {
-  -webkit-border-radius: 5px;
-  width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-  background-color: #ffffff;
-  border: 3px solid #e5effe;
-  padding: 2px 4px 2px 4px;
+  width: 970px;
+margin-left: -59px;
+margin-right: -16px;
+margin-top: 20px;
+margin-bottom: -59px;
+background-color: #ffffff;
+padding: 2px 4px 2px 4px;
+border-radius: 5px;
+border-top-left-radius: 0px;
+border-top-right-radius: 0px;
+border-top: 4px dashed gainsboro;
 }
 
 .color_selector {
@@ -111,7 +112,7 @@ div.color_selector {
   width: 40px;
   height: 25px;
   position: absolute;
-  margin-top: -7px;
+  margin-top: -2px;
   margin-left: 30px;
 }
 
@@ -125,7 +126,7 @@ div.checkerboard {
   top: 50%;
   left: 50%;
   width: 400px;
-  height: 100px;
+  height: 160px;
   margin-left: -200px;
   margin-top: -50px;
   color: #fff;
