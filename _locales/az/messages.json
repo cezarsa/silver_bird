@@ -11,7 +11,7 @@
     "description": "Text for composing new tweet"
   },
   "tweetit": {
-    "message": "Göndər"
+    "message": "Tvitlə"
   },
   "logout": {
     "message": "Çıxış",
@@ -525,10 +525,10 @@
     "message": "Bildiriş üslubu:"
   },
   "l_noti_on_page": {
-    "message": "Səhifədə bildiriş"
+    "message": "Səhifədə göstər"
   },
   "l_noti_desktop": {
-    "message": "Stolüstü Bildirişlər"
+    "message": "Masaüstü göstər"
   },
   "l_notification_fade_timeout": {
     "message": "Bildiriş fasiləsi(s):"
@@ -678,7 +678,7 @@
     "message": "Yerlər üzrə trend mövzular:" 
   },
   "l_use_streaming_api": {
-    "message": "Axın APİ-si istifadə edin (sınaqda!):"
+    "message": "Axın API-si istifadə edin (sınaqda!):"
   },
   "l_user_stream_url": {
     "message": "İstifadəçi axın URL-i:"
