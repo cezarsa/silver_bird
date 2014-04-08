@@ -11,7 +11,7 @@
     "description": "Text for composing new tweet"
   },
   "tweetit": {
-    "message": "Göndər"
+    "message": "Tvitlə"
   },
   "logout": {
     "message": "Çıxış",
@@ -90,7 +90,7 @@
     "message": "retvitləyən:"
   },
   "retweetedByMe": {
-    "message": "tərəfinizdən retvitləndi"
+    "message": "retvitlədiniz"
   },
   "unmarkFavorite": {
     "message": "Seçilmişlərdən yığışdır"
@@ -102,7 +102,7 @@
     "message": "Sil"
   },
   "deleteConfirm": {
-    "message": "Bu tviti sil: "
+    "message": "Tvit silinsin?: "
   },
   "Yes": {
     "message": "Hə"
@@ -117,7 +117,7 @@
     "message": "Retvit"
   },
   "retweetConfirm": {
-    "message": "Bu tviti retvitlə: "
+    "message": "Bu tvit retvitləsin?: "
   },
   "oldRT": {
     "message": "Paylaş"
@@ -126,10 +126,10 @@
     "message": "Hamısını oxunmuş kimi işarələ"
   },
   "newToken": {
-    "message": "Başqa simvol istə"
+    "message": "Başqa kod istə"
   },
   "shortenerIdleString": {
-    "message": "Bura qısaldılacaq ünvanı yazın və ya səhifəni sağdakı simvoldan qısaldın. »»»"
+    "message": "Bura qısaldılacaq keçidi (url) yazın və ya səhifəni sağdakı simvoldan qısaldın. »»»"
   },
   "timelineHome": {
     "message": "Əsas səhifə",
@@ -150,7 +150,7 @@
     "message": "tvit"
   },
   "newTweetsAvailable": {
-    "message": "Yeni $count$ tvit var. İndi yenilə.",
+    "message": "Yeni $count$ tvit var. Yenilə.",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -321,7 +321,7 @@
     }
   },
   "warningAPIHits": {
-    "message": "API limitinizi çox sürətli doldurursunuz. <br>Lütfən <a href='#' class=\"msg-trigger-openoptions\">seçimlər səhifəsindən</a> yeniləmə aralığını idarə edin. <br>Qalan haqq: $remainingHits$ - Bir sonrakı sıfırlama tarixi: $nextResetDate$ $nextResetTime$",
+    "message": "API limitinizi çox sürətli doldurursunuz. <br>Lütfən <a href='#' class=\"msg-trigger-openoptions\">ayarlar səhifəsindən</a> yeniləmə aralığını nəzər yetirin. <br>Qalan haqq: $remainingHits$ - Bir sonrakı sıfırlama tarixi: $nextResetDate$ $nextResetTime$",
     "placeholders": {
       "options_url": {
         "content": "$1"
@@ -483,16 +483,16 @@
     "message": "Simvol rəngi:"
   },
   "l_tweets_color_only_unified": {
-    "message": "Rənglər Yalnız Birləşmişdə:"
+    "message": "Rənglər Yalnız Əsas Səhifədə:"
   },
   "l_tweet_color": {
     "message": "Tvit rəngi:"
   },
   "w_Mentions": {
-    "message": "Bəhs etmələr"
+    "message": "Bildirişlər"
   },
   "btn_reset_popup_size": {
-    "message": "Əvvəlki ölçüyə sıfırla"
+    "message": "Əvvəlki ölçüyə qaytar"
   },
   "g_notifications": {
     "message": "Bildirişlər"
@@ -510,7 +510,7 @@
     "message": "Əsas səhifə:"
   },
   "notif_mentions": {
-    "message": "Bəhs etmələr:"
+    "message": "Bildirişlər:"
   },
   "notif_dms": {
     "message": "İsmarışlar:"
@@ -543,7 +543,7 @@
     "message": "URL qısaldıcı:"
   },
   "l_shortener_acct": {
-    "message": "Fərdi hesab istifadə et?"
+    "message": "Fərdi hesab istifadə et"
   },
   "l_shortener_login": {
     "message": "API Giriş:"
