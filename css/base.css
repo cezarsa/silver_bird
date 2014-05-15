@@ -248,10 +248,18 @@ input[type='text'] {
 .tweet .text {
   clear: right;
   word-wrap: break-word;
+  white-space: pre-wrap;
+  margin-left: 52px;
 }
 
 .tweet .user {
   font-size: 9pt;
+}
+
+.tweet .image img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .tweet .footer {

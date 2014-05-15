@@ -458,6 +458,9 @@
 	"l_hover_timeout": {
 		"message": "Marcar como leído en (ms):"
 	},
+	"l_show_photo_thumbnails": {
+		"message": "Mostrar miniaturas de las fotos:"
+	},
 	"l_show_expanded_urls": {
 		"message": "Expandir URLs acortadas:"
 	},

@@ -462,6 +462,9 @@
 	"l_hover_timeout": {
 		"message": "Marcar como lido em (ms):"
 	},
+	"l_show_photo_thumbnails": {
+		"message": "Mostrar miniaturas das fotos:"
+	},
 	"l_show_expanded_urls": {
 		"message": "Expandir URLs encurtadas:"
 	},
@@ -686,5 +689,21 @@
 	},
 	"l_shortener_oauth": {
 	  "message": "Autenticar usando conta pessoal:"
+	},
+	"l_notify_retweets": {
+	  "message": "Notificar quando meus tweets forem retwitados"
+	},
+	"l_notify_rt_always": {
+	  "message": "Sempre"
+	},
+	"l_notify_rt_only_first": {
+	  "message": "Somente a primeira vez"
+	},
+	"l_notify_rt_never": {
+	  "message": "Nunca"
+	},
+	"invalid_keys": {
+	  "message": "As chaves de API estão vazias. Você provavelmente está usando uma versão de desenvolvimento.<br>Você precisa registrar uma aplicação em http://dev.twitter.com e preencher os valores no arquivo lib/secret_keys.js."
 	}
+
 }

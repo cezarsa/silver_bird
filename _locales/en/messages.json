@@ -467,6 +467,9 @@
 	"l_hover_timeout": {
 		"message": "Hover to read time (ms):"
 	},
+	"l_show_photo_thumbnails": {
+		"message": "Show photo thumbnails:"
+	},
 	"l_show_expanded_urls": {
 		"message": "Expand shortened URLs:"
 	},
