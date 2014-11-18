@@ -11,7 +11,7 @@
     "description": "Text for composing new tweet"
   },
   "tweetit": {
-    "message": "Göndər"
+    "message": "Tvitlə"
   },
   "logout": {
     "message": "Çıxış",
@@ -90,7 +90,7 @@
     "message": "retvitləyən:"
   },
   "retweetedByMe": {
-    "message": "tərəfinizdən retvitləndi"
+    "message": "retvitlədiniz"
   },
   "unmarkFavorite": {
     "message": "Seçilmişlərdən yığışdır"
@@ -117,7 +117,7 @@
     "message": "Retvit"
   },
   "retweetConfirm": {
-    "message": "Bu tviti retvitlə: "
+    "message": "Tviti retvitlə: "
   },
   "oldRT": {
     "message": "Paylaş"
@@ -408,7 +408,7 @@
     "message": "Ayarlarınız uğurla qeyd edildi."
   },
   "changes_restart": {
-    "message": "Bəzi ayarların aktiv olması üçün qoşmanın yenidən başladılması gərək. Bunu indi etmək istəyirsinizmi? <br> (Oxunmamış tvitləriniz sıfırlanacaq)"
+    "message": "Bəzi ayarların aktiv olması üçün qoşmanın yenidən başladılması gərək. Bunu indi etmək istəyirsinizmi? (Oxunmamış tvitləriniz sıfırlanacaq)"
   },
   "remaining_api_hits": {
     "message": "Qalan Twitter API İstifadə Sayı: "
@@ -543,7 +543,7 @@
     "message": "URL qısaldıcı:"
   },
   "l_shortener_acct": {
-    "message": "Fərdi hesab istifadə et?"
+    "message": "Fərdi hesab istifadə et"
   },
   "l_shortener_login": {
     "message": "API Giriş:"
@@ -636,7 +636,7 @@
     "message": "Hazırkı səhifəni qısalt"
   },
   "tweet_send_error": {
-    "message": "Tvitinizi göndərərkən səhv yarandı. Twitter qəribə davranır ola bilərmi? Təkrar sınaya bilərsiniz amma eyni tviti göndərmədiyinizdən əmin olun."
+    "message": "Tvitinizi göndərərkən səhv yarandı. Bu Twitterdən ola bilərmi? Təkrar sınaya bilərsiniz amma eyni tviti göndərmədiyinizdən əmin olun."
   },
   "detach_window": {
     "message": "Pəncərəni Ayır"
@@ -678,10 +678,10 @@
     "message": "Yerlər üzrə trend mövzular:" 
   },
   "l_use_streaming_api": {
-    "message": "Axın APİ-si istifadə edin (sınaqda!):"
+    "message": "Axın API-si istifadə edin (sınaqda!):"
   },
   "l_user_stream_url": {
-    "message": "İstifadəçi axın URL-i:"
+    "message": "İstifadəçi axın URLi:"
   },
   "block_action": {
     "message": "Blok"
@@ -705,6 +705,6 @@
 	  "message": "Heç vaxt"
 	},
 	"invalid_keys": {
-	  "message": "Boş APİ açarlarından istifadə edirsiniz. Bu yəqin ona görə baş verir ki, siz hazırlanmaqda olan developer versiya istifadə edirsiz.<br>Siz http://dev.twitter.com -da tətbiqi qeydə almalısınız və lib/secret_keys.js faylında APİ açarlarını doldurmalısınız."
+	  "message": "Boş API açarlarından istifadə edirsiniz. Bu yəqin ona görə baş verir ki, siz hazırlanmaqda olan developer versiya istifadə edirsiz.<br>Siz http://dev.twitter.com-da tətbiqi qeydə almalısınız və lib/secret_keys.js faylında APİ açarlarını doldurmalısınız."
 	}
 }
