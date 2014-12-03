@@ -1,8 +1,8 @@
-## Silver Bird ##
+## Silver Feather ##
 
 1. What is it?
 
-    Silver Bird is a general purpose Chromium twitter extension.
+    Silver Feather is a general purpose Chromium twitter extension.
 
 2. Installing
 

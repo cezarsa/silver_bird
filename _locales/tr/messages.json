@@ -1,6 +1,6 @@
 {
 	"extDescription": {
-		"message": "Silver Bird, Twitter hesabınızı Google Chrome üzerinden takip etmenizi ve yönetmenizi sağlayan bir eklentidir.",
+		"message": "Silver Feather, Twitter hesabınızı Google Chrome üzerinden takip etmenizi ve yönetmenizi sağlayan bir eklentidir.",
 		"description": "Extension description"
 	},
 	"resetSize": {
@@ -173,13 +173,13 @@
 		"message": "AJAX isteği başarısız (kötü bağlantı?)"
 	},
 	"successAuth": {
-		"message": "Tebrikler, kimliğiniz doğrulandı. Silver Bird'ün tadını çıkarın!"
+		"message": "Tebrikler, kimliğiniz doğrulandı. Silver Feather'ün tadını çıkarın!"
 	},
 	"cbAuthorized": {
-		"message": "Silver Bird yetkili!"
+		"message": "Silver Feather yetkili!"
 	},
 	"cbNotAuthorized": {
-		"message": "Bir hata oluştu. Lütfen Silver Bird ikonuna tekrar tıklayın."
+		"message": "Bir hata oluştu. Lütfen Silver Feather ikonuna tekrar tıklayın."
 	},
 	"authorizing": {
 		"message": "Lütfen bekleyin..."
@@ -298,7 +298,7 @@
 		"message": "Yetkilendir!"
 	},
 	"exceededAPIHits": {
-		"message": "Günlük API kullanım limitini aştınız. Lütfen <a href='#' class=\"msg-trigger-openoptions\">ayarlar sayfasından</a> yenileme aralığını kontrol edin. Silver Bird $nextResetDate $nextResetTime$ tarihine kadar güncellenmeyecek.",
+		"message": "Günlük API kullanım limitini aştınız. Lütfen <a href='#' class=\"msg-trigger-openoptions\">ayarlar sayfasından</a> yenileme aralığını kontrol edin. Silver Feather $nextResetDate $nextResetTime$ tarihine kadar güncellenmeyecek.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -393,7 +393,7 @@
 		"message": "yıl önce"
 	},
 	"options_title": {
-		"message": "Silver Bird Seçenekleri"
+		"message": "Silver Feather Seçenekleri"
 	},
 	"conf_saved": {
 		"message": "Ayarlarınız başarıyla kaydedildi."

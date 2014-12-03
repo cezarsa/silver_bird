@@ -1,6 +1,6 @@
 {
 	"extDescription": {
-		"message": "Silver Bird це Twitter розширення, яке дозволяє читати стрічку і взаємодіє з вашим twitter аккаунтом.",
+		"message": "Silver Feather це Twitter розширення, яке дозволяє читати стрічку і взаємодіє з вашим twitter аккаунтом.",
 		"description": "Extension description"
 	},
 	"resetSize": {
@@ -173,16 +173,16 @@
 		"message": "Зрив запиту AJAX (погане з&#39;єднання?)"
 	},
 	"successAuth": {
-		"message": "Вітаємо, ви успішно увійшли в систему. Насолоджуйтесь Silver Bird!"
+		"message": "Вітаємо, ви успішно увійшли в систему. Насолоджуйтесь Silver Feather!"
 	},
 	"cbAuthorized": {
-		"message": "Silver Bird авторизований!"
+		"message": "Silver Feather авторизований!"
 	},
 	"cbNotAuthorized": {
-		"message": "Гей... Щось пішло не так. Спробуйте натиснути на іконку Silver Bird знову."
+		"message": "Гей... Щось пішло не так. Спробуйте натиснути на іконку Silver Feather знову."
 	},
 	"authorizing": {
-		"message": "Будь ласка, почекайте, авторизації Silver Bird..."
+		"message": "Будь ласка, почекайте, авторизації Silver Feather..."
 	},
 	"yourPIN": {
 		"message": "Ваш PIN: $pin$",
@@ -298,7 +298,7 @@
 		"message": "Завторизуйтеся!"
 	},
 	"exceededAPIHits": {
-		"message": "Ви перевищили ліміт API. Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='#' class=\"msg-trigger-openoptions\">налаштуваннях</a>. Silver Bird не буде оновлювати до $nextResetDate$ $nextResetTime$.",
+		"message": "Ви перевищили ліміт API. Будь ласка, перегляньте налаштування інтервалів оновлення в <a href='#' class=\"msg-trigger-openoptions\">налаштуваннях</a>. Silver Feather не буде оновлювати до $nextResetDate$ $nextResetTime$.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -393,7 +393,7 @@
 		"message": "років тому"
 	},
 	"options_title": {
-		"message": "Налаштування Silver Bird"
+		"message": "Налаштування Silver Feather"
 	},
 	"conf_saved": {
 		"message": "Ваші налаштування успішно збережені!"
@@ -549,7 +549,7 @@
 		"message": "Стрічки"
 	},
 	"notice_api_hits": {
-		"message": "Ви повинні тримати число звернень до API <span style=\"color: red;\">нижче <span class=\"__hourly_limit\"></span></span> ! Інакше Silver Bird перестане працювати і стрічки не будуть оновлюватися. <br> <span style=\"color: red;\">Пам&#39;ятайте,</span> якщо ви використовуєте кілька Twitter клієнтів, ви повинні тримати число звернень ще нижче."
+		"message": "Ви повинні тримати число звернень до API <span style=\"color: red;\">нижче <span class=\"__hourly_limit\"></span></span> ! Інакше Silver Feather перестане працювати і стрічки не будуть оновлюватися. <br> <span style=\"color: red;\">Пам&#39;ятайте,</span> якщо ви використовуєте кілька Twitter клієнтів, ви повинні тримати число звернень ще нижче."
 	},
 	"l_hits_notice": {
 		"message": "Звернень до API на годину:"
