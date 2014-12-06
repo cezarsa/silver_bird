@@ -2,13 +2,17 @@
 
 1. What is it?
 
-    Silver Feather is a general purpose Chromium twitter extension.
+    Silver Feather a fork of [Silver Bird](https://github.com/cezarsa/silver_bird), a general purpose Chromium Twitter extension.
+
+    Since the original extension is no longer maintained, this fork was made to fix outstanding errors and continue development.
 
 2. Installing
 
-    Get it at the [chrome web store](https://chrome.google.com/webstore/detail/encaiiljifbdbjlphpgpiimidegddhic)
+    Get it at the [chrome web store (currently disabled)]()
 
-    or [Download it directly from GitHub](https://github.com/cezarsa/silver_bird/downloads)
+    or [Get sources from GitHub](https://github.com/kav2k/silver_feather/)
+
+    Note that the source distribution does not include any API keys.
 
 3. Compatibility
 
