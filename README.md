@@ -8,7 +8,7 @@
 
 2. Installing
 
-    Get it at the [chrome web store (currently disabled)]()
+    Get it at the [Chrome Web Store (unlisted beta)](https://chrome.google.com/webstore/detail/silver-feather/cggngiphndchpmlighpenhejheolmeod)
 
     or [Get sources from GitHub](https://github.com/kav2k/silver_feather/)
 
@@ -35,3 +35,7 @@
 6. Credits
 
     [Chiara De Liberato](http://www.chiaradeliberato.it/) - Italian translation
+
+    Icon originally made by [Freepik](http://www.freepik.com)
+    from [Flaticon](http://www.flaticon.com),
+    licensed under [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/).
