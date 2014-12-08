@@ -1,5 +1,12 @@
-2.0.0.0 (2014-12-06)
+2.0.0.1 (2014-12-08)
 
+* Fixed Trending topics place selection
+* Fixed desktop notifications (using Web notifications)
+
+2.0.0.0 (2014-12-07)
+
+* Fixed mentions only checking username prefix (patch by Fabian Kneißl)
+* Fixed lists (patch is folklore; quoted by @itsanti)
 * Fork into Silver Feather. Rebranding, wiping old API keys.
 
 1.9.10.0 (2013-06-11)
