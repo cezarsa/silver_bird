@@ -706,5 +706,14 @@
 	},
 	"invalid_keys": {
 	  "message": "You are using empty API keys. This is probably happening because you're running a development version.<br>You should register an application at http://dev.twitter.com and fill the API keys in the lib/secret_keys.js file."
+	},
+	"ir_empty": {
+		"message": "Tweet is empty"
+	},
+	"ir_too_long": {
+		"message": "Tweet is too long"
+	},
+	"ir_invalid_characters": {
+		"message": "Tweet contains invalid characters"
 	}
 }
