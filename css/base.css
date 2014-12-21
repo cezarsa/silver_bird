@@ -323,6 +323,18 @@ input[type='text'] {
 
 .tweet .first_container {
   width: 100%;
+  display: table;
+}
+
+.tweet .avatar_container {
+  display: flex; /* This works, so I don't question it much */
+  vertical-align: top;
+}
+
+.tweet .main_container {
+  display: table-cell;
+  vertical-align: top;
+  width: 100%;
 }
 
 .tweet .new_actions {
