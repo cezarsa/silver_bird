@@ -33,7 +33,7 @@
   </div>
 </div>
 <div id="main_area">
-  <p>
+  <p style="display: none;">
     <span class="i18n" id="remaining_api_hits">Remaining Twitter API Hits: </span><span class="twitter_hits_left"></span><br>
     <span class="i18n" id="rate_limit_reset">Rate Limit Reset: </span><span class="twitter_hits_reset"></span>
     <a id="nerds_link" href="#" class="i18n">API Hits stats (for nerds)</a>
@@ -222,11 +222,11 @@
 
   <fieldset>
     <legend class="i18n" id="g_timelines">Timelines</legend>
-    <p class="notice i18n htmlSafe" style="text-align: center; color: black;" id="notice_api_hits">
+    <p class="notice i18n htmlSafe" style="text-align: center; color: black; display: none;" id="notice_api_hits">
       You should keep API hits <span style="color: red;">below <span class="__hourly_limit"></span></span>! Otherwise Silver Feather will stop working properly and timelines won't update anymore.<br>
       <span style="color: red;">Remember</span> that if you're using multiple Twitter clients you'll need to keep your API hits even lower.
     </p>
-    <p class="hits_notice">
+    <p class="hits_notice" style="display: none;">
       <span class="i18n" id="l_hits_notice">API hits per hour: </span><span id="predicted_hits_count"></span> / <span class="__hourly_limit"></span>
     </p>
     <table class="timelines">
@@ -298,7 +298,7 @@
     <input type="text" name="max_cached_tweets" validator="required,number,positive" must_restart><br>
   </fieldset>
 
-  <fieldset>
+  <fieldset style="display: none;">
     <legend class="i18n" id="g_microblogging_service">Microblogging Service</legend>
     <input type="radio" name="microblogging_service" value="twitter" id="service_twitter" must_restart> <label for="service_twitter" class="radio_opt">Twitter</label>
     <input type="radio" name="microblogging_service" value="identica" id="service_identica" must_restart> <label for="service_identica" class="radio_opt">identi.ca</label>
