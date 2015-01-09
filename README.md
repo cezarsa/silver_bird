@@ -1,14 +1,18 @@
-## Silver Bird ##
+## Silver Feather ##
 
 1. What is it?
 
-    Silver Bird is a general purpose Chromium twitter extension.
+    Silver Feather a fork of [Silver Bird](https://github.com/cezarsa/silver_bird), a general purpose Chromium Twitter extension.
+
+    Since the original extension is no longer maintained, this fork was made to fix outstanding errors and continue development.
 
 2. Installing
 
-    Get it at the [chrome web store](https://chrome.google.com/webstore/detail/encaiiljifbdbjlphpgpiimidegddhic)
+    Get it at the [Chrome Web Store (unlisted beta)](https://chrome.google.com/webstore/detail/silver-feather/cggngiphndchpmlighpenhejheolmeod)
 
-    or [Download it directly from GitHub](https://github.com/cezarsa/silver_bird/downloads)
+    or [Get sources from GitHub](https://github.com/kav2k/silver_feather/)
+
+    Note that the source distribution does not include any API keys.
 
 3. Compatibility
 
@@ -31,3 +35,7 @@
 6. Credits
 
     [Chiara De Liberato](http://www.chiaradeliberato.it/) - Italian translation
+
+    Icon originally made by [Freepik](http://www.freepik.com)
+    from [Flaticon](http://www.flaticon.com),
+    licensed under [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/).
