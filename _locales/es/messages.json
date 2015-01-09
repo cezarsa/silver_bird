@@ -629,6 +629,9 @@
 	"shorten_current": {
 		"message": "Compartir página actual"
 	},
+	"tweet_send_error": {
+	  "message": "Se produjo un error al que enviamos su tweet. Twitter está actuando raro? Puedes intentarlo de nuevo, pero primero asegúrese de su tweet ya no publicó y evita mensajes duplicados."
+	},
 	"detach_window": {
 	  "message": "Separar ventana"
 	},
@@ -706,5 +709,14 @@
 	},
 	"w_SentDM": {
 		"message": "DMs enviados"
+	},
+	"ir_empty": {
+		"message": "El Tweet está vacío"
+	},
+	"ir_too_long": {
+		"message": "El Tweet es muy largo"
+	},
+	"ir_invalid_characters": {
+		"message": "El Tweet contiene caracteres no válidos"
 	}
 }

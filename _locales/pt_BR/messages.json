@@ -704,6 +704,15 @@
 	},
 	"invalid_keys": {
 	  "message": "As chaves de API estão vazias. Você provavelmente está usando uma versão de desenvolvimento.<br>Você precisa registrar uma aplicação em http://dev.twitter.com e preencher os valores no arquivo lib/secret_keys.js."
+	},
+	"ir_empty": {
+		"message": "O Tweet está vazio"
+	},
+	"ir_too_long": {
+		"message": "O Tweet é muito longo"
+	},
+	"ir_invalid_characters": {
+		"message": "O Tweet contém caracteres inválidos"
 	}
 
 }
