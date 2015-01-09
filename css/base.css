@@ -256,7 +256,6 @@ input[type='text'] {
   clear: right;
   word-wrap: break-word;
   white-space: pre-wrap;
-  margin-left: 52px;
 }
 
 .tweet .user {
