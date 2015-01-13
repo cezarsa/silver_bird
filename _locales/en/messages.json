@@ -715,5 +715,8 @@
 	},
 	"ir_invalid_characters": {
 		"message": "Tweet contains invalid characters"
+	},
+	"l_render_emoji": {
+		"message": "Render emoji:"
 	}
 }
