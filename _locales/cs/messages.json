@@ -1,0 +1,722 @@
+{
+	"extDescription": {
+		"message": "Silver Feather je Twitterové rozšíření, které vám umožňuje následovat časovou osu a zacházet se svým účtem na Twitteru.",
+		"description": "Extension description"
+	},
+	"resetSize": {
+		"message": "Klikněte dvakrát k resetování velikosti"
+	},
+	"composeTweet": {
+		"message": "Vytvořit tweet",
+		"description": "Text for composing new tweet"
+	},
+	"tweetit": {
+		"message": "Tweetnout!"
+	},
+	"logout": {
+		"message": "Odhlásit se",
+		"description": "The text for the logout link"
+	},
+	"options": {
+		"message": "Nastavení",
+		"description": "Options link"
+	},
+	"refresh": {
+		"message": "Refresh",
+		"description": "Refresh link"
+	},
+	"suspend": {
+		"message": "Zrušit",
+		"description": "Suspend link"
+	},
+	"autoUpdatesSuspended": {
+		"message": "Automatické aktualizace zrušeny"
+	},
+	"resume": {
+		"message": "Pokračovat"
+	},
+	"remove": {
+		"message": "Odstranit"
+	},
+	"hide": {
+		"message": "Skrýt"
+	},
+	"show": {
+		"message": "Zobrazit"
+	},
+	"add": {
+		"message": "Přidat"
+	},
+	"selectList": {
+		"message": "- Vyberte seznam -"
+	},
+	"updateList": {
+		"message": "Aktualizovat seznamy..."
+	},
+	"w_Unified": {
+		"message": "Sjednocené" //Sjednocený = singular; this is plural
+	},
+	"w_Home": {
+		"message": "Home"
+	},
+	"w_DM": {
+		"message": "DMs"
+	},
+	"w_SentDM": {
+		"message": "Odeslat DM"
+	},
+	"w_ReceivedDM": {
+	  "message": "Přijaté DM"
+	},
+	"w_Favorites": {
+		"message": "Oblíbené"
+	},
+	"w_Lists": {
+		"message": "Seznamy"
+	},
+	"w_Search": {
+		"message": "Hledat" // hledání -frequent
+	},
+	"fromApp": {
+		"message": "z" // od (person); z (place)
+	},
+	"inReply": {
+		"message": "v odpovědi na"
+	},
+	"sentTo": {
+		"message": "odesláno" //sent to user - odesláno uživateli
+	},
+	"retweetedBy": {
+		"message": "retweetnuto od"
+	},
+	"retweetedByMe": {
+		"message": "retweetnuto mnou"
+	},
+	"unmarkFavorite": {
+		"message": "Odznačit jako oblíbené"
+	},
+	"markFavorite": {
+		"message": "Označit jako oblíbené"
+	},
+	"Delete": {
+		"message": "Smazat"
+	},
+	"deleteConfirm": {
+		"message": "Smazat tuhle zprávu: "
+	},
+	"Yes": {
+		"message": "Ano"
+	},
+	"No": {
+		"message": "Ne"
+	},
+	"Reply": {
+		"message": "Odpověď" //Odpověď - noun; Odpověďet - verb
+	},
+	"Retweet": {
+		"message": "Retweet" //verb: Retweetnout
+	},
+	"retweetConfirm": {
+		"message": "Retweetnout tuhle zprávu: "
+	},
+	"oldRT": {
+		"message": "Sdílet (starý RT)"
+	},
+	"markAllRead": {
+		"message": "Označit vše jako přečtené"
+	},
+	"newToken": {
+		"message": "Vyžádat další token"
+	},
+	"shortenerIdleString": {
+		"message": "Napiš URL ke zkrácení, nebo klikni sem \u2192"
+	},
+	"timelineHome": {
+		"message": "Home",
+		"description": "The home time line tab"
+	},
+	"timelineDM": {
+		"message": "DM",
+		"description": "The direct message time line tab"
+	},
+	"timelineFavorites": {
+		"message": "Oblíbené",
+		"description": "The home time line tab"
+	},
+	"tweet_singular": {
+		"message": "tweet"
+	},
+	"tweet_plural": {
+		"message": "tweety"
+	},
+	"newTweetsAvailable": {
+		"message": "$count$ more $tweets$ available. Update now.",
+		"placeholders": {
+			"count": {
+				"content": "$1"
+			},
+			"tweets": {
+				"content": "$2"
+			}
+		}
+	},
+	"preventClosing": {
+		"message": "Klikni k prevenci zavírání."
+	},
+	"changeNotificationSettings": {
+		"message": "Můžeš změnit nastavení notifikací v nastavení"
+	},
+	"loadingMap": {
+		"message": "Načítám mapu..."
+	},
+	"loadingImage": {
+		"message": "Načítám obrázek..."
+	},
+	"loadingLongUrl": {
+		"message": "Načítám dlouhé url..."
+	},
+	"errorExpandingUrl": {
+		"message": "Omlouváme se, něco se stalo špatně. Prosím zkuste to znova."
+	},
+	"ajaxFailed": {
+		"message": "AJAX request failed (bad connection?)"
+	},
+	"successAuth": {
+		"message": "Gratulace, byl jsi úspěšně autorizován. Užij si Silver Feather!"
+	},
+	"cbAuthorized": {
+		"message": "Silver Feather autorizován!"
+	},
+	"cbNotAuthorized": {
+		"message": "Oops... Něco se stalo špatně. Prosím zkus kliknout na Silver Feather ikonu znova."
+	},
+	"authorizing": {
+		"message": "Počkejte prosím, autorizuji Silver Feather..."
+	},
+	"yourPIN": {
+		"message": "Vaše PIN číslo je: $pin$",
+		"placeholders": {
+			"pin":{
+				"content": "$1"
+			}
+		}
+	},
+	"tryAgain": {
+		"message": "Zkusit znova"
+	},
+	"canceling": {
+		"message": "Zrušuji..."
+	},
+	"cancelTweet": {
+		"message": "Zrušit Tweet"
+	},
+	"queued_messages": {
+		"message": "Zprávy ve frontě:"
+	},
+	"queue_trying": {
+		"message": "snažím se odeslat pro $timediff$",
+		"placeholders": {
+			"timediff": {
+				"content": "$1"
+			}
+		}
+	},
+	"queue_retried": {
+		"message": "retried $retries$ times since $timediff$ ago [$laststatus$]",
+		"placeholders": {
+			"retries": {
+				"content": "$1"
+			},
+			"timediff": {
+				"content": "$2"
+			},
+			"laststatus": {
+				"content": "$3"
+			}
+		}
+	},
+	"ue_fetchingLists": {
+		"message": "Unexpected error $status$ fetching lists.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_updatingTweets": {
+		"message": "Unexpected error $baseError$ updating tweets.",
+		"placeholders": {
+			"baseError": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_updatingTweets2": {
+		"message": " Jestli se tato timeoutová chyba zobrazuje opakovaně, prosím zkuste se přihlásit a odhlásit znova."
+	},
+	"ue_deletingTweet": {
+		"message": "Unexpected error $status$ deleting tweet.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_retweeting": {
+		"message": "Unexpected error $status$ retweeting.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_markFavorite": {
+		"message": "Unexpected error $status$ marking as favorite.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"ue_unmarkFavorite": {
+		"message": "Unexpected error $status$ unmarking as favorite.",
+		"placeholders": {
+			"status": {
+				"content": "$1"
+			}
+		}
+	},
+	"newTweets": {
+		"message": "$count$ $newtweets$",
+		"placeholders": {
+			"count": {
+				"content": "$1"
+			},
+			"newtweets": {
+				"content": "$2"
+			}
+		}
+	},
+	"newtweets_singular": {
+		"message": "nový tweet"
+	},
+	"newtweets_plural": {
+		"message": "nové tweety"
+	},
+	"btnAuthorize": {
+		"message": "Autorizovat!"
+	},
+	"exceededAPIHits": {
+		"message": "Překročil jsi počet API hitů. Prosíme přezkoumejte vaše nastavení refresh intervalu v <a href='#' class=\"msg-trigger-openoptions\">options page</a>. Silver Feather se neaktualizuj dokud $nextResetDate $nextResetTime$.",
+		"placeholders": {
+			"options_url": {
+				"content": "$1"
+			},
+			"nextResetDate": {
+				"content": "$2"
+			},
+			"nextResetTime": {
+				"content": "$3"
+			}
+		}
+	},
+	"warningAPIHits": {
+		"message": "Hej! Vaše zbývající API hity končí rychle. <br>Prosíme přezkoumejte vaše nastavení refresh intervalu v <a href='#' class=\"msg-trigger-openoptions\">options page</a>. Pečlivě dbejte na to, jestli máte Twitter spuštěný na více zařízeních dokud sdílí stejný limit.<brDostupných zbývajících hitů: $remainingHits$ -Další reset hitů: $nextResetDate$ $nextResetTime$",
+		"placeholders": {
+			"options_url": {
+				"content": "$1"
+			},
+			"remainingHits": {
+				"content": "$2"
+			},
+			"nextResetDate": {
+				"content": "$3"
+			},
+			"nextResetTime": {
+				"content": "$4"
+			}
+		}
+	},
+	"oAuthError": {
+		"message": "Při pokusu o přihlášení došlo k následující chybě: $errorMessage$. Prosíme, <a href=\"#\" class=\"msg-trigger-openoptions\">kliknetě zde pro restart přihlašovacího procesu</a>",
+		"placeholders": {
+			"errorMessage": {
+				"content": "$1"
+			}
+		}
+	},
+	"justNow": {
+		"message": "právě teď"
+	},
+	"minuteAgo": {
+		"message": "méně než před 1 minutou"
+	},
+	"minutes": {
+		"message": "před $nr_of_minutes$ $minutes$",
+		"placeholders": {
+			"nr_of_minutes":{
+				"content": "$1"
+			},
+			"minutes": {
+				"content": "$2",
+				"example": "minute or minutes (singular / plural)"
+			}
+		}
+	},
+	"minute_singular": {
+		"message": "minuta"
+	},
+	"minute_plural": {
+		"message": "minuty" //1 minuta, 2 minuty, 3 minuty, 4 minuty, 5 minuty, 6 minuty, 7 minut ...
+	},
+	"timeAgo": {
+		"message": "zhruba před $time$ $time_string$",
+		"placeholders": {
+			"time": {
+				"content": "$1"
+			},
+			"time_string": {
+				"content": "$2"
+			}
+		}
+	},
+	"hour_singular": {
+		"message": "hodina"
+	},
+	"hour_plural": {
+		"message": "hodiny" //same as minutes
+	},
+	"day_singular": {
+		"message": "den"
+	},
+	"day_plural": {
+		"message": "dny"
+	},
+	"month_singular": {
+		"message": "měsíc"
+	},
+	"month_plural": {
+		"message": "měsíce"
+	},
+	"yearsAgo": {
+		"message": "před lety" // we do not use X years ago. we use 'před X lety' - something like before X years
+	},
+	"options_title": {
+		"message": "Nastavení Silver Feather"
+	},
+	"conf_saved": {
+		"message": "Vaše konfigurace byla úspěšne uložena!"
+	},
+	"changes_restart": {
+		"message": "Nicméně, některé z vašich změn potřebují aby se rozšíření restartovalo. Chtěli by jste to provést teď??<br>    (Tohle resetuje váš počet nepřečtených tweetů..)"
+	},
+	"remaining_api_hits": {
+		"message": "Zbývající hity Twitter API: "
+	},
+	"rate_limit_reset": {
+		"message": "Reset limitu rychlosti: "
+	},
+	"nerds_link": {
+		"message": "Statistika API hitů (pro experty)"
+	},
+	"g_ui": {
+		"message": "UI"
+	},
+	"l_name_attribute": {
+		"message": "Jméno v tweetech:"
+	},
+	"o_screen_name": {
+		"message": "Přezdívka"
+	},
+	"o_name": {
+		"message": "Pravé jméno"
+	},
+	"o_both": {
+		"message": "Obě jména"
+	},
+	"l_compose_position": {
+		"message": "Compose area position:"
+	},
+	"o_top": {
+		"message": "Vrch" //Where? Nahoře
+	},
+	"o_bottom": {
+		"message": "Spod" //Where? Dole
+	},
+	"l_theme": {
+		"message": "UI Motiv:"
+	},
+	"l_font_size": {
+		"message": "Velikost písma:"
+	},
+	"o_small": {
+		"message": "Malé"
+	},
+	"o_normal": {
+		"message": "Normální"
+	},
+	"o_large": {
+		"message": "Velké"
+	},
+	"o_extra_large": {
+		"message": "Extra Velké"
+	},
+	"l_font_family": {
+		"message": "Rodina písem:"
+	},
+	"l_hover_timeout": {
+		"message": "Najeďte pro přečtení času (ms):"
+	},
+	"l_show_expanded_urls": {
+		"message": "Rozšířit zkrácené URL:"
+	},
+	"l_reply_all": {
+		"message": "Odpovědět všem zmíněným:"
+	},
+	"l_show_hits_in_popup": {
+		"message": "Zobrazit počet API hitů:"
+	},
+	"l_show_user_autocomplete": {
+		"message": "Automaticky doplněné uživatelské jména:"
+	},
+	"l_icon_color": {
+		"message": "Barva ikony:"
+	},
+	"l_tweets_color_only_unified": {
+		"message": "Sjednocené barvy:"
+	},
+	"l_tweet_color": {
+		"message": "Barva tweetu:"
+	},
+	"w_Mentions": {
+		"message": "Zmínění"
+	},
+	"btn_reset_popup_size": {
+		"message": "Resetovat velikost popupu"
+	},
+	"g_notifications": {
+		"message": "Upozornění"
+	},
+	"l_tweet_notification": {
+		"message": "Upozornění na tweet"
+	},
+	"l_change_icon": {
+		"message": "Změnit ikonu"
+	},
+	"l_icon_color_column": {
+		"message": "Barva ikony"
+	},
+	"notif_home": {
+		"message": "Home:"
+	},
+	"notif_mentions": {
+		"message": "Zmínění:"
+	},
+	"notif_dms": {
+		"message": "DMs:"
+	},
+	"notif_lists": {
+		"message": "Seznamy:"
+	},
+	"notif_search": {
+		"message": "Hledat:"
+	},
+	"l_tweets_notification_style": {
+		"message": "Styl upozornění:"
+	},
+	"l_noti_on_page": {
+		"message": "Upozornit na stránce"
+	},
+	"l_noti_desktop": {
+		"message": "Upozornění na ploše"
+	},
+	"l_notification_fade_timeout": {
+		"message": "Časový limit upozornění (s):"
+	},
+	"l_notification_max_popups": {
+		"message": "Upozornění v jednom (-1: vše):"
+	},
+	"g_shortener": {
+		"message": "Zkracovač"
+	},
+	"l_url_shortener": {
+		"message": "URL Zkracovač:"
+	},
+	"l_shortener_acct": {
+		"message": "Používat osobní účet?"
+	},
+	"l_shortener_login": {
+		"message": "API Login:"
+	},
+	"l_shortener_key": {
+		"message": "API Key:"
+	},
+	"l_share_include_title": {
+		"message": "Zahrnout titul stránky (sdílení):"
+	},
+	"g_timelines": {
+		"message": "Časové osy"
+	},
+	"notice_api_hits": {
+		"message": "Měli by jste zachovat API hity <span style=\"color: red;\">pod <span class=\"__hourly_limit\"></span></span>! Jinak Silver Feather přestane fungovat správně a časové osy se nebudou aktualizovat nadále.<br><span style=\"color: red;\">Pamatujte</span>, že když používáte víc Twitterových klientů budete potřebovat počet vašich API hitů ještě nižší."
+	},
+	"l_hits_notice": {
+		"message": "API hity za hodinu: "
+	},
+	"l_visible": {
+		"message": "Viditelný"
+	},
+	"l_refresh_interval": {
+		"message": "Refresh Interval (s)"
+	},
+	"l_include_in_unified": {
+		"message": "Zahrnout ve sjednoceném čase"
+	},
+	"l_tabs_count": {
+		"message": "Počet záložek"
+	},
+	"l_unified_timeline": {
+		"message": "Sjednocená timeline:"
+	},
+	"tml_favorites": {
+		"message": "Oblíbené:"
+	},
+	"l_blocked_users": {
+		"message": "Zablokovaní uživatelé:"
+	},
+	"notice_right_click_change": {
+		"message": "* Hej, nyní můžete použít right-click context menu ke změně většiny nastavení příjmo v popup okně. Jen jděte pryč z tadyma! :)"
+	},
+	"l_tweets_per_page": {
+		"message": "Tweetů za stránku:"
+	},
+	"l_max_cached_tweets": {
+		"message": "Maximum zobrazených tweetů:"
+	},
+	"g_microblogging_service": {
+		"message": "Microblogging Service"
+	},
+	"g_advanced": {
+		"message": "Pokročilé"
+	},
+	"l_request_timeout": {
+		"message": "Časn na požadavek (ms):"
+	},
+	"l_base_url": {
+		"message": "Twitter's API URL:"
+	},
+	"l_base_oauth_url": {
+		"message": "OAuth URL:"
+	},
+	"l_same_signing_urls": {
+		"message": "Stejné Přihlašovací URLs:"
+	},
+	"l_base_signing_url": {
+		"message": "API Přihlašovací URL:"
+	},
+	"l_base_oauth_signing_url": {
+		"message": "OAuth Přihlašovací URL:"
+	},
+	"l_base_search_url": {
+		"message": "Hledat API URL:"
+	},
+	"btn_save": {
+		"message": "Uložit"
+	},
+	"btn_reset": {
+		"message": "Resetovat"
+	},
+	"btn_default": {
+		"message": "Reset na default"
+	},
+	"shortenIt": {
+		"message": "Zkrátit!"
+	},
+	"shorten_current": {
+		"message": "Sdílet aktuální stránku"
+	},
+	"tweet_send_error": {
+		"message": "Chyba nastala během pokusu o odeslání vašeho tweetu. Možná se Twitter chová divně? Můžete to zkusit znova, ale prosím zkontrolujte dvakrát váš účet k prevenci duplikovaných zpráv."
+	},
+	"detach_window": {
+	  "message": "Detach Window"
+	},
+	"follow_action": {
+	  "message": "Následovat"
+	},
+	"unfollow_action": {
+	  "message": "Nesledovat"
+	},
+	"tweets_action": {
+	  "message": "Tweety"
+	},
+	"profile_action": {
+	  "message": "Profil"
+	},
+	"add_mention_action": {
+	  "message": "Zmínění"
+	},
+	"g_image_service": {
+	  "message": "Obrázková služba"
+	},
+	"l_image_up_service": {
+	  "message": "Služba pro nahrávání obrázků:"
+	},
+	"l_default_locale": {
+	  "message": "Defaultní lokalita:"
+	},
+	"automatic": {
+	  "message": "Stejné jako prohlížeč"
+	},
+	"trending_topics": {
+	  "message": "Trendy"
+	},
+	"g_trending_topics": {
+	  "message": "Trendující témata" 
+	},
+	"l_trending_topics_woeid": {
+	  "message": "Trendující témata celosvětově:" 
+	},
+	"l_use_streaming_api": {
+	  "message": "Používat streaming API (experimentální!):"
+	},
+	"l_user_stream_url": {
+	  "message": "Uživatelské Stream URL:"
+	},
+	"block_action": {
+	  "message": "Blokovat"
+	},
+	"report_action": {
+	  "message": "Nahlásit jako spam"
+	},
+	"l_shortener_oauth": {
+	  "message": "Použít ověření osobního účtu:"
+	},
+	"l_notify_retweets": {
+	  "message": "Upozorňovat na retweety mojich tweetů?"
+	},
+	"l_notify_rt_always": {
+	  "message": "Vždy"
+	},
+	"l_notify_rt_only_first": {
+	  "message": "Jen poprvé"
+	},
+	"l_notify_rt_never": {
+	  "message": "Nikdy"
+	},
+	"invalid_keys": {
+	  "message": "Používáte API klíče. Tohle se pravděpodobně děje, protože používáte vývojářsku verzi.<br>Měli by jste zaregistrovat aplikaci na adrese http://dev.twitter.com a vyplnit API klíče v souboru lib/secret_keys.js."
+	},
+	"ir_empty": {
+		"message": "Tweet je prázdný"
+	},
+	"ir_too_long": {
+		"message": "Tweet je příliš dlouhý"
+	},
+	"ir_invalid_characters": {
+		"message": "Tweet obsahuje neplatné znaky"
+	},
+	"l_render_emoji": {
+		"message": "Renderovat emoji:"
+	}
+}
