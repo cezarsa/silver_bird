@@ -54,7 +54,7 @@
 		"message": "Aktualizovat seznamy..."
 	},
 	"w_Unified": {
-		"message": "Sjednocené" //Sjednocený = singular; this is plural
+		"message": "Sjednocené"
 	},
 	"w_Home": {
 		"message": "Home"
@@ -75,16 +75,16 @@
 		"message": "Seznamy"
 	},
 	"w_Search": {
-		"message": "Hledat" // hledání -frequent
+		"message": "Hledat"
 	},
 	"fromApp": {
-		"message": "z" // od (person); z (place)
+		"message": "z"
 	},
 	"inReply": {
 		"message": "v odpovědi na"
 	},
 	"sentTo": {
-		"message": "odesláno" //sent to user - odesláno uživateli
+		"message": "odesláno"
 	},
 	"retweetedBy": {
 		"message": "retweetnuto od"
@@ -111,10 +111,10 @@
 		"message": "Ne"
 	},
 	"Reply": {
-		"message": "Odpověď" //Odpověď - noun; Odpověďet - verb
+		"message": "Odpověď"
 	},
 	"Retweet": {
-		"message": "Retweet" //verb: Retweetnout
+		"message": "Retweet"
 	},
 	"retweetConfirm": {
 		"message": "Retweetnout tuhle zprávu: "
@@ -367,7 +367,7 @@
 		"message": "minuta"
 	},
 	"minute_plural": {
-		"message": "minuty" //1 minuta, 2 minuty, 3 minuty, 4 minuty, 5 minuty, 6 minuty, 7 minut ...
+		"message": "minuty"
 	},
 	"timeAgo": {
 		"message": "zhruba před $time$ $time_string$",
@@ -384,7 +384,7 @@
 		"message": "hodina"
 	},
 	"hour_plural": {
-		"message": "hodiny" //same as minutes
+		"message": "hodiny"
 	},
 	"day_singular": {
 		"message": "den"
@@ -399,7 +399,7 @@
 		"message": "měsíce"
 	},
 	"yearsAgo": {
-		"message": "před lety" // we do not use X years ago. we use 'před X lety' - something like before X years
+		"message": "před lety"
 	},
 	"options_title": {
 		"message": "Nastavení Silver Feather"
@@ -438,10 +438,10 @@
 		"message": "Compose area position:"
 	},
 	"o_top": {
-		"message": "Vrch" //Where? Nahoře
+		"message": "Vrch"
 	},
 	"o_bottom": {
-		"message": "Spod" //Where? Dole
+		"message": "Spod"
 	},
 	"l_theme": {
 		"message": "UI Motiv:"
