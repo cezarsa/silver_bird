@@ -76,6 +76,10 @@
     <input type="checkbox" id="show_photo_thumbnails" name="show_photo_thumbnails" /><br>
     <label for="show_expanded_urls" class="i18n" id="l_show_expanded_urls">Expand shortened URLs:</label>
     <input type="checkbox" id="show_expanded_urls" name="show_expanded_urls" /><br>
+    <label for="render_emoji" class="i18n" id="l_render_emoji">Render emoji:</label>
+    <input type="checkbox" id="render_emoji" name="render_emoji" /><br>
+    <label for="auto_expand_quotes" class="i18n" id="l_auto_expand_quotes">Automatically expand top-level quotes:</label>
+    <input type="checkbox" id="auto_expand_quotes" name="auto_expand_quotes" /><br>
     <label for="reply_all" class="i18n" id="l_reply_all">Reply to all mentioned:</label>
     <input type="checkbox" id="reply_all" name="reply_all" /><br/>
     <label for="show_hits_in_popup" class="i18n" id="l_show_hits_in_popup">Show API hits count:</label>
@@ -97,6 +101,7 @@
         <th class="i18n" id="w_Lists">Lists</th>
         <th class="i18n" id="w_Favorites">Favorites</th>
         <th class="i18n" id="w_Search">Search</th>
+        <th class="i18n" id="w_Quotes">Quotes</th>
       <tr>
         <td class="label i18n" id="l_tweet_color">Tweet color:</td>
         <td>
@@ -122,6 +127,10 @@
         <td>
           <div class="color_selector checkerboard"></div>
           <div name="search_tweets_color" class="color_selector"></div>
+        </td>
+        <td>
+          <div class="color_selector checkerboard"></div>
+          <div name="quotes_tweets_color" class="color_selector"></div>
         </td>
       </tr>
     </table><br>

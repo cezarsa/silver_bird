@@ -83,6 +83,9 @@
 	"inReply": {
 		"message": "in reply to"
 	},
+	"quoting": {
+		"message": "quoting"
+	},
 	"sentTo": {
 		"message": "sent to"
 	},
@@ -718,5 +721,14 @@
 	},
 	"ir_invalid_characters": {
 		"message": "Tweet contains invalid characters"
+	},
+	"l_render_emoji": {
+		"message": "Render emoji:"
+	},
+	"l_auto_expand_quotes": {
+		"message": "Automatically expand top-level quotes:"
+	},
+	"w_Quotes": {
+		"message": "Quotes"
 	}
 }

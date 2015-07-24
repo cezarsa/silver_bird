@@ -16,6 +16,10 @@ fieldset legend {
   font-weight: bold;
 }
 
+h1 {
+  text-align: center;
+}
+
 fieldset br {
   clear: both;
 }
