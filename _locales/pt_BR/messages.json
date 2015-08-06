@@ -1,6 +1,6 @@
 {
 	"extDescription": {
-		"message": "Silver Bird é uma extensão que integra o Chrome ao Twitter e permite que você acompanhe seus amigos e interaja com o seu Twitter.",
+		"message": "Silver Feather é uma extensão que integra o Chrome ao Twitter e permite que você acompanhe seus amigos e interaja com o seu Twitter.",
 		"description": "Descrição da extensão"
 	},
 	"resetSize": {
@@ -177,16 +177,16 @@
 		"message": "Requisição AJAX falhou (conexão ruim?)"
 	},
 	"successAuth": {
-		"message": "Parabés, você foi autenticado com sucesso. Aproveite o Silver Bird!"
+		"message": "Parabés, você foi autenticado com sucesso. Aproveite o Silver Feather!"
 	},
 	"cbAuthorized": {
-		"message": "Silver Bird autorizado!"
+		"message": "Silver Feather autorizado!"
 	},
 	"cbNotAuthorized": {
-		"message": "Ops... Tem algo errado. Por favor, tente clicar no ícone do Silver Bird novamente."
+		"message": "Ops... Tem algo errado. Por favor, tente clicar no ícone do Silver Feather novamente."
 	},
 	"authorizing": {
-		"message": "Por favor aguarde, autorizando o Silver Bird..."
+		"message": "Por favor aguarde, autorizando o Silver Feather..."
 	},
 	"yourPIN": {
 		"message": "Seu PIN é: $pin$",
@@ -302,7 +302,7 @@
 		"message": "Autorizar!"
 	},
 	"exceededAPIHits": {
-		"message": "Você excedeu o limite de chamadas à API do Twitter. Por favor reveja as suas configurações de intervalo de atualização na <a href='#' class=\"msg-trigger-openoptions\">página de opções</a>. O Silver Bird não irá atualizar até $nextResetDate $nextResetTime$.",
+		"message": "Você excedeu o limite de chamadas à API do Twitter. Por favor reveja as suas configurações de intervalo de atualização na <a href='#' class=\"msg-trigger-openoptions\">página de opções</a>. O Silver Feather não irá atualizar até $nextResetDate $nextResetTime$.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -397,7 +397,7 @@
 		"message": "anos atrás"
 	},
 	"options_title": {
-		"message": "Opções do Silver Bird"
+		"message": "Opções do Silver Feather"
 	},
 	"conf_saved": {
 		"message": "A configuração foi salva com sucesso!"
@@ -461,6 +461,9 @@
 	},
 	"l_hover_timeout": {
 		"message": "Marcar como lido em (ms):"
+	},
+	"l_show_photo_thumbnails": {
+		"message": "Mostrar miniaturas das fotos:"
 	},
 	"l_show_expanded_urls": {
 		"message": "Expandir URLs encurtadas:"
@@ -553,7 +556,7 @@
 		"message": "Timelines"
 	},
 	"notice_api_hits": {
-		"message": "Você deverá deixar o número de chamadas ao Twitter <span style=\"color: red;\">abaixo de <span class=\"__hourly_limit\"></span></span>! Caso contrário o Silver Bird irá parar de funcionar corretamente e as timelines não irão mais atualizar.<br><span style=\"color: red;\">Lembre-se</span> de que se você está utilizando múltiplos clientes para o Twitter você deverá deixar o número de chamadas ainda menor."
+		"message": "Você deverá deixar o número de chamadas ao Twitter <span style=\"color: red;\">abaixo de <span class=\"__hourly_limit\"></span></span>! Caso contrário o Silver Feather irá parar de funcionar corretamente e as timelines não irão mais atualizar.<br><span style=\"color: red;\">Lembre-se</span> de que se você está utilizando múltiplos clientes para o Twitter você deverá deixar o número de chamadas ainda menor."
 	},
 	"l_hits_notice": {
 		"message": "Chamadas ao Twitter por hora: "
@@ -686,5 +689,30 @@
 	},
 	"l_shortener_oauth": {
 	  "message": "Autenticar usando conta pessoal:"
+	},
+	"l_notify_retweets": {
+	  "message": "Notificar quando meus tweets forem retwitados"
+	},
+	"l_notify_rt_always": {
+	  "message": "Sempre"
+	},
+	"l_notify_rt_only_first": {
+	  "message": "Somente a primeira vez"
+	},
+	"l_notify_rt_never": {
+	  "message": "Nunca"
+	},
+	"invalid_keys": {
+	  "message": "As chaves de API estão vazias. Você provavelmente está usando uma versão de desenvolvimento.<br>Você precisa registrar uma aplicação em http://dev.twitter.com e preencher os valores no arquivo lib/secret_keys.js."
+	},
+	"ir_empty": {
+		"message": "O Tweet está vazio"
+	},
+	"ir_too_long": {
+		"message": "O Tweet é muito longo"
+	},
+	"ir_invalid_characters": {
+		"message": "O Tweet contém caracteres inválidos"
 	}
+
 }

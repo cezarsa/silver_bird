@@ -16,6 +16,14 @@ fieldset legend {
   font-weight: bold;
 }
 
+h1 {
+  text-align: center;
+}
+
+fieldset br {
+  clear: both;
+}
+
 #main_area label {
   float: left;
   width: 230px;
@@ -28,7 +36,7 @@ fieldset legend {
 
 #main_area input[type="text"], #main_area input[type="password"], #main_area select {
   border: 1px solid #b4cff2;
-  width: 140px;
+  width: 20em;
 }
 
 #main_area span.error {

@@ -1,3 +1,28 @@
+2.0.0.4 (2015-01-13)
+
+* Small layout fix for retweets
+* Added Twemoji support
+* Small layout fix for options page
+
+2.0.0.3 (2014-12-21)
+
+* Fixed line breaks in tweets
+
+2.0.0.2 (2014-12-14)
+
+* Fixed character counting for links
+
+2.0.0.1 (2014-12-08)
+
+* Fixed Trending topics place selection
+* Fixed desktop notifications (using Web notifications)
+
+2.0.0.0 (2014-12-07)
+
+* Fixed mentions only checking username prefix (patch by Fabian Kneißl)
+* Fixed lists (patch is folklore; quoted by @itsanti)
+* Fork into Silver Feather. Rebranding, wiping old API keys.
+
 1.9.10.0 (2013-06-11)
 
 * Using version 1.1 of Twitter API. Everything should be working again.
@@ -37,7 +62,7 @@
 
 1.9.8.1 (2011-05-28)
 
-* So long, farewell, auf Wiedersehen, good bye Chromed Bird. Welcome Silver Bird. The extension has been renamed.
+* So long, farewell, auf Wiedersehen, good bye Chromed Bird. Welcome Silver Feather. The extension has been renamed.
 
 1.9.7.9 (2011-05-24)
 

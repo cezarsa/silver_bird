@@ -235,6 +235,13 @@ input[type='text'] {
   padding: 2px 22px 0px 4px;
 }
 
+.tweet .emoji {
+  height: 1em;
+  width: 1em;
+  margin: 0 .05em 0 .1em;
+  vertical-align: -0.1em;
+}
+
 .tweet_overlay {
   width: 100%;
   margin-top: -2px;
@@ -248,10 +255,17 @@ input[type='text'] {
 .tweet .text {
   clear: right;
   word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .tweet .user {
   font-size: 9pt;
+}
+
+.tweet .image img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .tweet .footer {
@@ -278,7 +292,7 @@ input[type='text'] {
 }
 
 .tweet img.profile.retweet_retweeter {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   margin-right: -12px;
   position: relative;
   top: 24px;
@@ -322,6 +336,18 @@ input[type='text'] {
 }
 
 .tweet .first_container {
+  width: 100%;
+  display: table;
+}
+
+.tweet .avatar_container {
+  display: flex; /* This works, so I don't question it much */
+  vertical-align: top;
+}
+
+.tweet .main_container {
+  display: table-cell;
+  vertical-align: top;
   width: 100%;
 }
 
