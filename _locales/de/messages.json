@@ -1,6 +1,6 @@
 {
 	"extDescription": {
-		"message": "Silver Bird ist eine Erweiterung für Twitter, die es erlaubt, der Timeline zu folgen und mit Twitter zu interagieren.",
+		"message": "Steel Bird ist eine Erweiterung für Twitter, die es erlaubt, der Timeline zu folgen und mit Twitter zu interagieren.",
 		"description": "Beschreibung der Erweiterung"
 	},
 	"resetSize": {
@@ -173,16 +173,16 @@
 		"message": "AJAX Anfrage fehlgeschlagen. (Schlechte Verbindung?)"
 	},
 	"successAuth": {
-		"message": "Glückwunsch, Du wurdest erfolgreich authentifiziert. Viel Spaß mit Silver Bird!"
+		"message": "Glückwunsch, Du wurdest erfolgreich authentifiziert. Viel Spaß mit Steel Bird!"
 	},
 	"cbAuthorized": {
-		"message": "Silver Bird authorisiert!"
+		"message": "Steel Bird authorisiert!"
 	},
 	"cbNotAuthorized": {
-		"message": "Ups... Irgendwas ist schief gegangen. Bitte klick noch mal auf das Silver Bird Icon."
+		"message": "Ups... Irgendwas ist schief gegangen. Bitte klick noch mal auf das Steel Bird Icon."
 	},
 	"authorizing": {
-		"message": "Bitte warten, Silver Bird wird authorisiert..."
+		"message": "Bitte warten, Steel Bird wird authorisiert..."
 	},
 	"yourPIN": {
 		"message": "Deine PIN ist: $pin$",
@@ -298,7 +298,7 @@
 		"message": "Authorisieren!"
 	},
 	"exceededAPIHits": {
-		"message": "Du hast die API-Aufrufgrenze überschritten. Bitte überprüfe Deine Aktualisierungseinstellungen in den <a href='#' class=\"msg-trigger-openoptions\">Optionen</a>. Silver Bird wird bis $nextResetDate $nextResetTime$ nicht mehr aktualisiert.",
+		"message": "Du hast die API-Aufrufgrenze überschritten. Bitte überprüfe Deine Aktualisierungseinstellungen in den <a href='#' class=\"msg-trigger-openoptions\">Optionen</a>. Steel Bird wird bis $nextResetDate $nextResetTime$ nicht mehr aktualisiert.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -393,13 +393,13 @@
 		"message": "Vor Jahren"
 	},
 	"options_title": {
-		"message": "Silver Bird Optionen"
+		"message": "Steel Bird Optionen"
 	},
 	"conf_saved": {
 		"message": "Die Konfiguration wurde erfolgreich gespeichert!"
 	},
 	"changes_restart": {
-		"message": "Einige der Änderungen erfordern, dass Silver Bird neu gestartet werden muss. Jetz neu starten?<br>    (Das wird Deinen Ungelesene Tweets-Zähler zurücksetzen.)"
+		"message": "Einige der Änderungen erfordern, dass Steel Bird neu gestartet werden muss. Jetz neu starten?<br>    (Das wird Deinen Ungelesene Tweets-Zähler zurücksetzen.)"
 	},
 	"remaining_api_hits": {
 		"message": "Verbleibende Twitter-API-Aufrufe: "
@@ -546,7 +546,7 @@
 		"message": "Timelines"
 	},
 	"notice_api_hits": {
-		"message": "Die API-Aufrufe pro Stunde sollten <span style=\"color: red;\">unter <span class=\"__hourly_limit\"></span></span> bleiben! Sonst wird Silver Bird nicht mehr richtig arbeiten und Timelines werden nicht mehr aktualisiert.<br><span style=\"color: red;\">Bedenke</span>, dass die API-Aufrufe noch niedriger liegen müssen, wenn Du mehrere Twitter-Programme einsetzt!"
+		"message": "Die API-Aufrufe pro Stunde sollten <span style=\"color: red;\">unter <span class=\"__hourly_limit\"></span></span> bleiben! Sonst wird Steel Bird nicht mehr richtig arbeiten und Timelines werden nicht mehr aktualisiert.<br><span style=\"color: red;\">Bedenke</span>, dass die API-Aufrufe noch niedriger liegen müssen, wenn Du mehrere Twitter-Programme einsetzt!"
 	},
 	"l_hits_notice": {
 		"message": "API-Aufrufe pro Stunde: "

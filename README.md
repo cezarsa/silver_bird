@@ -1,14 +1,14 @@
-## Silver Bird ##
+## Steel Bird ##
 
 1. What is it?
 
-    Silver Bird is a general purpose Chromium twitter extension.
+    Steel Bird is a general purpose Chromium twitter extension, based on Chromed/Silver Bird abandoned extension.
 
 2. Installing
 
     Get it at the [chrome web store](https://chrome.google.com/webstore/detail/encaiiljifbdbjlphpgpiimidegddhic)
 
-    or [Download it directly from GitHub](https://github.com/cezarsa/silver_bird/downloads)
+    or [Download it directly from GitHub](https://github.com/tuxrafa/steel_bird/downloads)
 
 3. Compatibility
 
@@ -29,5 +29,5 @@
     This project uses the very simple and permissive MIT license. Check the LICENSE file.
 
 6. Credits
-
+    Cezar Sá Espinola - http://github.com/cezarsa - The Original Creator
     [Chiara De Liberato](http://www.chiaradeliberato.it/) - Italian translation
