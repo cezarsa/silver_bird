@@ -1,12 +1,12 @@
 {
-    "name": "Silver Bird",
-    "version": "1.9.10.2",
+    "name": "Steel Bird",
+    "version": "2.0",
     "manifest_version": 2,
     "description": "__MSG_extDescription__",
     "default_locale": "en",
     "browser_action": {
         "default_icon": "img/icon19.png",
-        "default_title": "Silver Bird",
+        "default_title": "Steel Bird",
         "default_popup": "popup.html?popup"
     },
     "background": {

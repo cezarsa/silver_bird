@@ -1,6 +1,6 @@
 {
 	"extDescription": {
-		"message": "Silver Bird è un'estensione di Twitter che ti permette di seguire le timeline ed interagire con i tuoi account Twitter.",
+		"message": "Steel Bird è un'estensione di Twitter che ti permette di seguire le timeline ed interagire con i tuoi account Twitter.",
 		"description": "Descrizione estensione"
 	},
 	"resetSize": {
@@ -182,16 +182,16 @@
 		"message": "La richiesta AJAX non ha avuto successo(scarsa connessione?)"
 	},
 	"successAuth": {
-		"message": "Complimenti, ti sei appena autenticato. Divertiti con Silver Bird!"
+		"message": "Complimenti, ti sei appena autenticato. Divertiti con Steel Bird!"
 	},
 	"cbAuthorized": {
-		"message": "Silver Bird autorizzato!"
+		"message": "Steel Bird autorizzato!"
 	},
 	"cbNotAuthorized": {
-		"message": "Ops... Qualcosa è andato storto. Prova a cliccare di nuovo sull'icona di Silver Bird."
+		"message": "Ops... Qualcosa è andato storto. Prova a cliccare di nuovo sull'icona di Steel Bird."
 	},
 	"authorizing": {
-		"message": "Attendi, autorizzazione di Silver Bird in corso..."
+		"message": "Attendi, autorizzazione di Steel Bird in corso..."
 	},
 	"yourPIN": {
 		"message": "Il tuo numero PIN è: $pin$",
@@ -307,7 +307,7 @@
 		"message": "Autorizza!"
 	},
 	"exceededAPIHits": {
-		"message": "Hai superato il limite di hit API. Modifica le opzioni di intervallo tra gli aggiornamenti nella <a href='#' class=\"msg-trigger-openoptions\">pagina delle opzioni</a>. Silver Bird non si aggiornerà fino al $nextResetDate $nextResetTime$.",
+		"message": "Hai superato il limite di hit API. Modifica le opzioni di intervallo tra gli aggiornamenti nella <a href='#' class=\"msg-trigger-openoptions\">pagina delle opzioni</a>. Steel Bird non si aggiornerà fino al $nextResetDate $nextResetTime$.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -402,7 +402,7 @@
 		"message": "anni fa"
 	},
 	"options_title": {
-		"message": "Opzioni di Silver Bird"
+		"message": "Opzioni di Steel Bird"
 	},
 	"conf_saved": {
 		"message": "Impostazioni salvate correttamente!"
@@ -558,7 +558,7 @@
 		"message": "Timeline"
 	},
 	"notice_api_hits": {
-		"message": "È consigliabile mantenere le hit API <span style=\"color: red;\"> al di sotto di <span class=\"__hourly_limit\"></span></span>! Altrimenti Silver Bird non funzionerà correttamente e le timeline non si aggiorneranno più.<br><span style=\"color: red;\">Ricorda</span> che se stai usando più di un client Twitter devi tenere il numero delle hit API ancora più basso."
+		"message": "È consigliabile mantenere le hit API <span style=\"color: red;\"> al di sotto di <span class=\"__hourly_limit\"></span></span>! Altrimenti Steel Bird non funzionerà correttamente e le timeline non si aggiorneranno più.<br><span style=\"color: red;\">Ricorda</span> che se stai usando più di un client Twitter devi tenere il numero delle hit API ancora più basso."
 	},
 	"l_hits_notice": {
 		"message": "Hit API all'ora: "

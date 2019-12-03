@@ -1,0 +1,233 @@
+/*
+  Bird of Steel Theme
+  Copyright 2009 Will Ryan, ausnadian at gmail dot com
+*/
+
+#shortener_area  {
+margin-top: -3px;
+}
+
+input[type='text'] {
+  -webkit-border-radius: 0px;
+  background-color: #efefef;
+  border: 1px solid #b7b7b7;
+}
+
+#warning {
+  background-color: #e5effe;
+  border: 2px solid #b4cff2;
+  border-top: 0;
+}
+
+#warning .dismiss {
+  border: 1px solid #b4cff2;
+  padding: 0px 4px 0px 4px;
+}
+
+#update_tweets {
+  -webkit-border-radius: 0px;
+  background-color: white;
+  color: #333;
+  border-bottom: 1px solid #777;
+  font-family: "Roboto Condensed", Roboto, Helvetica, Arial, sans, sans-serif;
+  text-transform: uppercase;
+  padding: 5px 0 0 0;
+}
+
+#update_tweets:hover {
+  background-color: #eff4fb;
+}
+
+#shortener_button div {
+  border-bottom-left-radius: 0px 0px;
+  border-bottom-right-radius: 0 0px;
+  background-color: #c6cad0;
+  border: 1px solid #8a8a8a;
+  border-top: 0px;
+  text-transform: lowercase;
+  font-size: 12px;
+  font-family: "Roboto Condensed", Roboto, Helvetica, Arial, sans, sans-serif;
+}
+
+#shortener_button div:hover {
+  background-color: #f0f5fb;
+  border: 1px solid #c1cddc;
+  border-top: 0px;
+}
+
+#shorten_current {
+  background: url(../img/globe_blue.png) repeat-x 0 0;
+}
+
+#compose_tweet_area textarea {
+  -webkit-border-radius: 2px 2px 0 0;
+  background-color: #fdfdfd;
+  border: 1px solid #d2d2d2;
+  outline: 1px solid #999;
+  padding: 2px 1%;
+  width: 98% !important;
+  margin: auto;
+}
+
+#compose_tweet {
+  -webkit-border-radius: 0px;
+  color: #333;
+  background-color: #dedede;
+  border: 1px solid #ccc;
+  padding: 4px 3px 3px 3px;
+  font-family: "Roboto Condensed", Roboto, Helvetica, Arial, sans, sans-serif;
+  text-transform: uppercase;
+}
+
+#compose_tweet:hover {
+  background-color: #0a0a0a;
+  border: 1px solid #000000;
+  color: white;
+}
+
+.tweet_overlay {
+  -webkit-border-radius: 2px;
+}
+
+.tweet {
+  -webkit-border-radius: 5px;
+  background-color: #ffffff;
+  border: 3px solid #e5effe;
+  margin-bottom: 3px;
+}
+
+.tweet.unread {
+  border: 1px solid #4b8cdc;
+  margin: 2px 2px 5px;
+}
+
+.tweet .user {
+  color: #666;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.tweet .footer {
+  color: #999;
+}
+
+.tweet img.profile {
+  -webkit-border-radius: 5px;
+}
+
+.tweet .rt_confirm {
+  -webkit-border-radius: 0px;
+  border: 1px solid #333;
+  border-right: 3px solid #333;
+  border-bottom: 3px solid #333;
+  background-color: #ddd;
+  font-family: "Roboto Condensed", Roboto, Helvetica, Arial, sans, sans-serif;
+}
+
+.tweet .extra_tweet_data {
+  color: #999;
+}
+
+/* Simple Select */
+div.simple_select .options_area ul li:hover {
+  background-color: rgb(223, 232, 246);
+}
+
+div.simple_select ul li.selected {
+  background-color: rgb(167, 167, 167);
+}
+
+.footer #tweetit {
+    border: 1px solid #333;
+    margin: 0 0 5px 0;
+    background: #333;
+    color: white;
+    font-family: "Roboto Condensed", Roboto, Helvetica, Arial, sans, sans-serif;
+    text-transform: uppercase;
+    content: "GO!";
+}
+
+div#tabs {
+    border: 0;
+    background: #fff;
+    border-radius: 0;
+    padding: 0;
+}
+
+ul.ui-tabs-nav {
+    background: #ddd;
+    border-bottom: 1px solid #777 !important;
+    border: 0;
+    border-radius: 0;
+}
+
+.ui-tabs .ui-tabs-nav li {
+    border-radius: 0;
+    background: #eee;
+    border: 0;
+    border-bottom: 1px solid #333 !important;
+}
+
+.ui-tabs .ui-tabs-nav li a {
+    color: #333;
+    font-family: "Roboto Condensed", Roboto, Helvetica, Arial, sans, sans-serif;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-state-active {
+    background: #333;
+}
+.ui-tabs .ui-tabs-nav li.ui-state-active a {
+    color: #eee !important;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-state-active div.simple_select .label {
+    color: #eee !important;
+}
+
+
+
+.tweet_overlay {
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+}
+
+.chromed_bird_tweet.tweet {
+    border: 0;
+    border-radius: 0;
+    width: 100%;
+    font-family: Roboto, Helvetica, Arial, sans, sans-serif;
+    border-bottom: 1px solid #333;
+}
+
+.tweet img.profile {
+    border-radius: 100%;
+    height: 40px;
+    width: 40px;
+    margin-top: 10px;
+}
+
+.tweet_space {
+    width: 100% !important;
+    padding: 1px 0 0;
+}
+
+div.simple_select .label {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    color: #333;
+    font-family: "Roboto Condensed", Roboto, Helvetica, Arial, sans, sans-serif;
+}
+
+
+.action_menu.vertical.up {
+    max-height: 70%;
+    overflow: scroll;
+    margin-top: 4%;
+    top: 0;
+}
+
+div.action_menu.vertical.up div.balloon {
+    background: none;
+}

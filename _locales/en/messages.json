@@ -1,6 +1,6 @@
 {
 	"extDescription": {
-		"message": "Silver Bird is a Twitter extension that allows you to follow your timelines and interact with your Twitter account.",
+		"message": "Steel Bird is a Twitter extension that allows you to follow your timelines and interact with your Twitter account.",
 		"description": "Extension description"
 	},
 	"resetSize": {
@@ -182,16 +182,16 @@
 		"message": "AJAX request failed (bad connection?)"
 	},
 	"successAuth": {
-		"message": "Congratulations, you've been successfully authenticated. Enjoy Silver Bird!"
+		"message": "Congratulations, you've been successfully authenticated. Enjoy Steel Bird!"
 	},
 	"cbAuthorized": {
-		"message": "Silver Bird authorized!"
+		"message": "Steel Bird authorized!"
 	},
 	"cbNotAuthorized": {
-		"message": "Oops... Something went wrong. Please, try clicking Silver Bird icon again."
+		"message": "Oops... Something went wrong. Please, try clicking Steel Bird icon again."
 	},
 	"authorizing": {
-		"message": "Please wait, authorizing Silver Bird..."
+		"message": "Please wait, authorizing Steel Bird..."
 	},
 	"yourPIN": {
 		"message": "Your PIN number is: $pin$",
@@ -307,7 +307,7 @@
 		"message": "Authorize!"
 	},
 	"exceededAPIHits": {
-		"message": "You've exceeded API hits limit. Please review your refresh interval settings in the <a href='#' class=\"msg-trigger-openoptions\">options page</a>. Silver Bird won't update until $nextResetDate $nextResetTime$.",
+		"message": "You've exceeded API hits limit. Please review your refresh interval settings in the <a href='#' class=\"msg-trigger-openoptions\">options page</a>. Steel Bird won't update until $nextResetDate $nextResetTime$.",
 		"placeholders": {
 			"options_url": {
 				"content": "$1"
@@ -402,7 +402,7 @@
 		"message": "years ago"
 	},
 	"options_title": {
-		"message": "Silver Bird Options"
+		"message": "Steel Bird Options"
 	},
 	"conf_saved": {
 		"message": "Your configuration has been successfully saved!"
@@ -558,7 +558,7 @@
 		"message": "Timelines"
 	},
 	"notice_api_hits": {
-		"message": "You should keep API hits <span style=\"color: red;\">below <span class=\"__hourly_limit\"></span></span>! Otherwise Silver Bird will stop working properly and timelines won't update anymore.<br><span style=\"color: red;\">Remember</span> that if you're using multiple Twitter clients you'll need to keep your API hits even lower."
+		"message": "You should keep API hits <span style=\"color: red;\">below <span class=\"__hourly_limit\"></span></span>! Otherwise Steel Bird will stop working properly and timelines won't update anymore.<br><span style=\"color: red;\">Remember</span> that if you're using multiple Twitter clients you'll need to keep your API hits even lower."
 	},
 	"l_hits_notice": {
 		"message": "API hits per hour: "
